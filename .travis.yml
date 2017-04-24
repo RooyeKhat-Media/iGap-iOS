@@ -1,0 +1,11 @@
+language: objective-c
+branches:
+  only:
+    - dev
+before_install:
+  - pod update
+  - pod install
+osx_image:
+  xcode8
+script:
+  - xcodebuild -scheme iGap -workspace iGap.xcworkspace

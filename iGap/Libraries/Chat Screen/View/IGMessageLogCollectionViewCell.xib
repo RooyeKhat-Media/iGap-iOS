@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="IGMessageLogCollectionViewCell" customModule="iGap" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="555" height="50"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="555" height="50"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Kxx-iN-ihX">
+                        <rect key="frame" x="251.5" y="13" width="52" height="24"/>
+                        <color key="backgroundColor" red="0.65820388380109951" green="0.65820388380109951" blue="0.65820388380109951" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="24" id="75D-SA-7gv"/>
+                        </constraints>
+                    </view>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KXj-hQ-xRd">
+                        <rect key="frame" x="260" y="17" width="36" height="17"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstItem="Kxx-iN-ihX" firstAttribute="width" secondItem="KXj-hQ-xRd" secondAttribute="width" constant="16" id="1SN-6x-361"/>
+                <constraint firstItem="KXj-hQ-xRd" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="5Ks-71-dG0"/>
+                <constraint firstItem="Kxx-iN-ihX" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="6oF-4r-802"/>
+                <constraint firstItem="KXj-hQ-xRd" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="8la-8F-3FS"/>
+                <constraint firstItem="Kxx-iN-ihX" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="nqF-wi-qmN"/>
+            </constraints>
+            <size key="customSize" width="555" height="50"/>
+            <connections>
+                <outlet property="labelBackgrondView" destination="Kxx-iN-ihX" id="0yY-bI-bLB"/>
+                <outlet property="logLabel" destination="KXj-hQ-xRd" id="h0t-nS-hKN"/>
+            </connections>
+            <point key="canvasLocation" x="-57.5" y="54"/>
+        </collectionViewCell>
+    </objects>
+</document>
