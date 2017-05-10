@@ -73,7 +73,7 @@ class IGGroupInfoMemberListTableViewCell: UITableViewCell {
                 groupMemberRecentlyStatus.text = "Service Notification"
                 break
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 60.0) {
                 self.setUser(member)
             }
 

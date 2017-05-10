@@ -109,7 +109,7 @@ class IGClientGetRoomHistoryRequest : IGRequest {
     
     class Handler : IGRequest.Handler{
         class func interpret(response responseProtoMessage:IGPClientGetRoomHistoryResponse, roomId: Int64) { //-> [IGRoomMessage]{
-            IGFactory.shared.saveIgpMessagesToDatabase(responseProtoMessage.igpMessage, for: roomId, updateLastMessage: false , isFromSharedMedia: true)
+            IGFactory.shared.saveIgpMessagesToDatabase(responseProtoMessage.igpMessage, for: roomId, updateLastMessage: false , isFromSharedMedia: false)
             
 //            var messages = [IGRoomMessage]()
 //            for igpMessage in responseProtoMessage.igpMessage {
@@ -256,4 +256,34 @@ class IGClientJoinByUsernameRequest: IGRequest {
          override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {}
     }
 }
+
+class IGClientCountRoomHistoryRequest: IGRequest {
+    class Generator: IGRequest.Generator {
+        class func generate(roomID: Int64) -> IGRequestWrapper {
+            let clientCountRoomHistoryRequestBuilder = IGPClientCountRoomHistory.Builder()
+            clientCountRoomHistoryRequestBuilder.setIgpRoomId(roomID)
+            return IGRequestWrapper(messageBuilder: clientCountRoomHistoryRequestBuilder, actionID: 613)
+            
+        }
+    }
+    class Handler: IGRequest.Handler {
+        class func interpret( response responseProtoMessage : IGPClientCountRoomHistoryResponse) -> (media: Int32 , image: Int32 , video: Int32 , gif: Int32 , voice: Int32 , file: Int32 , audio: Int32, url: Int32 ) {
+            let mediaCount = responseProtoMessage.igpMedia
+            let imageCount = responseProtoMessage.igpImage
+            let videoCount = responseProtoMessage.igpVideo
+            let audioCount = responseProtoMessage.igpAudio
+            let voiceCount = responseProtoMessage.igpVoice
+            let gifCount = responseProtoMessage.igpGif
+            let fileCount = responseProtoMessage.igpFile
+            let urlCount = responseProtoMessage.igpUrl
+            
+            return (media: mediaCount , image: imageCount , video: videoCount , gif: gifCount , voice: voiceCount , file: fileCount , audio: audioCount, url: urlCount )
+            
+            
+        }
+        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {}
+    }
+    
+}
+
 

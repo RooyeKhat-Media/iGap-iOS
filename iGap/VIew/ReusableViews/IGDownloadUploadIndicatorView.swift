@@ -53,6 +53,10 @@ class IGDownloadUploadIndicatorView: UIView {
         super.init(coder: aDecoder)!
         configure()
     }
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        configure()
+    }
     
     func configure() {
         self.isHidden = false
@@ -68,8 +72,6 @@ class IGDownloadUploadIndicatorView: UIView {
         
         self.alpha = 1.0
         self.backgroundColor = UIColor.clear
-        
-        
         self.isUserInteractionEnabled = true
         let tapRecognizer = UITapGestureRecognizer.init(target: self, action: #selector(didTapOnView))
         self.addGestureRecognizer(tapRecognizer)
@@ -123,7 +125,7 @@ class IGDownloadUploadIndicatorView: UIView {
         self.addDownloadButtonIfNeeded() //In case of reuse
         self.downloadButton?.setImage(UIImage(named:downloadImageName), for: .normal)
     }
-
+    
     
     func setState(_ state:IGFile.Status) {
         switch state {

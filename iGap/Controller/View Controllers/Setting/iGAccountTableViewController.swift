@@ -40,6 +40,7 @@ class IGAccountTableViewController: UITableViewController , UINavigationControll
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        self.tableView.isUserInteractionEnabled = true
         changeBackButtonItemPosition()
         if currentUser.email == nil {
             getUserEmail()
@@ -110,23 +111,29 @@ class IGAccountTableViewController: UITableViewController , UINavigationControll
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
         if indexPath.section == 0 && indexPath.row == 0 {
+            self.tableView.isUserInteractionEnabled = false
             performSegue(withIdentifier: "GoToNicknamePage", sender: self)
         }
 //        if indexPath.section == 1 && indexPath.row == 0 {
+   //     self.tableView.isUserInteractionEnabled = false
+
 //            performSegue(withIdentifier: "GoToPhoneNumberPage", sender: self)
 //        }
         if indexPath.section == 1 && indexPath.row == 1 {
+            self.tableView.isUserInteractionEnabled = false
             performSegue(withIdentifier: "GoToUsernamePage", sender: self)
         }
         if indexPath.section == 1 && indexPath.row == 2 {
+            self.tableView.isUserInteractionEnabled = false
             performSegue(withIdentifier: "GoToEmailPage", sender: self)
         }
         if indexPath.section == 2 && indexPath.row == 0 {
+            self.tableView.isUserInteractionEnabled = false
             performSegue(withIdentifier: "GoToDeleteAccountPage", sender: self)
         }
         if indexPath.section == 2 && indexPath.row == 1 {
+            self.tableView.isUserInteractionEnabled = false
             performSegue(withIdentifier: "GoToSelfDestructionTimePage", sender: self)
         }
         if indexPath.section == 3 && indexPath.row == 0 {

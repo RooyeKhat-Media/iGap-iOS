@@ -10,6 +10,8 @@
 
 import UIKit
 import SnapKit
+import MBProgressHUD
+
 
 class IGNavigationItem: UINavigationItem {
     
@@ -22,6 +24,8 @@ class IGNavigationItem: UINavigationItem {
     private var centerViewSubLabel:  UILabel?
     private var typingIndicatorView: IGDotActivityIndicator?
     var isUpdatingUserStatusForAction : Bool = false
+    var isProccesing: Bool = true
+    var hud = MBProgressHUD()
 //    var centerViewSubText:   UITextField?
     
     private var tapOnRightView:  (()->())?
@@ -111,7 +115,12 @@ class IGNavigationItem: UINavigationItem {
         self.leftBarButtonItem = backBarButton
         self.title = ""
         backViewContainer?.addAction {
+            self.backViewContainer?.isUserInteractionEnabled = false
+            //self.hud = MBProgressHUD.showAdded(to: self.backViewContainer!, animated: true)
+           // self.hud.mode = .indeterminate
            _ = self.navigationController?.popViewController(animated: true)
+           // self.hud.hide(animated: true)
+
         }
         
     }
@@ -208,7 +217,6 @@ class IGNavigationItem: UINavigationItem {
         self.titleView = titleView
     }
     
-    
     //MARK: - Messages View
     func setNavigationBarForRoom(_ room: IGRoom) {
         setRoomAvatar(room)
@@ -243,6 +251,7 @@ class IGNavigationItem: UINavigationItem {
                 
             self.centerViewSubLabel!.text = room.currentActionString()
         } else {
+            
             typingIndicatorView?.removeFromSuperview()
             typingIndicatorView = nil
             self.centerViewSubLabel!.snp.makeConstraints { (make) in
@@ -250,8 +259,11 @@ class IGNavigationItem: UINavigationItem {
                 make.centerX.equalTo(self.centerViewContainer!.snp.centerX)
             }
             if let peer = room.chatRoom?.peer {
+                if room.currenctActionsByUsers.first?.value.1 != .typing {
                 setLastSeenLabelForUser(peer, room: room)
+                }
             } else if let groupRoom = room.groupRoom {
+                    
                 self.centerViewSubLabel!.text = "\(groupRoom.participantCount) member\(groupRoom.participantCount>1 ? "s" : "")"
             } else if let channelRoom = room.channelRoom {
                 self.centerViewSubLabel!.text = "\(channelRoom.participantCount) member\(channelRoom.participantCount>1 ? "s" : "")"
@@ -271,6 +283,11 @@ class IGNavigationItem: UINavigationItem {
         let avatarView = IGAvatarView(frame: avatarViewFrame)
         avatarView.setRoom(room)
         rightViewContainer!.addSubview(avatarView)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 10.0) {
+            self.setRoomAvatar(room)
+        }
+
     }
     
     private func setRoomInfo(_ room: IGRoom) {
@@ -300,7 +317,9 @@ class IGNavigationItem: UINavigationItem {
         }
         
         if let peer = room.chatRoom?.peer {
-            setLastSeenLabelForUser(peer , room: room)
+            if room.currenctActionsByUsers.first?.value.1 != .typing {
+                setLastSeenLabelForUser(peer , room: room)
+            }
         } else if let groupRoom = room.groupRoom {
             self.centerViewSubLabel!.text = "\(groupRoom.participantCount) member\(groupRoom.participantCount>1 ? "s" : "")"
         } else if let channelRoom = room.channelRoom {
@@ -310,6 +329,7 @@ class IGNavigationItem: UINavigationItem {
     }
     
     private func setLastSeenLabelForUser(_ user: IGRegisteredUser , room : IGRoom) {
+        if room.currenctActionsByUsers.first?.value.1 != .typing && typingIndicatorView == nil {
         switch user.lastSeenStatus {
         case .longTimeAgo:
             self.centerViewSubLabel!.text = "A long time ago"
@@ -321,7 +341,9 @@ class IGNavigationItem: UINavigationItem {
             self.centerViewSubLabel!.text = "Last week"
             break
         case .online:
+            
             self.centerViewSubLabel!.text = "Online"
+            
             break
         case .exactly:
             self.centerViewSubLabel!.text = "\(user.lastSeen!.humanReadableForLastSeen())"
@@ -336,9 +358,10 @@ class IGNavigationItem: UINavigationItem {
             self.centerViewSubLabel!.text = "Service Notification"
             break
         }
-        print(room.currentActionString())
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            self.setLastSeenLabelForUser(user , room: room)
+          
+            DispatchQueue.main.asyncAfter(deadline: .now() + 10.0) {
+                self.setLastSeenLabelForUser(user , room: room)
+            }
         }
     }
     

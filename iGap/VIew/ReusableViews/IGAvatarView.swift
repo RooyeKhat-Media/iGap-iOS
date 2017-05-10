@@ -14,7 +14,7 @@ class IGAvatarView: UIView {
     
     private var initialLettersView: UIView?
     private var initialLettersLabel: UILabel?
-    private var avatarImageView: IGImageView?
+    var avatarImageView: IGImageView?
     private var gradient: CAGradientLayer?
     
     // MARK: - Initializers
@@ -46,6 +46,7 @@ class IGAvatarView: UIView {
         self.addSubview(self.initialLettersView!)
         self.addSubview(self.initialLettersLabel!)
         self.addSubview(self.avatarImageView!)
+        
         
         self.initialLettersLabel!.textColor = UIColor.white
         self.initialLettersLabel!.textAlignment = .center
@@ -102,6 +103,7 @@ class IGAvatarView: UIView {
         case .chat:
             if let avatar = room.chatRoom?.peer?.avatar {
                 self.avatarImageView!.setImage(avatar: avatar)
+                
             }
         case .group:
             if let avatar = room.groupRoom?.avatar {

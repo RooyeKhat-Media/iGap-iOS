@@ -74,6 +74,8 @@ class IGChannelAndGroupSharedMediaImagesAndVideosCollectionViewController: UICol
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    override func viewWillAppear(_ animated: Bool) {
+    }
 
     /*
     // MARK: - Navigation
@@ -108,7 +110,7 @@ class IGChannelAndGroupSharedMediaImagesAndVideosCollectionViewController: UICol
                         cell.sharedMediaImageView.setThumbnail(for: sharedAttachment)
                         cell.videoSizeLabel.isHidden = true
                         sharedMediaFilter = .image
-                        cell.attachment = sharedAttachment
+                        //cell.attachment = sharedAttachment
                         cell.setMediaIndicator(message: sharedImage)
                         
 
@@ -116,6 +118,7 @@ class IGChannelAndGroupSharedMediaImagesAndVideosCollectionViewController: UICol
                 }
             }
         }
+        
         if sharedMedia[indexPath.row].type == .video || sharedMedia[indexPath.row].type == .videoAndText {
             if let sharedImage: IGRoomMessage = sharedMedia[indexPath.row] {
                 if let sharedAttachment = sharedImage.attachment {
@@ -140,7 +143,7 @@ class IGChannelAndGroupSharedMediaImagesAndVideosCollectionViewController: UICol
                         cell.videoSizeLabel.isHidden = false
                         sharedMediaFilter = .video
                         cell.setMediaIndicator(message: sharedImage)
-                        cell.attachment = sharedAttachment
+                       // cell.attachment = sharedAttachment
                     }
 
                 }
@@ -222,38 +225,7 @@ class IGChannelAndGroupSharedMediaImagesAndVideosCollectionViewController: UICol
 
     }
     
-    
-    // MARK: UICollectionViewDelegate
-
-    /*
-    // Uncomment this method to specify if the specified item should be highlighted during tracking
-    override func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment this method to specify if the specified item should be selected
-    override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-    override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
-    
-    }
-    */
-
+   
 }
 
 extension IGChannelAndGroupSharedMediaImagesAndVideosCollectionViewController : UICollectionViewDelegateFlowLayout {

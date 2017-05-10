@@ -26,6 +26,8 @@ class IGTappableView: UIView {
 
     private func addTapGesture() {
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didGotTap))
+        tapGestureRecognizer.numberOfTapsRequired = 1
+        tapGestureRecognizer.numberOfTouchesRequired = 1
         self.addGestureRecognizer(tapGestureRecognizer)
     }
     

@@ -44,6 +44,7 @@ class IGGroupInfoTableViewController: UITableViewController , UIGestureRecognize
     @IBOutlet weak var leaveGroupLabel: UILabel!
     
     var room : IGRoom?
+    private let disposeBag = DisposeBag()
     var hud = MBProgressHUD()
     var myRole : IGGroupMember.IGRole!
     var signMessageIndexPath : IndexPath?
@@ -52,10 +53,9 @@ class IGGroupInfoTableViewController: UITableViewController , UIGestureRecognize
     var groupRoom : Results<IGRoom>!
     var mode : String? = "Members"
     var notificationToken: NotificationToken?
-    
+    var connectionStatus: IGAppManager.ConnectionStatus?
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         requestToGetRoom()
         myRole = room?.groupRoom?.role
         showGroupInfo()
@@ -132,8 +132,29 @@ class IGGroupInfoTableViewController: UITableViewController , UIGestureRecognize
                 break
             }
         }
+        
+        IGAppManager.sharedManager.connectionStatus.asObservable().subscribe(onNext: { (connectionStatus) in
+            DispatchQueue.main.async {
+                self.updateConnectionStatus(connectionStatus)
+                
+            }
+        }, onError: { (error) in
+            
+        }, onCompleted: {
+            
+        }, onDisposed: {
+            
+        }).addDisposableTo(disposeBag)
 
         
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        self.tableView.isUserInteractionEnabled = true
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        self.tableView.isUserInteractionEnabled = true
+
     }
     @IBAction func didTapOnCameraBtn(_ sender: UIButton) {
     }
@@ -226,14 +247,17 @@ class IGGroupInfoTableViewController: UITableViewController , UIGestureRecognize
             switch indexPath.row {
             case 0:
                 if myRole == .owner || myRole == .admin {
+                    self.tableView.isUserInteractionEnabled = false
                 self.performSegue(withIdentifier: "showGroupNameSetting", sender: self)
                 }
              break
             case 1:
+                self.tableView.isUserInteractionEnabled = false
                 self.performSegue(withIdentifier: "showDescribeGroupSetting", sender: self)
                 break
             case 2:
                 if myRole == .owner {
+                self.tableView.isUserInteractionEnabled = false
                 self.performSegue(withIdentifier: "showGroupTypeSetting", sender: self)
                 }
             case 3:
@@ -246,8 +270,10 @@ class IGGroupInfoTableViewController: UITableViewController , UIGestureRecognize
         if indexPath.section == 1 {
             switch indexPath.row {
             case 0:
+                self.tableView.isUserInteractionEnabled = false
                 self.performSegue(withIdentifier: "showGroupMemberSetting", sender: self)
             case 1:
+                self.tableView.isUserInteractionEnabled = false
                 self.performSegue(withIdentifier: "showGroupAdminsAnadModeratorsSetting", sender: self)
             default:
                 break
@@ -296,6 +322,19 @@ class IGGroupInfoTableViewController: UITableViewController , UIGestureRecognize
         
         return 44.0
     }
+    
+    func updateConnectionStatus(_ status: IGAppManager.ConnectionStatus) {
+        
+        switch status {
+        case .connected:
+            connectionStatus = .connected
+        case .connecting:
+            connectionStatus = .connecting
+        case .waitingForNetwork:
+            connectionStatus = .waitingForNetwork
+        }
+        
+    }
 
     func showGroupInfo() {
         groupNameTitleLabel.text = room?.title
@@ -319,7 +358,6 @@ class IGGroupInfoTableViewController: UITableViewController , UIGestureRecognize
         var groupLink: String? = ""
         if room?.groupRoom?.type == .privateRoom {
             groupLink = room?.groupRoom?.privateExtra?.inviteLink
-            print(room?.groupRoom?.privateExtra?.inviteToken)
         }
         if room?.groupRoom?.type == .publicRoom {
             if let groupUsername = room?.groupRoom?.publicExtra?.username {
@@ -343,11 +381,25 @@ class IGGroupInfoTableViewController: UITableViewController , UIGestureRecognize
         let deleteAction = UIAlertAction(title: actionTitle , style:.default , handler: {
             (alert: UIAlertAction) -> Void in
                 if self.myRole == .owner {
+                    if self.connectionStatus == .connecting || self.connectionStatus == .waitingForNetwork {
+                        let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                    } else {
+                        
                     self.deleteGroupRequest()
+                    }
                 }else{
-                    self.leftGroupRequest(room: self.room!)
+                    if self.connectionStatus == .connecting || self.connectionStatus == .waitingForNetwork {
+                        let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                    }else {
+                        self.leftGroupRequest(room: self.room!)
+                    }
                 }
-            
             
         })
         let cancelAction = UIAlertAction(title: "Cancel", style:.cancel , handler: {

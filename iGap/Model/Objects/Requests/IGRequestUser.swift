@@ -436,10 +436,26 @@ class IGUserAvatarDeleteRequest : IGRequest {
 //MARK: -
 class IGUserAvatarGetListRequest : IGRequest {
     class Generator : IGRequest.Generator{
+        class func generate(userId: Int64) -> IGRequestWrapper {
+            let userAvatarGetListRequestBuilder = IGPUserAvatarGetList.Builder()
+            userAvatarGetListRequestBuilder.setIgpUserId(userId)
+            return IGRequestWrapper(messageBuilder: userAvatarGetListRequestBuilder, actionID: 116)
+        }
         
     }
     
-    class Handler : IGRequest.Handler{
+    class Handler : IGRequest.Handler {
+        class func interpret(response responseProtoMessage:IGPUserAvatarGetListResponse , userId: Int64) -> Array<IGAvatar> {
+            let igpAvatars = responseProtoMessage.igpAvatar
+            var igAvatars : Array<IGAvatar> = []
+            for igpAvatar in igpAvatars {
+//                IGFactory.shared.updateUserAvatar(userId, igpAvatar: igpAvatar)
+                let igavatar = IGAvatar(igpAvatar: igpAvatar)
+                igAvatars.append(igavatar)
+            }
+            return igAvatars
+            
+        }
         override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {}
         override class func error() {}
         override class func timeout() {}
@@ -453,10 +469,12 @@ class IGUserInfoRequest : IGRequest {
             let userInfoRequestBuilder = IGPUserInfo.Builder()
             userInfoRequestBuilder.setIgpUserId(userID)
             return IGRequestWrapper(messageBuilder: userInfoRequestBuilder, actionID: 117)
+            
         }
     }
     
     class Handler : IGRequest.Handler{
+        
         override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {}
         override class func error() {}
         override class func timeout() {}

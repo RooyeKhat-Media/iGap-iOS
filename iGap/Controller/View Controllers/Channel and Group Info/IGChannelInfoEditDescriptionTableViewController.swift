@@ -24,6 +24,7 @@ class IGChannelInfoEditDescriptionTableViewController: UITableViewController , U
         super.viewDidLoad()
         channelDescriptionTextView.text = room?.channelRoom?.roomDescription
         let navigationItem = self.navigationItem as! IGNavigationItem
+        navigationItem.navigationController =  self.navigationController as! IGNavigationController
         let navigationController = self.navigationController as! IGNavigationController
         navigationController.interactivePopGestureRecognizer?.delegate = self
                 channelDescriptionTextView.delegate = self
@@ -31,10 +32,10 @@ class IGChannelInfoEditDescriptionTableViewController: UITableViewController , U
         if myRole == .owner || myRole == .admin {
             channelDescriptionTextView.isUserInteractionEnabled = true
             navigationItem.addNavigationViewItems(rightItemText: "Done", title: "Description")
-            navigationItem.navigationController = self.navigationController as! IGNavigationController
             navigationItem.rightViewContainer?.addAction {
                 self.changeChannelDescription()
             }
+            
             placeholderLabel = UILabel()
             placeholderLabel.text = "Enter some text to describe channel..."
             placeholderLabel.font = UIFont.italicSystemFont(ofSize: (channelDescriptionTextView.font?.pointSize)!)

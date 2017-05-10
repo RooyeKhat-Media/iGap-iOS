@@ -65,6 +65,14 @@ class IGSettingContactBlockListTableViewController: UITableViewController , UIGe
             }
         }
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        self.tableView.isUserInteractionEnabled = true
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        self.tableView.isUserInteractionEnabled = true
+
+    }
         override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -94,6 +102,7 @@ class IGSettingContactBlockListTableViewController: UITableViewController , UIGe
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     let lastRowIndex = self.tableView.numberOfRows(inSection: 0) - 1
         if indexPath.row == lastRowIndex{
+            self.tableView.isUserInteractionEnabled = false
             performSegue(withIdentifier: "GoToChooseContactAddToBlockListPage", sender: self)
         }
     }

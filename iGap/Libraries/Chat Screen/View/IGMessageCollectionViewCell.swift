@@ -575,7 +575,7 @@ class IGMessageCollectionViewCell: IGMessageGeneralCollectionViewCell {
                             self.forwardedMessageMediaImageView.prepareForAnimation(withGIFData: data)
                             self.forwardedMessageMediaImageView.startAnimatingGIF()
                         } else {
-                            //auto download
+                            self.downloadUploadIndicatorDidTapOnStart(self.forwardedMediaDownloadUploadIndicatorView)
                             
                         }
                     }
@@ -1037,6 +1037,20 @@ class IGMessageCollectionViewCell: IGMessageGeneralCollectionViewCell {
     
     func setThumbnailForForwardedAttachments() {
         
+        if let attachment = self.forwardedAttachment {
+            self.attachmentThumbnailImageView.isHidden = false
+            if attachment.type == .voice {
+                self.attachmentThumbnailImageView.image = UIImage(named: "IG_Message_Cell_Voice")
+            } else {
+                switch attachment.fileTypeBasedOnNameExtension {
+                case .docx:
+                    self.attachmentThumbnailImageView.image = UIImage(named: "IG_Message_Cell_File_Doc")
+                default:
+                    self.attachmentThumbnailImageView.image = UIImage(named: "IG_Message_Cell_File_Generic")
+                }
+            }
+        }
+
     }
 }
 
@@ -1053,6 +1067,14 @@ extension IGMessageCollectionViewCell: IGDownloadUploadIndicatorViewDelegate {
             }, failure: {
                 
             })
+        }
+        if let forwardAttachment = self.forwardedAttachment {
+            IGDownloadManager.sharedManager.download(file: forwardAttachment, previewType: .originalFile, completion: {
+                
+            }, failure: {
+                
+            })
+
         }
     }
     

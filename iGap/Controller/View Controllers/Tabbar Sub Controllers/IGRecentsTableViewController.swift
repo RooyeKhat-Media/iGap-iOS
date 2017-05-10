@@ -26,6 +26,7 @@ class IGRecentsTableViewController: UITableViewController {
     var rooms: Results<IGRoom>? = nil
     var notificationToken: NotificationToken?
     var hud = MBProgressHUD()
+    var connectionStatus: IGAppManager.ConnectionStatus?
 
     private let disposeBag = DisposeBag()
     
@@ -34,11 +35,14 @@ class IGRecentsTableViewController: UITableViewController {
         switch status {
         case .waitingForNetwork:
             navigationItem.setNavigationItemForWaitingForNetwork()
+            connectionStatus = .waitingForNetwork
             break
         case .connecting:
             navigationItem.setNavigationItemForConnecting()
+            connectionStatus = .connecting
             break
         case .connected:
+            connectionStatus = .connected
             self.setDefaultNavigationItem()
             break
         }
@@ -152,6 +156,7 @@ class IGRecentsTableViewController: UITableViewController {
                 self.tableView.deleteRows(at: deletions.map { IndexPath(row: $0, section: 0) }, with: .none)
                 self.tableView.reloadRows(at: modifications.map { IndexPath(row: $0, section: 0) }, with: .none)
                 self.tableView.endUpdates()
+                self.tableView.reloadData()
                 self.setTabbarBadge()
                 break
             case .error(let err):
@@ -175,14 +180,17 @@ class IGRecentsTableViewController: UITableViewController {
                                                selector: #selector(segueToChatNotificationReceived(_:)),
                                                name: NSNotification.Name(rawValue: kIGNotificationNameDidCreateARoom),
                                                object: nil)
-    }
+           }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.tableView.isUserInteractionEnabled = true
+
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        self.tableView.isUserInteractionEnabled = true
     }
 
     override func didReceiveMemoryWarning() {
@@ -343,9 +351,25 @@ class IGRecentsTableViewController: UITableViewController {
                 let clear = UIAlertAction(title: "Clear History", style: .default, handler: { (action) in
                     switch room.type{
                     case .chat:
+                        if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
+                            let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
+                            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                            alert.addAction(okAction)
+                            self.present(alert, animated: true, completion: nil)
+
+                        } else {
                         self.clearChatMessageHistory(room: room)
+                        }
                     case .group:
+                        if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
+                            let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
+                            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                            alert.addAction(okAction)
+                            self.present(alert, animated: true, completion: nil)
+
+                        } else {
                         self.clearGroupMessageHistory(room: room)
+                        }
                     default:
                         break
                     }
@@ -355,9 +379,25 @@ class IGRecentsTableViewController: UITableViewController {
                 let remove = UIAlertAction(title: "Delete", style: .destructive, handler: { (action) in
                     switch room.type {
                     case .chat:
+                        if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
+                            let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
+                            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                            alert.addAction(okAction)
+                            self.present(alert, animated: true, completion: nil)
+
+                        } else {
                         self.deleteChat(room: room)
+                        }
                     case .group:
+                        if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
+                            let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
+                            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                            alert.addAction(okAction)
+                            self.present(alert, animated: true, completion: nil)
+
+                        } else {
                         self.deleteGroup(room: room)
+                        }
                     default:
                         break
                     }
@@ -370,9 +410,27 @@ class IGRecentsTableViewController: UITableViewController {
                     case .chat:
                         break
                     case .group:
+                        if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
+                            let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
+                            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                            alert.addAction(okAction)
+                            self.present(alert, animated: true, completion: nil)
+
+                            
+                        } else {
                         self.leaveGroup(room: room)
+                        }
                     case .channel:
+                        if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
+                            let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
+                            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                            alert.addAction(okAction)
+                            self.present(alert, animated: true, completion: nil)
+
+                            
+                        } else {
                         self.leaveChannel(room: room)
+                        }
                     }
                 })
                 
@@ -433,6 +491,7 @@ class IGRecentsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedRoomForSegue = rooms![indexPath.row]
+        self.tableView.isUserInteractionEnabled = false
         performSegue(withIdentifier: "showRoomMessages", sender: self)
     }
     
@@ -495,6 +554,7 @@ class IGRecentsTableViewController: UITableViewController {
     }
     
     
+    
     func segueToChatNotificationReceived(_ aNotification: Notification) {
         if let roomId = aNotification.userInfo?["room"] as? Int64 {
             let predicate = NSPredicate(format: "id = %d", roomId)
@@ -539,7 +599,7 @@ class IGRecentsTableViewController: UITableViewController {
 }
 
 //MARK:- Room Clear, Delete, Leave
-extension IGRecentsTableViewController{
+extension IGRecentsTableViewController {
     func clearChatMessageHistory(room: IGRoom) {
         self.hud = MBProgressHUD.showAdded(to: self.view.superview!, animated: true)
         self.hud.mode = .indeterminate

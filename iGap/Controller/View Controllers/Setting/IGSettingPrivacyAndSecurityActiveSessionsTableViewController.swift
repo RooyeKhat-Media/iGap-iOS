@@ -34,7 +34,8 @@ class IGSettingPrivacyAndSecurityActiveSessionsTableViewController: UITableViewC
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
+        self.tableView.isUserInteractionEnabled = true
+
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -138,12 +139,14 @@ class IGSettingPrivacyAndSecurityActiveSessionsTableViewController: UITableViewC
     
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
         if indexPath.section != otherSessions.count + 1 {
             if indexPath.section == 0 {
                 selectedSession = currentSession
             } else {
                 selectedSession = otherSessions[indexPath.section - 1]
             }
+            self.tableView.isUserInteractionEnabled = false
             performSegue(withIdentifier: "GoToActiveSessionDetailsPage", sender: self)
         } else {
             let logoutConfirmAlertView = UIAlertController(title: "Are you sure you want to Terminate All Sessions?", message: nil, preferredStyle: .actionSheet)

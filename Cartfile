@@ -13,8 +13,8 @@ github "krzyzanowskim/CryptoSwift"
  
 github "RooyeKhat-Media/Gifu" "v2.0.0-b"
 github "RooyeKhat-Media/ALCameraViewController" "1.2.7"
-github "RooyeKhat-Media/IGProtoBuffLibrary" "build47-5"
-github "RooyeKhat-Media/INSPhotoGallery"  "1.1.0-a"
+github "RooyeKhat-Media/IGProtoBuffLibrary" "build54"
+github "RooyeKhat-Media/INSPhotoGallery"  "1.1.0-d"
 github "RooyeKhat-Media/Starscream" "2.0.4-a"
 github "RooyeKhat-Media/DBAttachmentPickerController"  "1.1.4-a"
 

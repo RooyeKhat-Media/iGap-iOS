@@ -118,6 +118,8 @@ class IGFileUploadStatusRequest : IGRequest {
                     status = .processing
                 case .processed:
                     status = .processed
+                default:
+                    status = .unknown
                 }
             } else {
                 status = .unknown

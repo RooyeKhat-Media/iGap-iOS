@@ -24,9 +24,19 @@ class IGSettingChatCatchTableViewController: UITableViewController {
         let backgroundImageView = UIImageView(image: backImage)
         self.tableView.backgroundView = backgroundImageView
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        self.tableView.isUserInteractionEnabled = true
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        self.tableView.isUserInteractionEnabled = true
+
+    }
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 3
     }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var numberOfRow : Int = 0
         switch section {
@@ -63,9 +73,11 @@ class IGSettingChatCatchTableViewController: UITableViewController {
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0 && indexPath.row == 0 {
+            self.tableView.isUserInteractionEnabled = false
             performSegue(withIdentifier: "GoToKeepMediaAfterTimePage", sender: self)
         }
         if indexPath.section == 1 && indexPath.row == 0 || indexPath.section == 2{
+            self.tableView.isUserInteractionEnabled = false
             performSegue(withIdentifier: "GoToCachedDataItemsPage", sender: self)
             if indexPath.section == 2{
                 let currentCell = tableView.cellForRow(at: indexPath) as?IGSettingChatCatchContactAndGroupsTableViewCell

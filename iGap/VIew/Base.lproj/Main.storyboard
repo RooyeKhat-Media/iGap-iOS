@@ -972,6 +972,7 @@ Please wait 0:59</string>
                         <outlet property="inputTextViewHeightConstraint" destination="i0G-sC-VLl" id="O1Y-ij-3h7"/>
                         <outlet property="joinButton" destination="uLc-FX-WjP" id="gTz-2h-Ury"/>
                         <outlet property="scrollToBottomContainerView" destination="5mR-SM-BTR" id="Xvj-fw-UgO"/>
+                        <outlet property="scrollToBottomContainerViewConstraint" destination="Obr-Bc-Azv" id="WAk-s1-O8N"/>
                         <segue destination="1II-EY-spK" kind="show" identifier="showUserInfo" id="0uO-4l-Kla"/>
                         <segue destination="FAw-oC-UEn" kind="show" identifier="showChannelinfo" id="rLo-Q7-ujr"/>
                         <segue destination="IMI-O0-WbA" kind="show" identifier="showGroupInfo" id="EiK-dt-3cR"/>
@@ -4376,10 +4377,6 @@ with iGap right now</string>
                                                     <color key="textColor" red="0.40000000600000002" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="pvQ-fU-Rde">
-                                                    <rect key="frame" x="322" y="11" width="20" height="20"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                </activityIndicatorView>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="bottom" secondItem="7bg-d0-uYt" secondAttribute="bottom" constant="12" id="528-68-8JO"/>
@@ -4410,10 +4407,6 @@ with iGap right now</string>
                                                     <color key="textColor" red="0.40000000600000002" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="uzp-vR-KVL">
-                                                    <rect key="frame" x="322" y="11" width="20" height="20"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                </activityIndicatorView>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="JFC-Bx-Xhu" secondAttribute="trailing" id="379-Xf-IQB"/>
@@ -4444,10 +4437,6 @@ with iGap right now</string>
                                                     <color key="textColor" red="0.40000000600000002" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Vw4-sb-F7V">
-                                                    <rect key="frame" x="322" y="11" width="20" height="20"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                </activityIndicatorView>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="5K7-sQ-TYb" firstAttribute="leading" secondItem="hiH-PK-F9I" secondAttribute="leadingMargin" constant="7" id="1jv-BP-6Kd"/>
@@ -4478,10 +4467,6 @@ with iGap right now</string>
                                                     <color key="textColor" red="0.40000000600000002" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="cnU-ud-AfK">
-                                                    <rect key="frame" x="322" y="11" width="20" height="20"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                </activityIndicatorView>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="rBZ-Ja-0rg" firstAttribute="top" secondItem="2fM-rZ-Fx9" secondAttribute="topMargin" constant="2" id="BRv-hX-KEZ"/>
@@ -4512,10 +4497,6 @@ with iGap right now</string>
                                                     <color key="textColor" red="0.40000000600000002" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="m1U-NL-Gz0">
-                                                    <rect key="frame" x="322" y="11" width="20" height="20"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                </activityIndicatorView>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="81C-Ov-9Jj" firstAttribute="top" secondItem="Vxp-Ey-Ksc" secondAttribute="topMargin" constant="2" id="Fcl-vT-VpQ"/>
@@ -4546,10 +4527,6 @@ with iGap right now</string>
                                                     <color key="textColor" red="0.40000000600000002" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="pNV-qT-eQG">
-                                                    <rect key="frame" x="322" y="11" width="20" height="20"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                </activityIndicatorView>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="Q3S-1B-Cym" firstAttribute="leading" secondItem="U0P-o3-qq1" secondAttribute="leadingMargin" constant="7" id="Ymq-r2-x9k"/>
@@ -4571,18 +4548,12 @@ with iGap right now</string>
                     </tableView>
                     <navigationItem key="navigationItem" id="anz-aW-sd4" customClass="IGNavigationItem" customModule="iGap" customModuleProvider="target"/>
                     <connections>
-                        <outlet property="audioIndicator" destination="uzp-vR-KVL" id="0kB-Hz-jqK"/>
-                        <outlet property="fileIndicator" destination="cnU-ud-AfK" id="LZu-97-D7t"/>
-                        <outlet property="imageIndicator" destination="pvQ-fU-Rde" id="AQw-4F-8IF"/>
-                        <outlet property="linkIndicator" destination="pNV-qT-eQG" id="JqY-MU-Wq2"/>
                         <outlet property="sizeOfSharedAudiosLabel" destination="JFC-Bx-Xhu" id="xMN-1O-mwT"/>
                         <outlet property="sizeOfSharedFiles" destination="z3J-Xe-56m" id="sHa-Lq-q9Z"/>
                         <outlet property="sizeOfSharedImage" destination="7bg-d0-uYt" id="uPt-ih-G1i"/>
                         <outlet property="sizeOfSharedLinksLabel" destination="gn6-qy-ZQ3" id="LeB-gd-GJe"/>
                         <outlet property="sizeOfSharedVideos" destination="Bp3-9T-wV3" id="nQf-wx-Ln0"/>
                         <outlet property="sizeOfSharedVoice" destination="60a-F5-dPq" id="Rab-d7-bj4"/>
-                        <outlet property="videoIndicator" destination="Vw4-sb-F7V" id="VV4-D3-Qa3"/>
-                        <outlet property="voicesIndicator" destination="m1U-NL-Gz0" id="buK-31-V38"/>
                         <segue destination="KhY-i4-sa3" kind="show" identifier="showImagesAndVideoSharedMediaCollection" id="DS0-aJ-OOF"/>
                         <segue destination="G0W-jm-Q25" kind="show" identifier="showLinksAndAudioSharedMediaTableview" id="qqb-MW-OTd"/>
                     </connections>
@@ -4719,10 +4690,10 @@ with iGap right now</string>
                                     <constraints>
                                         <constraint firstItem="qLY-lK-qmI" firstAttribute="leading" secondItem="cGT-6j-CjA" secondAttribute="trailing" constant="8" id="0yx-L4-7Tw"/>
                                         <constraint firstItem="OAx-S4-Xad" firstAttribute="top" secondItem="gsh-AL-s63" secondAttribute="bottom" constant="2" id="37F-14-6Se"/>
+                                        <constraint firstItem="4sL-l3-a9P" firstAttribute="leading" secondItem="qLY-lK-qmI" secondAttribute="trailing" constant="136" id="F7S-NS-bXF"/>
                                         <constraint firstItem="cGT-6j-CjA" firstAttribute="leading" secondItem="7Ht-86-pBb" secondAttribute="leadingMargin" id="HRg-tN-JXQ"/>
                                         <constraint firstItem="4sL-l3-a9P" firstAttribute="bottom" secondItem="7Ht-86-pBb" secondAttribute="bottomMargin" id="Ll0-sX-qJR"/>
                                         <constraint firstItem="gsh-AL-s63" firstAttribute="top" secondItem="7Ht-86-pBb" secondAttribute="topMargin" id="NaC-8r-ctw"/>
-                                        <constraint firstItem="4sL-l3-a9P" firstAttribute="leading" secondItem="7Ht-86-pBb" secondAttribute="leadingMargin" constant="283" id="UKN-fp-DPH"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="cGT-6j-CjA" secondAttribute="bottom" constant="47" id="V2p-bA-DV5"/>
                                         <constraint firstItem="cGT-6j-CjA" firstAttribute="top" secondItem="7Ht-86-pBb" secondAttribute="topMargin" constant="13" id="bdO-Vn-jnL"/>
                                         <constraint firstItem="gsh-AL-s63" firstAttribute="leading" secondItem="cGT-6j-CjA" secondAttribute="trailing" constant="8" id="cbp-Cq-LyW"/>
@@ -4850,9 +4821,9 @@ with iGap right now</string>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="en3-Mx-1bL">
-                                            <rect key="frame" x="8" y="9" width="50" height="60"/>
+                                            <rect key="frame" x="8" y="9" width="50" height="50"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="60" id="22b-jI-zwJ"/>
+                                                <constraint firstAttribute="height" constant="50" id="22b-jI-zwJ"/>
                                                 <constraint firstAttribute="width" constant="50" id="SfT-Qn-TkQ"/>
                                             </constraints>
                                         </imageView>
@@ -4878,12 +4849,12 @@ with iGap right now</string>
                                     <constraints>
                                         <constraint firstItem="en3-Mx-1bL" firstAttribute="top" secondItem="sSw-JB-8zX" secondAttribute="topMargin" constant="1" id="FzG-3c-oJG"/>
                                         <constraint firstItem="Q7c-VV-f6a" firstAttribute="leading" secondItem="en3-Mx-1bL" secondAttribute="trailing" constant="8" id="ZQO-1N-sr8"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="en3-Mx-1bL" secondAttribute="bottom" constant="1" id="b3a-Zq-Nd4"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="en3-Mx-1bL" secondAttribute="bottom" constant="11.5" id="b3a-Zq-Nd4"/>
                                         <constraint firstItem="en3-Mx-1bL" firstAttribute="leading" secondItem="sSw-JB-8zX" secondAttribute="leadingMargin" id="b5D-PK-5dP"/>
                                         <constraint firstItem="0TC-En-kH9" firstAttribute="leading" secondItem="en3-Mx-1bL" secondAttribute="trailing" constant="8" id="cKQ-BU-nPl"/>
                                         <constraint firstItem="Q7c-VV-f6a" firstAttribute="top" secondItem="0tL-ba-aYl" secondAttribute="bottom" constant="5" id="mBE-ws-RJM"/>
                                         <constraint firstItem="0tL-ba-aYl" firstAttribute="top" secondItem="0TC-En-kH9" secondAttribute="bottom" constant="5" id="rYV-NK-VD3"/>
-                                        <constraint firstItem="en3-Mx-1bL" firstAttribute="centerY" secondItem="sSw-JB-8zX" secondAttribute="centerY" id="wNz-53-d3n"/>
+                                        <constraint firstItem="en3-Mx-1bL" firstAttribute="centerY" secondItem="sSw-JB-8zX" secondAttribute="centerY" constant="-5.25" id="wNz-53-d3n"/>
                                         <constraint firstItem="0TC-En-kH9" firstAttribute="top" secondItem="sSw-JB-8zX" secondAttribute="topMargin" id="x8t-8H-MqD"/>
                                         <constraint firstItem="0tL-ba-aYl" firstAttribute="leading" secondItem="en3-Mx-1bL" secondAttribute="trailing" constant="8" id="yEL-xR-h0k"/>
                                     </constraints>
@@ -4953,10 +4924,10 @@ with iGap right now</string>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="m3u-p1-8tV"/>
+        <segue reference="Whh-xk-YjW"/>
+        <segue reference="liy-Td-nok"/>
         <segue reference="Z1Q-fW-ByF"/>
         <segue reference="xjE-gJ-o8r"/>
         <segue reference="VDJ-Zw-sln"/>
-        <segue reference="Whh-xk-YjW"/>
-        <segue reference="liy-Td-nok"/>
     </inferredMetricsTieBreakers>
 </document>

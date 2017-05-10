@@ -13,6 +13,7 @@ import ProtocolBuffers
 
 let kIGUserLoggedInNotificationName = "im.igap.ios.user.logged.in"
 let kIGNotificationNameDidCreateARoom = "im.igap.ios.room.created"
+let kIGNoticationForPushUserExpire = "im.igap.ios.user.expire"
 let statusBarTappedNotification = Notification(name: Notification.Name(rawValue: "im.igap.statusbarTapped"))
 
 

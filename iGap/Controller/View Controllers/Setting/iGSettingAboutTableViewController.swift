@@ -27,6 +27,9 @@ class IGSettingAboutTableViewController: UITableViewController , UIGestureRecogn
         let navigationController = self.navigationController as! IGNavigationController
         navigationController.interactivePopGestureRecognizer?.delegate = self
     }
+    override func viewDidAppear(_ animated: Bool) {
+        self.tableView.isUserInteractionEnabled = true
+    }
     
     // MARK: - Table view data source
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -56,13 +59,16 @@ class IGSettingAboutTableViewController: UITableViewController , UIGestureRecogn
             switch indexPath.row {
             case 0:
                 index = indexPath.row
+                self.tableView.isUserInteractionEnabled = false
                 performSegue(withIdentifier: "GoToWebPage", sender: self)
             case 1:
                 index = indexPath.row
-              performSegue(withIdentifier: "GoToWebPage", sender: self)
+                self.tableView.isUserInteractionEnabled = false
+                performSegue(withIdentifier: "GoToWebPage", sender: self)
             case 2:
                 index = indexPath.row
-              performSegue(withIdentifier: "GoToWebPage", sender: self)
+                self.tableView.isUserInteractionEnabled = false
+                performSegue(withIdentifier: "GoToWebPage", sender: self)
             default:
                 break
             }

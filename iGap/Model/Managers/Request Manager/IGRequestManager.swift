@@ -49,6 +49,8 @@ let protoClassesLookupTable: [Int: (proto: GeneratedMessageProtocol.Type, repons
             IGUserProfileGetNicknameRequest.Handler.self    as IGRequest.Handler.Type),
     30114: (IGPUserAvatarAddResponse.self                   as GeneratedMessageProtocol.Type,
             IGUserAvatarAddRequest.Handler.self             as IGRequest.Handler.Type),
+    30116: (IGPUserAvatarGetListResponse.self               as GeneratedMessageProtocol.Type,
+            IGUserAvatarGetListRequest.Handler.self         as IGRequest.Handler.Type),
     30117: (IGPUserInfoResponse.self                        as GeneratedMessageProtocol.Type,
             IGUserInfoRequest.Handler.self                  as IGRequest.Handler.Type),
     30118: (IGPUserGetDeleteTokenResponse.self              as GeneratedMessageProtocol.Type,
@@ -81,6 +83,7 @@ let protoClassesLookupTable: [Int: (proto: GeneratedMessageProtocol.Type, repons
             IGUserPrivacyGetRuleRequest.Handler.self        as IGRequest.Handler.Type),
     30144: (IGPUserPrivacySetRuleResponse.self              as GeneratedMessageProtocol.Type,
             IGUserPrivacySetRuleRequest.Handler.self        as IGRequest.Handler.Type),
+    
     
     //Chat: 302xx
     30200: (IGPChatGetRoomResponse.self                     as GeneratedMessageProtocol.Type,
@@ -229,7 +232,8 @@ let protoClassesLookupTable: [Int: (proto: GeneratedMessageProtocol.Type, repons
             IGClientJoinByInviteLinkRequest.Handler.self    as IGRequest.Handler.Type),
     30609: (IGPClientJoinByUsernameResponse.self            as GeneratedMessageProtocol.Type,
             IGClientJoinByUsernameRequest.Handler.self      as IGRequest.Handler.Type),
-    
+    30613: (IGPClientCountRoomHistoryResponse.self          as GeneratedMessageProtocol.Type,
+            IGClientCountRoomHistoryRequest.Handler.self    as IGRequest.Handler.Type),
     
     //File: 307xx
     30700: (IGPFileUploadOptionResponse.self                as GeneratedMessageProtocol.Type,
@@ -244,6 +248,10 @@ let protoClassesLookupTable: [Int: (proto: GeneratedMessageProtocol.Type, repons
             IGFileInfoRequest.Handler.self                  as IGRequest.Handler.Type),
     30705: (IGPFileDownloadResponse.self                    as GeneratedMessageProtocol.Type,
             IGFileDownloadRequest.Handler.self              as IGRequest.Handler.Type),
+    
+    //Push: 600xx
+    60002: (IGPPushUserInfoExpiredResponse.self              as GeneratedMessageProtocol.Type,
+           IGPushUserInfoExpiredRequest.Handler.self        as IGRequest.Handler.Type)
     
 ]
 

@@ -15,6 +15,8 @@ import RxRealm
 import RxSwift
 import RxCocoa
 import IGProtoBuff
+import MGSwipeTableCell
+import MBProgressHUD
 
 class IGGroupsTableViewController: UITableViewController {
     
@@ -22,7 +24,10 @@ class IGGroupsTableViewController: UITableViewController {
     var cellIdentifer = IGChatRoomListTableViewCell.cellReuseIdentifier()
     var rooms: Results<IGRoom>? = nil
     var notificationToken: NotificationToken?
-    
+    var hud = MBProgressHUD()
+    var connectionStatus: IGAppManager.ConnectionStatus?
+
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -68,7 +73,7 @@ class IGGroupsTableViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        //self.setTabbarHidden(false, animated: true)
+        self.tableView.isUserInteractionEnabled = true
     }
     
     override func didReceiveMemoryWarning() {
@@ -108,11 +113,157 @@ class IGGroupsTableViewController: UITableViewController {
         let cell: IGChatRoomListTableViewCell = self.tableView.dequeueReusableCell(withIdentifier: cellIdentifer) as! IGChatRoomListTableViewCell
         cell.setRoom(room: rooms![indexPath.row])
         
+        cell.rightButtons =
+            [MGSwipeButton(title: "Delete", backgroundColor: UIColor(red: 252.0/255.0, green: 23.0/255.0, blue: 22.0/255.0, alpha: 1), callback: { (sender: MGSwipeTableCell!) -> Bool in
+                let room = cell.room!
+                //let room = self.rooms![indexPath.row]
+                let title = room.title != nil ? room.title! : "Delete"
+                let alertC = UIAlertController(title: title, message: "What do you want to do?", preferredStyle: .actionSheet)
+                let clear = UIAlertAction(title: "Clear History", style: .default, handler: { (action) in
+                    switch room.type{
+                    case .chat:
+                        if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
+                            let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
+                            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                            alert.addAction(okAction)
+                            self.present(alert, animated: true, completion: nil)
+                            
+                        } else {
+                            self.clearChatMessageHistory(room: room)
+                        }
+                    case .group:
+                        if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
+                            let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
+                            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                            alert.addAction(okAction)
+                            self.present(alert, animated: true, completion: nil)
+                            
+                        } else {
+                            self.clearGroupMessageHistory(room: room)
+                        }
+                    default:
+                        break
+                    }
+                    
+                })
+                
+                let remove = UIAlertAction(title: "Delete", style: .destructive, handler: { (action) in
+                    switch room.type {
+                    case .chat:
+                        if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
+                            let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
+                            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                            alert.addAction(okAction)
+                            self.present(alert, animated: true, completion: nil)
+                            
+                        } else {
+                            self.deleteChat(room: room)
+                        }
+                    case .group:
+                        if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
+                            let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
+                            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                            alert.addAction(okAction)
+                            self.present(alert, animated: true, completion: nil)
+                            
+                        } else {
+                            self.deleteGroup(room: room)
+                        }
+                    default:
+                        break
+                    }
+                })
+                
+                
+                
+                let leave = UIAlertAction(title: "Leave", style: .destructive, handler: { (action) in
+                    switch room.type {
+                    case .chat:
+                        break
+                    case .group:
+                        if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
+                            let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
+                            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                            alert.addAction(okAction)
+                            self.present(alert, animated: true, completion: nil)
+                            
+                            
+                        } else {
+                            self.leaveGroup(room: room)
+                        }
+                    case .channel:
+                        if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
+                            let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
+                            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                            alert.addAction(okAction)
+                            self.present(alert, animated: true, completion: nil)
+                            
+                            
+                        } else {
+                            self.leaveChannel(room: room)
+                        }
+                    }
+                })
+                
+                let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
+                    
+                })
+                
+                
+                if room.type == .chat || room.type == .group {
+                    alertC.addAction(clear)
+                }
+                if room.chatRoom != nil {
+                    alertC.addAction(remove)
+                } else {
+                    if let groupRoom = room.groupRoom {
+                        if groupRoom.role == .owner {
+                            alertC.addAction(leave)
+                            alertC.addAction(remove)
+                        } else{
+                            alertC.addAction(leave)
+                        }
+                    } else if let channel = room.channelRoom {
+                        if channel.role == .owner {
+                            alertC.addAction(remove)
+                            alertC.addAction(leave)
+                        } else{
+                            alertC.addAction(leave)
+                        }
+                    }
+                }
+                
+                
+                alertC.addAction(cancel)
+                
+                self.present(alertC, animated: true, completion: {
+                    
+                })
+                
+                return true
+            })]
+        cell.rightSwipeSettings.transition = MGSwipeTransition.border
+        
+        
+        cell.leftExpansion.buttonIndex = 0
+        cell.leftExpansion.fillOnTrigger = true
+        cell.leftExpansion.threshold = 2.0
+        
+        cell.rightExpansion.buttonIndex = 0
+        cell.rightExpansion.fillOnTrigger = true
+        cell.rightExpansion.threshold = 1.5
+        
+        
+        cell.separatorInset = UIEdgeInsets(top: 0, left: 82.0, bottom: 0, right: 0)
+        cell.layoutMargins = UIEdgeInsets.zero
+
+        
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedRoomForSegue = rooms![indexPath.row]
+        self.tableView.isUserInteractionEnabled = false
         performSegue(withIdentifier: "showRoomMessages", sender: self)
     }
     
@@ -139,3 +290,192 @@ class IGGroupsTableViewController: UITableViewController {
     }
     
 }
+
+extension IGGroupsTableViewController {
+    func clearChatMessageHistory(room: IGRoom) {
+        self.hud = MBProgressHUD.showAdded(to: self.view.superview!, animated: true)
+        self.hud.mode = .indeterminate
+        IGChatClearMessageRequest.Generator.generate(room: room).success({ (protoResponse) in
+            DispatchQueue.main.async {
+                switch protoResponse {
+                case let clearChatMessages as IGPChatClearMessageResponse:
+                    IGChatClearMessageRequest.Handler.interpret(response: clearChatMessages)
+                default:
+                    break
+                }
+                self.hud.hide(animated: true)
+            }
+        }).error({ (errorCode , waitTime) in
+            switch errorCode {
+            case .timeout:
+                DispatchQueue.main.async {
+                    let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    self.hud.hide(animated: true)
+                    self.present(alert, animated: true, completion: nil)
+                }
+            default:
+                DispatchQueue.main.async {
+                    self.hud.hide(animated: true)
+                }
+                break
+            }
+            
+        }).send()
+    }
+    
+    func clearGroupMessageHistory(room: IGRoom) {
+        self.hud = MBProgressHUD.showAdded(to: self.view.superview!, animated: true)
+        self.hud.mode = .indeterminate
+        IGGroupClearMessageRequest.Generator.generate(group: room).success({ (protoResponse) in
+            DispatchQueue.main.async {
+                switch protoResponse {
+                case let deleteGroupMessageHistory as IGPGroupClearMessageResponse:
+                    IGGroupClearMessageRequest.Handler.interpret(response: deleteGroupMessageHistory)
+                default:
+                    break
+                }
+                self.hud.hide(animated: true)
+            }
+        }).error({ (errorCode , waitTime) in
+            DispatchQueue.main.async {
+                switch errorCode {
+                case .timeout:
+                    let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: nil)
+                default:
+                    break
+                }
+                self.hud.hide(animated: true)
+            }
+        }).send()
+    }
+    
+    func deleteChat(room: IGRoom) {
+        self.hud = MBProgressHUD.showAdded(to: self.view.superview!, animated: true)
+        self.hud.mode = .indeterminate
+        IGChatDeleteRequest.Generator.generate(room: room).success({ (protoResponse) in
+            DispatchQueue.main.async {
+                switch protoResponse {
+                case let deleteChat as IGPChatDeleteResponse:
+                    IGChatDeleteRequest.Handler.interpret(response: deleteChat)
+                default:
+                    break
+                }
+                self.hud.hide(animated: true)
+            }
+        }).error({ (errorCode , waitTime) in
+            DispatchQueue.main.async {
+                switch errorCode {
+                case .timeout:
+                    let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    self.hud.hide(animated: true)
+                    self.present(alert, animated: true, completion: nil)
+                default:
+                    break
+                }
+                self.hud.hide(animated: true)
+            }
+            
+        }).send()
+    }
+    
+    func deleteGroup(room: IGRoom) {
+        self.hud = MBProgressHUD.showAdded(to: self.view.superview!, animated: true)
+        self.hud.mode = .indeterminate
+        IGGroupDeleteRequest.Generator.generate(group: room).success({ (protoResponse) in
+            DispatchQueue.main.async {
+                switch protoResponse {
+                case let deleteGroup as IGPGroupDeleteResponse:
+                    IGGroupDeleteRequest.Handler.interpret(response: deleteGroup)
+                default:
+                    break
+                }
+                self.hud.hide(animated: true)
+            }
+        }).error({ (errorCode , waitTime) in
+            DispatchQueue.main.async {
+                switch errorCode {
+                case .timeout:
+                    let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: nil)
+                default:
+                    break
+                }
+                self.hud.hide(animated: true)
+            }
+        }).send()
+    }
+    
+    func leaveGroup(room: IGRoom) {
+        self.hud = MBProgressHUD.showAdded(to: self.view.superview!, animated: true)
+        self.hud.mode = .indeterminate
+        IGGroupLeftRequest.Generator.generate(room: room).success{ (protoResponse) in
+            DispatchQueue.main.async {
+                switch protoResponse {
+                case let response as IGPGroupLeftResponse:
+                    IGGroupLeftRequest.Handler.interpret(response: response)
+                default:
+                    break
+                }
+                self.hud.hide(animated: true)
+            }
+            }.error { (errorCode, waitTime) in
+                DispatchQueue.main.async {
+                    switch errorCode {
+                    case .timeout:
+                        let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                    default:
+                        let alert = UIAlertController(title: "Error", message: "There was an error leaving this group.", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                    self.hud.hide(animated: true)
+                }
+            }.send()
+    }
+    
+    func leaveChannel(room: IGRoom) {
+        self.hud = MBProgressHUD.showAdded(to: self.view.superview!, animated: true)
+        self.hud.mode = .indeterminate
+        IGChannelLeftRequest.Generator.generate(room: room).success { (protoResponse) in
+            DispatchQueue.main.async {
+                switch protoResponse {
+                case let response as IGPChannelLeftResponse:
+                    IGChannelLeftRequest.Handler.interpret(response: response)
+                default:
+                    break
+                }
+                self.hud.hide(animated: true)
+            }
+            }.error { (errorCode, waitTime) in
+                DispatchQueue.main.async {
+                    switch errorCode {
+                    case .timeout:
+                        let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                    default:
+                        let alert = UIAlertController(title: "Error", message: "There was an error leaving this channel.", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                    self.hud.hide(animated: true)
+                }
+            }.send()
+    }
+}
+

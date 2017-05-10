@@ -23,12 +23,12 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
     @IBOutlet weak var sizeOfSharedLinksLabel: UILabel!
     @IBOutlet weak var sizeOfSharedVoice: UILabel!
     
-    @IBOutlet weak var imageIndicator: UIActivityIndicatorView!
-    @IBOutlet weak var voicesIndicator: UIActivityIndicatorView!
-    @IBOutlet weak var linkIndicator: UIActivityIndicatorView!
-    @IBOutlet weak var fileIndicator: UIActivityIndicatorView!
-    @IBOutlet weak var audioIndicator: UIActivityIndicatorView!
-    @IBOutlet weak var videoIndicator: UIActivityIndicatorView!
+//    @IBOutlet weak var imageIndicator: UIActivityIndicatorView!
+//    @IBOutlet weak var voicesIndicator: UIActivityIndicatorView!
+//    @IBOutlet weak var linkIndicator: UIActivityIndicatorView!
+//    @IBOutlet weak var fileIndicator: UIActivityIndicatorView!
+//    @IBOutlet weak var audioIndicator: UIActivityIndicatorView!
+//    @IBOutlet weak var videoIndicator: UIActivityIndicatorView!
     
     
     var selectedRowNum : Int!
@@ -53,11 +53,14 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
         getCountOfFile()
         getCountOfVoices()
         getCountOfLinks()
+        getCountOfSahredMediaFiles()
+
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        self.tableView.isUserInteractionEnabled = true
         
-
     }
 
     override func didReceiveMemoryWarning() {
@@ -83,31 +86,38 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
             switch indexPath.row {
             case 0:
                 if sharedMediaImageFile.count != 0 {
+                    self.tableView.isUserInteractionEnabled = false
+
                 self.performSegue(withIdentifier: "showImagesAndVideoSharedMediaCollection", sender: self)
                 }
                 break
             case 1:
                 if sharedMediaAudioFile.count != 0 {
+                    self.tableView.isUserInteractionEnabled = false
                 self.performSegue(withIdentifier: "showLinksAndAudioSharedMediaTableview", sender: self)
                 }
                 break
             case 2:
                 if sharedMediaVideoFile.count != 0 {
+                    self.tableView.isUserInteractionEnabled = false
                 self.performSegue(withIdentifier: "showImagesAndVideoSharedMediaCollection", sender: self)
                 }
                 break
             case 3:
                 if sharedMediaFile.count != 0 {
+                    self.tableView.isUserInteractionEnabled = false
                 self.performSegue(withIdentifier: "showLinksAndAudioSharedMediaTableview", sender: self)
                 }
                 break
             case 4:
                 if sharedMediaVoiceFile.count != 0 {
+                    self.tableView.isUserInteractionEnabled = false
                 self.performSegue(withIdentifier: "showLinksAndAudioSharedMediaTableview", sender: self)
                 }
                 break
             case 5:
                 if sharedMediaLinkFile.count != 0 {
+                    self.tableView.isUserInteractionEnabled = false
                     self.performSegue(withIdentifier: "showLinksAndAudioSharedMediaTableview", sender: self)
                 }
 
@@ -118,25 +128,31 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
         }
     }
     
-    func getCountOfImages() {
-        
+    func getCountOfSahredMediaFiles() {
         if let selectedRoom = room {
-            self.imageIndicator.startAnimating()
-            IGClientSearchRoomHistoryRequest.Generator.generate(roomId: selectedRoom.id, offset: 0, filter: .image).success({ (protoResponse) in
+            self.hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+            self.hud.mode = .indeterminate
+            IGClientCountRoomHistoryRequest.Generator.generate(roomID: selectedRoom.id).success({ (protoResponse) in
                 DispatchQueue.main.async {
                     switch protoResponse {
-                    case let clientSearchRoomHistoryResponse as IGPClientSearchRoomHistoryResponse:
-                        let response =  IGClientSearchRoomHistoryRequest.Handler.interpret(response: clientSearchRoomHistoryResponse , roomId: selectedRoom.id)
-                        if let messagesResponse: [IGPRoomMessage] = response.messages {
-                            for message in messagesResponse {
-                                let msg = IGRoomMessage(igpMessage: message, roomId: selectedRoom.id)
-                                self.sharedMediaImageFile.append(msg)
-                            }
-                        }
-                        let countOfImage = response.NotDeletedCount
-                        self.sizeOfSharedImage.text = "\(countOfImage)"
-                        self.imageIndicator.stopAnimating()
-                        self.imageIndicator.hidesWhenStopped = true
+                    case let clientCountRoomHistory as IGPClientCountRoomHistoryResponse:
+                        let response = IGClientCountRoomHistoryRequest.Handler.interpret(response: clientCountRoomHistory)
+                        let media = response.media
+                        let audio = response.audio
+                        let video = response.video
+                        let url = response.url
+                        let file = response.file
+                        let gif  = response.gif
+                        let image = response.image
+                        let voice = response.voice
+                        self.sizeOfSharedVideos.text = "\(video)"
+                        self.sizeOfSharedFiles.text = "\(file)"
+                        self.sizeOfSharedImage.text = "\(image)"
+                        self.sizeOfSharedVoice.text = "\(voice)"
+                        self.sizeOfSharedAudiosLabel.text = "\(audio)"
+                        self.sizeOfSharedLinksLabel.text = "\(url)"
+                        self.hud.hide(animated: true)
+                        
                     default:
                         break
                     }
@@ -148,16 +164,51 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
                         let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
                         let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
                         alert.addAction(okAction)
-                        self.imageIndicator.stopAnimating()
-                        self.imageIndicator.hidesWhenStopped = true
+                        self.present(alert, animated: true, completion: nil)
+                        self.hud.hide(animated: true)
+                        
+                    }
+                default:
+                    break
+                }
+                
+            }).send()
+
+
+        }
+    }
+    
+    func getCountOfImages() {
+        
+        if let selectedRoom = room {
+            IGClientSearchRoomHistoryRequest.Generator.generate(roomId: selectedRoom.id, offset: 0, filter: .image).success({ (protoResponse) in
+                DispatchQueue.main.async {
+                    switch protoResponse {
+                    case let clientSearchRoomHistoryResponse as IGPClientSearchRoomHistoryResponse:
+                        let response =  IGClientSearchRoomHistoryRequest.Handler.interpret(response: clientSearchRoomHistoryResponse , roomId: selectedRoom.id)
+                        if let messagesResponse: [IGPRoomMessage] = response.messages {
+                            for message in messagesResponse {
+                                let msg = IGRoomMessage(igpMessage: message, roomId: selectedRoom.id)
+                                self.sharedMediaImageFile.append(msg)
+                            }
+                        }
+                    default:
+                        break
+                    }
+                }
+            }).error ({ (errorCode, waitTime) in
+                switch errorCode {
+                case .timeout:
+                    DispatchQueue.main.async {
+                        let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alert.addAction(okAction)
                         self.present(alert, animated: true, completion: nil)
                         
                     }
                 case .clientSearchRoomHistoryNotFound:
                     DispatchQueue.main.async {
                         self.sizeOfSharedImage.text = "\(0)"
-                        self.imageIndicator.stopAnimating()
-                        self.imageIndicator.hidesWhenStopped = true
                     }
                 default:
                     break
@@ -170,7 +221,6 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
     
     func getCountOfAudio() {
         if let selectedRoom = room {
-            self.audioIndicator.startAnimating()
             IGClientSearchRoomHistoryRequest.Generator.generate(roomId: selectedRoom.id, offset: 0, filter: .audio).success({ (protoResponse) in
                 DispatchQueue.main.async {
                     switch protoResponse {
@@ -182,10 +232,7 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
                                 self.sharedMediaAudioFile.append(msg)
                             }
                         }
-                        let countOfImage = response.NotDeletedCount
-                        self.sizeOfSharedAudiosLabel.text = "\(countOfImage)"
-                        self.audioIndicator.stopAnimating()
-                        self.audioIndicator.hidesWhenStopped = true
+                        
                     default:
                         break
                     }
@@ -197,16 +244,12 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
                         let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
                         let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
                         alert.addAction(okAction)
-                        self.audioIndicator.stopAnimating()
-                        self.audioIndicator.hidesWhenStopped = true
                         self.present(alert, animated: true, completion: nil)
                     }
                     
                 case .clientSearchRoomHistoryNotFound:
                     DispatchQueue.main.async {
                         self.sizeOfSharedAudiosLabel.text = "\(0)"
-                        self.audioIndicator.stopAnimating()
-                        self.audioIndicator.hidesWhenStopped = true
                     }
 
                 default:
@@ -220,7 +263,6 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
     
     func getCountOfVideos() {
         if let selectedRoom = room {
-            self.videoIndicator.startAnimating()
             IGClientSearchRoomHistoryRequest.Generator.generate(roomId: selectedRoom.id, offset: 0, filter: .video).success({ (protoResponse) in
                 DispatchQueue.main.async {
                     switch protoResponse {
@@ -232,10 +274,6 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
                                 self.sharedMediaVideoFile.append(msg)
                             }
                         }
-                        let countOfImage = response.NotDeletedCount
-                        self.sizeOfSharedVideos.text = "\(countOfImage)"
-                        self.videoIndicator.stopAnimating()
-                        self.videoIndicator.hidesWhenStopped = true
                     default:
                         break
                     }
@@ -247,15 +285,11 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
                         let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
                         let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
                         alert.addAction(okAction)
-                        self.videoIndicator.stopAnimating()
-                        self.videoIndicator.hidesWhenStopped = true
                         self.present(alert, animated: true, completion: nil)
                     }
                 case .clientSearchRoomHistoryNotFound:
                     DispatchQueue.main.async {
                         self.sizeOfSharedVideos.text = "\(0)"
-                        self.videoIndicator.stopAnimating()
-                        self.videoIndicator.hidesWhenStopped = true
 
                     }
 
@@ -272,7 +306,6 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
     func getCountOfFile() {
         
         if let selectedRoom = room {
-            self.fileIndicator.startAnimating()
             IGClientSearchRoomHistoryRequest.Generator.generate(roomId: selectedRoom.id, offset: 0, filter: .file).success({ (protoResponse) in
                 DispatchQueue.main.async {
                     switch protoResponse {
@@ -286,8 +319,6 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
                         }
                         let countOfImage = response.NotDeletedCount
                         self.sizeOfSharedFiles.text = "\(countOfImage)"
-                        self.fileIndicator.stopAnimating()
-                        self.fileIndicator.hidesWhenStopped = true
                     default:
                         break
                     }
@@ -299,15 +330,11 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
                         let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
                         let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
                         alert.addAction(okAction)
-                        self.fileIndicator.stopAnimating()
-                        self.fileIndicator.hidesWhenStopped = true
                         self.present(alert, animated: true, completion: nil)
                     }
                 case .clientSearchRoomHistoryNotFound:
                     DispatchQueue.main.async {
                         self.sizeOfSharedFiles.text = "\(0)"
-                        self.fileIndicator.stopAnimating()
-                        self.fileIndicator.hidesWhenStopped = true
                     }
 
                 default:
@@ -322,7 +349,6 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
     
     func getCountOfVoices() {
         if let selectedRoom = room {
-            self.voicesIndicator.startAnimating()
             IGClientSearchRoomHistoryRequest.Generator.generate(roomId: selectedRoom.id, offset: 0, filter: .voice).success({ (protoResponse) in
                 DispatchQueue.main.async {
                     switch protoResponse {
@@ -336,8 +362,6 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
                         }
                         let countOfImage = response.NotDeletedCount
                         self.sizeOfSharedVoice.text = "\(countOfImage)"
-                        self.voicesIndicator.stopAnimating()
-                        self.voicesIndicator.hidesWhenStopped = true
                     default:
                         break
                     }
@@ -349,15 +373,11 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
                         let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
                         let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
                         alert.addAction(okAction)
-                        self.voicesIndicator.stopAnimating()
-                        self.voicesIndicator.hidesWhenStopped = true
                         self.present(alert, animated: true, completion: nil)
                     }
                 case .clientSearchRoomHistoryNotFound:
                     DispatchQueue.main.async {
                         self.sizeOfSharedLinksLabel.text = "\(0)"
-                        self.voicesIndicator.stopAnimating()
-                        self.voicesIndicator.hidesWhenStopped = true
                     }
    
                 default:
@@ -371,7 +391,6 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
     }
     func getCountOfLinks() {
         if let selectedRoom = room {
-            self.linkIndicator.startAnimating()
             IGClientSearchRoomHistoryRequest.Generator.generate(roomId: selectedRoom.id, offset: 0, filter: .url).success({ (protoResponse) in
                 DispatchQueue.main.async {
                     switch protoResponse {
@@ -385,8 +404,6 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
                         }
                         let countOfImage = response.NotDeletedCount
                         self.sizeOfSharedLinksLabel.text = "\(countOfImage)"
-                        self.linkIndicator.stopAnimating()
-                        self.linkIndicator.hidesWhenStopped = true
                     default:
                         break
                     }
@@ -398,15 +415,11 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
                         let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
                         let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
                         alert.addAction(okAction)
-                        self.voicesIndicator.stopAnimating()
-                        self.voicesIndicator.hidesWhenStopped = true
                         self.present(alert, animated: true, completion: nil)
                     }
                 case .clientSearchRoomHistoryNotFound:
                     DispatchQueue.main.async {
                         self.sizeOfSharedLinksLabel.text = "\(0)"
-                        self.voicesIndicator.stopAnimating()
-                        self.voicesIndicator.hidesWhenStopped = true
                     }
                     
                 default:
@@ -432,7 +445,6 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
             switch selectedRowNum {
             case 0:
                 destination.navigationTitle = "Images"
-                print(sharedMediaImageFile.count)
                 destination.sharedMedia = sharedMediaImageFile
             case 2:
                 destination.navigationTitle = "Videos"

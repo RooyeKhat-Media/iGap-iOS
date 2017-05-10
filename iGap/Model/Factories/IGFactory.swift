@@ -24,7 +24,7 @@ fileprivate class IGFactoryTask: NSObject {
     var error:      (()->())?
     var status:     Status      = .pending
     var randomID:   String      = ""
-    
+    var isUpdateStatusRunning : Bool = false
     override init() {
         self.task = {}
         self.randomID = IGGlobal.randomString(length: 64)
@@ -726,6 +726,7 @@ class IGFactory: NSObject {
     //MARK: --------------------------------------------------------
     //MARK: ▶︎▶︎ User
     func updateUserStatus(_ userId: Int64, status: IGRegisteredUser.IGLastSeenStatus) {
+
         print ("◉ Executing Task: " + #function)
         let task = IGFactoryTask()
         task.task = {
@@ -1135,6 +1136,46 @@ class IGFactory: NSObject {
         self.performNextFactoryTaskIfPossible()
     }
     
+    func updateUserInfoExpired(_ userId: Int64) {
+        let task = IGFactoryTask()
+        task.task = {
+            IGFactoryTask(dependencyUserTask: userId, cacheID: nil).success {
+                IGDatabaseManager.shared.perfrmOnDatabaseThread {
+                    print ("◉ Executing Task: " + #function)
+                    let predicate = NSPredicate(format: "id = %lld", userId)
+                    if let userInDb = try! Realm().objects(IGRegisteredUser.self).filter(predicate).first {
+                        try! IGDatabaseManager.shared.realm.write {
+                            if userInDb.lastSeenStatus == .online {
+                                self.updateUserStatus(userId, status: .longTimeAgo)
+                            } else if userInDb.lastSeenStatus == .longTimeAgo {
+                                self.updateUserStatus(userId, status: .online)
+                                
+                            }
+                            NotificationCenter.default.post(name: NSNotification.Name(rawValue: kIGNoticationForPushUserExpire),
+                                                            object: nil,
+                                                            userInfo: ["user": userId])
+                            
+                           
+                        }
+                    }
+                    
+                    IGFactory.shared.performInFactoryQueue {
+                        task.success!()
+                    }
+                }
+                }.error {
+                    task.error!()
+                }.execute()
+        }
+        task.success {
+            self.removeTaskFromQueueAndPerformNext(task)
+            }.error {
+                self.removeTaskFromQueueAndPerformNext(task)
+            }.addToQueue() //.addAsHighPriorityToQueue()
+        self.performNextFactoryTaskIfPossible()
+        
+    }
+
     func saveBlockedUsers(_ blockedUsers : [IGPUserContactsGetBlockedListResponse.IGPUser]){
         for blockedUser in blockedUsers {
             let task = IGFactoryTask()
@@ -1347,7 +1388,7 @@ class IGFactory: NSObject {
                 let predicate = NSPredicate(format: "id = %lld", userId)
                 if let userInDb = IGDatabaseManager.shared.realm.objects(IGRegisteredUser.self).filter(predicate).first {
                     try! IGDatabaseManager.shared.realm.write {
-                        userInDb.avatar = avatar
+                     //   userInDb.avatar = avatar
                     }
                 }
                 IGFactory.shared.performInFactoryQueue {

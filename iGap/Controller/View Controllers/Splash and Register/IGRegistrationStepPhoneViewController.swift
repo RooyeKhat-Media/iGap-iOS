@@ -30,6 +30,7 @@ class IGRegistrationStepPhoneViewController: UIViewController {
     var registrationResponse : (username:String, userId:Int64, authorHash:String, verificationMethod: IGVerificationCodeSendMethod, resendDelay:Int32, codeDigitsCount:Int32, codeRegex:String)?
     var hud = MBProgressHUD()
     private let disposeBag = DisposeBag()
+    var connectionStatus: IGAppManager.ConnectionStatus?
     
     private func updateNavigationBarBasedOnNetworkStatus(_ status: IGAppManager.ConnectionStatus) {
         let navigationItem = self.navigationItem as! IGNavigationItem
@@ -37,9 +38,11 @@ class IGRegistrationStepPhoneViewController: UIViewController {
         switch status {
         case .waitingForNetwork:
             navigationItem.setNavigationItemForWaitingForNetwork()
+            connectionStatus = .waitingForNetwork
             break
         case .connecting:
             navigationItem.setNavigationItemForConnecting()
+            connectionStatus = .connecting
             if selectedCountry == nil {
             selectedCountry = IGCountryInfo.defaultCountry()
             }
@@ -48,6 +51,7 @@ class IGRegistrationStepPhoneViewController: UIViewController {
         case .connected:
             self.setDefaultNavigationItem()
             self.getUserCurrentLocation()
+            connectionStatus = .connected
             break
         }
     }
@@ -65,6 +69,7 @@ class IGRegistrationStepPhoneViewController: UIViewController {
         IGAppManager.sharedManager.connectionStatus.asObservable().subscribe(onNext: { (connectionStatus) in
             DispatchQueue.main.async {
                 self.updateNavigationBarBasedOnNetworkStatus(connectionStatus)
+                
             }
         }, onError: { (error) in
             
@@ -124,6 +129,13 @@ class IGRegistrationStepPhoneViewController: UIViewController {
     }
     
     func didTapOnNext() {
+        if connectionStatus == .waitingForNetwork || connectionStatus == .connecting {
+            let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+            alert.addAction(okAction)
+            self.present(alert, animated: true, completion: nil)
+
+        } else {
         if let phone = phoneNumberField.text {
             let phoneSpaceLess = phone.replacingOccurrences(of: " ", with: "")
             if IGGlobal.matches(for: (selectedCountry?.codeRegex)!, in: phoneSpaceLess) {
@@ -234,6 +246,7 @@ class IGRegistrationStepPhoneViewController: UIViewController {
             
         })
         //self.performSegue(withIdentifier: "showRegistration", sender: self)
+        }
     }
     
 

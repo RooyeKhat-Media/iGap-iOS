@@ -56,6 +56,11 @@ class IGRegistredUserInfoTableViewController: UITableViewController , UIGestureR
         let navigationController = self.navigationController as! IGNavigationController
         navigationController.interactivePopGestureRecognizer?.delegate = self
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.tableView.isUserInteractionEnabled = true
+
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -116,6 +121,7 @@ class IGRegistredUserInfoTableViewController: UITableViewController , UIGestureR
                     }
                 }
             case 2:
+                self.tableView.isUserInteractionEnabled = false
                 self.performSegue(withIdentifier: "showCreateGroupPage", sender: self)
                 
             default:

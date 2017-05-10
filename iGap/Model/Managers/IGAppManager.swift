@@ -96,14 +96,11 @@ class IGAppManager: NSObject {
     public func setUserLoginSuccessful() {
         isUserLoggedIn.value = true
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: kIGUserLoggedInNotificationName), object: nil)
-       // self.setUserUpdateStatus(status: .online)
-        //IGContactManager.sharedManager.sendContactsToServer()
-        //IGContactManager.sharedManager.getContactListFromServer()
+       
     }
     
     public func isUserLoggiedIn() -> Bool {
         if isUserLoggedIn.value == true {
-            self.setUserUpdateStatus(status: .online)
         }
         return isUserLoggedIn.value
     }

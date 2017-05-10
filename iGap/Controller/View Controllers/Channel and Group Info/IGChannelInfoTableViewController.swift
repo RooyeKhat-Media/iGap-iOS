@@ -45,20 +45,25 @@ class IGChannelInfoTableViewController: UITableViewController , UIGestureRecogni
     @IBOutlet weak var adminAndModeratorCell: UITableViewCell!
 
     var selectedChannel : IGChannelRoom?
+    private let disposeBag = DisposeBag()
     var room : IGRoom?
     var hud = MBProgressHUD()
     var allMember = [IGChannelMember]()
     var myRole : IGChannelMember.IGRole!
     var signMessageIndexPath : IndexPath?
+    var channelLinkIndexPath : IndexPath?
     var imagePicker = UIImagePickerController()
 //    var rooms : Results<IGRoom>!
     var notificationToken: NotificationToken?
+    var connectionStatus: IGAppManager.ConnectionStatus?
 
 
     override func viewDidLoad() {
         super.viewDidLoad()
         requestToGetRoom()
         imagePicker.delegate = self
+        tableView.estimatedRowHeight = 44.0
+        tableView.rowHeight = UITableViewAutomaticDimension
         signMessageIndexPath = IndexPath(row: 2, section: 1)
         myRole = room?.channelRoom?.role
         switch myRole! {
@@ -113,6 +118,20 @@ class IGChannelInfoTableViewController: UITableViewController , UIGestureRecogni
         self.notificationToken = room?.addNotificationBlock({ (objectChange) in
             self.showChannelInfo()
         })
+        
+        IGAppManager.sharedManager.connectionStatus.asObservable().subscribe(onNext: { (connectionStatus) in
+            DispatchQueue.main.async {
+                self.updateConnectionStatus(connectionStatus)
+                
+            }
+        }, onError: { (error) in
+            
+        }, onCompleted: {
+            
+        }, onDisposed: {
+            
+        }).addDisposableTo(disposeBag)
+
             
             
 //            { (changes: RealmCollectionChange) in
@@ -139,6 +158,7 @@ class IGChannelInfoTableViewController: UITableViewController , UIGestureRecogni
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
        // showChannelInfo()
+        self.tableView.isUserInteractionEnabled = true
     }
 
     override func didReceiveMemoryWarning() {
@@ -154,6 +174,20 @@ class IGChannelInfoTableViewController: UITableViewController , UIGestureRecogni
         requestToUpdateChannelSignature(signMessageSwitchStatus!)
         
     }
+    
+    func updateConnectionStatus(_ status: IGAppManager.ConnectionStatus) {
+        
+        switch status {
+        case .connected:
+            connectionStatus = .connected
+        case .connecting:
+            connectionStatus = .connecting
+        case .waitingForNetwork:
+            connectionStatus = .waitingForNetwork
+        }
+        
+    }
+
     @IBAction func didTapOnCameraBtn(_ sender: UIButton) {
         let optionMenu = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         let cameraOption = UIAlertAction(title: "Take a Photo", style: .default, handler: {
@@ -233,18 +267,21 @@ class IGChannelInfoTableViewController: UITableViewController , UIGestureRecogni
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print(indexPath.section)
+
         if indexPath.section == 0 {
             switch indexPath.row {
             case 0:
                 if myRole == .owner || myRole == .admin {
+                    self.tableView.isUserInteractionEnabled = false
                 self.performSegue(withIdentifier: "showChannelInfoSetName", sender: self)
                 }
             case 1:
-                
+                self.tableView.isUserInteractionEnabled = false
                 self.performSegue(withIdentifier: "showChannelInfoSetDescription", sender: self)
                 
             case 2:
                 if myRole == .owner {
+                self.tableView.isUserInteractionEnabled = false
                 self.performSegue(withIdentifier: "showChannelInfoSetType", sender: self)
                 }
             case 3:
@@ -256,8 +293,10 @@ class IGChannelInfoTableViewController: UITableViewController , UIGestureRecogni
         if indexPath.section == 1 {
             switch indexPath.row {
             case 0:
+                self.tableView.isUserInteractionEnabled = false
                 self.performSegue(withIdentifier: "showChannelInfoSetMembers", sender: self)
             case 1:
+                self.tableView.isUserInteractionEnabled = false
                 self.performSegue(withIdentifier: "showAdminAndModarators", sender: self)
             default:
                 break
@@ -266,6 +305,7 @@ class IGChannelInfoTableViewController: UITableViewController , UIGestureRecogni
         if indexPath.section == 2 {
             switch indexPath.row {
             case 0:
+                self.tableView.isUserInteractionEnabled = false
                 self.performSegue(withIdentifier: "showSharedMadiaPage", sender: self)
             default:
                 break
@@ -281,10 +321,11 @@ class IGChannelInfoTableViewController: UITableViewController , UIGestureRecogni
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
-        if indexPath.section == 1 && indexPath.row == 1 && adminAndModeratorCell.isHidden == true {
+        
+        if indexPath.section == 1 && indexPath.row == 2 && adminAndModeratorCell.isHidden == true {
             return 0.0
         }
-        if indexPath.section == 1 && indexPath.row == 0 && allMemberCell.isHidden == true {
+        if indexPath.section == 1 && indexPath.row == 1 && allMemberCell.isHidden == true {
             return 0.0
         }
         if indexPath.section == 0 && indexPath.row == 3 && channelLinkCell.isHidden == true {
@@ -296,13 +337,14 @@ class IGChannelInfoTableViewController: UITableViewController , UIGestureRecogni
        if indexPath.section == 2 && indexPath.row == 1 && notificationCell.isHidden == true {
             return 0.0
         }
-        if indexPath.section == 2 && indexPath.row == 2 && channelSignMessageCell.isHidden == true {
+        if indexPath.section == 1 && indexPath.row == 0 && channelSignMessageCell.isHidden == true {
             return 0.0
         }
         
         return 44.0
         
     }
+
     
     func showDeleteChannelActionSheet() {
         var title : String!
@@ -318,9 +360,23 @@ class IGChannelInfoTableViewController: UITableViewController , UIGestureRecogni
         let deleteAction = UIAlertAction(title: actionTitle , style:.default , handler: {
             (alert: UIAlertAction) -> Void in
             if self.myRole == .owner {
+                if self.connectionStatus == .connecting || self.connectionStatus == .waitingForNetwork {
+                    let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: nil)
+                } else {
                 self.deleteChannelRequest()
+                }
             } else {
+                if self.connectionStatus == .connecting || self.connectionStatus == .waitingForNetwork {
+                    let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: nil)
+                } else {
                 self.leftChannelRequest(room: self.room!)
+                }
             }
             
         })

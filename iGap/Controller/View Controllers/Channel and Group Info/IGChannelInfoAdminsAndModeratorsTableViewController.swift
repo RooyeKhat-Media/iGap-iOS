@@ -47,6 +47,8 @@ class IGChannelInfoAdminsAndModeratorsTableViewController: UITableViewController
         adminMember.removeAll()
         moderatorMember.removeAll()
         fetchAdminChannelMemberFromServer()
+        self.tableView.isUserInteractionEnabled = true
+
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -71,6 +73,7 @@ class IGChannelInfoAdminsAndModeratorsTableViewController: UITableViewController
         if indexPath.row == 1 {
             index = 1
         }
+        self.tableView.isUserInteractionEnabled = false
         self.performSegue(withIdentifier: "showAdminsOrModeratorDetailTableview", sender: self)
             
     }

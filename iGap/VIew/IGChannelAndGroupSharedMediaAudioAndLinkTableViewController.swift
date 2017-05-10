@@ -36,6 +36,9 @@ class IGChannelAndGroupSharedMediaAudioAndLinkTableViewController: UITableViewCo
         navigationController.interactivePopGestureRecognizer?.delegate = self
         
     }
+    override func viewDidAppear(_ animated: Bool) {
+        self.tableView.isUserInteractionEnabled = true
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -119,6 +122,7 @@ class IGChannelAndGroupSharedMediaAudioAndLinkTableViewController: UITableViewCo
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.tableView.isUserInteractionEnabled = false
         if sharedMedia[indexPath.row].type == .voice {
             let musicPlayer = IGMusicViewController()
             musicPlayer.attachment = sharedMedia[indexPath.row].attachment

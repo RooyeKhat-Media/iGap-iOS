@@ -146,6 +146,7 @@ class IGSettingPrivacy_SecurityTableViewController: UITableViewController , UIGe
         
     }
     override func viewWillAppear(_ animated: Bool) {
+        self.tableView.isUserInteractionEnabled = true
         fetchBlockedContactsFromServer()
         numberOfBlockedContacts.text = "\(blockedUsers.count) Contact "
         if let avatarPrivacy = userPrivacy?.avatar {
@@ -254,20 +255,25 @@ class IGSettingPrivacy_SecurityTableViewController: UITableViewController , UIGe
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedIndexPath = indexPath
          if indexPath.section == 0 && indexPath.row == 0 {
-          performSegue(withIdentifier: "GoToBlockListPageFromPrivacyAndSecurity", sender: self)
+            self.tableView.isUserInteractionEnabled = false
+            performSegue(withIdentifier: "GoToBlockListPageFromPrivacyAndSecurity", sender: self)
             //selectedIndexPath = indexPath
          }
         if indexPath.section == 0 && indexPath.row != 0 {
-           performSegue(withIdentifier: "GoToWhoCanSeeYourPrivacyAndPolicyPage", sender: self)
+            self.tableView.isUserInteractionEnabled = false
+            performSegue(withIdentifier: "GoToWhoCanSeeYourPrivacyAndPolicyPage", sender: self)
         }
         
         if indexPath.section == 1 {
             switch indexPath.row {
             case 1 :
+                self.tableView.isUserInteractionEnabled = false
                 performSegue(withIdentifier: "GoToPassCodeLockSettingsPage", sender: self)
             case 2 :
+                self.tableView.isUserInteractionEnabled = false
                 performSegue(withIdentifier: "GoToTwoStepVerificationPage", sender: self)
             case 0 :
+                self.tableView.isUserInteractionEnabled = false
                 performSegue(withIdentifier: "GoToActiveSessionListPage", sender: self)
                 default:
                 break

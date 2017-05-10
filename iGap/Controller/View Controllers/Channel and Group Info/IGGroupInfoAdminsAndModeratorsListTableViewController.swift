@@ -46,6 +46,9 @@ class IGGroupInfoAdminsAndModeratorsListTableViewController: UITableViewControll
 
         
     }
+    override func viewWillAppear(_ animated: Bool) {
+        self.tableView.isUserInteractionEnabled = true
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -64,6 +67,7 @@ class IGGroupInfoAdminsAndModeratorsListTableViewController: UITableViewControll
         return 2
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.tableView.isUserInteractionEnabled = false
         if indexPath.row == 0 {
             index = 0
         }

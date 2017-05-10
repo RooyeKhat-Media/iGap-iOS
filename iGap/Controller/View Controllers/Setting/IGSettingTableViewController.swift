@@ -12,7 +12,9 @@ import UIKit
 import RealmSwift
 import IGProtoBuff
 import INSPhotoGalleryFramework
-
+import RxRealm
+import RxSwift
+import Gifu
 class IGSettingTableViewController: UITableViewController {
     
     @IBOutlet weak var usernameLabel: UILabel!
@@ -23,18 +25,29 @@ class IGSettingTableViewController: UITableViewController {
     let borderName = CALayer()
     let width = CGFloat(0.5)
     var shareContent = NSString()
+    var user : IGRegisteredUser?
+    var avatars: [IGAvatar] = []
+    var deleteView: IGTappableView?
+    var userAvatar: IGAvatar?
+    var downloadIndicatorMainView : IGDownloadUploadIndicatorView?
+        
+    
+    let disposeBag = DisposeBag()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        requestToGetAvatarList()
         let currentUserId = IGAppManager.sharedManager.userID()
+        
         let realm = try! Realm()
         let predicate = NSPredicate(format: "id = %lld", currentUserId!)
         if let userInDb = realm.objects(IGRegisteredUser.self).filter(predicate).first {
             userAvatarView.setUser(userInDb)
             usernameLabel.text = userInDb.displayName
-          	//let tap = UITapGestureRecognizer.init(target: self, action: ((self.showAvatar(avatar:userInDb.avatar!))))
-            //userAvatarView.addGestureRecognizer(tap)
-            userAvatarView.isUserInteractionEnabled = true
+            user = userInDb
+            userAvatarView.avatarImageView?.isUserInteractionEnabled = true
+            let tap = UITapGestureRecognizer.init(target: self, action: #selector(self.handleTap(recognizer:)))
+            userAvatarView.avatarImageView?.addGestureRecognizer(tap)
 
             let navigationItem = self.navigationItem as! IGNavigationItem
             navigationItem.addModalViewItems(leftItemText: nil, rightItemText: "Done", title: "Settings")
@@ -55,13 +68,182 @@ class IGSettingTableViewController: UITableViewController {
         self.tableView.backgroundView = UIImageView(image: UIImage(named: "IG_Settigns_Bg"))
         tableView.tableFooterView = UIView()
         imagePicker.delegate = self
+        
+        
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.tableView.isUserInteractionEnabled = true
+        requestToGetAvatarList()
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        self.tableView.isUserInteractionEnabled = true
+
     }
     
-     func showAvatar(avatar: IGAvatar) {
-        let photos = [IGMedia(avatar: avatar)]
+    func requestToGetAvatarList() {
+        if let currentUserId = IGAppManager.sharedManager.userID() {
+        IGUserAvatarGetListRequest.Generator.generate(userId: currentUserId).success({ (protoResponse) in
+            DispatchQueue.main.async {
+                switch protoResponse {
+                case let UserAvatarGetListoResponse as IGPUserAvatarGetListResponse:
+                    let responseAvatars =   IGUserAvatarGetListRequest.Handler.interpret(response: UserAvatarGetListoResponse, userId: currentUserId)
+                    self.avatars = responseAvatars
+                    for avatar in self.avatars {
+                        let avatarView = IGImageView()
+                        avatarView.setImage(avatar: avatar)
+                    }
+
+                    
+                default:
+                    break
+                }
+            }
+        }).error ({ (errorCode, waitTime) in
+            switch errorCode {
+            case .timeout:
+                DispatchQueue.main.async {
+                    let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: nil)
+                }
+            default:
+                break
+            }
+            
+        }).send()
+        }
+    }
+    
+    func handleTap(recognizer:UITapGestureRecognizer) {
+        if recognizer.state == .ended {
+            if let userAvatar = user?.avatar {
+            showAvatar( avatar: userAvatar)
+            }
+        }
+    }
+    
+    var avatarPhotos : [INSPhotoViewable]?
+    var galleryPhotos: INSPhotosViewController?
+    func showAvatar(avatar : IGAvatar) {
+            var photos: [INSPhotoViewable] = self.avatars.map { (avatar) -> IGMedia in
+               // setMediaIndicator(avatar: avatar)
+                return IGMedia(avatar: avatar)
+            }
+        avatarPhotos = photos
         let currentPhoto = photos[0]
-        let galleryPreview = INSPhotosViewController(photos: photos, initialPhoto: currentPhoto, referenceView: nil)
+
+        let deleteViewFrame = CGRect(x:320, y:595, width: 25 , height:25)
+        let trashImageView = UIImageView()
+        trashImageView.image = UIImage(named: "IG_Trash_avatar")
+        trashImageView.frame = CGRect(x: 0, y: 0, width: 25, height: 25)
+        deleteView = IGTappableView(frame: deleteViewFrame)
+        deleteView?.addSubview(trashImageView)
+        let downloadViewFrame = self.view.bounds
+        deleteView?.addAction {
+            self.didTapOnTrashButton()
+        }
+         downloadIndicatorMainView = IGDownloadUploadIndicatorView(frame: downloadViewFrame)
+        let galleryPreview = INSPhotosViewController(photos: photos, initialPhoto: currentPhoto, referenceView: nil, deleteView: deleteView, downloadView: nil)
+        galleryPhotos = galleryPreview
         present(galleryPreview, animated: true, completion: nil)
+        
+    }
+    
+    func setMediaIndicator(avatar: IGAvatar) {
+        if let msgAttachment = avatar.file {
+            if let messageAttachmentVariableInCache = IGAttachmentManager.sharedManager.getRxVariable(attachmentPrimaryKeyId: msgAttachment.primaryKeyId!) {
+                self.userAvatar?.file = messageAttachmentVariableInCache.value
+            } else {
+                self.userAvatar?.file = msgAttachment.detach()
+                let attachmentRef = ThreadSafeReference(to: msgAttachment)
+                IGAttachmentManager.sharedManager.add(attachmentRef: attachmentRef)
+                self.userAvatar?.file = IGAttachmentManager.sharedManager.getRxVariable(attachmentPrimaryKeyId: msgAttachment.primaryKeyId!)?.value
+            }
+            
+            
+            if let variableInCache = IGAttachmentManager.sharedManager.getRxVariable(attachmentPrimaryKeyId: msgAttachment.primaryKeyId!) {
+                self.userAvatar?.file = variableInCache.value
+                variableInCache.asObservable().subscribe({ (event) in
+                    DispatchQueue.main.async {
+                        self.updateAttachmentDownloadUploadIndicatorView()
+                    }
+                }).addDisposableTo(disposeBag)
+            } else {
+            }
+            
+            //MARK: ▶︎ Rx End
+                //self.forwardedMessageAudioAndVoiceViewHeightConstraint.constant = 0
+                self.userAvatarView.isHidden = false
+                self.downloadIndicatorMainView?.isHidden = false
+                let progress = Progress(totalUnitCount: 100)
+                progress.completedUnitCount = 0
+                
+               // self.sharedMediaImageView.setThumbnail(for: msgAttachment)
+                // self.forwardedMessageMediaContainerViewHeightConstraint.constant = messageSizes.forwardedMessageAttachmentHeight //+ 20
+                
+                if msgAttachment.status != .ready {
+                    self.downloadIndicatorMainView?.size = msgAttachment.sizeToString()
+                    self.downloadIndicatorMainView?.delegate = self
+                }
+            
+            
+        }
+        
+    }
+    
+    
+    func updateAttachmentDownloadUploadIndicatorView() {
+        if let attachment =  self.userAvatar?.file {
+            
+            if attachment.status == .ready {
+                self.downloadIndicatorMainView?.setState(attachment.status)
+                setThumbnailForAttachments()
+                if attachment.type == .image {
+                   // self.currentPhoto.setThumbnail(for: attachment)
+                }
+                return
+            }
+            
+            
+            switch attachment.type {
+            case .video, .image:
+                self.downloadIndicatorMainView?.setFileType(.media)
+                self.downloadIndicatorMainView?.setState(attachment.status)
+                if attachment.status == .downloading ||  attachment.status == .uploading {
+                    self.downloadIndicatorMainView?.setPercentage(attachment.downloadUploadPercent)
+                }
+            default:
+                break
+            }
+        }
+        
+    }
+    
+    func setThumbnailForAttachments() {
+        if let attachment = self.userAvatar?.file {
+          //  self.currentPhoto.isHidden = false
+            
+        }
+    }
+
+    
+    func didTapOnTrashButton() {
+        
+//        galleryPhotos?.currentPhotoViewController = { [weak self] photo in
+//            if let index = self?.avatarPhotos?.index(where: {$0 === photo}) {
+//                 print(self?.avatars[index].id)
+//               // let indexPath = IndexPath(item: index, section: 0)
+//                //let cell = collectionView.cellForItem(at: indexPath) as? ExampleCollectionViewCell
+//            }
+//            return nil
+//        }
+//        if let index = self.avatarPhotos?.index(where: {$0 === photo}) {
+//            print(avatars[index].id)
+//            
+//        }
+
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -82,19 +264,29 @@ class IGSettingTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+
         if indexPath.section == 0 && indexPath.row == 0 {
+            self.tableView.isUserInteractionEnabled = false
             performSegue(withIdentifier: "GoToAccountSettingPage", sender: self)
         }
         if indexPath.section == 1 && indexPath.row == 0 {
+            self.tableView.isUserInteractionEnabled = false
+
             performSegue(withIdentifier: "GoToContactListPage", sender: self)
         }
         if indexPath.section == 1 && indexPath.row == 2 {
+            self.tableView.isUserInteractionEnabled = false
+
             performSegue(withIdentifier: "GoToChatSettingPage", sender: self)
         }
         if indexPath.section == 1 && indexPath.row == 3 {
+            self.tableView.isUserInteractionEnabled = false
+
             performSegue(withIdentifier: "GoToNotificationSettingsPage", sender: self)
         }
         if indexPath.section == 1 && indexPath.row == 1 {
+            self.tableView.isUserInteractionEnabled = false
             performSegue(withIdentifier: "GoToPrivacyAndPolicySettingsPage", sender: self)
         }
         if indexPath.section == 2 && indexPath.row == 0 {
@@ -104,6 +296,7 @@ class IGSettingTableViewController: UITableViewController {
             present(activityViewController, animated: true, completion: {})
         }
         if indexPath.section == 2 && indexPath.row == 1 {
+            self.tableView.isUserInteractionEnabled = false
             performSegue(withIdentifier: "GoToAboutSettingPage", sender: self)
         }
     }
@@ -223,3 +416,24 @@ extension IGSettingTableViewController: UIImagePickerControllerDelegate {
 extension IGSettingTableViewController: UINavigationControllerDelegate {
     
 }
+extension IGSettingTableViewController: IGDownloadUploadIndicatorViewDelegate {
+    func downloadUploadIndicatorDidTapOnStart(_ indicator: IGDownloadUploadIndicatorView) {
+        if self.userAvatar?.file?.status == .downloading {
+            return
+        }
+        
+        if let attachment = self.userAvatar?.file {
+            IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: {
+                
+            }, failure: {
+                
+            })
+        }
+        
+    }
+    
+    func downloadUploadIndicatorDidTapOnCancel(_ indicator: IGDownloadUploadIndicatorView) {
+        
+    }
+}
+

@@ -25,6 +25,8 @@ class IGNavigationController: UINavigationController ,UINavigationBarDelegate {
         return super.popToRootViewController(animated: animated)
     }
     
+    
+    
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
@@ -83,7 +85,8 @@ class IGNavigationController: UINavigationController ,UINavigationBarDelegate {
         
     }
     
-    func setCenterView(){
+    
+    func setCenterView() {
         let titleView = UIView(frame: CGRect(x: 0, y: 0, width: 150, height: 45))
         let nameLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 150, height: 21))
         nameLabel.text = "John Smith"
@@ -99,11 +102,12 @@ class IGNavigationController: UINavigationController ,UINavigationBarDelegate {
         self.navigationBar.topItem?.titleView = titleView
     }
     
-    func getHightOfNavigationBar()->(CGFloat){
+    func getHightOfNavigationBar()->(CGFloat) {
         let navBarHeight = self.navigationBar.frame.size.height
         return navBarHeight
     }
-    func connectingTitleView(){
+    
+    func connectingTitleView() {
         let connectingTitleView = UIView(frame: CGRect(x: 0, y: 0, width: 150, height: 30))
         let activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
         connectingTitleView.addSubview(activityIndicator)

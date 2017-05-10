@@ -23,6 +23,7 @@ class IGMedia: INSPhotoViewable, Equatable {
     var attributedTitle: NSAttributedString?
     var file: IGFile?
     
+    
     init(message: IGRoomMessage, forwardedMedia: Bool) {
         if let attachment = forwardedMedia ? message.forwardedFrom?.attachment : message.attachment {
             file = attachment
@@ -31,6 +32,7 @@ class IGMedia: INSPhotoViewable, Equatable {
             if let text = message.message {
                 attributedTitle = NSAttributedString(string: text)
             }
+            
         }
     }
     

@@ -44,6 +44,7 @@ class IGChatRoomListTableViewCell: MGSwipeTableCell {
     var room: IGRoom?
     var lastMessageStatusContainerViewWidthConstraintDefault: CGFloat = 18.0
     var roomVariableFromRoomManagerCache: Variable<IGRoom>?
+    var users = try! Realm().objects(IGRegisteredUser.self)
     let disposeBag = DisposeBag()
     
     //MARK: - Class Methods
@@ -65,6 +66,13 @@ class IGChatRoomListTableViewCell: MGSwipeTableCell {
         
         contentView.backgroundColor = UIColor(red: 247.0/255.0, green: 247.0/255.0, blue: 247.0/255.0, alpha: 1.0)
         self.initialConfiguration()
+        
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(getUserAvatarAgain(_:)),
+                                               name: NSNotification.Name(rawValue: kIGNoticationForPushUserExpire),
+                                               object: nil)
+
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -75,6 +83,42 @@ class IGChatRoomListTableViewCell: MGSwipeTableCell {
         super.prepareForReuse()
         self.initialConfiguration()
     }
+    
+    func getUserAvatarAgain(_ aNotification: Notification) {
+        if let userId = aNotification.userInfo?["user"] as? Int64{
+            let predicate = NSPredicate(format: "id = %d", userId )
+            if let userInDb = try! Realm().objects(IGRegisteredUser.self).filter(predicate).first {
+             // setUserStatus(userInDb)
+            }
+            IGChatGetRoomRequest.Generator.generate(peerId: userId).success({ (protoResponse) in
+                 DispatchQueue.main.async {
+                  switch protoResponse {
+                  case let chatGetRoomResponse as IGPChatGetRoomResponse:
+                    let roomId =  IGChatGetRoomRequest.Handler.interpret(response: chatGetRoomResponse)
+                    if self.room?.id == roomId {
+                        self.setRoom(room: self.room!)
+                    }
+                default:
+                    break
+                }
+                }
+                
+                //avatarView.setUser(user)
+                
+            }).error({ (errorCode, waitTime) in
+                
+            }).send()
+            
+            
+        }
+    }
+    
+    func setUserStatus(_ user: IGRegisteredUser) {
+        
+
+        
+    }
+
     
     func initialConfiguration() {
         lastMessageStatusContainerView.backgroundColor = UIColor.red//organizationalColor()

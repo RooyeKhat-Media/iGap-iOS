@@ -82,7 +82,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
     @IBOutlet weak var inputBarOriginalMessageViewSenderNameLabel: UILabel!
     @IBOutlet weak var inputBarOriginalMessageViewBodyTextLabel: UILabel!
     @IBOutlet weak var scrollToBottomContainerView: UIView!
-    
+    @IBOutlet weak var scrollToBottomContainerViewConstraint: NSLayoutConstraint!
     private let disposeBag = DisposeBag()
     var isFetchingRoomHistory: Bool = false
     var isInMessageViewController : Bool = true
@@ -96,6 +96,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
     var bouncingViewWhileRecord: UIView?
     var initialLongTapOnRecordButtonPosition: CGPoint?
     var collectionViewTopInsetOffset: CGFloat = 0.0
+    var connectionStatus : IGAppManager.ConnectionStatus?
     
     
     //var messages = [IGRoomMessage]()
@@ -129,6 +130,22 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
     //MARK: - Initilizers
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        IGAppManager.sharedManager.connectionStatus.asObservable().subscribe(onNext: { (connectionStatus) in
+            DispatchQueue.main.async {
+                self.updateConnectionStatus(connectionStatus)
+                
+            }
+        }, onError: { (error) in
+            
+        }, onCompleted: {
+            
+        }, onDisposed: {
+            
+        }).addDisposableTo(disposeBag)
+        
+
+        
         self.addNotificationObserverForTapOnStatusBar()
         var canBecomeFirstResponder: Bool { return true }
         let navigationItem = self.navigationItem as! IGNavigationItem
@@ -168,6 +185,8 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
             } else {
                 inputBarContainerView.isHidden = true
                 collectionViewTopInsetOffset = -54.0 + 8.0
+                
+
             }
         } else {
             
@@ -280,7 +299,6 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
                 UIView.animate(withDuration: 0.2, animations: {
                     self.collectionView.alpha = 1.0
                 })
-
                 
                 break
             case .update(_, let deletions, let insertions, let modifications):
@@ -330,6 +348,8 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
                 break
             }
         }
+        
+       
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -427,7 +447,6 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
         //TODO: check performance
         self.collectionView!.collectionViewLayout.invalidateLayout()
     }
-    
     
     
     
@@ -612,15 +631,34 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
         })
     }
     
+    func updateConnectionStatus(_ status: IGAppManager.ConnectionStatus) {
+        
+        switch status {
+        case .connected:
+            connectionStatus = .connected
+        case .connecting:
+            connectionStatus = .connecting
+        case .waitingForNetwork:
+            connectionStatus = .waitingForNetwork
+        }
+        
+    }
+    
+    
+    
     //MARK: IBActions
     @IBAction func didTapOnSendButton(_ sender: UIButton) {
         if currentAttachment == nil && inputTextView.text == "" && selectedMessageToForwardToThisRoom == nil {
             return
         }
-        
-        
+        if connectionStatus == .waitingForNetwork || connectionStatus == .connecting {
+            let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+            alert.addAction(okAction)
+            self.present(alert, animated: true, completion: nil)
+        }else {
         if selectedMessageToEdit != nil {
-            switch room!.type {
+                        switch room!.type {
             case .chat:
                 IGChatEditMessageRequest.Generator.generate(message: selectedMessageToEdit!, newText: inputTextView.text,  room: room!).success({ (protoResponse) in
                     IGChatEditMessageRequest.Handler.interpret(response: protoResponse)
@@ -650,6 +688,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
                     
                 }).send()
             }
+            
             selectedMessageToEdit = nil
             self.inputTextView.text = ""
             self.setInputBarHeight()
@@ -713,6 +752,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
         self.selectedMessageToReply = nil
         self.currentAttachment = nil
         self.setInputBarHeight()
+        }
     }
     
     
@@ -1474,6 +1514,9 @@ extension IGMessageViewController: UICollectionViewDelegateFlowLayout {
         if scrollView.contentOffset.y > 100 {
             self.scrollToBottomContainerView.isHidden = false
         } else {
+            if room!.isReadOnly {
+                scrollToBottomContainerViewConstraint.constant = -40
+            }
             self.scrollToBottomContainerView.isHidden = true
         }
     }
@@ -1637,7 +1680,14 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
             self.performSegue(withIdentifier: "showForwardMessageTable", sender: self)
         })
         let edit = UIAlertAction(title: "Edit", style: .default, handler: { (action) in
+            if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
+                let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alert.addAction(okAction)
+                self.present(alert, animated: true, completion: nil)
+            }else {
             self.editMessage(cellMessage)
+            }
         })
         let more = UIAlertAction(title: "More", style: .default, handler: { (action) in
             for visibleCell in self.collectionView.visibleCells {

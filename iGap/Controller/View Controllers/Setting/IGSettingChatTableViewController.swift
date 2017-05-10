@@ -18,9 +18,18 @@ class IGSettingChatTableViewController: UITableViewController {
         let backgroundImageView = UIImageView(image: backImage)
         self.tableView.backgroundView = backgroundImageView
         }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        self.tableView.isUserInteractionEnabled = true
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        self.tableView.isUserInteractionEnabled = true
+    }
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 5
         }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var numberOfRows : Int = 0
         switch section {
@@ -41,6 +50,7 @@ class IGSettingChatTableViewController: UITableViewController {
         return numberOfRows
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
 //        if indexPath.section == 0 {
 //            switch indexPath.row {
 //            case 0:
@@ -57,9 +67,11 @@ class IGSettingChatTableViewController: UITableViewController {
 //            performSegue(withIdentifier: "GoToCacheSettingsPage", sender: self)
 //        }
         if indexPath.section == 0 && indexPath.row == 0 {
+            self.tableView.isUserInteractionEnabled = false
             performSegue(withIdentifier: "GoToCacheSettingsPage", sender: self)
         }
         if indexPath.section == 1 || indexPath.section == 2{
+            self.tableView.isUserInteractionEnabled = false
             performSegue(withIdentifier: "GoToAutoDownloadTypePage", sender: self)
         }
         if indexPath.section == 4 {

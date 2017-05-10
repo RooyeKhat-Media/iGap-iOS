@@ -26,9 +26,20 @@ class IGSettingPrivacy_SecurityPasscodeLockTableViewController: UITableViewContr
         let navigationItem = self.navigationItem as! IGNavigationItem
         navigationItem.addNavigationViewItems(rightItemText: nil, title: "Passcode Lock")
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        self.tableView.isUserInteractionEnabled = true
+
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        self.tableView.isUserInteractionEnabled = true
+
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         if loadItForSecendTime == false {
         return 1
@@ -62,7 +73,8 @@ class IGSettingPrivacy_SecurityPasscodeLockTableViewController: UITableViewContr
             default:
                 break
             }
-        self.performSegue(withIdentifier: "EnterPassCode", sender: self)
+            self.tableView.isUserInteractionEnabled = false
+            self.performSegue(withIdentifier: "EnterPassCode", sender: self)
         }
         if loadItForSecendTime == true{
             if indexPath.section == 1 {

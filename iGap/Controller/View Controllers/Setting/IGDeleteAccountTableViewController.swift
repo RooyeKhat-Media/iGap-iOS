@@ -30,6 +30,8 @@ class IGDeleteAccountTableViewController: UITableViewController , UIGestureRecog
     }
     override func viewDidAppear(_ animated: Bool) {
         hud.hide(animated: true)
+        self.tableView.isUserInteractionEnabled = true
+
     }
     
     
@@ -40,6 +42,7 @@ class IGDeleteAccountTableViewController: UITableViewController , UIGestureRecog
         return 1
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.tableView.isUserInteractionEnabled = false
         getDeleteToken()
     }
     override func didReceiveMemoryWarning() {

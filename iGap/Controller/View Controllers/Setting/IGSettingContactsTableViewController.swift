@@ -143,6 +143,7 @@ class IGSettingContactsTableViewController: UITableViewController,UISearchResult
     
     override func viewDidAppear(_ animated: Bool) {
         self.navigationController?.extendedLayoutIncludesOpaqueBars = true
+        self.tableView.isUserInteractionEnabled = true
     }
     
     @IBAction func addBarButtonClicked(_ sender: UIBarButtonItem) {
@@ -244,6 +245,7 @@ class IGSettingContactsTableViewController: UITableViewController,UISearchResult
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if resultSearchController.isActive == false {
             if indexPath.section == 0 && indexPath.row == 0 {
+                self.tableView.isUserInteractionEnabled = false
                 performSegue(withIdentifier: "GoToBlockListPage", sender: self)
             } else {
                 self.hud = MBProgressHUD.showAdded(to: self.view, animated: true)
