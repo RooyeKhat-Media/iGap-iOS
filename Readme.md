@@ -32,7 +32,13 @@ Using the iGap infrastructure and utilizing it in personal and/or organizational
 ## Partner
 **[RooyeKhat Media](https://rooyekhat.co/en)** was founded in 2015 aiming to create communicative and informative platforms supported by Internet and network on the basis of modern technology. We focus on the fields of designing, programming, supporting communicative and media software on mobile phones and tablets.
 
+## IRAN Sans-serif fonts
+IRAN Sans-serif fonts are considered a proprietary software.To gain information about the laws regarding the use of these fonts, please visit www.fontiran.com 
+
+This set of fonts are used in this project (iGap-iOS) under the license: (CKXUL)
+
 ## Licence
 iGap is released under the [GNU Affero General Public License](LICENSE) . This Free Software Foundation license is fairly new, and thus we wanted to talk about how this license differs from GPL.
+
 
 ![GNU AFFERO GENERAL PUBLIC LICENSE - Version 3](https://www.gnu.org/graphics/agplv3-88x31.png)
