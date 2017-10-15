@@ -10,7 +10,7 @@
 
 import Foundation
 import IGProtoBuff
-import ProtocolBuffers
+import SwiftProtobuf
 
 enum IGGender: Int {
     case unknown = 0
@@ -49,6 +49,7 @@ enum IGRoomMessageStatus: Int {
     case sent
     case delivered
     case seen
+    case listened
 }
 
 enum IGRoomMessageType: Int {
@@ -136,6 +137,8 @@ enum IGRoomMessageType: Int {
             return .contact
         case .gifText:
             return .gifAndText
+        default:
+            return .text
         }
     }
 }
@@ -224,6 +227,8 @@ enum IGClientAction: Int {
             return .choosingContact
         case .painting:
             return .painting
+        default:
+            return .cancel
         }
     }
 }
@@ -274,6 +279,10 @@ enum IGPrivacyType: Int {
     case avatar
     case groupInvite
     case channelInvite
+    case voiceCalling
+    case videoCalling
+    case screenSharing
+    case secretChat
 }
 
 enum IGPrivacyLevel: Int {
@@ -282,13 +291,14 @@ enum IGPrivacyLevel: Int {
     case allowContacts
     
     func fromIGP(_ igpPrivacyLevel: IGPPrivacyLevel) -> IGPrivacyLevel {
-        
         switch igpPrivacyLevel {
         case .allowAll:
             return .allowAll
         case .allowContacts:
             return .allowContacts
         case .denyAll:
+            return . denyAll
+        default:
             return . denyAll
         }
     }

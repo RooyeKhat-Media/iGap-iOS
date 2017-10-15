@@ -25,11 +25,10 @@ class IGSettingPrivacyAndSecurityActiveSessionMoreDetailsTableViewController: UI
     @IBOutlet weak var SelectedSessionDeviceModelLabel: UILabel!
     @IBOutlet weak var selectedSessionImageview: UIImageView!
     var hud = MBProgressHUD()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        let backImage = UIImage(named: "IG_Settigns_Bg")
-        let backgroundImageView = UIImageView(image: backImage)
-        self.tableView.backgroundView = backgroundImageView
+        self.tableView.backgroundColor = UIColor(red: 247.0/255.0, green: 247.0/255.0, blue: 247.0/255.0, alpha: 1.0)
         SessionInfoCell.selectionStyle = UITableViewCellSelectionStyle.none
         let navigationItem = self.navigationItem as! IGNavigationItem
         navigationItem.addNavigationViewItems(rightItemText: nil, title: "Active Sessions")

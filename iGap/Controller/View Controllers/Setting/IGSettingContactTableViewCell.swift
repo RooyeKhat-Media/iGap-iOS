@@ -62,9 +62,9 @@ class IGSettingContactTableViewCell: UITableViewCell {
             lastSeenStatusLabel.text = "Service Notification"
             break
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            self.setUser(user)
-        }
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+//            self.setUser(user)
+//        }
 
     }
 

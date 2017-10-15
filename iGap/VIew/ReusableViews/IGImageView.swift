@@ -18,8 +18,8 @@ class IGImageView: GIFImageView {
         animator?.prepareForReuse()
     }
     
-    
-    override func setThumbnail(for attachment: IGFile) {
+    //FIXME: override was removed (check performance)
+    func setThumbnaill(for attachment: IGFile) {
         attachmentId = attachment.primaryKeyId
         setOrFetchThumbnail(for: attachment)
     }
@@ -85,8 +85,8 @@ class IGImageView: GIFImageView {
     }
     
     
-    
-    override func setImage(avatar: IGAvatar) {
+    //FIXME: override was removed (check performance)
+    func setImagee(avatar: IGAvatar) {
         attachmentId = avatar.file?.primaryKeyId
         setOrFetchAvatar(avatar)
     }

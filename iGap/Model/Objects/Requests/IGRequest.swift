@@ -10,7 +10,7 @@
 
 import Foundation
 import IGProtoBuff
-import ProtocolBuffers
+import SwiftProtobuf
 
 class IGRequest {
     class Generator {
@@ -18,8 +18,8 @@ class IGRequest {
     }
     
     class Handler {
-        class func handle(responseProtoMessage: GeneratedResponseMessage) {} //I think we can remove this function
-        class func handlePush(responseProtoMessage: GeneratedResponseMessage) {}
+        class func handle(responseProtoMessage: Message) {} //I think we can remove this function
+        class func handlePush(responseProtoMessage: Message) {}
         class func error() {}
         class func timeout() {}
     }

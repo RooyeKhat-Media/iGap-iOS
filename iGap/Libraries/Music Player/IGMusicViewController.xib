@@ -91,7 +91,7 @@
                                     <subviews>
                                         <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="aPC-Ub-Zbk">
                                             <rect key="frame" x="6" y="8" width="238" height="31"/>
-                                            <color key="minimumTrackTintColor" red="0.19215686269999999" green="0.74117647060000003" blue="0.71372549019999998" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="minimumTrackTintColor" red="0.0" green="0.6901960784" blue="0.7490196078d+" alpha="1" colorSpace="calibratedRGB"/>
                                             <connections>
                                                 <action selector="didChangedSliderValue:" destination="-1" eventType="valueChanged" id="Ndk-55-Ck8"/>
                                                 <action selector="didTouchDownSlide:" destination="-1" eventType="touchDown" id="2Ly-nJ-xh6"/>

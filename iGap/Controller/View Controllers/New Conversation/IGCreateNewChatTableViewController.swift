@@ -19,7 +19,7 @@ class IGCreateNewChatTableViewController: UITableViewController, UISearchResults
     
     class User: NSObject {
         let registredUser: IGRegisteredUser
-        let name: String
+        @objc let name: String
         var section :Int?
         init(registredUser: IGRegisteredUser){
             self.registredUser = registredUser

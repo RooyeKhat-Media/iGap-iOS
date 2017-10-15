@@ -125,11 +125,11 @@ class IGMessageCollectionViewCell: IGMessageGeneralCollectionViewCell {
     }
     
     class func messageBodyTextViewFont() -> UIFont {
-        return UIFont.systemFont(ofSize: 14.0)
+        return UIFont.igFont(ofSize: 14.0)//.systemFont(ofSize: 14.0)
     }
     
     class func replyToLabelFont() -> UIFont {
-        return UIFont.systemFont(ofSize: 14.0)
+        return UIFont.igFont(ofSize: 14.0)
     }
     
     /*
@@ -229,7 +229,7 @@ class IGMessageCollectionViewCell: IGMessageGeneralCollectionViewCell {
         
         self.mainBubbleView.layer.cornerRadius = 18
         self.mainBubbleView.layer.masksToBounds = true
-        self.mainBubbleView.layer.borderColor = UIColor.incommingChatBuubleBackgroundColor().cgColor
+        self.mainBubbleView.layer.borderColor = UIColor(red: 179.0/255.0, green: 179.0/255.0, blue: 179.0/255.0, alpha: 1.0).cgColor
         
         self.mediaContainerView.layer.cornerRadius = 18
         self.mediaContainerView.layer.masksToBounds = true
@@ -237,11 +237,11 @@ class IGMessageCollectionViewCell: IGMessageGeneralCollectionViewCell {
         self.forwardedMediaDownloadUploadIndicatorView.shouldShowSize = true
         
         self.senderAvatarBackView.layer.cornerRadius = 15
-        self.senderAvatarBackView.layer.masksToBounds = false
-        self.senderAvatarBackView.layer.shadowColor = UIColor.black.cgColor
-        self.senderAvatarBackView.layer.shadowOpacity = 0.25
-        self.senderAvatarBackView.layer.shadowRadius = 4.0
-        self.senderAvatarBackView.layer.shadowOffset = CGSize(width: 0, height: 0)
+        self.senderAvatarBackView.layer.masksToBounds = true
+//        self.senderAvatarBackView.layer.shadowColor = UIColor.black.cgColor
+//        self.senderAvatarBackView.layer.shadowOpacity = 0.25
+//        self.senderAvatarBackView.layer.shadowRadius = 4.0
+//        self.senderAvatarBackView.layer.shadowOffset = CGSize(width: 0, height: 0)
         
         //self.senderAvatarImageView.layer.cornerRadius = 15
         //self.senderAvatarImageView.layer.masksToBounds = true
@@ -388,7 +388,7 @@ class IGMessageCollectionViewCell: IGMessageGeneralCollectionViewCell {
         
         
         if isIncommingMessage {
-            self.mainBubbleView.layer.borderWidth = 1.0
+            self.mainBubbleView.layer.borderWidth = 0.0
             self.attachmentContainreView.backgroundColor = UIColor.white
             if let sender = message.authorUser {
                 self.senderNaemLabel.text = sender.displayName
@@ -398,7 +398,7 @@ class IGMessageCollectionViewCell: IGMessageGeneralCollectionViewCell {
                 self.senderNaemLabel.text = ""
             }
         } else {
-            self.mainBubbleView.layer.borderWidth = 0.0
+            self.mainBubbleView.layer.borderWidth = 1.0
             self.senderNaemLabel.text = ""
         }
         
@@ -777,22 +777,22 @@ class IGMessageCollectionViewCell: IGMessageGeneralCollectionViewCell {
         
         //MARK: Body Text (message)
         if let body = message.message {
-            let start = Date.timeIntervalSinceReferenceDate
+//            let start = Date.timeIntervalSinceReferenceDate
             bodyViewHeightConstraint.constant = messageSizes.messageBodyHeight
-            let step1 = Date.timeIntervalSinceReferenceDate
-            print("message.id: \(message.id) Step1: -> \(step1 - start)")
+//            let step1 = Date.timeIntervalSinceReferenceDate
+//            print("message.id: \(message.id) Step1: -> \(step1 - start)")
             bodyLabel.text = body
-            let step2 = Date.timeIntervalSinceReferenceDate
-            print("message.id: \(message.id) Step2: -> \(step2 - step1)")
+//            let step2 = Date.timeIntervalSinceReferenceDate
+//            print("message.id: \(message.id) Step2: -> \(step2 - step1)")
             bodyView.isHidden = false
-            let step3 = Date.timeIntervalSinceReferenceDate
-            print("message.id: \(message.id) Step3: -> \(step3 - step2)")
+//            let step3 = Date.timeIntervalSinceReferenceDate
+//            print("message.id: \(message.id) Step3: -> \(step3 - step2)")
             bodyLabel.isHidden = false
-            let step4 = Date.timeIntervalSinceReferenceDate
-            print("message.id: \(message.id) Step4: -> \(step4 - step3)")
+//            let step4 = Date.timeIntervalSinceReferenceDate
+//            print("message.id: \(message.id) Step4: -> \(step4 - step3)")
             timeLabelBottomConstraint.constant = 11.0
-            let step5 = Date.timeIntervalSinceReferenceDate
-            print("message.id: \(message.id) Step4: -> \(step5 - step4)")
+//            let step5 = Date.timeIntervalSinceReferenceDate
+//            print("message.id: \(message.id) Step4: -> \(step5 - step4)")
             timeLabel.backgroundColor = UIColor.clear
             bodyView.backgroundColor = UIColor.clear
             bodyLabel.textColor = UIColor.chatBubbleTextColor(isIncommingMessage: isIncommingMessage)
@@ -839,7 +839,7 @@ class IGMessageCollectionViewCell: IGMessageGeneralCollectionViewCell {
             self.statusIndicatorImageView.image = UIImage(named: "IG_Message_Cell_State_Sent")
         case .delivered:
             self.statusIndicatorImageView.image = UIImage(named: "IG_Message_Cell_State_Delivered")
-        case .seen:
+        case .seen,.listened:
             self.statusIndicatorImageView.image = UIImage(named: "IG_Message_Cell_State_Seen")
         case .failed, .unknown:
             self.statusIndicatorImageView.image = nil

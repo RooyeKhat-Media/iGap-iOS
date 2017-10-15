@@ -10,7 +10,7 @@
 
 import Foundation
 import IGProtoBuff
-import ProtocolBuffers
+import SwiftProtobuf
 
 typealias IGErrorWaitTime = Int
 
@@ -46,6 +46,7 @@ enum IGError: String {
     case userVerifyInvalidCode                  = "106"
     case userVerifyExpiredCode                  = "107"
     case userVerifyMaxTryLock                   = "108"    // waitTime
+    case userVerifyTwoStepVerificationEnabled   = "184"
     
     //in response to 102 (User Login)
     case userLoginBadPayload                = "109"
@@ -116,6 +117,27 @@ enum IGError: String {
     case userGetDeleteTokenLockedManyTries      = "153.1"
     case userDeleteTokenInvalidCode             = "156.1"
     case userProfileUpdateLock                  = "175.2"
+
+    //in response to ... (User Two-Step Verification Get Password Deyails)
+    case userTwoStepVerificationGetPasswordDetailsBadPayload = "185"
+    case userTwoStepVerificationGetPasswordDetailsInternalServerError = "186"
+    case userTwoStepVerificationGetPasswordDetailsForbidden = "187"
+    case userTwoStepVerificationGetPasswordDetailsNoPassword = "188"
+    
+    //in response to ... (User Two-Step Verification Check Password)
+    case userTwoStepVerificationCheckPasswordBadPayload = "10103"
+    case userTwoStepVerificationCheckPasswordInternalServerError = "10104"
+    case userTwoStepVerificationCheckPasswordInvalidPassword = "10150"
+    case userTwoStepVerificationCheckPasswordMaxTryLock = "10106"
+    case userTwoStepVerificationCheckPasswordNoPassword = "10107"
+    
+    case userTwoStepVerificationVerifyPasswordBadPayload = "189"
+    case userTwoStepVerificationVerifyPasswordInternalServerError = "190"
+    case userTwoStepVerificationVerifyPasswordMaxTryLock = "191"
+    case userTwoStepVerificationVerifyPasswordForbidden = "192"
+    case userTwoStepVerificationVerifyPasswordNoPassword = "193"
+    case userTwoStepVerificationVerifyPasswordInvalidPassword = "194"
+    
     case canNotAddThisUserAsAdminToGroup        = "323.3"
     case canNotAddThisUserAsModeratorToGroup    = "320.3"
     case canNotAddThisUserAsAdminToChannel      = "423.3"

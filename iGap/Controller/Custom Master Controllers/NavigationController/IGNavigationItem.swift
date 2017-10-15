@@ -45,12 +45,13 @@ class IGNavigationItem: UINavigationItem {
     }
     
     func configure() {
-        let rightViewFrame = CGRect(x:0, y:0, width: 50, height:80)
+        let rightViewFrame = CGRect(x:0, y:0, width: 40, height:40)
         rightViewContainer = IGTappableView(frame: rightViewFrame)
         rightViewContainer!.backgroundColor = UIColor.clear
         let rightBarButton = UIBarButtonItem(customView: rightViewContainer!)
         self.rightBarButtonItem = rightBarButton
     }
+    
     //MARK: - Connecting
     func setNavigationItemForConnecting() {
         setNavigationItemWithCenterActivityIndicator(text: "Connecting")
@@ -69,7 +70,7 @@ class IGNavigationItem: UINavigationItem {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 17.0, weight: UIFontWeightSemibold)
         label.textAlignment = .center
-        label.textColor = UIColor.darkGray
+        label.textColor = UIColor.white
         label.text = text
         centerViewContainer?.addSubview(label)
         label.snp.makeConstraints { (make) in
@@ -77,7 +78,7 @@ class IGNavigationItem: UINavigationItem {
             make.centerY.equalTo(self.centerViewContainer!.snp.centerY).offset(-5)
         }
         
-        let activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+        let activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .white)
         centerViewContainer?.addSubview(activityIndicatorView)
         activityIndicatorView.startAnimating()
         activityIndicatorView.snp.makeConstraints { (make) in
@@ -116,13 +117,8 @@ class IGNavigationItem: UINavigationItem {
         self.title = ""
         backViewContainer?.addAction {
             self.backViewContainer?.isUserInteractionEnabled = false
-            //self.hud = MBProgressHUD.showAdded(to: self.backViewContainer!, animated: true)
-           // self.hud.mode = .indeterminate
            _ = self.navigationController?.popViewController(animated: true)
-           // self.hud.hide(animated: true)
-
-        }
-        
+        }        
     }
     
     //MARK: - Modal VCs
@@ -140,28 +136,30 @@ class IGNavigationItem: UINavigationItem {
     }
     
     private func addTitleLabel(title: String) {
-        let titleView = UIView(frame: CGRect(x: 0, y: 0, width: 150, height: 80))
-        let label = UILabel(frame: CGRect(x: 0, y: 20, width: 150, height: 31))
+        let height = self.navigationController?.navigationBar.frame.height
+        let titleView = UIView(frame: CGRect(x: 0, y: 0, width: 150, height: 40))
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 150, height: 40))
         label.font = UIFont.systemFont(ofSize: 17.0, weight: UIFontWeightBold)
         label.textAlignment = .center
         label.text = title
+        label.textColor = UIColor.white
         
         titleView.addSubview(label)
         self.titleView = titleView
     }
     
     private func addModalViewRightItem(title: String) {
-        let rightViewFrame = CGRect(x:0, y:0, width: 50, height:80)
+        let rightViewFrame = CGRect(x:0, y:0, width: 50, height:40)
         rightViewContainer = IGTappableView(frame: rightViewFrame)
         rightViewContainer!.backgroundColor = UIColor.clear
         let rightBarButton = UIBarButtonItem(customView: rightViewContainer!)
         self.rightBarButtonItem = rightBarButton
         
-        let labelFrame = CGRect(x: -40, y: 20, width: 100, height:31)
+        let labelFrame = CGRect(x: -40, y: 0, width: 100, height:40)
         let label = UILabel(frame: labelFrame)
         label.textAlignment = .right
         label.text = title
-        label.textColor = UIColor.organizationalColor()
+        label.textColor = UIColor.white
         rightViewContainer!.addSubview(label)
     }
     
@@ -175,7 +173,7 @@ class IGNavigationItem: UINavigationItem {
         let labelFrame = CGRect(x: -10, y: 20, width: 100, height:31)
         let label = UILabel(frame: labelFrame)
         label.text = title
-        label.textColor = UIColor.organizationalColor()
+        label.textColor = UIColor.white
         leftViewContainer!.addSubview(label)
     }
     
@@ -187,12 +185,12 @@ class IGNavigationItem: UINavigationItem {
     }
     
     private func addSettingButton() {
-        let leftViewFrame = CGRect(x:0, y:0, width: 50, height:80)
+        let leftViewFrame = CGRect(x:0, y:0, width: 50, height:40)
         leftViewContainer = IGTappableView(frame: leftViewFrame)
         leftViewContainer!.backgroundColor = UIColor.clear
         let leftBarButton = UIBarButtonItem(customView: leftViewContainer!)
         self.leftBarButtonItem = leftBarButton
-        let settingViewFrame = CGRect(x: -10, y: 20, width: 31, height:31)
+        let settingViewFrame = CGRect(x: -10, y: 5, width: 31, height:31)
         let settingButtonImageView = UIImageView(frame: settingViewFrame)
         settingButtonImageView.image = UIImage(named:"IG_Nav_Bar_Menu")
         settingButtonImageView.tintColor = UIColor.organizationalColor()
@@ -200,7 +198,7 @@ class IGNavigationItem: UINavigationItem {
     }
     
     private func addComopseButton() {
-        let composeButtonFrame = CGRect(x: 30, y: 20, width: 31, height:31)
+        let composeButtonFrame = CGRect(x: 20, y: 5, width: 31, height:31)
         let composeButtonImageView = UIImageView(frame: composeButtonFrame)
         composeButtonImageView.image = UIImage(named:"IG_Nav_Bar_Compose")
         composeButtonImageView.tintColor = UIColor.organizationalColor()
@@ -208,8 +206,8 @@ class IGNavigationItem: UINavigationItem {
     }
     
     private func addiGapLogo() {
-        let titleView = UIView(frame: CGRect(x: 0, y: 0, width: 67, height: 23))
-        let logoImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 67, height: 23))
+        let titleView = UIView(frame: CGRect(x: 0, y: 0, width: 67, height: 40))
+        let logoImageView = UIImageView(frame: CGRect(x: 0, y: 8, width: 67, height: 23))
         logoImageView.image = UIImage(named: "IG_Nav_Bar_Logo")
         logoImageView.contentMode = .scaleAspectFit
         
@@ -277,8 +275,7 @@ class IGNavigationItem: UINavigationItem {
     }
     
     private func setRoomAvatar(_ room: IGRoom) {
-        let avatarViewFrame = CGRect(x: 10, y: 10, width: 50, height:50)
-        
+        let avatarViewFrame = CGRect(x: 0, y: 0, width: 40, height:40)
         
         let avatarView = IGAvatarView(frame: avatarViewFrame)
         avatarView.setRoom(room)
@@ -292,24 +289,26 @@ class IGNavigationItem: UINavigationItem {
     
     private func setRoomInfo(_ room: IGRoom) {
         self.centerViewContainer?.subviews.forEach { $0.removeFromSuperview() }
+        
         self.centerViewContainer = IGTappableView(frame: CGRect(x: 0, y: 0, width: 200, height: 45))
         
         self.titleView = self.centerViewContainer
-        
-        if (UIScreen.main.bounds.width) == 320.0 {
-        self.centerViewMainLabel = UILabel(frame: CGRect(x: -10, y: 0, width: 200, height: 18))
-        } else {
+//        if (UIScreen.main.bounds.width) == 320.0 {
+//            self.centerViewMainLabel = UILabel(frame: CGRect(x: -10, y: 0, width: 200, height: 18))
+//        } else {
+//            self.centerViewMainLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 18))
+//        }
         self.centerViewMainLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 18))
-        }
         self.centerViewMainLabel!.text = room.title
+        self.centerViewMainLabel!.textColor = UIColor.white
         self.centerViewMainLabel!.textAlignment = .center
-        self.centerViewMainLabel!.font = UIFont.boldSystemFont(ofSize: 16)
+        self.centerViewMainLabel!.font = UIFont.igFont(ofSize: 16.0, weight: .bold)//boldSystemFont(ofSize: 16)
         self.centerViewContainer!.addSubview(self.centerViewMainLabel!)
         
         self.centerViewSubLabel = UILabel()//frame: CGRect(x: 0, y: 20, width: 200, height: 16))
-        self.centerViewSubLabel!.textColor = UIColor.organizationalColor()
+        self.centerViewSubLabel!.textColor = UIColor.white
         self.centerViewSubLabel!.textAlignment = .center
-        self.centerViewSubLabel!.font = UIFont.boldSystemFont(ofSize: 12)
+        self.centerViewSubLabel!.font = UIFont.igFont(ofSize: 12.0, weight: .regular)//boldSystemFont(ofSize: 12)
         self.centerViewContainer!.addSubview(self.centerViewSubLabel!)
         self.centerViewSubLabel!.snp.makeConstraints { (make) in
             make.top.equalTo(self.centerViewMainLabel!.snp.bottom).offset(3)

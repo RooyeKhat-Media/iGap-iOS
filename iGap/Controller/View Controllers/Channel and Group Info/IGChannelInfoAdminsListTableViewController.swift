@@ -9,7 +9,7 @@
  */
 
 import UIKit
-import ProtocolBuffers
+import SwiftProtobuf
 import RealmSwift
 import MBProgressHUD
 import IGProtoBuff

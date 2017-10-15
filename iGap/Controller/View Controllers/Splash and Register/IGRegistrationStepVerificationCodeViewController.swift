@@ -10,7 +10,7 @@
 
 import UIKit
 import IGProtoBuff
-import ProtocolBuffers
+import SwiftProtobuf
 import MBProgressHUD
 
 class IGRegistrationStepVerificationCodeViewController: UIViewController, UIGestureRecognizerDelegate {
@@ -184,8 +184,8 @@ class IGRegistrationStepVerificationCodeViewController: UIViewController, UIGest
     }
     
     fileprivate func verifyUser() {
-        hud = MBProgressHUD.showAdded(to: self.view, animated: true)
-        hud.mode = .indeterminate
+        self.hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+        self.hud.mode = .indeterminate
         if let code = Int32(codeTextField.text!){
             IGUserVerifyRequest.Generator.generate(usename: self.username!, code: code).success({ (responseProto) in
                 DispatchQueue.main.async {
@@ -200,65 +200,71 @@ class IGRegistrationStepVerificationCodeViewController: UIViewController, UIGest
                     }    
                 }
             }).error({ (errorCode, waitTime) in
-                var errorTitle = ""
-                var errorBody = ""
-                switch errorCode {
-                case .userVerifyBadPayload:
-                    errorTitle = "Error"
-                    errorBody = "Invalid payload"
-                    break
-                case .userVerifyBadPayloadInvalidCode:
-                    errorTitle = "Error"
-                    errorBody = "The code payload is invalid."
-                    break
-                case .userVerifyBadPayloadInvalidUsername:
-                    errorTitle = "Error"
-                    errorBody = "Username payload is invalid."
-                    break
-                case .userVerifyInternalServerError:
-                    errorTitle = "Error"
-                    errorBody = "Inernal server error. Try agian later and if problem persists contact iGap support."
-                    break
-                case .userVerifyUserNotFound:
-                    errorTitle = "Error"
-                    errorBody = "Could not found the request user. Try agian later and if problem persists contact iGap support."
-                    break
-                case .userVerifyBlockedUser:
-                    errorTitle = "Error"
-                    errorBody = "This use is blocked. You cannot register."
-                    break
-                case .userVerifyInvalidCode:
-                    errorTitle = "Invalid Code"
-                    errorBody = "The code you entred is not valid. Verify the code and try again."
-                    break
-                case .userVerifyExpiredCode:
-                    errorTitle = "Invalid Code"
-                    errorBody = "Code has been expired. Please request a new code."
-                    break
-                case .userVerifyMaxTryLock:
-                    errorTitle = ""
-                    errorBody = "To many failed code verification attempt."
-                    break
-                case .timeout:
-                    errorTitle = "Timeout"
-                    errorBody = "Please try again later."
-                    break
-                default:
-                    errorTitle = "Unknown error"
-                    errorBody = "An error occured. Please try again later.\nCode \(errorCode)"
-                    break
+                if errorCode == .userVerifyTwoStepVerificationEnabled {
+                    DispatchQueue.main.async {
+                        self.hud.hide(animated: false)
+                        self.performSegue(withIdentifier:"twoStepPassword", sender: nil);
+                    }
+                }else{
+                    var errorTitle = ""
+                    var errorBody = ""
+                    switch errorCode {
+                    case .userVerifyBadPayload:
+                        errorTitle = "Error"
+                        errorBody = "Invalid payload"
+                        break
+                    case .userVerifyBadPayloadInvalidCode:
+                        errorTitle = "Error"
+                        errorBody = "The code payload is invalid."
+                        break
+                    case .userVerifyBadPayloadInvalidUsername:
+                        errorTitle = "Error"
+                        errorBody = "Username payload is invalid."
+                        break
+                    case .userVerifyInternalServerError:
+                        errorTitle = "Error"
+                        errorBody = "Inernal server error. Try agian later and if problem persists contact iGap support."
+                        break
+                    case .userVerifyUserNotFound:
+                        errorTitle = "Error"
+                        errorBody = "Could not found the request user. Try agian later and if problem persists contact iGap support."
+                        break
+                    case .userVerifyBlockedUser:
+                        errorTitle = "Error"
+                        errorBody = "This use is blocked. You cannot register."
+                        break
+                    case .userVerifyInvalidCode:
+                        errorTitle = "Invalid Code"
+                        errorBody = "The code you entred is not valid. Verify the code and try again."
+                        break
+                    case .userVerifyExpiredCode:
+                        errorTitle = "Invalid Code"
+                        errorBody = "Code has been expired. Please request a new code."
+                        break
+                    case .userVerifyMaxTryLock:
+                        errorTitle = ""
+                        errorBody = "Too many failed code verification attempt."
+                        break
+                    case .timeout:
+                        errorTitle = "Timeout"
+                        errorBody = "Please try again later."
+                        break
+                    default:
+                        errorTitle = "Unknown error"
+                        errorBody = "An error occured. Please try again later.\nCode \(errorCode)"
+                        break
+                    }
+                    if waitTime != nil &&  waitTime != 0 {
+                        errorBody += "\nPlease try again in \(waitTime!) seconds."
+                    }
+                    DispatchQueue.main.async {
+                        let alert = UIAlertController(title: errorTitle, message: errorBody, preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alert.addAction(okAction)
+                        self.hud.hide(animated: true)
+                        self.present(alert, animated: true, completion: nil)
+                    }
                 }
-                if waitTime != nil &&  waitTime != 0 {
-                    errorBody += "\nPlease try again in \(waitTime!) seconds."
-                }
-                DispatchQueue.main.async {
-                    let alert = UIAlertController(title: errorTitle, message: errorBody, preferredStyle: .alert)
-                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                    alert.addAction(okAction)
-                    self.hud.hide(animated: true)
-                    self.present(alert, animated: true, completion: nil)
-                }
-                
             }).send()
         }
     }
@@ -277,7 +283,7 @@ class IGRegistrationStepVerificationCodeViewController: UIViewController, UIGest
                             DispatchQueue.main.async {
                                 switch protoResponse {
                                 case let userInfoResponse as IGPUserInfoResponse:
-                                    let igpUser = (userInfoResponse.igpUser)!
+                                    let igpUser = userInfoResponse.igpUser
                                     IGFactory.shared.saveRegistredUsers([igpUser])
                                     break
                                 default:

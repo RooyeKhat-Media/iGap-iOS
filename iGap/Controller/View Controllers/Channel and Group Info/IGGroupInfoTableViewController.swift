@@ -9,7 +9,7 @@
  */
 
 import UIKit
-import ProtocolBuffers
+import SwiftProtobuf
 import RealmSwift
 import RxRealm
 import RxSwift
@@ -17,8 +17,10 @@ import RxCocoa
 import IGProtoBuff
 import MGSwipeTableCell
 import MBProgressHUD
+import INSPhotoGalleryFramework
+import NVActivityIndicatorView
 
-class IGGroupInfoTableViewController: UITableViewController , UIGestureRecognizerDelegate{
+class IGGroupInfoTableViewController: UITableViewController , UIGestureRecognizerDelegate , NVActivityIndicatorViewable {
 
     @IBOutlet weak var groupNameLabelTrailingConstraint: NSLayoutConstraint!
     @IBOutlet weak var groupDescriptionLabelTrailingConstraint: NSLayoutConstraint!
@@ -54,19 +56,29 @@ class IGGroupInfoTableViewController: UITableViewController , UIGestureRecognize
     var mode : String? = "Members"
     var notificationToken: NotificationToken?
     var connectionStatus: IGAppManager.ConnectionStatus?
+    var avatars: [IGAvatar] = []
+    var deleteView: IGTappableView?
+    var userAvatar: IGAvatar?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         requestToGetRoom()
+        requestToGetAvatarList()
         myRole = room?.groupRoom?.role
         showGroupInfo()
         imagePicker.delegate = self
-        self.tableView.backgroundView = UIImageView(image: UIImage(named: "IG_Settigns_Bg"))
+        self.tableView.backgroundColor = UIColor(red: 247.0/255.0, green: 247.0/255.0, blue: 247.0/255.0, alpha: 1.0)
         tableView.tableFooterView = UIView()
         let navigationItem = self.navigationItem as! IGNavigationItem
         navigationItem.addNavigationViewItems(rightItemText: nil, title: "Group Info")
-        navigationItem.navigationController = self.navigationController as! IGNavigationController
+        navigationItem.navigationController = self.navigationController as? IGNavigationController
         let navigationController = self.navigationController as! IGNavigationController
         navigationController.interactivePopGestureRecognizer?.delegate = self
+
+        
+        groupAvatarView.avatarImageView?.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer.init(target: self, action: #selector(self.handleTap(recognizer:)))
+        groupAvatarView.avatarImageView?.addGestureRecognizer(tap)
 
         switch myRole! {
         case .admin:
@@ -335,6 +347,186 @@ class IGGroupInfoTableViewController: UITableViewController , UIGestureRecognize
         }
         
     }
+    
+    func handleTap(recognizer:UITapGestureRecognizer) {
+        if recognizer.state == .ended {
+            if let userAvatar = room?.groupRoom?.avatar {
+                showAvatar( avatar: userAvatar)
+            }
+        }
+    }
+    
+    var avatarPhotos : [INSPhotoViewable]?
+    var galleryPhotos: INSPhotosViewController?
+    var lastIndex: Array<Any>.Index?
+    var currentAvatarId: Int64?
+    var timer = Timer()
+    func showAvatar(avatar : IGAvatar) {
+        var photos: [INSPhotoViewable] = self.avatars.map { (avatar) -> IGMedia in
+            return IGMedia(avatar: avatar)
+        }
+        avatarPhotos = photos
+        let currentPhoto = photos[0]
+        let deleteViewFrame = CGRect(x:320, y:595, width: 25 , height:25)
+        let trashImageView = UIImageView()
+        trashImageView.image = UIImage(named: "IG_Trash_avatar")
+        trashImageView.frame = CGRect(x: 0, y: 0, width: 25, height: 25)
+        if myRole == .owner || myRole == .admin {
+            deleteView = IGTappableView(frame: deleteViewFrame)
+            deleteView?.addSubview(trashImageView)
+            deleteView?.addAction {
+                self.didTapOnTrashButton()
+            }
+        } else {
+            deleteView = nil
+        }
+        
+        let downloadIndicatorMainView = UIView()
+        let downloadViewFrame = self.view.bounds
+        downloadIndicatorMainView.backgroundColor = UIColor.white
+        downloadIndicatorMainView.frame = downloadViewFrame
+        let andicatorViewFrame = CGRect(x: view.bounds.midX, y: view.bounds.midY,width: 50 , height: 50)
+        let activityIndicatorView = NVActivityIndicatorView(frame: andicatorViewFrame,
+                                                            type: NVActivityIndicatorType.audioEqualizer)
+        downloadIndicatorMainView.addSubview(activityIndicatorView)
+        
+        let galleryPreview = INSPhotosViewController(photos: photos, initialPhoto: currentPhoto, referenceView: nil, deleteView: deleteView, downloadView: downloadIndicatorMainView)
+        galleryPhotos = galleryPreview
+        present(galleryPreview, animated: true, completion: nil)
+        activityIndicatorView.startAnimating()
+        activityIndicatorView.startAnimating()
+        
+        DispatchQueue.main.async {
+            let size = CGSize(width: 30, height: 30)
+            self.startAnimating(size, message: nil, type: NVActivityIndicatorType.ballRotateChase)
+            
+            let thisPhoto = galleryPreview.accessCurrentPhotoDetail()
+            
+            //self.avatarPhotos.index(of:thisPhoto)
+            if let index =  self.avatarPhotos?.index(where: {$0 === thisPhoto}) {
+                self.lastIndex = index
+                let currentAvatarFile = self.avatars[index].file
+                self.currentAvatarId = self.avatars[index].id
+                if currentAvatarFile?.status == .downloading {
+                    return
+                }
+                
+                if let attachment = currentAvatarFile {
+                    IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: {
+                        galleryPreview.hiddenDownloadView()
+                        self.stopAnimating()
+                    }, failure: {
+                        
+                    })
+                }
+                
+            }
+            
+        }
+        scheduledTimerWithTimeInterval()
+    }
+    
+    func scheduledTimerWithTimeInterval(){
+        // Scheduling timer to Call the function **Countdown** with the interval of 1 seconds
+        timer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(self.updateCounting), userInfo: nil, repeats: true)
+    }
+    
+    func updateCounting(){
+        let nextPhoto = galleryPhotos?.accessCurrentPhotoDetail()
+        if let index =  self.avatarPhotos?.index(where: {$0 === nextPhoto}) {
+            let currentAvatarFile = self.avatars[index].file
+            let nextAvatarId = self.avatars[index].id
+            if nextAvatarId != self.currentAvatarId {
+                let size = CGSize(width: 30, height: 30)
+                self.startAnimating(size, message: nil, type: NVActivityIndicatorType.ballRotateChase)
+                if currentAvatarFile?.status == .downloading {
+                    return
+                }
+                
+                if let attachment = currentAvatarFile {
+                    IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: {
+                        self.galleryPhotos?.hiddenDownloadView()
+                        self.stopAnimating()
+                    }, failure: {
+                        
+                    })
+                }
+                self.currentAvatarId = nextAvatarId
+            } else {
+                
+            }
+        }
+    }
+
+
+    
+    func didTapOnTrashButton() {
+        timer.invalidate()
+        let thisPhoto = galleryPhotos?.accessCurrentPhotoDetail()
+        if let index =  self.avatarPhotos?.index(where: {$0 === thisPhoto}) {
+            let thisAvatarId = self.avatars[index].id
+            IGGroupAvatarDeleteRequest.Generator.generate(avatarId: thisAvatarId, roomId: (room?.id)!).success({ (protoResponse) in
+                DispatchQueue.main.async {
+                    switch protoResponse {
+                    case let groupAvatarDeleteResponse as IGPGroupAvatarDeleteResponse :
+                        IGGroupAvatarDeleteRequest.Handler.interpret(response: groupAvatarDeleteResponse)
+                        self.avatarPhotos?.remove(at: index)
+                        self.avatars.remove(at: index)
+                    default:
+                        break
+                    }
+                }
+            }).error ({ (errorCode, waitTime) in
+                switch errorCode {
+                case .timeout:
+                    DispatchQueue.main.async {
+                        let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                default:
+                    break
+                }
+                
+            }).send()
+            
+            
+            
+            
+        }
+    }
+    
+    
+    func requestToGetAvatarList() {
+        if let currentRoomID = room?.id {
+            IGGroupAvatarGetListRequest.Generator.generate(roomId: currentRoomID).success({ (protoResponse) in
+                DispatchQueue.main.async {
+                    switch protoResponse {
+                    case let groupAvatarGetListResponse as IGPGroupAvatarGetListResponse:
+                        let responseAvatars = IGGroupAvatarGetListRequest.Handler.interpret(response: groupAvatarGetListResponse)
+                    self.avatars = responseAvatars
+                    default:
+                        break
+                    }
+                }
+            }).error ({ (errorCode, waitTime) in
+                switch errorCode {
+                case .timeout:
+                    DispatchQueue.main.async {
+                        let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                default:
+                    break
+                }
+                
+            }).send()
+        }
+    }
+
 
     func showGroupInfo() {
         groupNameTitleLabel.text = room?.title

@@ -10,7 +10,7 @@
 
 import UIKit
 import IGProtoBuff
-import ProtocolBuffers
+import SwiftProtobuf
 
 typealias UploadStartCallback    = (()->())?
 typealias UploadProgressCallback = ((Progress)->())?

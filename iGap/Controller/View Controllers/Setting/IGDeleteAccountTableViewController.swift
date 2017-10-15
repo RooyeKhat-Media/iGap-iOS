@@ -17,13 +17,11 @@ class IGDeleteAccountTableViewController: UITableViewController , UIGestureRecog
     var hud = MBProgressHUD()
     override func viewDidLoad() {
         super.viewDidLoad()
-        let backImage = UIImage(named: "IG_Settigns_Bg")
-        let backgroundImageView = UIImageView(image: backImage)
-        self.tableView.backgroundView = backgroundImageView
+        self.tableView.backgroundColor = UIColor(red: 247.0/255.0, green: 247.0/255.0, blue: 247.0/255.0, alpha: 1.0)
         tableView.tableFooterView = UIView()
         let navigationItem = self.navigationItem as! IGNavigationItem
         navigationItem.addNavigationViewItems(rightItemText: nil , title: "Delete Account")
-        navigationItem.navigationController = self.navigationController as! IGNavigationController
+        navigationItem.navigationController = self.navigationController as? IGNavigationController
         let navigationController = self.navigationController as! IGNavigationController
         navigationController.interactivePopGestureRecognizer?.delegate = self
 

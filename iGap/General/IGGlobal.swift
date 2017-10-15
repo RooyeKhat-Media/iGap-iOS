@@ -9,13 +9,15 @@
  */
 
 import UIKit
-import ProtocolBuffers
+import SwiftProtobuf
 
 let kIGUserLoggedInNotificationName = "im.igap.ios.user.logged.in"
 let kIGNotificationNameDidCreateARoom = "im.igap.ios.room.created"
 let kIGNoticationForPushUserExpire = "im.igap.ios.user.expire"
-let statusBarTappedNotification = Notification(name: Notification.Name(rawValue: "im.igap.statusbarTapped"))
 
+let IGNotificationStatusBarTapped         = Notification(name: Notification.Name(rawValue: "im.igap.statusbarTapped"))
+let IGNotificationPushLoginToken          = Notification(name: Notification.Name(rawValue: "im.igap.ios.user.push.token"))
+let IGNotificationPushTwoStepVerification = Notification(name: Notification.Name(rawValue: "im.igap.ios.user.push.two.step"))
 
 
 class IGGlobal {
@@ -65,41 +67,37 @@ extension UIColor {
     
     //MARK: General Colors
     class func organizationalColor() -> UIColor {
-        return UIColor(red: 49.0/255.0, green: 189.0/255.0, blue: 181.0/255.0, alpha: 1.0)
+        return UIColor(red:0/255.0, green:176.0/255.0, blue:191.0/255.0, alpha:1.0)
     }
     
     class func organizationalColorLight() -> UIColor {
-        return UIColor(red:191.0/255.0, green:239.0/255.0, blue:238.0/255.0, alpha:1.0)
+        return UIColor(red:180.0/255.0, green:255.0/255.0, blue:255.0/255.0, alpha:1.0)
     }
     
     //MARK: MessageCVCell Bubble
+    class func outgoingChatBuubleBackgroundColor() -> UIColor {
+        return UIColor(red: 247.0/255.0, green: 247.0/255.0, blue: 247.0/255.0, alpha: 1.0)
+    }
+
     class func incommingChatBuubleBackgroundColor() -> UIColor {
-        return UIColor(red: 242.0/255.0, green: 242.0/255.0, blue: 242.0/255.0, alpha: 1.0)
+        return UIColor.white
     }
     
     class func chatBubbleBackground(isIncommingMessage: Bool) -> UIColor {
         if isIncommingMessage {
             return UIColor.incommingChatBuubleBackgroundColor()
         } else {
-            return UIColor.organizationalColorLight()
+            return UIColor.outgoingChatBuubleBackgroundColor()
         }
     }
     
     class func chatBubbleTextColor(isIncommingMessage: Bool) -> UIColor {
-        if isIncommingMessage {
-            return UIColor(red: 53.0/255.0, green: 53.0/255.0, blue: 53.0/255.0, alpha: 1.0)
-        } else {
-            return UIColor(red: 53.0/255.0, green: 53.0/255.0, blue: 53.0/255.0, alpha: 1.0)//.white
-        }
+        return UIColor(red: 51.0/255.0, green: 51.0/255.0, blue: 51.0/255.0, alpha: 1.0)
     }
     
     //MARK: MessageCVCell Time
     class func chatTimeTextColor(isIncommingMessage: Bool) -> UIColor {
-        if isIncommingMessage {
-            return UIColor(red: 59.0/255.0, green: 59.0/255.0, blue: 59.0/255.0, alpha: 1.0)
-        } else {
-            return UIColor(red: 59.0/255.0, green: 59.0/255.0, blue: 59.0/255.0, alpha: 1.0)
-        }
+        return UIColor(red: 105.0/255.0, green: 123.0/255.0, blue: 135.0/255.0, alpha: 1.0)
     }
     
     //MARK: MessageCVCell Forward
@@ -180,10 +178,15 @@ extension UIColor {
 
 //MARK: -
 extension Date {
-     func convertToHumanReadable() -> String {
+    func convertToHumanReadable(onlyTimeIfToday: Bool = false) -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "HH:mm"
+        
         let calendar = NSCalendar.current
+        if onlyTimeIfToday && !calendar.isDateInToday(self) {
+            dateFormatter.dateFormat = "MMM, dd"
+            return dateFormatter.string(from: self)
+        }
+        dateFormatter.dateFormat = "HH:mm"
         let hour = calendar.component(Calendar.Component.hour, from: self)
         let min = calendar.component(Calendar.Component.minute, from: self)
         return "\(String(format: "%02d", hour)):\(String(format: "%02d", min))"
@@ -217,9 +220,9 @@ extension Date {
         let dateString = dateFormatter.string(from: self)
         dateFormatter.dateFormat = "h:mm a"
         let timeString = dateFormatter.string(from: self)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            self.humanReadableForLastSeen()
-        }
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+//            self.humanReadableForLastSeen()
+//        }
 
         return dateString + " at " + timeString
         
@@ -259,6 +262,17 @@ extension UIViewController {
     
     func isTabbarHidden() -> Bool {
         return (self.tabBarController?.tabBar.frame.origin.y)! >= self.view.frame.maxY
+    }
+    
+    func showAlert(title: String, message: String, action: (()->())? = nil, completion: (() -> Swift.Void)? = nil) {
+        let alertVC = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Ok", style: .default) { (alertAction) in
+            if let action = action {
+                action()
+            }
+        }
+        alertVC.addAction(okAction)
+        self.present(alertVC, animated: true, completion: completion)
     }
 }
 
@@ -422,3 +436,48 @@ extension UIImage {
     }
 }
 
+
+//MARK: -
+extension UIFont {
+    
+    enum FontWeight {
+        case ultraLight
+        case light
+        case regular
+        case medium
+        case bold
+    }
+    
+    class func igFont(ofSize fontSize: CGFloat, weight: FontWeight = .regular) -> UIFont {
+        switch weight {
+        case .ultraLight:
+            return UIFont(name: "IRANSans-UltraLight", size: fontSize)!
+        case .light:
+            return UIFont(name: "IRANSans-Light", size: fontSize)!
+        case .regular:
+            return UIFont(name: "IRANSans", size: fontSize)!
+        case .medium:
+            return UIFont(name: "IRANSans-Medium", size: fontSize)!
+        case .bold:
+            return UIFont(name: "IRANSans-Bold", size: fontSize)!
+        }
+    }
+    
+//    func bold() -> UIFont {
+//        return withTraits(traits: .traitBold)
+//    }
+    
+//    func italic() -> UIFont {
+//        return withTraits(traits: .traitItalic)
+//    }
+    
+//    func withTraits(traits:UIFontDescriptorSymbolicTraits...) -> UIFont {
+//        
+//        if let result = CTFontCreateCopyWithSymbolicTraits(self as CTFont, 0, nil, .traitItalic, .traitItalic) {
+//            return result as UIFont
+//        }
+//        
+//        let descriptor = self.fontDescriptor.withSymbolicTraits(UIFontDescriptorSymbolicTraits(traits))!
+//        return UIFont(descriptor: descriptor, size: 0)
+//    }
+}

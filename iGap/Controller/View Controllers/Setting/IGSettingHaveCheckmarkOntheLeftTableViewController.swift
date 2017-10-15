@@ -31,13 +31,11 @@ class IGSettingHaveCheckmarkOntheLeftTableViewController: UITableViewController 
         currentUser = realm.objects(IGRegisteredUser.self).filter(predicate).first!
         
         self.navigationItem.title = navBarTitle
-        let backImage = UIImage(named: "IG_Settigns_Bg")
-        let backgroundImageView = UIImageView(image: backImage)
-        self.tableView.backgroundView = backgroundImageView
+        self.tableView.backgroundColor = UIColor(red: 247.0/255.0, green: 247.0/255.0, blue: 247.0/255.0, alpha: 1.0)
         let navigationItem = self.navigationItem as! IGNavigationItem
         navigationItem.addNavigationViewItems(rightItemText: "Done", title: mode)
         navigationItem.navigationController = self.navigationController as! IGNavigationController
-        let navigationController = self.navigationController as! IGNavigationController
+        let navigationController = self.navigationController as? IGNavigationController
         navigationItem.rightViewContainer?.addAction {
             self.doneButtonClicked()
         }

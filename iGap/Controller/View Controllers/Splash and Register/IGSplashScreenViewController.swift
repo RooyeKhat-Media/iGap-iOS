@@ -10,31 +10,27 @@
 
 import UIKit
 import Gifu
+import SnapKit
 
 class IGSplashScreenViewController: UIViewController {
 
     
-    @IBOutlet weak var backgroundLatyer: UIView!
-    @IBOutlet weak var mainImageView: GIFImageView!
-    @IBOutlet weak var secondCenterImageView: UIImageView!
+    @IBOutlet weak var backgroundLayer: UIView!
+    @IBOutlet weak var gifImageView: GIFImageView!
+    @IBOutlet weak var pageControll: UIPageControl!
+    
+    @IBOutlet weak var topView: UIView!
+    @IBOutlet weak var skipButton: UIButton!
+    
+    @IBOutlet weak var bottomView: UIView!
     @IBOutlet weak var animateCityImageView: UIImageView!
     @IBOutlet weak var greenTreeImageView: UIImageView!
-    @IBOutlet weak var CenterImageView: UIImageView!
-    @IBOutlet weak var secondIGapLabel: UILabel!
-    @IBOutlet weak var iGapLabel: UILabel!
-    @IBOutlet weak var limitlessConnectionLabel: UILabel!
-    @IBOutlet weak var descriptionTextView: UITextView!
     @IBOutlet weak var startButton: UIButton!
-    @IBOutlet weak var skipButton: UIButton!
-    @IBOutlet weak var pageControll: UIPageControl!
-    @IBOutlet weak var topView: UIView!
-    @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet weak var secendDescriptionTextView: UITextView!
-    @IBOutlet weak var thirdDescriptionTextView: UITextView!
-    @IBOutlet weak var fourthDescriptionTextView: UITextView!
-    @IBOutlet weak var fifthDescriptionTextView: UITextView!
     
-    var pageIndex : Int = 0
+
+
+    var numberOfPages: Int = 6
+    var pageIndex: Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,40 +39,116 @@ class IGSplashScreenViewController: UIViewController {
         self.navigationController?.isNavigationBarHidden = true
         
         animateCityImage()
-        handlePageControll()
-        scrollView.delegate = self
-        scrollView.contentSize = CGSize(width: self.view.frame.width*5, height: scrollView.frame.size.height)
-        scrollView.backgroundColor = UIColor.clear
+        addSwipegestureRecognizer()
+        
+        pageControll.numberOfPages = numberOfPages
+        pageControll.isUserInteractionEnabled = false
+        
         startButton.layer.borderWidth = 0
         startButton.layer.cornerRadius = 15
         startButton.alpha = 0.0
-        
+
+        skipButton.layer.borderWidth = 0
+        skipButton.layer.cornerRadius = 8
         
         NotificationCenter.default.addObserver(self, selector: #selector(animateCityImage), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
+        
+        let gradient: CAGradientLayer = CAGradientLayer()
+        let gradientStartColor = UIColor(hexString: "bae6ff")
+        let gradientCebterColor = UIColor(hexString: "e4f5ff")
+        let gradientEndColor = UIColor.white
+        gradient.colors = [gradientStartColor.cgColor, gradientCebterColor.cgColor, gradientEndColor.cgColor]
+        gradient.locations = [0.0 , 0.25, 0.5]
+        gradient.startPoint = CGPoint(x: 1.0, y: 0.0)
+        gradient.endPoint = CGPoint(x: 1.0, y: 1.0)
+        gradient.frame = CGRect(x: 0.0, y: 0.0, width: self.topView.frame.size.width, height: self.topView.frame.size.height)
+        
+        self.topView.layer.insertSublayer(gradient, at: 0)
+        
+        
+        let images = ["IG_Splash_Cute_1", "IG_Splash_Cute_2", "IG_Splash_Cute_3", "IG_Splash_Cute_4", "IG_Splash_Cute_5", "IG_Splash_Cute_6"]
+        let titles = ["Limitless Connection", "Security & Privacy", "Chat", "File Transferring", "Voice Call", "Everything for free in iGap!"]
+        let descriptions = ["Build your own world by iGap right now.\nIt takes only few minutes to join iGap community.",
+                            "iGap attaches the utmost importance to your security and privacy using the individual encryption algorithms and guarantees a safe and secure connection between you, your friends and family.",
+                            "You can have one-on-one or group chats and even create your own channel and add members in order to share information with millions of people.",
+                            "You have an authority to transfer any file with any size and type or save them on your cloud storage; and then share anything you'd like to with anyone you'd want to.",
+                            "You can make thoroughly free and secure voice calls to anyone on iGap and save your money. iGap voice call is P2P-based with no servers' interference in voice transmission.",
+                            "Let's stop waiting!\niGap is thoroughly free. So, just now build your own world freely."]
+        
+        for i in 0..<numberOfPages {
+            let imageView = UIImageView(frame: CGRect.zero)
+            imageView.image = UIImage(named: images[i])
+            imageView.tag = i
+            self.topView.addSubview(imageView)
+            imageView.snp.makeConstraints({ (make) in
+                make.width.equalTo(162.0)
+                make.height.equalTo(125.0)
+                make.centerX.equalToSuperview()
+                make.top.equalToSuperview().offset(36.0)
+            })
+            
+            
+            let titleLabel = UILabel(frame: CGRect.zero)
+            titleLabel.text = titles[i]
+            titleLabel.textAlignment = .center
+            titleLabel.tag = i
+            titleLabel.font = UIFont.boldSystemFont(ofSize: 18.0)
+            self.topView.addSubview(titleLabel)
+            titleLabel.snp.makeConstraints({ (make) in
+                make.top.equalTo(imageView.snp.bottom).offset(28.0)
+                make.width.equalToSuperview().offset(-32.0)
+                make.height.equalTo(20.0)
+                make.centerX.equalToSuperview()
+            })
+            
+            
+            let desciptionLabel = UILabel(frame: CGRect.zero)
+            desciptionLabel.text = descriptions[i]
+            desciptionLabel.textAlignment = .center
+            desciptionLabel.numberOfLines = 0
+            desciptionLabel.tag = i
+            self.topView.addSubview(desciptionLabel)
+            desciptionLabel.snp.makeConstraints({ (make) in
+                make.top.equalTo(titleLabel.snp.bottom).offset(8.0)
+                make.width.equalToSuperview().offset(-32.0)
+                make.bottom.equalToSuperview()
+                make.centerX.equalToSuperview()
+            })
+            
+            
+            if i != 0 {
+                imageView.alpha = 0.0
+                titleLabel.alpha = 0.0
+                desciptionLabel.alpha = 0.0
+            }
+        }
+        
+        
+        
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        mainImageView.prepareForAnimation(withGIFNamed: "Splash", loopCount: 1) { (Void) in
+        gifImageView.prepareForAnimation(withGIFNamed: "Splash", loopCount: 1) { (Void) in
             DispatchQueue.main.async( execute: {
                 UIView.animate(withDuration: 0.4, animations: {
-                    let frame = self.mainImageView.frame
-                    self.mainImageView.frame = CGRect(x: frame.origin.x + frame.size.width/10.0,
-                                                      y: frame.origin.y + frame.size.height/10.0,
-                                                      width: frame.size.width - frame.size.width/5.0,
-                                                      height: frame.size.height - frame.size.height/5.0)
+                    let frame = self.gifImageView.frame
+                    self.gifImageView.frame = CGRect(x: frame.origin.x + frame.size.width/10.0,
+                                                     y: frame.origin.y + frame.size.height/10.0,
+                                                     width: frame.size.width - frame.size.width/5.0,
+                                                     height: frame.size.height - frame.size.height/5.0)
                     
                     }, completion: { (Bool) in
                         UIView.animate(withDuration: 0.2, animations: {
-                            let frame = self.mainImageView.frame
-                            self.mainImageView.frame = CGRect(x: frame.origin.x - frame.size.width/2.0,
-                                                              y: frame.origin.y - frame.size.height/2.0,
-                                                              width: frame.size.width * 2.0,
-                                                              height: frame.size.height * 2.0)
-                            self.mainImageView.alpha = 0.0
-                            self.backgroundLatyer.alpha = 0.0
+                            let frame = self.gifImageView.frame
+                            self.gifImageView.frame = CGRect(x: frame.origin.x - frame.size.width/2.0,
+                                                             y: frame.origin.y - frame.size.height/2.0,
+                                                             width: frame.size.width * 2.0,
+                                                             height: frame.size.height * 2.0)
+                            self.gifImageView.alpha = 0.0
+                            self.backgroundLayer.alpha = 0.0
                         }, completion: { (Bool) in
                             //
                         })
@@ -84,7 +156,7 @@ class IGSplashScreenViewController: UIViewController {
 
             })
         }
-        mainImageView.startAnimatingGIF()
+        gifImageView.startAnimatingGIF()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -104,24 +176,7 @@ class IGSplashScreenViewController: UIViewController {
     
     @IBAction func didTapOnStartButton(_ sender: UIButton) {
         self.performSegue(withIdentifier: "showPhoneNumber", sender: self)
-    }
-    
-    
-    
-    
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-    
-    
-    
+    }    
     
     @objc private func animateCityImage() {
         self.animateCityImageView.subviews.forEach({ $0.removeFromSuperview() })
@@ -142,142 +197,60 @@ class IGSplashScreenViewController: UIViewController {
                                                 height: self.animateCityImageView.frame.height)
         self.animateCityImageView.addSubview(secondAnimationImageView)
         // Animate background
-        UIView.animate(withDuration: 10.0, delay: 0.0, options: [.repeat,.curveLinear]  , animations: {
+        UIView.animate(withDuration: 40.0, delay: 0.0, options: [.repeat,.curveLinear]  , animations: {
             firstAnimationImageView.frame = firstAnimationImageView.frame.offsetBy(dx: -1 * firstAnimationImageView.frame.size.width, dy: 0.0)
             secondAnimationImageView.frame = secondAnimationImageView.frame.offsetBy(dx: -1 * secondAnimationImageView.frame.size.width, dy: 0.0)
         }, completion: nil)
     }
 
     
-    private func handlePageControll(){
+    func addSwipegestureRecognizer() {
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(self.respondToSwipeGesture(_:)))
+        swipeRight.direction = UISwipeGestureRecognizerDirection.right
+        self.view.addGestureRecognizer(swipeRight)
+        
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(self.respondToSwipeGesture(_:)))
+        swipeLeft.direction = UISwipeGestureRecognizerDirection.left
+        self.view.addGestureRecognizer(swipeLeft)
+        
+        
     }
-}
-
-extension IGSplashScreenViewController: UIScrollViewDelegate {
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let pageNumber = round(scrollView.contentOffset.x / scrollView.frame.size.width)
-        pageControll.currentPage = Int(pageNumber)
-        pageIndex = Int(pageNumber)
-        switch pageIndex {
-        case 0:
-            UIView.transition(with: self.descriptionTextView,
-                              duration: 0.5,
-                              options: UIViewAnimationOptions.transitionCrossDissolve,
-                              animations: {
-                                self.secendDescriptionTextView.alpha = 0
-                                self.thirdDescriptionTextView.alpha = 0
-                                self.fourthDescriptionTextView.alpha = 0
-                                self.fifthDescriptionTextView.alpha = 0
-                                self.limitlessConnectionLabel.alpha = 1
-                                self.descriptionTextView.alpha = 1
-                                self.CenterImageView.image = UIImage(named: "IG_Splash_Logo")
-                                self.CenterImageView.alpha = 1
-                                self.secondCenterImageView.alpha = 0
-                                self.iGapLabel.text = "iGAP"
-                                self.iGapLabel.alpha = 1
-                                self.secondIGapLabel.alpha = 0
-                                self.limitlessConnectionLabel.text = "Limitless Connection"
-                                self.descriptionTextView.textAlignment = .center
-                                self.startButton.alpha = 0.0
-                                self.skipButton.alpha = 1.0
-            },
-                              completion: nil)
-            break
-        case 1:
-            UIView.transition(with: self.secendDescriptionTextView,
-                              duration: 0.5,
-                              options: UIViewAnimationOptions.transitionCrossDissolve,
-                              animations: {
-                                self.descriptionTextView.alpha = 0
-                                self.thirdDescriptionTextView.alpha = 0
-                                self.fourthDescriptionTextView.alpha = 0
-                                self.fifthDescriptionTextView.alpha = 0
-                                self.secendDescriptionTextView.alpha = 1
-                                self.limitlessConnectionLabel.alpha = 0
-                                self.secondCenterImageView.image = UIImage(named: "IG_Splash_Secure")
-                                self.CenterImageView.alpha = 0
-                                self.secondCenterImageView.alpha = 1
-                                self.secondIGapLabel.text = "SECURITY"
-                                self.iGapLabel.alpha = 0
-                                self.secondIGapLabel.alpha = 1
-                                self.secendDescriptionTextView.textAlignment = .center
-                                self.startButton.alpha = 0.0
-                                self.skipButton.alpha = 1.0
-            },
-                              completion: nil)
-            break
-        case 2:
-            UIView.transition(with: self.thirdDescriptionTextView,
-                              duration: 0.5,
-                              options: UIViewAnimationOptions.transitionCrossDissolve,
-                              animations: {
-                                self.descriptionTextView.alpha = 0
-                                self.secendDescriptionTextView.alpha = 0
-                                self.fourthDescriptionTextView.alpha = 0
-                                self.fifthDescriptionTextView.alpha = 0
-                                self.limitlessConnectionLabel.alpha = 0
-                                self.iGapLabel.text = "CHAT"
-                                self.secondIGapLabel.alpha = 0
-                                self.iGapLabel.alpha = 1
-                                self.CenterImageView.image = UIImage(named: "IG_Splash_Chat")
-                                self.secondCenterImageView.alpha = 0
-                                self.CenterImageView.alpha = 1
-                                self.thirdDescriptionTextView.alpha = 1
-                                self.thirdDescriptionTextView.textAlignment = .center
-                                self.startButton.alpha = 0.0
-                                self.skipButton.alpha = 1.0
-                                
-            },
-                              completion: nil)
-            break
-        case 3:
-            UIView.transition(with: self.fourthDescriptionTextView,
-                              duration: 0.5,
-                              options: UIViewAnimationOptions.transitionCrossDissolve,
-                              animations: {
-                                self.descriptionTextView.alpha = 0
-                                self.secendDescriptionTextView.alpha = 0
-                                self.thirdDescriptionTextView.alpha = 0
-                                self.fifthDescriptionTextView.alpha = 0
-                                self.limitlessConnectionLabel.alpha = 0
-                                self.secondIGapLabel.text = "FILE TRANSFER"
-                                self.iGapLabel.alpha = 0
-                                self.secondIGapLabel.alpha = 1
-                                self.secondCenterImageView.image = UIImage(named: "IG_Splash_Transfer")
-                                self.CenterImageView.alpha = 0
-                                self.secondCenterImageView.alpha = 1
-                                self.fourthDescriptionTextView.alpha = 1
-                                self.fourthDescriptionTextView.textAlignment = .center
-                                self.startButton.alpha = 0.0
-                                self.skipButton.alpha = 1.0
-            },
-                              completion: nil)
-            break
-        case 4:
-            UIView.transition(with: self.fifthDescriptionTextView,
-                              duration: 0.5,
-                              options: UIViewAnimationOptions.transitionCrossDissolve,
-                              animations: {
-                                self.descriptionTextView.alpha = 0
-                                self.secendDescriptionTextView.alpha = 0
-                                self.thirdDescriptionTextView.alpha = 0
-                                self.fourthDescriptionTextView.alpha = 0
-                                self.limitlessConnectionLabel.alpha = 0
-                                self.iGapLabel.text = "EVERYTHING FOR FREE"
-                                self.secondIGapLabel.alpha = 0
-                                self.iGapLabel.alpha = 1
-                                self.CenterImageView.image = UIImage(named: "IG_Splash_Boy")
-                                self.secondCenterImageView.alpha = 0
-                                self.CenterImageView.alpha = 1
-                                self.fifthDescriptionTextView.alpha = 1
-                                self.fifthDescriptionTextView.textAlignment = .center
-                                self.startButton.alpha = 1.0
-                                self.skipButton.alpha = 0.0
-            },
-                              completion: nil)
-            break
-        default:
-            break
+    
+    @objc func respondToSwipeGesture(_ gesture: UIGestureRecognizer) {
+        if let swipeGesture = gesture as? UISwipeGestureRecognizer {
+            switch swipeGesture.direction {
+            case UISwipeGestureRecognizerDirection.right:
+                if pageIndex > 0 {
+                    changeView(for: pageIndex - 1)
+                }
+            case UISwipeGestureRecognizerDirection.left:
+                if pageIndex < (numberOfPages - 1) {
+                    changeView(for: pageIndex + 1)
+                }
+            default:
+                break
+            }
+        }
+    }
+    
+    func changeView(for page: Int) {
+        pageControll.currentPage = page
+        pageIndex = page
+        UIView.animate(withDuration: 0.5, animations: {
+            for view in self.topView.subviews {
+                if (view == self.skipButton && self.pageIndex != self.numberOfPages - 1) || view.tag == self.pageIndex {
+                    view.alpha = 1.0
+                } else {
+                    view.alpha = 0.0
+                }
+            }
+            if self.pageIndex == self.numberOfPages - 1 {
+                self.startButton.alpha = 1.0
+            } else {
+                self.startButton.alpha = 0.0
+            }
+        }) { (completed) in
+            
         }
     }
 }

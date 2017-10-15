@@ -9,7 +9,7 @@
  */
 
 import UIKit
-import ProtocolBuffers
+import SwiftProtobuf
 import RealmSwift
 import RxRealm
 import RxSwift
@@ -27,7 +27,9 @@ class IGRecentsTableViewController: UITableViewController {
     var notificationToken: NotificationToken?
     var hud = MBProgressHUD()
     var connectionStatus: IGAppManager.ConnectionStatus?
-
+    var isLoadingMoreRooms: Bool = false
+    var numberOfRoomFetchedInLastRequest: Int = -1
+    
     private let disposeBag = DisposeBag()
     
     private func updateNavigationBarBasedOnNetworkStatus(_ status: IGAppManager.ConnectionStatus) {
@@ -140,7 +142,11 @@ class IGRecentsTableViewController: UITableViewController {
         }, onDisposed: {
             
         }).addDisposableTo(disposeBag)
+    }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tableView.isUserInteractionEnabled = true
         
         self.notificationToken = rooms!.addNotificationBlock { (changes: RealmCollectionChange) in
             switch changes {
@@ -180,17 +186,18 @@ class IGRecentsTableViewController: UITableViewController {
                                                selector: #selector(segueToChatNotificationReceived(_:)),
                                                name: NSNotification.Name(rawValue: kIGNotificationNameDidCreateARoom),
                                                object: nil)
-           }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.tableView.isUserInteractionEnabled = true
-
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.tableView.isUserInteractionEnabled = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tableView.isUserInteractionEnabled = true
+        self.notificationToken?.stop()
     }
 
     override func didReceiveMemoryWarning() {
@@ -216,12 +223,14 @@ class IGRecentsTableViewController: UITableViewController {
     
     @objc private func fetchRoomList() {
         let clientCondition = IGClientCondition()
-        IGClientGetRoomListRequest.Generator.generate().success { (responseProtoMessage) in
+        isLoadingMoreRooms = true
+        IGClientGetRoomListRequest.Generator.generate(offset: 0, limit: 40).success { (responseProtoMessage) in
+            self.isLoadingMoreRooms = false
                 DispatchQueue.main.async {
                     switch responseProtoMessage {
                     case let response as IGPClientGetRoomListResponse:
                         self.sendClientCondition(clientCondition: clientCondition)
-                        IGClientGetRoomListRequest.Handler.interpret(response: response)
+                        self.numberOfRoomFetchedInLastRequest = IGClientGetRoomListRequest.Handler.interpret(response: response)
                     default:
                         break;
                     }
@@ -788,3 +797,35 @@ extension IGRecentsTableViewController {
 }
 
 
+extension IGRecentsTableViewController {
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let remaining = scrollView.contentSize.height - (scrollView.frame.size.height + scrollView.contentOffset.y)
+        if remaining < 100 {
+            self.loadMoreRooms()
+        }
+    }
+}
+
+
+
+extension IGRecentsTableViewController {
+    func loadMoreRooms() {
+        if !isLoadingMoreRooms && numberOfRoomFetchedInLastRequest % 40 == 0 {
+            isLoadingMoreRooms = true
+            let offset = rooms!.count
+            IGClientGetRoomListRequest.Generator.generate(offset: Int32(offset), limit: 40).success { (responseProtoMessage) in
+                DispatchQueue.main.async {
+                    self.isLoadingMoreRooms = false
+                    switch responseProtoMessage {
+                    case let response as IGPClientGetRoomListResponse:
+                        self.numberOfRoomFetchedInLastRequest = IGClientGetRoomListRequest.Handler.interpret(response: response)
+                    default:
+                        break;
+                    }
+                }
+            }.error({ (errorCode, waitTime) in
+                    
+            }).send()
+        }
+    }
+}

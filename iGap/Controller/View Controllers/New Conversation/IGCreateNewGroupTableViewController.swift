@@ -21,7 +21,7 @@ class IGCreateNewGroupTableViewController: UITableViewController , UIGestureReco
     var imagePicker = UIImagePickerController()
     let borderName = CALayer()
     let width = CGFloat(0.5)
-    let greenColor = UIColor(red: 49.0/255.0, green: 189.0/255.0, blue: 182.0/255.0, alpha: 1)
+    let greenColor = UIColor.organizationalColor()
     var mode : String?
     var roomId : Int64?
     var selectedUsersToCreateGroup = [IGRegisteredUser]()
@@ -206,7 +206,7 @@ class IGCreateNewGroupTableViewController: UITableViewController , UIGestureReco
                     DispatchQueue.main.async {
                         switch protoResponse {
                         case let groupCreateRespone as IGPGroupCreateResponse:
-                            IGClientGetRoomRequest.Generator.generate(roomId: groupCreateRespone.igpRoomId).success({ (protoResponse) in
+                            IGClientGetRoomRequest.Generator.generate(roomId: groupCreateRespone.igpRoomID).success({ (protoResponse) in
                                 DispatchQueue.main.async {
                                     switch protoResponse {
                                     case let getRoomProtoResponse as IGPClientGetRoomResponse:
@@ -228,7 +228,7 @@ class IGCreateNewGroupTableViewController: UITableViewController , UIGestureReco
                                                             
                                                         }, completion: { (uploadTask) in
                                                             if let token = uploadTask.token {
-                                                                IGGroupAvatarAddRequest.Generator.generate(attachment: token , roomID: getRoomProtoResponse.igpRoom.igpId).success({ (protoResponse) in
+                                                                IGGroupAvatarAddRequest.Generator.generate(attachment: token , roomID: getRoomProtoResponse.igpRoom.igpID).success({ (protoResponse) in
                                                                     DispatchQueue.main.async {
                                                                         
                                                                         
@@ -266,7 +266,7 @@ class IGCreateNewGroupTableViewController: UITableViewController , UIGestureReco
                                         self.dismiss(animated: true, completion: {
                                             NotificationCenter.default.post(name: NSNotification.Name(rawValue: kIGNotificationNameDidCreateARoom),
                                                                             object: nil,
-                                                                            userInfo: ["room": getRoomProtoResponse.igpRoom.igpId])
+                                                                            userInfo: ["room": getRoomProtoResponse.igpRoom.igpID])
                                             
                                         })
                                     default:

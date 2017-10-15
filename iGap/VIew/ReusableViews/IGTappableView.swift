@@ -14,6 +14,10 @@ class IGTappableView: UIView {
 
     private var tap: (()->())?
     
+    override var intrinsicContentSize: CGSize {
+        return UILayoutFittingExpandedSize
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         addTapGesture()

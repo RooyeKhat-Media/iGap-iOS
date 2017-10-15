@@ -22,10 +22,19 @@ class IGSecurityManager: NSObject {
     private var symmetricKey                = ""
     private var encryptedSymmetricKeyData   = Data()
     private var publicKey             : String    = ""
+    private var embeddedPublicKey     : String    = "-----BEGIN PUBLIC KEY-----\n" +
+"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAo+inlAfd8Qior8IMKaJ+\n" +
+"BREJcEc9J9RhHgh6g/LvHKsnMaiEbAL70jQBQTLpCRu5Cnpj20+isOi++Wtf/pIP\n" +
+"FdJbD/1H+5jS+ja0RA6unp93DnBuYZ2JjV60vF3Ynj6F4Vr1ts5Xg5dJlEaOcOO2\n" +
+"YzOU97ZGP0ozrXIT5S+Y0BC4M9ieQmlGREzt3UZlTBbyUYPS4mMFh88YcT3QTiTA\n" +
+"k897qlJLxkYxVyAgwAD/0ihmWEkBQe9IxwVT/x5/QbixGSl4Zvd+5d+9sTZcSZQS\n" +
+"iJInT4E6DcmgAVYu5jFMWJDTEuurOQZ1W4nbmGyoY1bZXaFoiMPfzy72VIddkoHg\n" +
+"mwIDAQAB\n" +
+"-----END PUBLIC KEY-----"
     private var symmetricIVSize       : Int       = 0
     private var encryptoinKeySize     : Int       = 128
     private var encryptoinBlockMode   : BlockMode = .CBC
-    private var encryptoinPaddingType : Padding   = PKCS7()
+    private var encryptoinPaddingType : Padding   = Padding.pkcs7 // PKCS7()
     
     private override init() {
         super.init()
@@ -35,12 +44,21 @@ class IGSecurityManager: NSObject {
         self.publicKey = removeSpecialCharacters(pemString: publicKey)
     }
     
-    func generateEncryptedSymmetricKeyData(length :Int) -> Data {
+    func generateEncryptedSymmetricKeyData(length :Int,secondaryChunkSize:Int) -> Data {
+        encryptedSymmetricKeyData   = Data()
         symmetricKey = IGGlobal.randomString(length: length)
         print("symmetricKey: \(symmetricKey)")
         do {
             let symmetricKeyData = symmetricKey.data(using: .utf8)
-            encryptedSymmetricKeyData = try encrypt(rawData: symmetricKeyData!) //SwiftyRSA.encryptData(symmetricKeyData!, publicKeyPEM: publicKey)
+            var encSymmetricKeyData = try encrypt(rawData: symmetricKeyData!) //SwiftyRSA.encryptData(symmetricKeyData!, publicKeyPEM: publicKey)
+
+            while(0<encSymmetricKeyData.count){
+                let chunk = encSymmetricKeyData.subdata(in: 0..<secondaryChunkSize)
+                let encryptedChunk = try SwiftyRSA.encryptData(chunk, publicKeyPEM: embeddedPublicKey)
+                encryptedSymmetricKeyData.append(contentsOf: encryptedChunk)
+                encSymmetricKeyData = encSymmetricKeyData.subdata(in: secondaryChunkSize..<encSymmetricKeyData.count)
+            }
+
         } catch  {
             print(error)
         }
@@ -90,15 +108,14 @@ class IGSecurityManager: NSObject {
         return encryptedData
     }
     
-    func decrypt(encryptedData :Data) -> Data {
+    func decrypt(encryptedData :Data) -> Data! {
         var decryptedData = Data()
         do {
             decryptedData = try decryptUsingAES(encryptedData: encryptedData)
             return decryptedData
         } catch  {
-            
+            return  nil
         }
-        return Data()
     }
     
     //MARK: private functions
@@ -115,7 +132,7 @@ class IGSecurityManager: NSObject {
     private func encrypt(rawData :Data, iv: Data) throws -> Data {
         let keyData = symmetricKey.data(using: .utf8)!
         let aes = try AES(key: [UInt8](keyData), iv: [UInt8](iv), blockMode: encryptoinBlockMode, padding: encryptoinPaddingType)
-        let ciphered = try aes.encrypt(rawData)
+        let ciphered = try aes.encrypt(Array(rawData))
         return Data(bytes: ciphered)
     }
     
@@ -132,7 +149,7 @@ class IGSecurityManager: NSObject {
         let keyData = symmetricKey.data(using: .utf8)!
         let aes = try AES(key: [UInt8](keyData), iv: [UInt8](iv), blockMode: encryptoinBlockMode, padding: encryptoinPaddingType)
         
-        let deciphered = try aes.decrypt(encryptedPayload)
+        let deciphered = try aes.decrypt(Array(encryptedPayload))
         return Data(bytes: deciphered)
     }
 }

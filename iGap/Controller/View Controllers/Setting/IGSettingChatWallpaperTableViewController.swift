@@ -16,18 +16,16 @@ class IGSettingChatWallpaperTableViewController: UITableViewController,UINavigat
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let backImage = UIImage(named: "IG_Settigns_Bg")
-        let backgroundImageView = UIImageView(image: backImage)
-        self.tableView.backgroundView = backgroundImageView
-        }
+        self.tableView.backgroundColor = UIColor(red: 247.0/255.0, green: 247.0/255.0, blue: 247.0/255.0, alpha: 1.0)
+    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        }
+    }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
-        }
+    }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var numberOfRows : Int = 0

@@ -9,7 +9,7 @@
  */
 
 import UIKit
-import ProtocolBuffers
+import SwiftProtobuf
 import RealmSwift
 import MBProgressHUD
 import IGProtoBuff
@@ -163,7 +163,7 @@ class IGGroupInfoMemberListTableViewController: UITableViewController , UIGestur
     func fetchGroupMemberFromServer() {
         self.hud = MBProgressHUD.showAdded(to: self.view, animated: true)
         self.hud.mode = .indeterminate
-        IGGroupGetMemberListRequest.Generator.generate(room: room!, filterRole: filterRole).success({ (protoResponse) in
+        IGGroupGetMemberListRequest.Generator.generate(room: room!, offset: Int32(self.allMember.count), limit: 40, filterRole: filterRole).success({ (protoResponse) in
             DispatchQueue.main.async {
                 switch protoResponse {
                 case let getGroupMemberList as IGPGroupGetMemberListResponse:

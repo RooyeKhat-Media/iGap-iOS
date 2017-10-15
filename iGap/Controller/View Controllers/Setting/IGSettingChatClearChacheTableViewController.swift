@@ -17,23 +17,22 @@ class IGSettingChatClearChacheTableViewController: UITableViewController {
     @IBOutlet weak var audioAndVoicesSizeLabel: UILabel!
     @IBOutlet weak var imagesAndGIFsSize: UILabel!
     
-   var navBarTitle = "Cached Data"
-    let greenColor = UIColor(red: 49.0/255.0, green: 189.0/255.0, blue: 182.0/255.0, alpha: 1)
+    var navBarTitle = "Cached Data"
+    let greenColor = UIColor.organizationalColor()
     override func viewDidLoad() {
         super.viewDidLoad()
         setupEditBtn()
         self.navigationItem.title = navBarTitle
-        let backImage = UIImage(named: "IG_Settigns_Bg")
-        let backgroundImageView = UIImageView(image: backImage)
-        self.tableView.backgroundView = backgroundImageView
-        }
-       override func didReceiveMemoryWarning() {
+        self.tableView.backgroundColor = UIColor(red: 247.0/255.0, green: 247.0/255.0, blue: 247.0/255.0, alpha: 1.0)
+    }
+    
+    override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        }
+    }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 2
-        }
+    }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var numberOfRows = 0
@@ -44,30 +43,30 @@ class IGSettingChatClearChacheTableViewController: UITableViewController {
             numberOfRows = 1
         default:
             break
-            }
-        return numberOfRows
         }
+        return numberOfRows
+    }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 1  {
             showConfirmDeleteAlertView()
-            }
         }
+    }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if tableView.isEditing == true {
-          //  label.text = "0"
+            //  label.text = "0"
             doneButtonClicked()
-            }
         }
+    }
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         if indexPath.section == 0 {
             return true
-            }
-            return false
         }
+        return false
+    }
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         return true
-        }
+    }
     func setupEditBtn(){
         let editBtn = UIButton()
         editBtn.setTitleColor(UIColor.organizationalColor(), for: .normal)
@@ -81,7 +80,7 @@ class IGSettingChatClearChacheTableViewController: UITableViewController {
         let barButtonItem = UIBarButtonItem(customView: editBtn)
         barButtonItem.imageInsets = UIEdgeInsets(top: 0, left: 50, bottom: 0, right: 0)
         self.navigationItem.rightBarButtonItem = barButtonItem
-        }
+    }
     func editButtonClicked(){
         self.tableView.allowsMultipleSelectionDuringEditing = false
         self.tableView.setEditing(true, animated: true)
@@ -98,11 +97,11 @@ class IGSettingChatClearChacheTableViewController: UITableViewController {
         let topRightbarButtonItem = UIBarButtonItem(customView: doneBtn)
         topRightbarButtonItem.imageInsets = UIEdgeInsets(top: 0, left: 75, bottom: 0, right: 0)
         self.navigationItem.rightBarButtonItem = topRightbarButtonItem
-        }
+    }
     func doneButtonClicked(){
         tableView?.setEditing(false, animated: true)
         setupEditBtn()
-        }
+    }
     func showConfirmDeleteAlertView(){
         let deleteConfirmAlertView = UIAlertController(title: "Are you sure you want to delete the all data?", message: nil, preferredStyle: .actionSheet)
         let deleteAction = UIAlertAction(title: "Delete", style:.default , handler: {

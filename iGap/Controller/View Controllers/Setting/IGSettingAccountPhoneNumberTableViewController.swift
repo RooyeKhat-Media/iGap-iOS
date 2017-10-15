@@ -13,13 +13,11 @@ import UIKit
 class IGSettingAccountPhoneNumberTableViewController: UITableViewController {
 
     @IBOutlet weak var firstCell: UITableViewCell!
-    let greenColor = UIColor(red: 49.0/255.0, green: 189.0/255.0, blue: 182.0/255.0, alpha: 1)
+    let greenColor = UIColor.organizationalColor()
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.barTintColor = UIColor.white
-        let backImage = UIImage(named: "IG_Settigns_Bg")
-        let backgroundImageView = UIImageView(image: backImage)
-        self.tableView.backgroundView = backgroundImageView
+        self.tableView.backgroundColor = UIColor(red: 247.0/255.0, green: 247.0/255.0, blue: 247.0/255.0, alpha: 1.0)
         setBarbuttonItems()
     }
     override func viewDidAppear(_ animated: Bool) {

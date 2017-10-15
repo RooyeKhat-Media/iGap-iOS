@@ -1,5 +1,3 @@
-//
-//  IGMessageViewController.swift
 /*
  * This is the source code of iGap for iOS
  * It is licensed under GNU AGPL v3.0
@@ -15,41 +13,41 @@ import Foundation
 import IGProtoBuff
 
 class IGRoomMessage: Object {
-    dynamic var message:            String?
-    dynamic var creationTime:       Date?
-    dynamic var updateTime:         Date?
-    dynamic var authorHash:         String?
-    dynamic var authorUser:         IGRegisteredUser? // When sent in a chat/group
-    dynamic var authorRoom:         IGRoom?           // When sent in a channel
-    dynamic var attachment:         IGFile?
-    dynamic var forwardedFrom:      IGRoomMessage?
-    dynamic var repliedTo:          IGRoomMessage?
-    dynamic var log:                IGRoomMessageLog?
-    dynamic var contact:            IGRoomMessageContact?
-    dynamic var location:           IGRoomMessageLocation?
-    dynamic var id:                 Int64                           = -1
-    dynamic var roomId:             Int64                           = -1
-    dynamic var primaryKeyId:       String?
-    dynamic var messageVersion:     Int64                           = -1
-    dynamic var previuosMessageUID: Int64                           = -1
-    dynamic var statusVersion:      Int64                           = -1
-    dynamic var deleteVersion:      Int64                           = -1
-    dynamic var shouldFetchBefore:  Bool                            = false
-    dynamic var shouldFetchAfter:   Bool                            = false
-    dynamic var isFirstMessage:     Bool                            = false
-    dynamic var isLastMessage:      Bool                            = false
-    dynamic var isEdited:           Bool                            = false
-    dynamic var isDeleted:          Bool                            = false
-    dynamic var pendingSend:        Bool                            = false
-    dynamic var pendingDelivered:   Bool                            = false
-    dynamic var pendingSeen:        Bool                            = false
-    dynamic var pendingEdit:        Bool                            = false
-    dynamic var pendingDelete:      Bool                            = false
-    dynamic var isFromSharedMedia:  Bool                            = false
-    dynamic var typeRaw:            IGRoomMessageType.RawValue      = IGRoomMessageType.unknown.rawValue
-    dynamic var statusRaw:          IGRoomMessageStatus.RawValue    = IGRoomMessageStatus.unknown.rawValue
-    dynamic var temporaryId:        String?
-    
+    @objc dynamic var message:            String?
+    @objc dynamic var creationTime:       Date?
+    @objc dynamic var updateTime:         Date?
+    @objc dynamic var authorHash:         String?
+    @objc dynamic var authorUser:         IGRegisteredUser? // When sent in a chat/group
+    @objc dynamic var authorRoom:         IGRoom?           // When sent in a channel
+    @objc dynamic var attachment:         IGFile?
+    @objc dynamic var forwardedFrom:      IGRoomMessage?
+    @objc dynamic var repliedTo:          IGRoomMessage?
+    @objc dynamic var log:                IGRoomMessageLog?
+    @objc dynamic var contact:            IGRoomMessageContact?
+    @objc dynamic var location:           IGRoomMessageLocation?
+    @objc dynamic var id:                 Int64                           = -1
+    @objc dynamic var roomId:             Int64                           = -1
+    @objc dynamic var primaryKeyId:       String?
+    @objc dynamic var messageVersion:     Int64                           = -1
+    @objc dynamic var previuosMessageUID: Int64                           = -1
+    @objc dynamic var statusVersion:      Int64                           = -1
+    @objc dynamic var deleteVersion:      Int64                           = -1
+    @objc dynamic var shouldFetchBefore:  Bool                            = false
+    @objc dynamic var shouldFetchAfter:   Bool                            = false
+    @objc dynamic var isFirstMessage:     Bool                            = false
+    @objc dynamic var isLastMessage:      Bool                            = false
+    @objc dynamic var isEdited:           Bool                            = false
+    @objc dynamic var isDeleted:          Bool                            = false
+    @objc dynamic var pendingSend:        Bool                            = false
+    @objc dynamic var pendingDelivered:   Bool                            = false
+    @objc dynamic var pendingSeen:        Bool                            = false
+    @objc dynamic var pendingEdit:        Bool                            = false
+    @objc dynamic var pendingDelete:      Bool                            = false
+    @objc dynamic var isFromSharedMedia:  Bool                            = false
+    @objc dynamic var typeRaw:            IGRoomMessageType.RawValue      = IGRoomMessageType.unknown.rawValue
+    @objc dynamic var statusRaw:          IGRoomMessageStatus.RawValue    = IGRoomMessageStatus.unknown.rawValue
+    @objc dynamic var temporaryId:        String?
+
     var status: IGRoomMessageStatus {
         get {
             if let s = IGRoomMessageStatus(rawValue: statusRaw) {
@@ -72,7 +70,10 @@ class IGRoomMessage: Object {
             typeRaw = newValue.rawValue
         }
     }
-    
+
+    override static func indexedProperties() -> [String] {
+        return ["roomId","id"]
+    }
 
     override static func ignoredProperties() -> [String] {
         return ["status", "type"]
@@ -84,39 +85,38 @@ class IGRoomMessage: Object {
     
     convenience init(igpMessage: IGPRoomMessage, roomId: Int64, isForward: Bool = false, isReply: Bool = false) {
         self.init()
-        self.id = igpMessage.igpMessageId
+        self.id = igpMessage.igpMessageID
         if !isForward && !isReply {
             self.roomId = roomId
         }
-        self.primaryKeyId = IGRoomMessage.generatePrimaryKey(messageID: igpMessage.igpMessageId, roomID: roomId, isForward: isForward, isReply: isReply)
+        self.primaryKeyId = IGRoomMessage.generatePrimaryKey(messageID: igpMessage.igpMessageID, roomID: roomId, isForward: isForward, isReply: isReply)
         self.messageVersion = igpMessage.igpMessageVersion
         self.isDeleted = igpMessage.igpDeleted
         
-        if igpMessage.hasIgpStatus {
-            switch igpMessage.igpStatus {
-            case .failed:
-                self.status = .failed
-            case .sending:
-                self.status = .sending
-            case .sent:
-                self.status = .sent
-            case .delivered:
-                self.status = .delivered
-            case .seen:
-                self.status = .seen
-            }
+        switch igpMessage.igpStatus {
+        case .failed:
+            self.status = .failed
+        case .sending:
+            self.status = .sending
+        case .sent:
+            self.status = .sent
+        case .delivered:
+            self.status = .delivered
+        case .seen:
+            self.status = .seen
+        case .listened:
+            self.status = .listened
+        default:
+            self.status = .unknown
         }
-        if igpMessage.hasIgpStatusVersion {
+        if igpMessage.igpStatusVersion != 0 {
             self.statusVersion = igpMessage.igpStatusVersion
         }
-        if igpMessage.hasIgpMessageType {
-            self.type = IGRoomMessageType.unknown.fromIGP(igpMessage.igpMessageType)
-        }
-        if igpMessage.hasIgpMessage {
-            self.message = igpMessage.igpMessage
-        }
+        self.type = IGRoomMessageType.unknown.fromIGP(igpMessage.igpMessageType)
+        self.message = igpMessage.igpMessage
+        
         if igpMessage.hasIgpAttachment {
-            let predicate = NSPredicate(format: "cacheID = %@", igpMessage.igpAttachment.igpCacheId)
+            let predicate = NSPredicate(format: "cacheID = %@", igpMessage.igpAttachment.igpCacheID)
             let realm = try! Realm()
             if let fileInDb = realm.objects(IGFile.self).filter(predicate).first {
                 self.attachment = fileInDb
@@ -132,32 +132,36 @@ class IGRoomMessage: Object {
             }
         }
         if igpMessage.hasIgpAuthor {
-            if let author = igpMessage.igpAuthor {
-                if author.hasIgpHash {
-                    self.authorHash = author.igpHash
+            let author = igpMessage.igpAuthor
+            if author.igpHash != "" {
+                self.authorHash = author.igpHash
+            }
+            
+            if author.hasIgpUser {
+                let authorUser = author.igpUser
+                //read realm for existing user
+                let predicate = NSPredicate(format: "id = %lld", authorUser.igpUserID)
+                let realm = try! Realm()
+                if let userInDb = realm.objects(IGRegisteredUser.self).filter(predicate).first {
+                    self.authorUser = userInDb
+                    self.authorRoom = nil
+                } else {
+                    //if your code reaches here there is something wrong
+                    //you MUST fetch all dependecies befor performing any action
+                    //assertionFailure()
                 }
-                if let authorUser = author.igpUser {
-                    //read realm for existing user
-                    let predicate = NSPredicate(format: "id = %d", authorUser.igpUserId)
-                    let realm = try! Realm()
-                    if let userInDb = realm.objects(IGRegisteredUser.self).filter(predicate).first {
-                        self.authorUser = userInDb
-                        self.authorRoom = nil
-                    } else {
-                        //if your code reaches here there is something wrong
-                        //you MUST fetch all dependecies befor performing any action
-                    }
-                } else if let authorRoom = author.igpRoom {
-                    //read realm for existing room
-                    let predicate = NSPredicate(format: "id = %d", authorRoom.igpRoomId)
-                    let realm = try! Realm()
-                    if let roomInDb = realm.objects(IGRoom.self).filter(predicate).first {
-                        self.authorRoom = roomInDb
-                        self.authorUser = nil
-                    } else {
-                        //if your code reaches here there is something wrong
-                        //you MUST fetch all dependecies befor performing any action
-                    }
+            } else if author.hasIgpRoom {
+                let authorRoom = author.igpRoom
+                //read realm for existing room
+                let predicate = NSPredicate(format: "id = %lld", authorRoom.igpRoomID)
+                let realm = try! Realm()
+                if let roomInDb = realm.objects(IGRoom.self).filter(predicate).first {
+                    self.authorRoom = roomInDb
+                    self.authorUser = nil
+                } else {
+                    //if your code reaches here there is something wrong
+                    //you MUST fetch all dependecies befor performing any action
+                    //assertionFailure()
                 }
             }
         }
@@ -190,26 +194,20 @@ class IGRoomMessage: Object {
                 self.contact = IGRoomMessageContact(igpRoomMessageContact: igpMessage.igpContact, for: self)
             }
         }
-        if igpMessage.hasIgpEdited {
-            self.isEdited = igpMessage.igpEdited
-        }
-        if igpMessage.hasIgpCreateTime {
-            self.creationTime = Date(timeIntervalSince1970: TimeInterval(igpMessage.igpCreateTime))
-        }
-        if igpMessage.hasIgpUpdateTime {
-            self.updateTime = Date(timeIntervalSince1970: TimeInterval(igpMessage.igpUpdateTime))
-        }
+        self.isEdited = igpMessage.igpEdited
+        self.creationTime = Date(timeIntervalSince1970: TimeInterval(igpMessage.igpCreateTime))
+        self.updateTime = Date(timeIntervalSince1970: TimeInterval(igpMessage.igpUpdateTime))
         if igpMessage.hasIgpForwardFrom {
             if igpMessage.igpForwardFrom.igpAuthor.hasIgpRoom {
-                print("fount that shit")
+                print("found that")
             }
             self.forwardedFrom = IGRoomMessage(igpMessage: igpMessage.igpForwardFrom, roomId: roomId, isForward: true)
         }
         if igpMessage.hasIgpReplyTo {
             self.repliedTo = IGRoomMessage(igpMessage: igpMessage.igpReplyTo, roomId: roomId, isReply: true)
         }
-        if igpMessage.hasIgpPreviousMessageId {
-            self.previuosMessageUID = igpMessage.igpPreviousMessageId
+        if igpMessage.igpPreviousMessageID != 0 {
+            self.previuosMessageUID = igpMessage.igpPreviousMessageID
         }
     }
     

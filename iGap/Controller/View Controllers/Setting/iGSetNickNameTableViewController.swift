@@ -9,7 +9,7 @@
  */
 
 import UIKit
-import ProtocolBuffers
+import SwiftProtobuf
 import RealmSwift
 import MBProgressHUD
 import IGProtoBuff
@@ -17,15 +17,13 @@ import IGProtoBuff
 class IGSetNickNameTableViewController: UITableViewController , UITextFieldDelegate , UIGestureRecognizerDelegate {
 
     @IBOutlet weak var nickNameTextField: UITextField!
-    let greenColor = UIColor(red: 49.0/255.0, green: 189.0/255.0, blue: 182.0/255.0, alpha: 1)
+    let greenColor = UIColor.organizationalColor()
     var hud = MBProgressHUD()
     var limitLength = 16
     override func viewDidLoad() {
         super.viewDidLoad()
         nickNameTextField.delegate = self
-        let backImage = UIImage(named: "IG_Settigns_Bg")
-        let backgroundImageView = UIImageView(image: backImage)
-        self.tableView.backgroundView = backgroundImageView
+        self.tableView.backgroundColor = UIColor(red: 247.0/255.0, green: 247.0/255.0, blue: 247.0/255.0, alpha: 1.0)
         let navigationItem = self.navigationItem as! IGNavigationItem
         navigationItem.addNavigationViewItems(rightItemText: "Done", title: "Nickname")
         navigationItem.navigationController = self.navigationController as! IGNavigationController

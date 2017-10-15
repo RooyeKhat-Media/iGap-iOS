@@ -21,11 +21,11 @@ class IGGroupMember: Object {
         case owner
     }
     
-    dynamic var primaryKeyId: String         = ""    // user_id + _ + room_id
-    dynamic var roomID: Int64                        = -1
-    dynamic var userID: Int64                        = -1
-    dynamic var roleRaw: IGRole.RawValue  = IGRole.member.rawValue
-    dynamic var user: IGRegisteredUser?
+    @objc dynamic var primaryKeyId: String         = ""    // user_id + _ + room_id
+    @objc dynamic var roomID: Int64                        = -1
+    @objc dynamic var userID: Int64                        = -1
+    @objc dynamic var roleRaw: IGRole.RawValue  = IGRole.member.rawValue
+    @objc dynamic var user: IGRegisteredUser?
     
     var role: IGRole {
         get {
@@ -38,7 +38,10 @@ class IGGroupMember: Object {
             roleRaw = newValue.rawValue
         }
     }
-    
+
+    override static func indexedProperties() -> [String] {
+        return ["roomID"]
+    }
     
     override static func primaryKey() -> String {
         return "primaryKeyId"
@@ -50,23 +53,22 @@ class IGGroupMember: Object {
         
     convenience init(igpMember: IGPGroupGetMemberListResponse.IGPMember, roomId: Int64) {
         self.init()
-        self.userID = igpMember.igpUserId
+        self.userID = igpMember.igpUserID
         self.roomID = roomId
-        self.primaryKeyId = "\(Int(igpMember.igpUserId))" + "_" + "\(Int(roomId))"
-        if igpMember.hasIgpRole == true {
-            switch igpMember.igpRole {
-            case .admin:
-                self.role = .admin
-            case .member:
-                self.role = .member
-            case .moderator:
-                self.role = .moderator
-            case .owner:
-                self.role = .owner
-            }
-            
-        }
+        self.primaryKeyId = "\(Int(igpMember.igpUserID))" + "_" + "\(Int(roomId))"
         
+        switch igpMember.igpRole {
+        case .admin:
+            self.role = .admin
+        case .member:
+            self.role = .member
+        case .moderator:
+            self.role = .moderator
+        case .owner:
+            self.role = .owner
+        default:
+            break
+        }
     }
     convenience init(userID : Int64 , role : IGRole) {
         self.init()
@@ -91,18 +93,18 @@ class IGGroupRoom: Object {
 
     
     //MARK: properties
-    dynamic var id:                         Int64                           = -1
-    dynamic var typeRaw:                    IGType.RawValue                 = IGType.privateRoom.rawValue
-    dynamic var roleRaw:                    IGGroupMember.IGRole.RawValue     = IGRole.member.rawValue
-    dynamic var participantCount:           Int32                           = 0
-    dynamic var participantCountText:       String                          = ""
-    dynamic var participantCountLimit:      Int32                           = 0
-    dynamic var participantCountLimitText:  String                          = ""
-    dynamic var roomDescription:            String                          = ""
-    dynamic var avatarCount:                Int32                           = 0
-    dynamic var avatar:                     IGAvatar?
-    dynamic var privateExtra:               IGGroupPrivateExtra?
-    dynamic var publicExtra:                IGGroupPublicExtra?
+    @objc dynamic var id:                         Int64                           = -1
+    @objc dynamic var typeRaw:                    IGType.RawValue                 = IGType.privateRoom.rawValue
+    @objc dynamic var roleRaw:                    IGGroupMember.IGRole.RawValue     = IGRole.member.rawValue
+    @objc dynamic var participantCount:           Int32                           = 0
+    @objc dynamic var participantCountText:       String                          = ""
+    @objc dynamic var participantCountLimit:      Int32                           = 0
+    @objc dynamic var participantCountLimitText:  String                          = ""
+    @objc dynamic var roomDescription:            String                          = ""
+    @objc dynamic var avatarCount:                Int32                           = 0
+    @objc dynamic var avatar:                     IGAvatar?
+    @objc dynamic var privateExtra:               IGGroupPrivateExtra?
+    @objc dynamic var publicExtra:                IGGroupPublicExtra?
     
     //MARK: ignored properties
     var type: IGType {
@@ -146,6 +148,8 @@ class IGGroupRoom: Object {
             self.type = .privateRoom
         case .publicRoom:
             self.type = .publicRoom
+        default:
+            break
         }
         switch igpGroupRoom.igpRole {
         case .member:
@@ -156,6 +160,8 @@ class IGGroupRoom: Object {
             self.role = .admin
         case .owner:
             self.role = .owner
+        default:
+            break
         }
         self.participantCount = igpGroupRoom.igpParticipantsCount
         self.participantCountText = igpGroupRoom.igpParticipantsCountLabel
@@ -202,9 +208,9 @@ class IGGroupRoom: Object {
 
 
 class IGGroupPrivateExtra: Object {
-    dynamic var id:             Int64   = -1
-    dynamic var inviteLink:     String  = ""
-    dynamic var inviteToken:    String  = ""
+    @objc dynamic var id:             Int64   = -1
+    @objc dynamic var inviteLink:     String  = ""
+    @objc dynamic var inviteToken:    String  = ""
     
     override static func primaryKey() -> String {
         return "id"
@@ -224,8 +230,8 @@ class IGGroupPrivateExtra: Object {
 }
 
 class IGGroupPublicExtra: Object {
-    dynamic var id:         Int64   = -1
-    dynamic var username:   String  = ""
+    @objc dynamic var id:         Int64   = -1
+    @objc dynamic var username:   String  = ""
     
     override static func primaryKey() -> String {
         return "id"

@@ -174,7 +174,7 @@ class IGChooseMemberFromContactToCreateChannelViewController: UIViewController ,
                     case let channelAddMemberResponse as IGPChannelAddMemberResponse :
                         IGChannelAddMemberRequest.Handler.interpret(response: channelAddMemberResponse)
                         self.dismiss(animated: true, completion: {
-                            NotificationCenter.default.post(name: NSNotification.Name(rawValue: kIGNotificationNameDidCreateARoom),object: nil,userInfo: ["room": self.igpRoom.igpId])
+                            NotificationCenter.default.post(name: NSNotification.Name(rawValue: kIGNotificationNameDidCreateARoom),object: nil,userInfo: ["room": self.igpRoom.igpID])
                         })
                     default:
                         break

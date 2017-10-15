@@ -10,13 +10,13 @@
 
 import Foundation
 import IGProtoBuff
-import ProtocolBuffers
+import SwiftProtobuf
 
 class IGInfoLocationRequest : IGRequest {
     class Generator : IGRequest.Generator{
         class func generate() -> IGRequestWrapper{
-            let locationInfoRequestBuilder = IGPInfoLocation.Builder()
-            return IGRequestWrapper(messageBuilder: locationInfoRequestBuilder, actionID: 500)
+            let locationInfoRequestMessage = IGPInfoLocation()
+            return IGRequestWrapper(message: locationInfoRequestMessage, actionID: 500)
         }
     }
     
@@ -33,7 +33,7 @@ class IGInfoLocationRequest : IGRequest {
             return country
             
         }
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {}
+        override class func handlePush(responseProtoMessage: Message) {}
         override class func error() {}
         override class func timeout() {}
     }
@@ -43,14 +43,14 @@ class IGInfoLocationRequest : IGRequest {
 class IGInfoCountryRequest : IGRequest {
     class Generator : IGRequest.Generator{
         class func generate(countryCode : String) -> IGRequestWrapper{
-            let countryInfoRequestBuilder = IGPInfoCountry.Builder()
-            countryInfoRequestBuilder.setIgpIsoCode(countryCode)
-            return IGRequestWrapper(messageBuilder: countryInfoRequestBuilder, actionID: 501)
+            var countryInfoRequestMessage = IGPInfoCountry()
+            countryInfoRequestMessage.igpIsoCode = countryCode
+            return IGRequestWrapper(message: countryInfoRequestMessage, actionID: 501)
         }
     }
     
     class Handler : IGRequest.Handler{
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {}
+        override class func handlePush(responseProtoMessage: Message) {}
         override class func error() {}
         override class func timeout() {}
     }
@@ -60,13 +60,13 @@ class IGInfoCountryRequest : IGRequest {
 class IGInfoTimeRequest : IGRequest {
     class Generator : IGRequest.Generator{
         class func generate() -> IGRequestWrapper{
-            let timeInfoRequestBuilder = IGPInfoTime.Builder()
-            return IGRequestWrapper(messageBuilder: timeInfoRequestBuilder, actionID: 502)
+            let timeInfoRequestMessage = IGPInfoTime()
+            return IGRequestWrapper(message: timeInfoRequestMessage, actionID: 502)
         }
     }
     
     class Handler : IGRequest.Handler{
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {}
+        override class func handlePush(responseProtoMessage: Message) {}
         override class func error() {}
         override class func timeout() {}
     }
@@ -75,10 +75,10 @@ class IGInfoTimeRequest : IGRequest {
 //MARK: -
 class IGInfoPageRequest : IGRequest {
     class Generator : IGRequest.Generator{
-        class func generate(pageID: String) -> IGRequestWrapper{
-            let pageInfoRequestBuilder = IGPInfoPage.Builder()
-            pageInfoRequestBuilder.setIgpId(pageID)
-            return IGRequestWrapper(messageBuilder: pageInfoRequestBuilder, actionID: 503)
+        class func generate(pageID: String) -> IGRequestWrapper {
+            var pageInfoRequestMessage = IGPInfoPage()
+            pageInfoRequestMessage.igpID = pageID
+            return IGRequestWrapper(message: pageInfoRequestMessage, actionID: 503)
         }
     }
     
@@ -87,7 +87,7 @@ class IGInfoPageRequest : IGRequest {
             return responseProtoMessage.igpBody
         }
         
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {}
+        override class func handlePush(responseProtoMessage: Message) {}
         override class func error() {}
         override class func timeout() {}
     }

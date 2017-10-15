@@ -10,7 +10,7 @@
 
 import UIKit
 import IGProtoBuff
-import ProtocolBuffers
+import SwiftProtobuf
 import RealmSwift
 import RxRealm
 import RxSwift
@@ -26,7 +26,8 @@ class IGChatsTableViewController: UITableViewController {
     var notificationToken: NotificationToken?
     var hud = MBProgressHUD()
     var connectionStatus: IGAppManager.ConnectionStatus?
-
+    var isLoadingMoreRooms: Bool = false
+    var numberOfRoomFetchedInLastRequest: Int = -1
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -78,6 +79,11 @@ class IGChatsTableViewController: UITableViewController {
         //self.setTabbarHidden(false, animated: true)
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tableView.isUserInteractionEnabled = true
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -86,11 +92,13 @@ class IGChatsTableViewController: UITableViewController {
     
     //MARK: Room List actions
     @objc private func fetchRoomList() {
-        IGClientGetRoomListRequest.Generator.generate().success { (responseProtoMessage) in
+        isLoadingMoreRooms = true
+        IGClientGetRoomListRequest.Generator.generate(offset: 0, limit: 40).success { (responseProtoMessage) in
             DispatchQueue.main.async {
+                self.isLoadingMoreRooms = false
                 switch responseProtoMessage {
                 case let response as IGPClientGetRoomListResponse:
-                    IGClientGetRoomListRequest.Handler.interpret(response: response)
+                    self.numberOfRoomFetchedInLastRequest = IGClientGetRoomListRequest.Handler.interpret(response: response)
                 default:
                     break;
                 }
@@ -479,3 +487,37 @@ extension IGChatsTableViewController {
     }
 }
 
+
+
+extension IGChatsTableViewController {
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let remaining = scrollView.contentSize.height - (scrollView.frame.size.height + scrollView.contentOffset.y)
+        if remaining < 100 {
+            self.loadMoreRooms()
+        }
+    }
+}
+
+
+
+extension IGChatsTableViewController {
+    func loadMoreRooms() {
+        if !isLoadingMoreRooms && numberOfRoomFetchedInLastRequest % 40 == 0 {
+            isLoadingMoreRooms = true
+            let offset = rooms!.count
+            IGClientGetRoomListRequest.Generator.generate(offset: Int32(offset), limit: 40).success { (responseProtoMessage) in
+                DispatchQueue.main.async {
+                    self.isLoadingMoreRooms = false
+                    switch responseProtoMessage {
+                    case let response as IGPClientGetRoomListResponse:
+                        self.numberOfRoomFetchedInLastRequest = IGClientGetRoomListRequest.Handler.interpret(response: response)
+                    default:
+                        break;
+                    }
+                }
+                }.error({ (errorCode, waitTime) in
+                    
+                }).send()
+        }
+    }
+}

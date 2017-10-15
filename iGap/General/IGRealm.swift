@@ -12,7 +12,7 @@ import RealmSwift
 import Foundation
 
 class IGRealmString: Object {
-    dynamic var innerString: String = ""
+    @objc dynamic var innerString: String = ""
     
     override static func primaryKey() -> String {
         return "innerString"

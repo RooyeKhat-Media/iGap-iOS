@@ -9,7 +9,7 @@
  */
 
 import UIKit
-import ProtocolBuffers
+import SwiftProtobuf
 import RealmSwift
 import MBProgressHUD
 import IGProtoBuff
@@ -28,11 +28,9 @@ class IGPrivacyAndSecurityWhoCanSeeTableViewController: UITableViewController , 
     var cell : UITableViewCell!
     override func viewDidLoad() {
         super.viewDidLoad()
-        let backImage = UIImage(named: "IG_Settigns_Bg")
-        let backgroundImageView = UIImageView(image: backImage)
-        self.tableView.backgroundView = backgroundImageView
+        self.tableView.backgroundColor = UIColor(red: 247.0/255.0, green: 247.0/255.0, blue: 247.0/255.0, alpha: 1.0)
         let navigationItem = self.navigationItem as! IGNavigationItem
-        navigationItem.navigationController = self.navigationController as! IGNavigationController
+        navigationItem.navigationController = self.navigationController as? IGNavigationController
         let navigationController = self.navigationController as! IGNavigationController
         navigationController.interactivePopGestureRecognizer?.delegate = self
         navigationItem.addNavigationViewItems(rightItemText: "Done", title: mode)

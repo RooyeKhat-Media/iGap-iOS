@@ -1,5 +1,3 @@
-//
-//  IGMessageViewController.swift
 /*
  * This is the source code of iGap for iOS
  * It is licensed under GNU AGPL v3.0
@@ -26,6 +24,10 @@ class IGRoomMessageLog: Object {
         case roomConvertedToPrivate
         case memberJoinedByInviteLink
         case roomDeleted
+        case missedVoiceCall
+        case missedVideoCall
+        case missedScreenShare
+        case missedSecretChat
     }
     
     enum ExtraType: Int {
@@ -35,10 +37,10 @@ class IGRoomMessageLog: Object {
     
     
     //properties
-    dynamic var id:             String?
-    dynamic var typeRaw:        LogType.RawValue    = LogType.userJoined.rawValue
-    dynamic var extraTypeRaw:   ExtraType.RawValue  = ExtraType.noExtra.rawValue
-    dynamic var targetUser:     IGRegisteredUser?
+    @objc dynamic var id:             String?
+    @objc dynamic var typeRaw:        LogType.RawValue    = LogType.userJoined.rawValue
+    @objc dynamic var extraTypeRaw:   ExtraType.RawValue  = ExtraType.noExtra.rawValue
+    @objc dynamic var targetUser:     IGRegisteredUser?
     //ignored properties
     var type: LogType {
         get {
@@ -110,6 +112,30 @@ class IGRoomMessageLog: Object {
             bodyString = actorUsernameTitle + " joined via invite link"
         case .roomDeleted:
             bodyString = "This room was deleted"
+        case .missedVoiceCall:
+            if message.authorHash==IGAppManager.sharedManager.authorHash(){
+                bodyString = "Did not respond to your voice call or failed"
+            }else {
+                bodyString = "Missed voice call"
+            }
+        case .missedVideoCall:
+            if message.authorHash==IGAppManager.sharedManager.authorHash(){
+                bodyString = "Did not respond to your video call or failed"
+            }else {
+                bodyString = "Missed video call"
+            }
+        case .missedScreenShare:
+            if message.authorHash==IGAppManager.sharedManager.authorHash(){
+                bodyString = "Did not respond to your screen share or failed"
+            }else {
+                bodyString = "Missed screen share"
+            }
+        case .missedSecretChat:
+            if message.authorHash==IGAppManager.sharedManager.authorHash(){
+                bodyString = "Did not respond to your secret chat or failed"
+            }else {
+                bodyString = "Missed secret chat"
+            }
         }
         
         if let target = message.log?.targetUser {
@@ -155,6 +181,16 @@ class IGRoomMessageLog: Object {
             self.type = .memberJoinedByInviteLink
         case .roomDeleted:
             self.type = .roomDeleted
+        case .missedVoiceCall:
+            self.type = .missedVoiceCall
+        case .missedVideoCall:
+            self.type = .missedVideoCall
+        case .missedSecretChat:
+            self.type = .missedSecretChat
+        case .missedScreenShare:
+            self.type = .missedScreenShare
+        default:
+            break
         }
         
         switch igpRoomMessageLog.igpExtraType {
@@ -162,10 +198,12 @@ class IGRoomMessageLog: Object {
             self.extraType = .noExtra
         case .targetUser:
             self.extraType = .targetUser
+        default:
+            break
         }
         
         if igpRoomMessageLog.hasIgpTargetUser {
-            let predicate = NSPredicate(format: "id = %d", igpRoomMessageLog.igpTargetUser.igpId)
+            let predicate = NSPredicate(format: "id = %d", igpRoomMessageLog.igpTargetUser.igpID)
             let realm = try! Realm()
             if let userInDb = realm.objects(IGRegisteredUser.self).filter(predicate).first {
                 self.targetUser = userInDb

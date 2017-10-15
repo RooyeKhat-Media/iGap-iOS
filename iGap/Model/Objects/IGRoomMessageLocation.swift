@@ -1,5 +1,3 @@
-//
-//  IGMessageViewController.swift
 /*
  * This is the source code of iGap for iOS
  * It is licensed under GNU AGPL v3.0
@@ -15,9 +13,9 @@ import Foundation
 import IGProtoBuff
 
 class IGRoomMessageLocation: Object {
-    dynamic var id:         String?
-    dynamic var latitude:   Double      = 0.0
-    dynamic var longitude:  Double      = 0.0
+    @objc dynamic var id:         String?
+    @objc dynamic var latitude:   Double      = 0.0
+    @objc dynamic var longitude:  Double      = 0.0
     
     override static func primaryKey() -> String {
         return "id"

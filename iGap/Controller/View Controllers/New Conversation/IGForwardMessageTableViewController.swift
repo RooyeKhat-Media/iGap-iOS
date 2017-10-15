@@ -10,7 +10,7 @@
 
 import UIKit
 import Contacts
-import ProtocolBuffers
+import SwiftProtobuf
 import RealmSwift
 import IGProtoBuff
 import MGSwipeTableCell

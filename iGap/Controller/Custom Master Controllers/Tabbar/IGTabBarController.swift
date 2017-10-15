@@ -14,11 +14,17 @@ class IGTabBarController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.tabBar.barTintColor = UIColor.organizationalColor()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        selectedItemTitleMustbeBold()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         selectedItemTitleMustbeBold()
     }
+    
     
     override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
         selectedItemTitleMustbeBold()
@@ -28,11 +34,11 @@ class IGTabBarController: UITabBarController {
         for item in tabBar.items!{
             if tabBar.selectedItem == item {
                 let selectedTitleFont = UIFont.systemFont(ofSize: 9, weight: UIFontWeightBold)
-                let selectedTitleColor = UIColor.organizationalColor()
+                let selectedTitleColor = UIColor.white
                 item.setTitleTextAttributes([NSFontAttributeName: selectedTitleFont, NSForegroundColorAttributeName: selectedTitleColor], for: UIControlState.normal)
             }else{
                 let normalTitleFont = UIFont.systemFont(ofSize: 9, weight: UIFontWeightRegular)
-                let normalTitleColor = UIColor(red: 136.0/255.0, green: 136.0/255.0, blue: 136.0/255.0, alpha: 136.0/255.0)
+                let normalTitleColor = UIColor(red: 176.0/255.0, green: 224.0/255.0, blue: 230.0/255.0, alpha: 1.0)
                 item.setTitleTextAttributes([NSFontAttributeName: normalTitleFont, NSForegroundColorAttributeName: normalTitleColor], for: UIControlState.normal)
             }
         }

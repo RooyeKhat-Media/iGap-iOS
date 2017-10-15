@@ -10,253 +10,319 @@
 
 import UIKit
 import IGProtoBuff
-import ProtocolBuffers
+import SwiftProtobuf
 import RxSwift
 
-let protoClassesLookupTable: [Int: (proto: GeneratedMessageProtocol.Type, reponseHandler: IGRequest.Handler.Type)] = [
+
+let protoClassesLookupTable: [Int: (proto: ResponseMessage.Type, reponseHandler: IGRequest.Handler.Type)] = [
     //System: xx
-        0: (IGPErrorResponse.self                           as GeneratedMessageProtocol.Type,
+        0: (IGPErrorResponse.self                           as ResponseMessage.Type,
             IGErrorRequest.Handler.self                     as IGRequest.Handler.Type),
-    30001: (IGPConnectionSecuringResponse.self              as GeneratedMessageProtocol.Type,
+    30001: (IGPConnectionSecuringResponse.self              as ResponseMessage.Type,
             IGConnectionSecuringRequest.Handler.self        as IGRequest.Handler.Type),
-    30002: (IGPConnectionSymmetricKeyResponse.self          as GeneratedMessageProtocol.Type,
+    30002: (IGPConnectionSymmetricKeyResponse.self          as ResponseMessage.Type,
             IGConnectionSymmetricKeyRequest.Handler.self    as IGRequest.Handler.Type),
-    30003: (IGPHeartbeatResponse.self                       as GeneratedMessageProtocol.Type,
+    30003: (IGPHeartbeatResponse.self                       as ResponseMessage.Type,
             IGHeartBeatRequest.Handler.self                 as IGRequest.Handler.Type),
-    
+
     //User: 301xx
-    30100: (IGPUserRegisterResponse.self                    as GeneratedMessageProtocol.Type,
+    30100: (IGPUserRegisterResponse.self                    as ResponseMessage.Type,
             IGUserRegisterRequest.Handler.self              as IGRequest.Handler.Type),
-    30101: (IGPUserVerifyResponse.self                      as GeneratedMessageProtocol.Type,
+    30101: (IGPUserVerifyResponse.self                      as ResponseMessage.Type,
             IGUserVerifyRequest.Handler.self                as IGRequest.Handler.Type),
-    30102: (IGPUserLoginResponse.self                       as GeneratedMessageProtocol.Type,
+    30102: (IGPUserLoginResponse.self                       as ResponseMessage.Type,
             IGUserLoginRequest.Handler.self                 as IGRequest.Handler.Type),
-    30103: (IGPUserProfileSetEmailResponse.self             as GeneratedMessageProtocol.Type,
+    30103: (IGPUserProfileSetEmailResponse.self             as ResponseMessage.Type,
             IGUserProfileSetEmailRequest.Handler.self       as IGRequest.Handler.Type),
-    30104: (IGPUserProfileSetGenderResponse.self            as GeneratedMessageProtocol.Type,
+    30104: (IGPUserProfileSetGenderResponse.self            as ResponseMessage.Type,
             IGUserProfileSetGenderRequest.Handler.self      as IGRequest.Handler.Type),
-    30105: (IGPUserProfileSetNicknameResponse.self          as GeneratedMessageProtocol.Type,
+    30105: (IGPUserProfileSetNicknameResponse.self          as ResponseMessage.Type,
             IGUserProfileSetNicknameRequest.Handler.self    as IGRequest.Handler.Type),
-    30106: (IGPUserContactsImportResponse.self              as GeneratedMessageProtocol.Type,
+    30106: (IGPUserContactsImportResponse.self              as ResponseMessage.Type,
             IGUserContactsImportRequest.Handler.self        as IGRequest.Handler.Type),
-    30107: (IGPUserContactsGetListResponse.self             as GeneratedMessageProtocol.Type,
+    30107: (IGPUserContactsGetListResponse.self             as ResponseMessage.Type,
             IGUserContactsGetListRequest.Handler.self       as IGRequest.Handler.Type),
-    30110: (IGPUserProfileGetEmailResponse.self             as GeneratedMessageProtocol.Type,
+    30110: (IGPUserProfileGetEmailResponse.self             as ResponseMessage.Type,
             IGUserProfileGetEmailRequest.Handler.self       as IGRequest.Handler.Type),
-    30111: (IGPUserProfileGetGenderResponse.self            as GeneratedMessageProtocol.Type,
+    30111: (IGPUserProfileGetGenderResponse.self            as ResponseMessage.Type,
             IGUserProfileGetGenderRequest.Handler.self      as IGRequest.Handler.Type),
-    30112: (IGPUserProfileGetNicknameResponse.self          as GeneratedMessageProtocol.Type,
+    30112: (IGPUserProfileGetNicknameResponse.self          as ResponseMessage.Type,
             IGUserProfileGetNicknameRequest.Handler.self    as IGRequest.Handler.Type),
-    30114: (IGPUserAvatarAddResponse.self                   as GeneratedMessageProtocol.Type,
+    30114: (IGPUserAvatarAddResponse.self                   as ResponseMessage.Type,
             IGUserAvatarAddRequest.Handler.self             as IGRequest.Handler.Type),
-    30116: (IGPUserAvatarGetListResponse.self               as GeneratedMessageProtocol.Type,
+    30115: (IGPUserAvatarDeleteResponse.self                as ResponseMessage.Type,
+            IGUserAvatarDeleteRequest.Handler.self          as IGRequest.Handler.Type),
+    30116: (IGPUserAvatarGetListResponse.self               as ResponseMessage.Type,
             IGUserAvatarGetListRequest.Handler.self         as IGRequest.Handler.Type),
-    30117: (IGPUserInfoResponse.self                        as GeneratedMessageProtocol.Type,
+    30117: (IGPUserInfoResponse.self                        as ResponseMessage.Type,
             IGUserInfoRequest.Handler.self                  as IGRequest.Handler.Type),
-    30118: (IGPUserGetDeleteTokenResponse.self              as GeneratedMessageProtocol.Type,
+    30118: (IGPUserGetDeleteTokenResponse.self              as ResponseMessage.Type,
             IGUserGetDeleteTokenRequest.Handler.self        as IGRequest.Handler.Type),
-    30119: (IGPUserDeleteResponse.self                      as GeneratedMessageProtocol.Type,
+    30119: (IGPUserDeleteResponse.self                      as ResponseMessage.Type,
             IGUserDeleteRequest.Handler.self                as IGRequest.Handler.Type),
-    30120: (IGPUserProfileSetSelfRemoveResponse.self        as GeneratedMessageProtocol.Type,
+    30120: (IGPUserProfileSetSelfRemoveResponse.self        as ResponseMessage.Type,
             IGUserProfileSetSelfRemoveRequest.Handler.self  as IGRequest.Handler.Type),
-    30121: (IGPUserProfileGetSelfRemoveResponse.self        as GeneratedMessageProtocol.Type,
+    30121: (IGPUserProfileGetSelfRemoveResponse.self        as ResponseMessage.Type,
             IGUserProfileGetSelfRemoveRequest.Handler.self  as IGRequest.Handler.Type),
-    30122: (IGPUserProfileCheckUsernameResponse.self        as GeneratedMessageProtocol.Type,
+    30122: (IGPUserProfileCheckUsernameResponse.self        as ResponseMessage.Type,
             IGUserProfileCheckUsernameRequest.Handler.self  as IGRequest.Handler.Type),
-    30123: (IGPUserProfileUpdateUsernameResponse.self       as GeneratedMessageProtocol.Type,
+    30123: (IGPUserProfileUpdateUsernameResponse.self       as ResponseMessage.Type,
             IGUserProfileUpdateUsernameRequest.Handler.self as IGRequest.Handler.Type),
-    30124: (IGPUserUpdateStatusResponse.self                as GeneratedMessageProtocol.Type,
+    30124: (IGPUserUpdateStatusResponse.self                as ResponseMessage.Type,
             IGUserUpdateStatusRequest.Handler.self          as IGRequest.Handler.Type),
-    30125: (IGPUserSessionGetActiveListResponse.self        as GeneratedMessageProtocol.Type,
+    30125: (IGPUserSessionGetActiveListResponse.self        as ResponseMessage.Type,
             IGUserSessionGetActiveListRequest.Handler.self  as IGRequest.Handler.Type),
-    30126: (IGPUserSessionTerminateResponse.self            as GeneratedMessageProtocol.Type,
+    30126: (IGPUserSessionTerminateResponse.self            as ResponseMessage.Type,
             IGUserSessionTerminateRequest.Handler.self      as IGRequest.Handler.Type),
-    30127: (IGPUserSessionLogoutResponse.self               as GeneratedMessageProtocol.Type,
+    30127: (IGPUserSessionLogoutResponse.self               as ResponseMessage.Type,
             IGUserSessionLogoutRequest.Handler.self         as IGRequest.Handler.Type),
-    30128: (IGPUserContactsBlockResponse.self               as GeneratedMessageProtocol.Type,
+    30128: (IGPUserContactsBlockResponse.self               as ResponseMessage.Type,
             IGUserContactsBlockRequest.Handler.self         as IGRequest.Handler.Type),
-    30129: (IGPUserContactsUnblockResponse.self             as GeneratedMessageProtocol.Type,
+    30129: (IGPUserContactsUnblockResponse.self             as ResponseMessage.Type,
             IGUserContactsUnBlockRequest.Handler.self       as IGRequest.Handler.Type),
-    30130: (IGPUserContactsGetBlockedListResponse.self      as GeneratedMessageProtocol.Type,
-            IGUserContactsGetBlockedListRequest.Handler.self as IGRequest.Handler.Type),
-    30143: (IGPUserPrivacyGetRuleResponse.self              as GeneratedMessageProtocol.Type,
+    30130: (IGPUserContactsGetBlockedListResponse.self      as ResponseMessage.Type,
+            IGUserContactsGetBlockedListRequest.Handler.self                        as IGRequest.Handler.Type),
+    30131: (IGPUserTwoStepVerificationGetPasswordDetailResponse.self                as ResponseMessage.Type,
+            IGUserTwoStepVerificationGetPasswordDetailRequest.Handler.self          as IGRequest.Handler.Type),
+    30132: (IGPUserTwoStepVerificationVerifyPasswordResponse.self                   as ResponseMessage.Type,
+            IGUserTwoStepVerificationVerifyPasswordRequest.Handler.self             as IGRequest.Handler.Type),
+    30133: (IGPUserTwoStepVerificationSetPasswordResponse.self                      as ResponseMessage.Type,
+            IGUserTwoStepVerificationSetPasswordRequest.Handler.self                as IGRequest.Handler.Type),
+    30134: (IGPUserTwoStepVerificationUnsetPasswordResponse.self                    as ResponseMessage.Type,
+            IGUserTwoStepVerificationUnsetPasswordRequest.Handler.self              as IGRequest.Handler.Type),
+    30135: (IGPUserTwoStepVerificationCheckPasswordResponse.self                    as ResponseMessage.Type,
+            IGUserTwoStepVerificationCheckPasswordRequest.Handler.self              as IGRequest.Handler.Type),
+    30136: (IGPUserTwoStepVerificationVerifyRecoveryEmailResponse.self              as ResponseMessage.Type,
+            IGUserTwoStepVerificationVerifyRecoveryEmailRequest.Handler.self        as IGRequest.Handler.Type),
+    30137: (IGPUserTwoStepVerificationChangeRecoveryEmailResponse.self              as ResponseMessage.Type,
+            IGUserTwoStepVerificationChangeRecoveryEmailRequest.Handler.self        as IGRequest.Handler.Type),
+    30138: (IGPUserTwoStepVerificationRequestRecoveryTokenResponse.self             as ResponseMessage.Type,
+            IGUserTwoStepVerificationRequestRecoveryTokenRequest.Handler.self       as IGRequest.Handler.Type),
+    30139: (IGPUserTwoStepVerificationRecoverPasswordByTokenResponse.self           as ResponseMessage.Type,
+            IGUserTwoStepVerificationRecoverPasswordByTokenRequest.Handler.self     as IGRequest.Handler.Type),
+    30140: (IGPUserTwoStepVerificationRecoverPasswordByAnswersResponse.self         as ResponseMessage.Type,
+            IGUserTwoStepVerificationRecoverPasswordByAnswersRequest.Handler.self   as IGRequest.Handler.Type),
+    30141: (IGPUserTwoStepVerificationChangeRecoveryQuestionResponse.self           as ResponseMessage.Type,
+            IGUserTwoStepVerificationChangeRecoveryQuestionRequest.Handler.self     as IGRequest.Handler.Type),
+    30142: (IGPUserTwoStepVerificationChangeHintResponse.self                       as ResponseMessage.Type,
+            IGUserTwoStepVerificationChangehintRequest.Handler.self                 as IGRequest.Handler.Type),
+    30143: (IGPUserPrivacyGetRuleResponse.self              as ResponseMessage.Type,
             IGUserPrivacyGetRuleRequest.Handler.self        as IGRequest.Handler.Type),
-    30144: (IGPUserPrivacySetRuleResponse.self              as GeneratedMessageProtocol.Type,
+    30144: (IGPUserPrivacySetRuleResponse.self              as ResponseMessage.Type,
             IGUserPrivacySetRuleRequest.Handler.self        as IGRequest.Handler.Type),
-    
-    
+    30145: (IGPUserVerifyNewDeviceResponse.self             as ResponseMessage.Type,
+            IGUserVerifyNewDeviceRequest.Handler.self       as IGRequest.Handler.Type),
+
     //Chat: 302xx
-    30200: (IGPChatGetRoomResponse.self                     as GeneratedMessageProtocol.Type,
+    30200: (IGPChatGetRoomResponse.self                     as ResponseMessage.Type,
             IGChatGetRoomRequest.Handler.self               as IGRequest.Handler.Type),
-    30201: (IGPChatSendMessageResponse.self                 as GeneratedMessageProtocol.Type,
+    30201: (IGPChatSendMessageResponse.self                 as ResponseMessage.Type,
             IGChatSendMessageRequest.Handler.self           as IGRequest.Handler.Type),
-    30202: (IGPChatUpdateStatusResponse.self                as GeneratedMessageProtocol.Type,
+    30202: (IGPChatUpdateStatusResponse.self                as ResponseMessage.Type,
             IGChatUpdateStatusRequest.Handler.self          as IGRequest.Handler.Type),
-    30203: (IGPChatEditMessageResponse.self                 as GeneratedMessageProtocol.Type,
+    30203: (IGPChatEditMessageResponse.self                 as ResponseMessage.Type,
              IGChatEditMessageRequest.Handler.self          as IGRequest.Handler.Type),
-    30204: (IGPChatDeleteMessageResponse.self               as GeneratedMessageProtocol.Type,
+    30204: (IGPChatDeleteMessageResponse.self               as ResponseMessage.Type,
              IGChatDeleteMessageRequest.Handler.self        as IGRequest.Handler.Type),
-    30205: (IGPChatClearMessageResponse.self                as GeneratedMessageProtocol.Type,
+    30205: (IGPChatClearMessageResponse.self                as ResponseMessage.Type,
             IGChatClearMessageRequest.Handler.self          as IGRequest.Handler.Type),
-    30206: (IGPChatDeleteResponse.self                      as GeneratedMessageProtocol.Type,
+    30206: (IGPChatDeleteResponse.self                      as ResponseMessage.Type,
             IGChatDeleteRequest.Handler.self                as IGRequest.Handler.Type),
-    30207: (IGPChatUpdateDraftResponse.self                 as GeneratedMessageProtocol.Type,
+    30207: (IGPChatUpdateDraftResponse.self                 as ResponseMessage.Type,
             IGChatUpdateDraftRequest.Handler.self           as IGRequest.Handler.Type),
-    30208: (IGPChatGetDraftResponse.self                    as GeneratedMessageProtocol.Type,
+    30208: (IGPChatGetDraftResponse.self                    as ResponseMessage.Type,
             IGChatGetDraftRequest.Handler.self              as IGRequest.Handler.Type),
-    30209: (IGPChatConvertToGroupResponse.self              as GeneratedMessageProtocol.Type,
+    30209: (IGPChatConvertToGroupResponse.self              as ResponseMessage.Type,
             IGChatConvertToGroupRequest.Handler.self        as IGRequest.Handler.Type),
-    30210: (IGPChatSetActionResponse.self                   as GeneratedMessageProtocol.Type,
+    30210: (IGPChatSetActionResponse.self                   as ResponseMessage.Type,
              IGChatSetActionRequest.Handler.self            as IGRequest.Handler.Type),
-    
+
     //Group: 303xx
-    30300: (IGPGroupCreateResponse.self                     as GeneratedMessageProtocol.Type,
+    30300: (IGPGroupCreateResponse.self                     as ResponseMessage.Type,
             IGGroupCreateRequest.Handler.self               as IGRequest.Handler.Type),
-    30301: (IGPGroupAddMemberResponse.self                  as GeneratedMessageProtocol.Type,
+    30301: (IGPGroupAddMemberResponse.self                  as ResponseMessage.Type,
             IGGroupAddMemberRequest.Handler.self            as IGRequest.Handler.Type),
-    30302: (IGPGroupAddAdminResponse.self                   as GeneratedMessageProtocol.Type,
+    30302: (IGPGroupAddAdminResponse.self                   as ResponseMessage.Type,
             IGGroupAddAdminRequest.Handler.self             as IGRequest.Handler.Type),
-    30303: (IGPGroupAddModeratorResponse.self               as GeneratedMessageProtocol.Type,
+    30303: (IGPGroupAddModeratorResponse.self               as ResponseMessage.Type,
             IGGroupAddModeratorRequest.Handler.self         as IGRequest.Handler.Type),
-    30304: (IGPGroupClearMessageResponse.self               as GeneratedMessageProtocol.Type,
+    30304: (IGPGroupClearMessageResponse.self               as ResponseMessage.Type,
             IGGroupClearMessageRequest.Handler.self         as IGRequest.Handler.Type),
-    30305: (IGPGroupEditResponse.self                       as GeneratedMessageProtocol.Type,
+    30305: (IGPGroupEditResponse.self                       as ResponseMessage.Type,
             IGGroupEditRequest.Handler.self                 as IGRequest.Handler.Type),
-    30306: (IGPGroupKickAdminResponse.self                  as GeneratedMessageProtocol.Type,
+    30306: (IGPGroupKickAdminResponse.self                  as ResponseMessage.Type,
             IGGroupKickAdminRequest.Handler.self            as IGRequest.Handler.Type),
-    30307: (IGPGroupKickMemberResponse.self                 as GeneratedMessageProtocol.Type,
+    30307: (IGPGroupKickMemberResponse.self                 as ResponseMessage.Type,
             IGGroupKickMemberRequest.Handler.self           as IGRequest.Handler.Type),
-    30308: (IGPGroupKickModeratorResponse.self              as GeneratedMessageProtocol.Type,
+    30308: (IGPGroupKickModeratorResponse.self              as ResponseMessage.Type,
             IGGroupKickModeratorRequest.Handler.self        as IGRequest.Handler.Type),
-    30309: (IGPGroupLeftResponse.self                       as GeneratedMessageProtocol.Type,
+    30309: (IGPGroupLeftResponse.self                       as ResponseMessage.Type,
             IGGroupLeftRequest.Handler.self                 as IGRequest.Handler.Type),
-    30310: (IGPGroupSendMessageResponse.self                as GeneratedMessageProtocol.Type,
+    30310: (IGPGroupSendMessageResponse.self                as ResponseMessage.Type,
             IGGroupSendMessageRequest.Handler.self          as IGRequest.Handler.Type),
-    30311: (IGPGroupUpdateStatusResponse.self               as GeneratedMessageProtocol.Type,
+    30311: (IGPGroupUpdateStatusResponse.self               as ResponseMessage.Type,
             IGGroupUpdateStatusRequest.Handler.self         as IGRequest.Handler.Type),
-    30312: (IGPGroupAvatarAddResponse.self                  as GeneratedMessageProtocol.Type,
+    30312: (IGPGroupAvatarAddResponse.self                  as ResponseMessage.Type,
             IGGroupAvatarAddRequest.Handler.self            as IGRequest.Handler.Type),
-    30313: (IGPGroupAvatarDeleteResponse.self               as GeneratedMessageProtocol.Type,
+    30313: (IGPGroupAvatarDeleteResponse.self               as ResponseMessage.Type,
             IGGroupAvatarDeleteRequest.Handler.self         as IGRequest.Handler.Type),
-    30314: (IGPGroupAvatarGetListResponse.self              as GeneratedMessageProtocol.Type,
+    30314: (IGPGroupAvatarGetListResponse.self              as ResponseMessage.Type,
             IGGroupAvatarGetListRequest.Handler.self        as IGRequest.Handler.Type),
-    30315: (IGPGroupUpdateDraftResponse.self                as GeneratedMessageProtocol.Type,
+    30315: (IGPGroupUpdateDraftResponse.self                as ResponseMessage.Type,
             IGGroupUpdateDraftRequest.Handler.self          as IGRequest.Handler.Type),
-    30316: (IGPGroupGetDraftResponse.self                   as GeneratedMessageProtocol.Type,
+    30316: (IGPGroupGetDraftResponse.self                   as ResponseMessage.Type,
             IGGroupGetDraftRequest.Handler.self             as IGRequest.Handler.Type),
-    30317: (IGPGroupGetMemberListResponse.self              as GeneratedMessageProtocol.Type,
+    30317: (IGPGroupGetMemberListResponse.self              as ResponseMessage.Type,
             IGGroupGetMemberListRequest.Handler.self        as IGRequest.Handler.Type),
-    30318: (IGPGroupDeleteResponse.self                     as GeneratedMessageProtocol.Type,
+    30318: (IGPGroupDeleteResponse.self                     as ResponseMessage.Type,
             IGGroupDeleteRequest.Handler.self               as IGRequest.Handler.Type),
-    30319: (IGPGroupSetActionResponse.self                  as GeneratedMessageProtocol.Type,
+    30319: (IGPGroupSetActionResponse.self                  as ResponseMessage.Type,
             IGGroupSetActionRequest.Handler.self            as IGRequest.Handler.Type),
-    30320: (IGPGroupDeleteMessageResponse.self              as GeneratedMessageProtocol.Type,
+    30320: (IGPGroupDeleteMessageResponse.self              as ResponseMessage.Type,
             IGGroupDeleteMessageRequest.Handler.self        as IGRequest.Handler.Type),
-    30321: (IGPGroupCheckUsernameResponse.self              as GeneratedMessageProtocol.Type,
+    30321: (IGPGroupCheckUsernameResponse.self              as ResponseMessage.Type,
             IGGroupCheckUsernameRequest.Handler.self        as IGRequest.Handler.Type),
-    30322: (IGPGroupCheckUsernameResponse.self              as GeneratedMessageProtocol.Type,
+    30322: (IGPGroupCheckUsernameResponse.self              as ResponseMessage.Type,
             IGGroupCheckUsernameRequest.Handler.self        as IGRequest.Handler.Type),
-    30323: (IGPGroupRemoveUsernameResponse.self             as GeneratedMessageProtocol.Type,
+    30323: (IGPGroupRemoveUsernameResponse.self             as ResponseMessage.Type,
             IGGroupRemoveUsernameRequest.Handler.self       as IGRequest.Handler.Type),
-    30324: (IGPGroupRevokeLinkResponse.self                 as GeneratedMessageProtocol.Type,
+    30324: (IGPGroupRevokeLinkResponse.self                 as ResponseMessage.Type,
             IGGroupRevokLinkRequest.Handler.self            as IGRequest.Handler.Type),
-    30325: (IGPGroupEditMessageResponse.self                as GeneratedMessageProtocol.Type,
+    30325: (IGPGroupEditMessageResponse.self                as ResponseMessage.Type,
             IGGroupEditMessageRequest.Handler.self          as IGRequest.Handler.Type),
-    
+
     //Channel: 304xx
-    30400: (IGPChannelCreateResponse.self                   as GeneratedMessageProtocol.Type,
+    30400: (IGPChannelCreateResponse.self                   as ResponseMessage.Type,
             IGChannelCreateRequest.Handler.self             as IGRequest.Handler.Type),
-    30401: (IGPChannelAddMemberResponse.self                as GeneratedMessageProtocol.Type,
+    30401: (IGPChannelAddMemberResponse.self                as ResponseMessage.Type,
             IGChannelAddMemberRequest.Handler.self          as IGRequest.Handler.Type),
-    30402: (IGPChannelAddAdminResponse.self                 as GeneratedMessageProtocol.Type,
+    30402: (IGPChannelAddAdminResponse.self                 as ResponseMessage.Type,
             IGChannelAddAdminRequest.Handler.self           as IGRequest.Handler.Type),
-    30403: (IGPChannelAddModeratorResponse.self             as GeneratedMessageProtocol.Type,
+    30403: (IGPChannelAddModeratorResponse.self             as ResponseMessage.Type,
             IGChannelAddModeratorRequest.Handler.self       as IGRequest.Handler.Type),
-    30404: (IGPChannelDeleteResponse.self                   as GeneratedMessageProtocol.Type,
+    30404: (IGPChannelDeleteResponse.self                   as ResponseMessage.Type,
             IGChannelDeleteRequest.Handler.self             as IGRequest.Handler.Type),
-    30405: (IGPChannelEditResponse.self                     as GeneratedMessageProtocol.Type,
+    30405: (IGPChannelEditResponse.self                     as ResponseMessage.Type,
             IGChannelEditRequest.Handler.self               as IGRequest.Handler.Type),
-    30406: (IGPChannelKickAdminResponse.self                as GeneratedMessageProtocol.Type,
+    30406: (IGPChannelKickAdminResponse.self                as ResponseMessage.Type,
             IGChannelKickAdminRequest.Handler.self          as IGRequest.Handler.Type),
-    30407: (IGPChannelKickMemberResponse.self               as GeneratedMessageProtocol.Type,
+    30407: (IGPChannelKickMemberResponse.self               as ResponseMessage.Type,
             IGChannelKickMemberRequest.Handler.self         as IGRequest.Handler.Type),
-    30408: (IGPChannelKickModeratorResponse.self            as GeneratedMessageProtocol.Type,
+    30408: (IGPChannelKickModeratorResponse.self            as ResponseMessage.Type,
             IGChannelKickModeratorRequest.Handler.self      as IGRequest.Handler.Type),
-    30409: (IGPChannelLeftResponse.self                     as GeneratedMessageProtocol.Type,
+    30409: (IGPChannelLeftResponse.self                     as ResponseMessage.Type,
             IGChannelLeftRequest.Handler.self               as IGRequest.Handler.Type),
-    30410: (IGPChannelSendMessageResponse.self              as GeneratedMessageProtocol.Type,
+    30410: (IGPChannelSendMessageResponse.self              as ResponseMessage.Type,
             IGChannelSendMessageRequest.Handler.self        as IGRequest.Handler.Type),
-    30411: (IGPChannelDeleteMessageResponse.self            as GeneratedMessageProtocol.Type,
+    30411: (IGPChannelDeleteMessageResponse.self            as ResponseMessage.Type,
             IGChannelDeleteMessageRequest.Handler.self      as IGRequest.Handler.Type),
-    30412: (IGPChannelAvatarAddResponse.self                as GeneratedMessageProtocol.Type,
+    30412: (IGPChannelAvatarAddResponse.self                as ResponseMessage.Type,
             IGChannelAddAvatarRequest.Handler.self          as IGRequest.Handler.Type),
-    30415: (IGPChannelUpdateDraftResponse.self              as GeneratedMessageProtocol.Type,
+    30413: (IGPChannelAvatarDeleteResponse.self             as ResponseMessage.Type,
+            IGChannelAvatarDeleteRequest.Handler.self       as IGRequest.Handler.Type),
+    30414: (IGPChannelAvatarGetListResponse.self            as ResponseMessage.Type,
+            IGChannelAvatarGetListRequest.Handler.self      as IGRequest.Handler.Type),
+    30415: (IGPChannelUpdateDraftResponse.self              as ResponseMessage.Type,
             IGChannelUpdateDraftRequest.Handler.self        as IGRequest.Handler.Type),
-    30416: (IGPChannelGetDraftResponse.self                 as GeneratedMessageProtocol.Type,
+    30416: (IGPChannelGetDraftResponse.self                 as ResponseMessage.Type,
             IGChannelGetDraftRequest.Handler.self           as IGRequest.Handler.Type),
-    30417: (IGPChannelGetMemberListResponse.self            as GeneratedMessageProtocol.Type,
+    30417: (IGPChannelGetMemberListResponse.self            as ResponseMessage.Type,
             IGChannelGetMemberListRequest.Handler.self      as IGRequest.Handler.Type),
-    30419: (IGPChannelUpdateUsernameResponse.self           as GeneratedMessageProtocol.Type,
+    30419: (IGPChannelUpdateUsernameResponse.self           as ResponseMessage.Type,
             IGChannelUpdateUsernameRequest.Handler.self     as IGRequest.Handler.Type),
-    30420: (IGPChannelRemoveUsernameResponse.self           as GeneratedMessageProtocol.Type,
+    30420: (IGPChannelRemoveUsernameResponse.self           as ResponseMessage.Type,
             IGChannelRemoveUsernameRequest.Handler.self     as IGRequest.Handler.Type),
-    30422: (IGPChannelUpdateSignatureResponse.self          as GeneratedMessageProtocol.Type,
+    30422: (IGPChannelUpdateSignatureResponse.self          as ResponseMessage.Type,
             IGChannelUpdateSignatureRequest.Handler.self    as IGRequest.Handler.Type),
-    30425: (IGPChannelEditMessageResponse.self              as GeneratedMessageProtocol.Type,
+    30425: (IGPChannelEditMessageResponse.self              as ResponseMessage.Type,
             IGChannelEditMessageRequest.Handler.self        as IGRequest.Handler.Type),
-    
+
     //Info: 305xx
-    30500: (IGPInfoLocationResponse.self                    as GeneratedMessageProtocol.Type,
+    30500: (IGPInfoLocationResponse.self                    as ResponseMessage.Type,
             IGInfoLocationRequest.Handler.self              as IGRequest.Handler.Type),
-    30501: (IGPInfoCountryResponse.self                     as GeneratedMessageProtocol.Type,
+    30501: (IGPInfoCountryResponse.self                     as ResponseMessage.Type,
             IGInfoCountryRequest.Handler.self               as IGRequest.Handler.Type),
-    30503: (IGPInfoPageResponse.self                        as GeneratedMessageProtocol.Type,
+    30503: (IGPInfoPageResponse.self                        as ResponseMessage.Type,
             IGInfoPageRequest.Handler.self                  as IGRequest.Handler.Type),
-    
+
     //Client: 306xx
-    30600: (IGPClientConditionResponse.self                 as GeneratedMessageProtocol.Type,
+    30600: (IGPClientConditionResponse.self                 as ResponseMessage.Type,
             IGClientConditionRequest.Handler.self           as IGRequest.Handler.Type),
-    30601: (IGPClientGetRoomListResponse.self               as GeneratedMessageProtocol.Type,
+    30601: (IGPClientGetRoomListResponse.self               as ResponseMessage.Type,
             IGClientGetRoomListRequest.Handler.self         as IGRequest.Handler.Type),
-    30602: (IGPClientGetRoomResponse.self                   as GeneratedMessageProtocol.Type,
+    30602: (IGPClientGetRoomResponse.self                   as ResponseMessage.Type,
             IGClientGetRoomRequest.Handler.self             as IGRequest.Handler.Type),
-    30603: (IGPClientGetRoomHistoryResponse.self            as GeneratedMessageProtocol.Type,
+    30603: (IGPClientGetRoomHistoryResponse.self            as ResponseMessage.Type,
             IGClientGetRoomHistoryRequest.Handler.self      as IGRequest.Handler.Type),
-    30605: (IGPClientSearchRoomHistoryResponse.self         as GeneratedMessageProtocol.Type,
+    30605: (IGPClientSearchRoomHistoryResponse.self         as ResponseMessage.Type,
             IGClientSearchRoomHistoryRequest.Handler.self   as IGRequest.Handler.Type),
-    30606: (IGPClientResolveUsernameResponse.self           as GeneratedMessageProtocol.Type,
+    30606: (IGPClientResolveUsernameResponse.self           as ResponseMessage.Type,
             IGClientResolveUsernameRequest.Handler.self     as IGRequest.Handler.Type),
-    30607: (IGPClientCheckInviteLinkResponse.self           as GeneratedMessageProtocol.Type,
-            IGClinetCheckInviteLinkRequest.Handler.self    as IGRequest.Handler.Type),
-    30608: (IGPClientJoinByInviteLinkResponse.self          as GeneratedMessageProtocol.Type,
+    30607: (IGPClientCheckInviteLinkResponse.self           as ResponseMessage.Type,
+            IGClinetCheckInviteLinkRequest.Handler.self     as IGRequest.Handler.Type),
+    30608: (IGPClientJoinByInviteLinkResponse.self          as ResponseMessage.Type,
             IGClientJoinByInviteLinkRequest.Handler.self    as IGRequest.Handler.Type),
-    30609: (IGPClientJoinByUsernameResponse.self            as GeneratedMessageProtocol.Type,
+    30609: (IGPClientJoinByUsernameResponse.self            as ResponseMessage.Type,
             IGClientJoinByUsernameRequest.Handler.self      as IGRequest.Handler.Type),
-    30613: (IGPClientCountRoomHistoryResponse.self          as GeneratedMessageProtocol.Type,
+    30613: (IGPClientCountRoomHistoryResponse.self          as ResponseMessage.Type,
             IGClientCountRoomHistoryRequest.Handler.self    as IGRequest.Handler.Type),
-    
+
     //File: 307xx
-    30700: (IGPFileUploadOptionResponse.self                as GeneratedMessageProtocol.Type,
+    30700: (IGPFileUploadOptionResponse.self                as ResponseMessage.Type,
             IGFileUploadOptionRequest.Handler.self          as IGRequest.Handler.Type),
-    30701: (IGPFileUploadInitResponse.self                  as GeneratedMessageProtocol.Type,
+    30701: (IGPFileUploadInitResponse.self                  as ResponseMessage.Type,
             IGFileUploadInitRequest.Handler.self            as IGRequest.Handler.Type),
-    30702: (IGPFileUploadResponse.self                      as GeneratedMessageProtocol.Type,
+    30702: (IGPFileUploadResponse.self                      as ResponseMessage.Type,
             IGFileUploadRequest.Handler.self                as IGRequest.Handler.Type),
-    30703: (IGPFileUploadStatusResponse.self                as GeneratedMessageProtocol.Type,
+    30703: (IGPFileUploadStatusResponse.self                as ResponseMessage.Type,
             IGFileUploadStatusRequest.Handler.self          as IGRequest.Handler.Type),
-    30704: (IGPFileInfoResponse.self                        as GeneratedMessageProtocol.Type,
+    30704: (IGPFileInfoResponse.self                        as ResponseMessage.Type,
             IGFileInfoRequest.Handler.self                  as IGRequest.Handler.Type),
-    30705: (IGPFileDownloadResponse.self                    as GeneratedMessageProtocol.Type,
+    30705: (IGPFileDownloadResponse.self                    as ResponseMessage.Type,
             IGFileDownloadRequest.Handler.self              as IGRequest.Handler.Type),
-    
+
+    //QR: 308xx
+    30802: (IGPQrCodeNewDeviceResponse.self                 as ResponseMessage.Type,
+            IGQrCodeNewDeviceRequest.Handler.self           as IGRequest.Handler.Type),
+
+
+    //Signaling 309xx
+    30900: (IGPSignalingGetConfigurationResponse.self      as ResponseMessage.Type,
+            IGSignalingGetConfigurationRequest.Handler.self as IGRequest.Handler.Type),
+    30901: (IGPSignalingOfferResponse.self                 as ResponseMessage.Type,
+            IGSignalingOfferRequest.Handler.self           as IGRequest.Handler.Type),
+    30902: (IGPSignalingRingingResponse.self               as ResponseMessage.Type,
+            IGSignalingRingingRequest.Handler.self         as IGRequest.Handler.Type),
+    30903: (IGPSignalingAcceptResponse.self                as ResponseMessage.Type,
+            IGSignalingAcceptRequest.Handler.self          as IGRequest.Handler.Type),
+    30904: (IGPSignalingCandidateResponse.self             as ResponseMessage.Type,
+            IGSignalingCandidateRequest.Handler.self       as IGRequest.Handler.Type),
+    30905: (IGPSignalingLeaveResponse.self                 as ResponseMessage.Type,
+            IGSignalingLeaveRequest.Handler.self           as IGRequest.Handler.Type),
+    30906: (IGPSignalingSessionHoldResponse.self           as ResponseMessage.Type,
+            IGSignalingSessionHoldRequest.Handler.self     as IGRequest.Handler.Type),
+    30907: (IGPSignalingGetLogResponse.self                as ResponseMessage.Type,
+            IGSignalingGetLogRequest.Handler.self          as IGRequest.Handler.Type),
+    30908: (IGPSignalingClearLogResponse.self              as ResponseMessage.Type,
+            IGSignalingClearLogRequest.Handler.self        as IGRequest.Handler.Type),
+    30909: (IGPSignalingRateResponse.self                  as ResponseMessage.Type,
+            IGSignalingRateRequest.Handler.self            as IGRequest.Handler.Type),
+
     //Push: 600xx
-    60002: (IGPPushUserInfoExpiredResponse.self              as GeneratedMessageProtocol.Type,
-           IGPushUserInfoExpiredRequest.Handler.self        as IGRequest.Handler.Type)
-    
+    60000: (IGPPushLoginTokenResponse.self                 as ResponseMessage.Type,
+            IGPushLoginTokenRequest.Handler.self           as IGRequest.Handler.Type),
+    60001: (IGPPushTwoStepVerificationResponse.self        as ResponseMessage.Type,
+            IGPushTwoStepVerificationRequest.Handler.self  as IGRequest.Handler.Type),
+    60002: (IGPPushUserInfoExpiredResponse.self            as ResponseMessage.Type,
+            IGPushUserInfoExpiredRequest.Handler.self      as IGRequest.Handler.Type),
+    60003: (IGPPushRateSignalingResponse.self              as ResponseMessage.Type,
+            IGPushRateSignalingRequest.Handler.self        as IGRequest.Handler.Type)
 ]
 
+var unsecureResponseActionID : [Int] = [30001,30002,30003]
+
 //login is not required for these methods
-var withoutLoginMehotdsActionID : [Int] = [100, 101, 102, 500, 501, 502, 503]
+var actionIdOfMethodsThatCanBeSentWithoutBeingLoggedIn : [Int] = [100, 101, 102,131,132, 500, 501, 502, 503, 802]
 
 
 class IGRequestManager {
@@ -322,16 +388,16 @@ class IGRequestManager {
             if IGAppManager.sharedManager.connectionStatus.value == .connected {
                 if IGAppManager.sharedManager.isUserLoggedIn.value {
                     shouldSendRequest = true
-                } else if withoutLoginMehotdsActionID.contains(requestWrapper.actionId) {
+                } else if actionIdOfMethodsThatCanBeSentWithoutBeingLoggedIn.contains(requestWrapper.actionId) {
                     shouldSendRequest = true
                 }
             }
             
             if shouldSendRequest {
                 if let request = generateIGRequestObject() {
-                    pendingRequests[request.igpId] = requestWrapper
-                    requestWrapper.id = request.igpId
-                    _ = requestWrapper.message.setIgpRequest(request)
+                    pendingRequests[request.igpID] = requestWrapper
+                    requestWrapper.id = request.igpID
+                    _ = requestWrapper.message.igpRequest = request
                     IGWebSocketManager.sharedManager.send(requestW: requestWrapper)
                     DispatchQueue.main.asyncAfter(deadline: .now() + timeoutSeconds , execute: {
                         self.internalTimeOut(for: requestWrapper)
@@ -351,7 +417,7 @@ class IGRequestManager {
     }
     
 //    func requestWrapperForReponse(_ response:IGPResponse) -> IGRequestWrapper? {
-//        let requestWrapper = pendingRequests[response.igpId]
+//        let requestWrapper = pendingRequests[response.igpID]
 //        if requestWrapper != nil {
 //            return requestWrapper
 //        }
@@ -374,44 +440,51 @@ class IGRequestManager {
         }
         
         print("✦ \(NSDate.timeIntervalSinceReferenceDate) ----- ➤➤➤ Action ID: \(actionID)")
-    
+
+        if !IGWebSocketManager.sharedManager.isSecureConnection() && !unsecureResponseActionID.contains(actionID) {
+            return
+        }
+
+
         if let lookupTableResult = protoClassesLookupTable[actionID] {
             let protoClassName = lookupTableResult.proto
             do {
-                let responseProtoMessage = try protoClassName.parseFrom(data: payload) as! GeneratedResponseMessage
+                let responseProtoMessage = try protoClassName.init(serializedData: payload) 
                 let requestHandlerClassName = lookupTableResult.reponseHandler
-                if let response = responseProtoMessage.igpResponse {
-                    //check if this is a `reponse` or a `push`
-                    if let correspondingRequestWrapper = pendingRequests[response.igpId] {
-                        if actionID == 0 { //-> failed
-                            let errorProtoMessage = responseProtoMessage as! IGPErrorResponse
-                            print("✘ \(NSDate.timeIntervalSinceReferenceDate) ----- ✘✘✘✘✘✘ Major Code: \(errorProtoMessage.igpMajorCode)")
-                            print("✘ \(NSDate.timeIntervalSinceReferenceDate) ----- ✘✘✘✘✘✘ Minor Code: \(errorProtoMessage.igpMinorCode)")
-                            
-                            let errorData = IGErrorRequest.Handler.interpret(response: errorProtoMessage)
-                            
-                            if let error = correspondingRequestWrapper.error {
-                                error(errorData.error, errorData.wait)
-                            }
-                        } else { // -> successful
-                            if let sucess = correspondingRequestWrapper.success {
-                                sucess(responseProtoMessage)
-                            } else {
-                                requestHandlerClassName.handlePush(responseProtoMessage: responseProtoMessage)
-                            }
+                
+                let response = responseProtoMessage.igpResponse
+                //check if this is a `reponse` or a `push`
+                if let correspondingRequestWrapper = pendingRequests[response.igpID] {
+                    if actionID == 0 { //-> failed
+                        let errorProtoMessage = responseProtoMessage as! IGPErrorResponse
+                        print("✘ \(NSDate.timeIntervalSinceReferenceDate) ----- ✘✘✘✘✘✘ Major Code: \(errorProtoMessage.igpMajorCode)")
+                        print("✘ \(NSDate.timeIntervalSinceReferenceDate) ----- ✘✘✘✘✘✘ Minor Code: \(errorProtoMessage.igpMinorCode)")
+
+                        let errorData = IGErrorRequest.Handler.interpret(response: errorProtoMessage)
+
+                        if let error = correspondingRequestWrapper.error {
+                            error(errorData.error, errorData.wait)
                         }
-                        resolvedRequests[response.igpId] = correspondingRequestWrapper
-                        pendingRequests[response.igpId]  = nil
-                    } else if resolvedRequests[response.igpId] != nil {
-                        print ("✦ \(NSDate.timeIntervalSinceReferenceDate) ----- Response is already resolved")
-                    } else {
-                        //this is a `pushed` message
-                        //call its corresponding handler class to handle push
-                        requestHandlerClassName.handlePush(responseProtoMessage: responseProtoMessage)
+                    } else { // -> successful
+                        if let sucess = correspondingRequestWrapper.success {
+                            sucess(responseProtoMessage)
+                        } else {
+                            requestHandlerClassName.handlePush(responseProtoMessage: responseProtoMessage)
+                        }
                     }
+                    resolvedRequests[response.igpID] = correspondingRequestWrapper
+                    pendingRequests[response.igpID]  = nil
+                } else if resolvedRequests[response.igpID] != nil {
+                    print ("✦ \(NSDate.timeIntervalSinceReferenceDate) ----- Response is already resolved")
                 } else {
-                    print ("✦ \(NSDate.timeIntervalSinceReferenceDate) ----- Response without IGResponse Property")
+                    //this is a `pushed` message
+                    //call its corresponding handler class to handle push
+                    requestHandlerClassName.handlePush(responseProtoMessage: responseProtoMessage)
                 }
+//            }
+//            else {
+//                    print ("✦ \(NSDate.timeIntervalSinceReferenceDate) ----- Response without IGResponse Property")
+//                }
             } catch let error {
                 print ("✦ \(NSDate.timeIntervalSinceReferenceDate) ----- Error Parsing Proto From Binary Data")
                 print (error)
@@ -439,15 +512,10 @@ class IGRequestManager {
     
     //MARK: Private Methods
     func generateIGRequestObject() -> IGPRequest? {
-        let requestBuilder = IGPRequest.Builder()
-        requestBuilder.setIgpId(generateRandomRequestID())
-        do {
-            let request = try requestBuilder.build()
-            return request
-        } catch {
-            
-        }
-        return nil
+        var requestMessage = IGPRequest()
+        requestMessage.igpID = generateRandomRequestID()
+        return requestMessage
+
     }
     
     private func generateRandomRequestID() -> String {

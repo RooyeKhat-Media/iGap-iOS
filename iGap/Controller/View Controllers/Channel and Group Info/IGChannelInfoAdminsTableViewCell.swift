@@ -58,9 +58,9 @@ class IGChannelInfoAdminsTableViewCell: UITableViewCell {
                 adminRecentlyStatusLabel.text = "Service Notification"
                 break
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                self.setUser(member)
-            }
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+//                self.setUser(member)
+//            }
 
             
         }

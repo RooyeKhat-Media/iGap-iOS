@@ -14,10 +14,10 @@ class IGNavigationBar: UINavigationBar, UINavigationBarDelegate {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.tintColor = UIColor.organizationalColor()
+        self.tintColor = UIColor.white
         self.isTranslucent = false
         //self.barStyle = .black
-        self.barTintColor = UIColor.white
+        self.barTintColor = UIColor.organizationalColor()
         self.layer.shadowColor = UIColor.darkGray.cgColor
         self.layer.shadowOffset = CGSize(width: 2.0, height: 2.0)
         self.layer.shadowRadius = 4.0
@@ -31,10 +31,10 @@ class IGNavigationBar: UINavigationBar, UINavigationBarDelegate {
         
     override func layoutSubviews() {
         super.layoutSubviews()
-        
+
         for items in self.items! {
             if items.leftBarButtonItems != nil {
-            
+
                 for item in items.leftBarButtonItems! {
                     item.setBackgroundVerticalPositionAdjustment(-100, for: .default)
                     item.setBackgroundVerticalPositionAdjustment(-100, for: .compact)
@@ -49,10 +49,35 @@ class IGNavigationBar: UINavigationBar, UINavigationBarDelegate {
             //barButton.imageInsets = UIEdgeInsetsMake(0.0, -20, 50, 0)
             //item.imageInsets = UIEdgeInsetsMake(0.0, -20, 50, 0)
         }
+        
+//        super.layoutSubviews()
+//
+//        frame = CGRect(x: frame.origin.x, y:  0, width: frame.size.width, height: 56.0)
+//
+//        // title position (statusbar height / 2)
+//        setTitleVerticalPositionAdjustment(-10, for: UIBarMetrics.default)
+//
+//        for subview in self.subviews {
+//            var stringFromClass = NSStringFromClass(subview.classForCoder)
+//            if stringFromClass.contains("BarBackground") {
+//                subview.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: 56.0)
+//                subview.backgroundColor = .yellow
+//
+//            }
+//
+//            stringFromClass = NSStringFromClass(subview.classForCoder)
+//            if stringFromClass.contains("BarContent") {
+//
+//                subview.frame = CGRect(x: subview.frame.origin.x, y: 20, width: subview.frame.width, height: 56.0)
+//
+//                subview.backgroundColor = UIColor(red: 20/255, green: 20/255, blue: 20/255, alpha: 0.4)
+//
+//            }
+//        }
     }
     
-    override func sizeThatFits(_ size: CGSize) -> CGSize {
-        let newSize :CGSize = CGSize(width: UIScreen.main.bounds.width, height: 56)
-        return newSize
-    }
+//    override func sizeThatFits(_ size: CGSize) -> CGSize {
+//        let newSize :CGSize = CGSize(width: UIScreen.main.bounds.width, height: 156)
+//        return newSize
+//    }
 }

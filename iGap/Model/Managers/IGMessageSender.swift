@@ -10,7 +10,7 @@
 
 import UIKit
 import IGProtoBuff
-import ProtocolBuffers
+import SwiftProtobuf
 
 class IGMessageSender {
     static let defaultSender = IGMessageSender()

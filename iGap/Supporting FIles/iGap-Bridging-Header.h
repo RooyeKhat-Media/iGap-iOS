@@ -13,5 +13,6 @@
 
 #import <CommonCrypto/CommonCrypto.h>
 #import "TTTAttributedLabel.h"
+#import "MTBBarcodeScanner.h"
 
 #endif /* iGap_Bridging_Header_h */

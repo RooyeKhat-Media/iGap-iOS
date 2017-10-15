@@ -13,12 +13,12 @@ import Foundation
 import IGProtoBuff
 
 class IGSessionInfo: Object {
-    dynamic private var id: Int     = 1
-    dynamic var loginToken: String?
-    dynamic var username:   String?
-    dynamic var userID:     Int64   = -1
-    dynamic var nickname:   String?
-    dynamic var authorHash: String?
+    @objc dynamic  private var id: Int     = 1
+    @objc dynamic  var loginToken: String?
+    @objc dynamic  var username:   String?
+    @objc dynamic  var userID:     Int64   = -1
+    @objc dynamic  var nickname:   String?
+    @objc dynamic  var authorHash: String?
     
     override static func primaryKey() -> String {
         return "id"
@@ -43,8 +43,8 @@ class IGSession: Object {
     
     convenience init(igpSession: IGPUserSessionGetActiveListResponse.IGPSession) {
         self.init()
-        self.sessionId = igpSession.igpSessionId
-        self.appID = igpSession.igpAppId
+        self.sessionId = igpSession.igpSessionID
+        self.appID = igpSession.igpAppID
         self.appBuildVersion = igpSession.igpAppBuildVersion
         self.createTime = igpSession.igpCreateTime
         self.activeTime = igpSession.igpActiveTime
@@ -53,44 +53,47 @@ class IGSession: Object {
         self.appVersion = igpSession.igpAppVersion
         self.ip = igpSession.igpIp
         self.isCurrent = igpSession.igpCurrent
-        if igpSession.hasIgpPlatform {
-            switch igpSession.igpPlatform {
-            case .android:
-                self.platform = .android
-            case .blackBerry:
-                self.platform = .blackberry
-            case .ios:
-                self.platform = .iOS
-            case .linux:
-                self.platform = .linux
-            case .macOs:
-                self.platform = .macOS
-            case .unknownPlatform:
-                self.platform = .unknown
-            case .windows:
-                self.platform = .windows
-            }
+        
+        switch igpSession.igpPlatform {
+        case .android:
+            self.platform = .android
+        case .blackBerry:
+            self.platform = .blackberry
+        case .ios:
+            self.platform = .iOS
+        case .linux:
+            self.platform = .linux
+        case .macOs:
+            self.platform = .macOS
+        case .unknownPlatform:
+            self.platform = .unknown
+        case .windows:
+            self.platform = .windows
+        case .UNRECOGNIZED(_):
+            self.platform = .unknown
         }
-        if igpSession.hasIgpDevice {
-            switch igpSession.igpDevice {
-            case .mobile:
-                self.device = .mobile
-            case .pc:
-                self.device = .desktop
-            case .tablet:
-                self.device = .tablet
-            case .unknownDevice:
-                self.device = .unknown
-            }
+        
+        switch igpSession.igpDevice {
+        case .mobile:
+            self.device = .mobile
+        case .pc:
+            self.device = .desktop
+        case .tablet:
+            self.device = .tablet
+        case .unknownDevice:
+            self.device = .unknown
+        case .UNRECOGNIZED(_):
+            self.device = .unknown
         }
-        if igpSession.hasIgpLanguage {
-            switch igpSession.igpLanguage {
-            case .enUs:
-                self.language = .en_us
-            case .faIr:
-                self.language = .fa_ir
-            }
+        switch igpSession.igpLanguage {
+        case .enUs:
+            self.language = .en_us
+        case .faIr:
+            self.language = .fa_ir
+        case .UNRECOGNIZED(_):
+            self.language = .en_us
         }
+        
     }
 }
 

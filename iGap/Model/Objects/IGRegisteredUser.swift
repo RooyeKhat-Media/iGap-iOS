@@ -26,26 +26,26 @@ class IGRegisteredUser: Object {
     }
     
     //properties
-    dynamic var id:                 Int64                       = -1
-    dynamic var phone:              Int64                       = -1
-    dynamic var avatarCount:        Int32                       = 0
-    dynamic var selfRemove:         Int32                       = -1
-    dynamic var genderRaw:          Int                         = IGGender.unknown.rawValue
-    dynamic var cacheID:            String                      = ""
-    dynamic var username:           String                      = ""
-    dynamic var firstName:          String                      = ""
-    dynamic var lastName:           String                      = ""
-    dynamic var displayName:        String                      = ""
-    dynamic var email:              String?
-    dynamic var initials:           String                      = ""
-    dynamic var color:              String                      = ""
-    dynamic var lastSeen:           Date?
-    dynamic var avatar:             IGAvatar?
-    dynamic var isDeleted:          Bool                        = false
-    dynamic var isMutual:           Bool                        = false //current user have this user in his/her contacts
-    dynamic var isInContacts:       Bool                        = false
-    dynamic var isBlocked:          Bool                        = false
-    dynamic var lastSeenStatusRaw:  IGLastSeenStatus.RawValue   = IGLastSeenStatus.longTimeAgo.rawValue
+    @objc dynamic var id:                 Int64                       = -1
+    @objc dynamic var phone:              Int64                       = -1
+    @objc dynamic var avatarCount:        Int32                       = 0
+    @objc dynamic var selfRemove:         Int32                       = -1
+    @objc dynamic var genderRaw:          Int                         = IGGender.unknown.rawValue
+    @objc dynamic var cacheID:            String                      = ""
+    @objc dynamic var username:           String                      = ""
+    @objc dynamic var firstName:          String                      = ""
+    @objc dynamic var lastName:           String                      = ""
+    @objc dynamic var displayName:        String                      = ""
+    @objc dynamic var email:              String?
+    @objc dynamic var initials:           String                      = ""
+    @objc dynamic var color:              String                      = ""
+    @objc dynamic var lastSeen:           Date?
+    @objc dynamic var avatar:             IGAvatar?
+    @objc dynamic var isDeleted:          Bool                        = false
+    @objc dynamic var isMutual:           Bool                        = false //current user have this user in his/her contacts
+    @objc dynamic var isInContacts:       Bool                        = false
+    @objc dynamic var isBlocked:          Bool                        = false
+    @objc dynamic var lastSeenStatusRaw:  IGLastSeenStatus.RawValue   = IGLastSeenStatus.longTimeAgo.rawValue
     //ignored properties
     var lastSeenStatus: IGLastSeenStatus {
         get {
@@ -88,16 +88,16 @@ class IGRegisteredUser: Object {
     
     convenience init(igpAuthor : IGPRoomMessage.IGPAuthor) {
         self.init()
-        self.id = igpAuthor.igpUser.igpUserId
-        self.cacheID = igpAuthor.igpUser.igpCacheId
+        self.id = igpAuthor.igpUser.igpUserID
+        self.cacheID = igpAuthor.igpUser.igpCacheID
     }
     
     convenience init(igpUser: IGPRegisteredUser) {
         self.init()
-        self.id = igpUser.igpId
+        self.id = igpUser.igpID
         self.phone = igpUser.igpPhone
         self.avatarCount = igpUser.igpAvatarCount
-        self.cacheID = igpUser.igpCacheId
+        self.cacheID = igpUser.igpCacheID
         self.username = igpUser.igpUsername
         self.firstName = igpUser.igpFirstName
         self.lastName = igpUser.igpLastName
@@ -108,28 +108,22 @@ class IGRegisteredUser: Object {
         switch igpUser.igpStatus {
         case .longTimeAgo:
             self.lastSeenStatus = .longTimeAgo
-            break
         case .lastMonth:
             self.lastSeenStatus = .lastMonth
-            break
         case .lastWeek:
             self.lastSeenStatus = .lastWeek
-            break
         case .online:
             self.lastSeenStatus = .online
-            break
         case .exactly:
             self.lastSeenStatus = .exactly
-            break
         case .recently:
             self.lastSeenStatus = .recently
-            break
         case .support:
             self.lastSeenStatus = .support
-            break
         case .serviceNotifications:
             self.lastSeenStatus = .serviceNotification
-            break
+        case .UNRECOGNIZED(_):
+            self.lastSeenStatus = .longTimeAgo
         }
         
         self.lastSeen = Date(timeIntervalSince1970: TimeInterval(igpUser.igpLastSeen))

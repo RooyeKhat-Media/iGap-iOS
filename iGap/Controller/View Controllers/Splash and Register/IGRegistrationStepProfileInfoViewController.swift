@@ -11,7 +11,7 @@
 import UIKit
 import CameraViewController
 import IGProtoBuff
-import ProtocolBuffers
+import SwiftProtobuf
 
 class IGRegistrationStepProfileInfoViewController: UITableViewController {
 
@@ -71,7 +71,7 @@ class IGRegistrationStepProfileInfoViewController: UITableViewController {
                             DispatchQueue.main.async {
                                 switch protoResponse {
                                 case let userInfoResponse as IGPUserInfoResponse:
-                                    let igpUser = (userInfoResponse.igpUser)!
+                                    let igpUser = userInfoResponse.igpUser
                                     IGFactory.shared.saveRegistredUsers([igpUser])
                                     break
                                 default:

@@ -37,7 +37,7 @@ class IGSettingAccountUsernameTableViewController: UITableViewController , UIGes
             usernameTextField.text = userInDb.username
         }
         
-        self.tableView.backgroundView = UIImageView(image: UIImage(named: "IG_Settigns_Bg"))
+        self.tableView.backgroundColor = UIColor(red: 247.0/255.0, green: 247.0/255.0, blue: 247.0/255.0, alpha: 1.0)
         
         let navigationItem = self.navigationItem as! IGNavigationItem
         navigationItem.addNavigationViewItems(rightItemText: "Done", title: "Username")

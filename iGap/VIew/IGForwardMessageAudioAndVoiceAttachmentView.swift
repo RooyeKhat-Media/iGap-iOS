@@ -37,11 +37,11 @@ class IGForwardMessageAudioAndVoiceAttachmentView: UIView {
     }
     
     class func messageBodyTextViewFont() -> UIFont {
-        return UIFont.systemFont(ofSize: 14.0)
+        return UIFont.igFont(ofSize: 14.0)
     }
     
     class func replyToLabelFont() -> UIFont {
-        return UIFont.systemFont(ofSize: 14.0)
+        return UIFont.igFont(ofSize: 14.0)
     }
 
     class func sizeForAttachment() -> CGSize {

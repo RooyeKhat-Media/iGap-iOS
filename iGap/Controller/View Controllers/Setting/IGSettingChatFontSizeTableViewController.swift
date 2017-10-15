@@ -11,29 +11,29 @@
 import UIKit
 
 class IGSettingChatFontSizeTableViewController: UITableViewController {
-
+    
     @IBOutlet weak var deviceSettingSwitcher: UISwitch!
     @IBOutlet weak var mediumFontSizeCell: UITableViewCell!
-    let greenColor = UIColor(red: 49.0/255.0, green: 189.0/255.0, blue: 182.0/255.0, alpha: 1)
+    let greenColor = UIColor.organizationalColor()
     var currentSelectedCellIndexPath : IndexPath?
     override func viewDidLoad() {
         super.viewDidLoad()
         setBarbuttonItem()
         setDefualtFontSize()
-        let backImage = UIImage(named: "IG_Settigns_Bg")
-        let backgroundImageView = UIImageView(image: backImage)
-        self.tableView.backgroundView = backgroundImageView
+        self.tableView.backgroundColor = UIColor(red: 247.0/255.0, green: 247.0/255.0, blue: 247.0/255.0, alpha: 1.0)
         deviceSettingSwitcher.addTarget(self, action: #selector(IGSettingChatFontSizeTableViewController.stateChanged), for: UIControlEvents.valueChanged)
     }
-      override func numberOfSections(in tableView: UITableView) -> Int {
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
         var numberOfSection = 0
         if deviceSettingSwitcher.isOn{
             numberOfSection = 1
         }else{
-        numberOfSection = 2
+            numberOfSection = 2
         }
         return numberOfSection
     }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var numberOfRows : Int = 0
         switch section {
@@ -48,17 +48,17 @@ class IGSettingChatFontSizeTableViewController: UITableViewController {
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section != 0 {
-          if let currentCell = tableView.cellForRow(at: indexPath){
-            currentCell.selectedBackgroundView?.backgroundColor = UIColor.clear
-            if currentCell != mediumFontSizeCell {
-                mediumFontSizeCell.accessoryType = .none
+            if let currentCell = tableView.cellForRow(at: indexPath){
+                currentCell.selectedBackgroundView?.backgroundColor = UIColor.clear
+                if currentCell != mediumFontSizeCell {
+                    mediumFontSizeCell.accessoryType = .none
+                }
+                if (currentCell.accessoryType == UITableViewCellAccessoryType.none) {
+                    currentCell.accessoryType = UITableViewCellAccessoryType.checkmark
+                }else{
+                    (currentCell.accessoryType = UITableViewCellAccessoryType.none)
+                }
             }
-             if (currentCell.accessoryType == UITableViewCellAccessoryType.none) {
-                currentCell.accessoryType = UITableViewCellAccessoryType.checkmark
-            }else{
-                (currentCell.accessoryType = UITableViewCellAccessoryType.none)
-            }
-          }
         }
         currentSelectedCellIndexPath  = indexPath
     }
@@ -85,7 +85,7 @@ class IGSettingChatFontSizeTableViewController: UITableViewController {
     }
     func setDefualtFontSize(){
         mediumFontSizeCell.accessoryType = .checkmark
-        }
+    }
     func setBarbuttonItem(){
         //nextButton
         let doneBtn = UIButton()
@@ -98,8 +98,8 @@ class IGSettingChatFontSizeTableViewController: UITableViewController {
         doneBtn.addTarget(self, action: #selector(IGSettingChatFontSizeTableViewController.doneButtonClicked), for: UIControlEvents.touchUpInside)
         let topRightBarbuttonItem = UIBarButtonItem(customView: doneBtn)
         self.navigationItem.rightBarButtonItem = topRightBarbuttonItem
-        }
+    }
     func doneButtonClicked(){
     }
-
+    
 }

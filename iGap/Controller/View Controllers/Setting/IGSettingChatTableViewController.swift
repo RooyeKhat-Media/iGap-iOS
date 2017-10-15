@@ -14,10 +14,8 @@ class IGSettingChatTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let backImage = UIImage(named: "IG_Settigns_Bg")
-        let backgroundImageView = UIImageView(image: backImage)
-        self.tableView.backgroundView = backgroundImageView
-        }
+        self.tableView.backgroundColor = UIColor(red: 247.0/255.0, green: 247.0/255.0, blue: 247.0/255.0, alpha: 1.0)
+    }
     
     override func viewDidAppear(_ animated: Bool) {
         self.tableView.isUserInteractionEnabled = true
@@ -28,7 +26,7 @@ class IGSettingChatTableViewController: UITableViewController {
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 5
-        }
+    }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var numberOfRows : Int = 0
@@ -49,6 +47,7 @@ class IGSettingChatTableViewController: UITableViewController {
         }
         return numberOfRows
     }
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
 //        if indexPath.section == 0 {
@@ -137,4 +136,4 @@ class IGSettingChatTableViewController: UITableViewController {
         present(deleteAllChatsAlert, animated: true, completion: nil)
     }
     
-    }
+}

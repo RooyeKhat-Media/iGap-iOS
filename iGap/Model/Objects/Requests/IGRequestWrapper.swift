@@ -10,7 +10,8 @@
 
 import Foundation
 import IGProtoBuff
-import ProtocolBuffers
+import SwiftProtobuf
+//import SwiftProtobuf
 
 //TODO: rename this to IGRequestTask
 class IGRequestWrapper :NSObject {
@@ -18,7 +19,7 @@ class IGRequestWrapper :NSObject {
     
     var id       = ""
     var actionId = 0
-    var message  : GeneratedRequestMessageBuilder!  // = GeneratedMessageBuilder()
+    var message  : RequestMessage!  // = GeneratedMessageBuilder()
     var identity = ""
     var time     : Int?
     var IV       = Data()
@@ -29,17 +30,17 @@ class IGRequestWrapper :NSObject {
     var messageSenderTask: IGMessageSenderTask?
     var room: IGRoom?
     
-    var success: ((GeneratedResponseMessage)->())?
+    var success: ((ResponseMessage)->())?
     var error: ((IGError, IGErrorWaitTime?)->())?
     
     
-    init(messageBuilder: GeneratedRequestMessageBuilder!, actionID:Int) {
-        self.message = messageBuilder
+    init(message: RequestMessage!, actionID:Int) {
+        self.message = message
         self.actionId = actionID
     }
     
     @discardableResult
-    func success(_ sucess: @escaping (GeneratedResponseMessage)->()) -> IGRequestWrapper {
+    func success(_ sucess: @escaping (ResponseMessage)->()) -> IGRequestWrapper {
         self.success = sucess
         return self
     }

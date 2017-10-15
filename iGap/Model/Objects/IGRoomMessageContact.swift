@@ -1,5 +1,3 @@
-//
-//  IGMessageViewController.swift
 /*
  * This is the source code of iGap for iOS
  * It is licensed under GNU AGPL v3.0
@@ -15,10 +13,10 @@ import Foundation
 import IGProtoBuff
 
 class IGRoomMessageContact: Object {
-    dynamic var id:         String?
-    dynamic var firstName:  String?
-    dynamic var lastName:   String?
-    dynamic var nickname:   String?
+    @objc dynamic var id:         String?
+    @objc dynamic var firstName:  String?
+    @objc dynamic var lastName:   String?
+    @objc dynamic var nickname:   String?
     let phones:     List<IGRealmString>    = List<IGRealmString>()
     let emails:     List<IGRealmString>    = List<IGRealmString>()
     
@@ -31,13 +29,13 @@ class IGRoomMessageContact: Object {
         self.init()
         self.id = message.primaryKeyId
         
-        if igpRoomMessageContact.hasIgpFirstName {
+        if igpRoomMessageContact.igpFirstName != "" {
             self.firstName = igpRoomMessageContact.igpFirstName
         }
-        if igpRoomMessageContact.hasIgpLastName {
+        if igpRoomMessageContact.igpLastName != "" {
             self.lastName = igpRoomMessageContact.igpLastName
         }
-        if igpRoomMessageContact.hasIgpNickname {
+        if igpRoomMessageContact.igpNickname != "" {
             self.nickname = igpRoomMessageContact.igpNickname
         }
         for phone in igpRoomMessageContact.igpPhone {

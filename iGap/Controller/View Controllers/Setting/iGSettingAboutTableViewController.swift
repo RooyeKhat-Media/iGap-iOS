@@ -18,15 +18,21 @@ class IGSettingAboutTableViewController: UITableViewController , UIGestureRecogn
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let backImage = UIImage(named: "IG_Settigns_Bg")
-        let backgroundImageView = UIImageView(image: backImage)
-        self.tableView.backgroundView = backgroundImageView
+        self.tableView.backgroundColor = UIColor(red: 247.0/255.0, green: 247.0/255.0, blue: 247.0/255.0, alpha: 1.0)
         let navigationItem = self.navigationItem as! IGNavigationItem
         navigationItem.addNavigationViewItems(rightItemText: nil, title: "About")
-        navigationItem.navigationController = self.navigationController as! IGNavigationController
+        navigationItem.navigationController = self.navigationController as? IGNavigationController
         let navigationController = self.navigationController as! IGNavigationController
         navigationController.interactivePopGestureRecognizer?.delegate = self
+        
+        if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
+            self.appVersionLabel.text = version
+        }
+        
+        //appVersionLabel.text = Bundle.main.
     }
+    
+    
     override func viewDidAppear(_ animated: Bool) {
         self.tableView.isUserInteractionEnabled = true
     }
@@ -81,12 +87,13 @@ class IGSettingAboutTableViewController: UITableViewController , UIGestureRecogn
             switch index! {
             case 0:
                 destination.pageUrl = "https://www.igap.net"
+                destination.pageTitle = "iGap Home"
             case 1:
                 destination.pageUrl = "https://blog.igap.net"
+                destination.pageTitle = "iGap Blog"
             case 2:
                 destination.pageUrl = "https://support.igap.net"
-
-                
+                destination.pageTitle = "Support"
             default:
                 break
             }

@@ -13,10 +13,10 @@ import Foundation
 
 class IGContact: Object {
 
-    dynamic var phoneNumber: String?
-    dynamic var firstName: String?
-    dynamic var lastName: String?
-    dynamic var user: IGRegisteredUser?
+    @objc dynamic  var phoneNumber: String?
+    @objc dynamic  var firstName: String?
+    @objc dynamic  var lastName: String?
+    @objc dynamic  var user: IGRegisteredUser?
     
     override static func primaryKey() -> String {
         return "phoneNumber"

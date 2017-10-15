@@ -13,13 +13,23 @@ import Contacts
 import RealmSwift
 import IGProtoBuff
 import MBProgressHUD
+import NVActivityIndicatorView
+import INSPhotoGalleryFramework
 
-class IGRegistredUserInfoTableViewController: UITableViewController , UIGestureRecognizerDelegate {
+class IGRegistredUserInfoTableViewController: UITableViewController , UIGestureRecognizerDelegate , NVActivityIndicatorViewable {
 
     var user: IGRegisteredUser?
     var previousRoomId: Int64?
     var room: IGRoom?
     var hud = MBProgressHUD()
+    var avatars: [IGAvatar] = []
+    var deleteView: IGTappableView?
+    var userAvatar: IGAvatar?
+    var avatarPhotos : [INSPhotoViewable]?
+    var galleryPhotos: INSPhotosViewController?
+    var lastIndex: Array<Any>.Index?
+    var currentAvatarId: Int64?
+    var timer = Timer()
     
     @IBOutlet weak var avatarView: IGAvatarView!
     @IBOutlet weak var blockContactLabel: UILabel!
@@ -30,6 +40,7 @@ class IGRegistredUserInfoTableViewController: UITableViewController , UIGestureR
     override func viewDidLoad() {
         super.viewDidLoad()
         if user != nil {
+            requestToGetAvatarList()
             self.avatarView.setUser(user!)
             self.displayNameLabel.text = user!.displayName
             if let phone = user?.phone {
@@ -50,6 +61,10 @@ class IGRegistredUserInfoTableViewController: UITableViewController , UIGestureR
                    }
             }
         }
+        avatarView.avatarImageView?.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer.init(target: self, action: #selector(self.handleTap(recognizer:)))
+        avatarView.avatarImageView?.addGestureRecognizer(tap)
+        
         let navigaitonItem = self.navigationItem as! IGNavigationItem
         navigaitonItem.addNavigationViewItems(rightItemText: nil, title: "Contact Info")
         navigaitonItem.navigationController = self.navigationController as? IGNavigationController
@@ -135,6 +150,198 @@ class IGRegistredUserInfoTableViewController: UITableViewController , UIGestureR
             showClearHistoryActionSheet()
         }
     }
+    
+    func requestToGetAvatarList() {
+        if let currentUserId = user?.id {
+            IGUserAvatarGetListRequest.Generator.generate(userId: currentUserId).success({ (protoResponse) in
+                DispatchQueue.main.async {
+                    switch protoResponse {
+                    case let UserAvatarGetListoResponse as IGPUserAvatarGetListResponse:
+                        let responseAvatars =   IGUserAvatarGetListRequest.Handler.interpret(response: UserAvatarGetListoResponse, userId: currentUserId)
+                        self.avatars = responseAvatars
+                        for avatar in self.avatars {
+                            let avatarView = IGImageView()
+                            // avatarView.setImage(avatar: avatar)
+                        }
+                        
+                        
+                    default:
+                        break
+                    }
+                }
+            }).error ({ (errorCode, waitTime) in
+                switch errorCode {
+                case .timeout:
+                    DispatchQueue.main.async {
+                        let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                default:
+                    break
+                }
+                
+            }).send()
+        }
+    }
+
+    
+    func handleTap(recognizer:UITapGestureRecognizer) {
+        if recognizer.state == .ended {
+            if let userAvatar = user?.avatar {
+                showAvatar( avatar: userAvatar)
+            }
+        }
+    }
+    
+
+    func showAvatar(avatar : IGAvatar) {
+        var photos: [INSPhotoViewable] = self.avatars.map { (avatar) -> IGMedia in
+            return IGMedia(avatar: avatar)
+        }
+        avatarPhotos = photos
+        let currentPhoto = photos[0]
+        let deleteViewFrame = CGRect(x:320, y:595, width: 25 , height:25)
+        let trashImageView = UIImageView()
+        trashImageView.image = UIImage(named: "IG_Trash_avatar")
+        trashImageView.frame = CGRect(x: 0, y: 0, width: 25, height: 25)
+        let currentUserID = IGAppManager.sharedManager.userID()
+        if let userID = user?.id {
+            if userID == currentUserID {
+                deleteView = IGTappableView(frame: deleteViewFrame)
+                deleteView?.addSubview(trashImageView)
+                deleteView?.addAction {
+                    self.didTapOnTrashButton()
+                }
+                
+            } else {
+                deleteView = nil
+            }
+        }
+        
+        let downloadIndicatorMainView = UIView()
+        let downloadViewFrame = self.view.bounds
+        downloadIndicatorMainView.backgroundColor = UIColor.white
+        downloadIndicatorMainView.frame = downloadViewFrame
+        let andicatorViewFrame = CGRect(x: view.bounds.midX, y: view.bounds.midY,width: 50 , height: 50)
+        let activityIndicatorView = NVActivityIndicatorView(frame: andicatorViewFrame,type: NVActivityIndicatorType.audioEqualizer)
+        downloadIndicatorMainView.addSubview(activityIndicatorView)
+        
+        let galleryPreview = INSPhotosViewController(photos: photos, initialPhoto: currentPhoto, referenceView: nil, deleteView: deleteView, downloadView: downloadIndicatorMainView)
+        galleryPhotos = galleryPreview
+        present(galleryPreview, animated: true, completion: nil)
+        activityIndicatorView.startAnimating()
+        DispatchQueue.main.async {
+            let size = CGSize(width: 30, height: 30)
+            self.startAnimating(size, message: nil, type: NVActivityIndicatorType.ballRotateChase)
+            let thisPhoto = galleryPreview.accessCurrentPhotoDetail()
+            if let index =  self.avatarPhotos?.index(where: {$0 === thisPhoto}) {
+                self.lastIndex = index
+                let currentAvatarFile = self.avatars[index].file
+                self.currentAvatarId = self.avatars[index].id
+                if currentAvatarFile?.status == .downloading {
+                    return
+                }
+                
+                if let attachment = currentAvatarFile {
+                    IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: {
+                        galleryPreview.hiddenDownloadView()
+                        self.stopAnimating()
+                    }, failure: {
+                        
+                    })
+                }
+                
+            }
+            
+        }
+        scheduledTimerWithTimeInterval()
+    }
+    
+    func scheduledTimerWithTimeInterval(){
+        // Scheduling timer to Call the function **Countdown** with the interval of 1 seconds
+        timer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(self.updateCounting), userInfo: nil, repeats: true)
+    }
+    
+    func updateCounting(){
+        timer.invalidate()
+        let nextPhoto = galleryPhotos?.accessCurrentPhotoDetail()
+        if let index =  self.avatarPhotos?.index(where: {$0 === nextPhoto}) {
+            let currentAvatarFile = self.avatars[index].file
+            let nextAvatarId = self.avatars[index].id
+            if nextAvatarId != self.currentAvatarId {
+                let size = CGSize(width: 30, height: 30)
+                self.startAnimating(size, message: nil, type: NVActivityIndicatorType.ballRotateChase)
+                if currentAvatarFile?.status == .downloading {
+                    return
+                }
+                
+                if let attachment = currentAvatarFile {
+                    IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: {
+                        self.galleryPhotos?.hiddenDownloadView()
+                        self.stopAnimating()
+                    }, failure: {
+                        
+                    })
+                }
+                self.currentAvatarId = nextAvatarId
+            } else {
+                
+            }
+        }
+        scheduledTimerWithTimeInterval()
+    }
+    
+    
+    
+    
+    func setThumbnailForAttachments() {
+        if let attachment = self.userAvatar?.file {
+            //  self.currentPhoto.isHidden = false
+            
+        }
+    }
+    
+    
+    func didTapOnTrashButton() {
+        timer.invalidate()
+        let thisPhoto = galleryPhotos?.accessCurrentPhotoDetail()
+        if let index =  self.avatarPhotos?.index(where: {$0 === thisPhoto}) {
+            let thisAvatarId = self.avatars[index].id
+            IGUserAvatarDeleteRequest.Generator.generate(avatarID: thisAvatarId).success({ (protoResponse) in
+                DispatchQueue.main.async {
+                    switch protoResponse {
+                    case let userAvatarDeleteResponse as IGPUserAvatarDeleteResponse :
+                        IGUserAvatarDeleteRequest.Handler.interpret(response: userAvatarDeleteResponse)
+                        self.avatarPhotos?.remove(at: index)
+                        self.scheduledTimerWithTimeInterval()
+                    default:
+                        break
+                    }
+                }
+            }).error ({ (errorCode, waitTime) in
+                self.timer.invalidate()
+                self.scheduledTimerWithTimeInterval()
+
+                switch errorCode {
+                case .timeout:
+                    DispatchQueue.main.async {
+                        let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                default:
+                    break
+                }
+                
+            }).send()
+            
+        }
+    }
+
+    
     
     func createChat() {
         if let selectedUser = user {

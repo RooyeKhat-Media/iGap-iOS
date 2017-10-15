@@ -11,7 +11,7 @@
 import Foundation
 import UIKit
 import IGProtoBuff
-import ProtocolBuffers
+import SwiftProtobuf
 
 enum IGVerificationCodeSendMethod {
     case sms
@@ -22,11 +22,11 @@ enum IGVerificationCodeSendMethod {
 //MARK: -
 class IGUserRegisterRequest : IGRequest {
     class Generator : IGRequest.Generator{
-        class func generate(countryCode : String, phoneNumber : Int64) -> IGRequestWrapper{
-            let userRegisterRequestBuilder = IGPUserRegister.Builder()
-            userRegisterRequestBuilder.igpCountryCode = countryCode
-            userRegisterRequestBuilder.igpPhoneNumber = phoneNumber
-            return IGRequestWrapper(messageBuilder: userRegisterRequestBuilder, actionID: 100)
+        class func generate(countryCode : String, phoneNumber : Int64) -> IGRequestWrapper {
+            var userRegisterRequestMessage = IGPUserRegister()
+            userRegisterRequestMessage.igpCountryCode = countryCode
+            userRegisterRequestMessage.igpPhoneNumber = phoneNumber
+            return IGRequestWrapper(message: userRegisterRequestMessage, actionID: 100)
         }
     }
     
@@ -48,10 +48,12 @@ class IGUserRegisterRequest : IGRequest {
                 codeSendMethod = .igap
             case .verifyCodeSmsSocket:
                 codeSendMethod = .both
+            case .UNRECOGNIZED(_):
+                codeSendMethod = .sms
             }
             
             return (username:           responseProtoMessage.igpUsername,
-                    userId:             responseProtoMessage.igpUserId,
+                    userId:             responseProtoMessage.igpUserID,
                     authorHash:         responseProtoMessage.igpAuthorHash,
                     verificationMethod: codeSendMethod,
                     resendDelay:        responseProtoMessage.igpResendDelay,
@@ -60,7 +62,7 @@ class IGUserRegisterRequest : IGRequest {
             
         }
         
-        override class func handle(responseProtoMessage: GeneratedResponseMessage) {}
+        override class func handle(responseProtoMessage: Message) {}
         override class func error() {}
         override class func timeout() {}
     }
@@ -70,10 +72,10 @@ class IGUserRegisterRequest : IGRequest {
 class IGUserVerifyRequest : IGRequest {
     class Generator : IGRequest.Generator{
         class func generate(usename: String, code:Int32)  -> IGRequestWrapper {
-            let userVerifyRequestBuilder = IGPUserVerify.Builder()
-            userVerifyRequestBuilder.setIgpUsername(usename)
-            userVerifyRequestBuilder.setIgpCode(code)
-            return IGRequestWrapper(messageBuilder: userVerifyRequestBuilder, actionID: 101)
+            var userVerifyRequestMessage = IGPUserVerify()
+            userVerifyRequestMessage.igpUsername = usename
+            userVerifyRequestMessage.igpCode = code
+            return IGRequestWrapper(message: userVerifyRequestMessage, actionID: 101)
         }
     }
     
@@ -83,7 +85,7 @@ class IGUserVerifyRequest : IGRequest {
                     newuser : responseProtoMessage.igpNewUser )
         }
         
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {}
+        override class func handlePush(responseProtoMessage: Message) {}
         override class func error() {}
         override class func timeout() {}
     }
@@ -93,42 +95,42 @@ class IGUserVerifyRequest : IGRequest {
 class IGUserLoginRequest : IGRequest {
     class Generator : IGRequest.Generator{
         class func generate(token: String) -> IGRequestWrapper {
-            let userLoginRequestBuilder = IGPUserLogin.Builder()
-            userLoginRequestBuilder.setIgpToken(token)
+            var userLoginRequestMessage = IGPUserLogin()
+            userLoginRequestMessage.igpToken = token
             
             if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
-                userLoginRequestBuilder.setIgpAppVersion(version)
+                userLoginRequestMessage.igpAppVersion = version
             } else {
-                userLoginRequestBuilder.setIgpAppVersion("0.0.0")
+                userLoginRequestMessage.igpAppVersion = "0.0.0"
             }
             
             if let buildVersion = Bundle.main.infoDictionary?["CFBundleVersion"] as? Int {
-                userLoginRequestBuilder.setIgpAppBuildVersion(Int32(buildVersion))
+                userLoginRequestMessage.igpAppBuildVersion = Int32(buildVersion)
             } else {
-                userLoginRequestBuilder.setIgpAppBuildVersion(Int32(1))
+                userLoginRequestMessage.igpAppBuildVersion = Int32(1)
             }
             
-            userLoginRequestBuilder.setIgpPlatform(IGPPlatform.ios)
-            userLoginRequestBuilder.setIgpPlatformVersion(UIDevice.current.systemVersion)
-            userLoginRequestBuilder.setIgpAppName("iGap iOS")
-            userLoginRequestBuilder.setIgpAppId(3)
+            userLoginRequestMessage.igpPlatform = IGPPlatform.ios
+            userLoginRequestMessage.igpPlatformVersion = UIDevice.current.systemVersion
+            userLoginRequestMessage.igpAppName = "iGap iOS"
+            userLoginRequestMessage.igpAppID = 3
             
             switch UIDevice.current.userInterfaceIdiom {
             case .pad:
-                userLoginRequestBuilder.setIgpDevice(IGPDevice.tablet)
+                userLoginRequestMessage.igpDevice = IGPDevice.tablet
             case.phone:
-                userLoginRequestBuilder.setIgpDevice(IGPDevice.mobile)
+                userLoginRequestMessage.igpDevice = IGPDevice.mobile
             default:
-                userLoginRequestBuilder.setIgpDevice(IGPDevice.unknownDevice)
+                userLoginRequestMessage.igpDevice = IGPDevice.unknownDevice
             }
-            userLoginRequestBuilder.setIgpDeviceName(UIDevice.current.name)
-            userLoginRequestBuilder.setIgpLanguage(IGPLanguage.enUs)
-            return IGRequestWrapper(messageBuilder: userLoginRequestBuilder, actionID: 102)
+            userLoginRequestMessage.igpDeviceName = UIDevice.current.name
+            userLoginRequestMessage.igpLanguage = IGPLanguage.enUs
+            return IGRequestWrapper(message: userLoginRequestMessage, actionID: 102)
         }
     }
     
     class Handler : IGRequest.Handler{
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {}
+        override class func handlePush(responseProtoMessage: Message) {}
         override class func error() {}
         override class func timeout() {}
     }
@@ -138,9 +140,9 @@ class IGUserLoginRequest : IGRequest {
 class IGUserProfileSetEmailRequest : IGRequest {
     class Generator : IGRequest.Generator{
         class func generate(userEmail: String) -> IGRequestWrapper {
-            let setEmailRequestBuilder = IGPUserProfileSetEmail.Builder()
-            setEmailRequestBuilder.setIgpEmail(userEmail)
-            return IGRequestWrapper(messageBuilder: setEmailRequestBuilder, actionID: 103)
+            var setEmailRequestMessage = IGPUserProfileSetEmail()
+            setEmailRequestMessage.igpEmail = userEmail
+            return IGRequestWrapper(message: setEmailRequestMessage, actionID: 103)
         }
     }
     
@@ -153,7 +155,7 @@ class IGUserProfileSetEmailRequest : IGRequest {
             return email
         }
         
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {
+        override class func handlePush(responseProtoMessage: Message) {
             switch responseProtoMessage {
             case let setEmailProtoResponse as IGPUserProfileSetEmailResponse:
                 self.interpret(response: setEmailProtoResponse)
@@ -171,9 +173,9 @@ class IGUserProfileSetEmailRequest : IGRequest {
 class IGUserProfileSetGenderRequest : IGRequest {
     class Generator : IGRequest.Generator{
         class func generate(gender: IGPGender) -> IGRequestWrapper {
-            let setGenderRequestBuilder = IGPUserProfileSetGender.Builder()
-            setGenderRequestBuilder.setIgpGender(gender)
-            return IGRequestWrapper(messageBuilder: setGenderRequestBuilder, actionID: 104)
+            var setGenderRequestMessage = IGPUserProfileSetGender()
+            setGenderRequestMessage.igpGender = gender
+            return IGRequestWrapper(message: setGenderRequestMessage, actionID: 104)
         }
     }
     
@@ -187,7 +189,7 @@ class IGUserProfileSetGenderRequest : IGRequest {
                 return gender
         }
 
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {
+        override class func handlePush(responseProtoMessage: Message) {
             
         }
         override class func error() {}
@@ -199,9 +201,9 @@ class IGUserProfileSetGenderRequest : IGRequest {
 class IGUserProfileSetNicknameRequest : IGRequest {
     class Generator : IGRequest.Generator{
         class func generate(nickname: String) -> IGRequestWrapper {
-            let setNicknameRequestBuilder = IGPUserProfileSetNickname.Builder()
-            setNicknameRequestBuilder.setIgpNickname(nickname)
-            return IGRequestWrapper(messageBuilder: setNicknameRequestBuilder, actionID: 105)
+            var setNicknameRequestMessage = IGPUserProfileSetNickname()
+            setNicknameRequestMessage.igpNickname = nickname
+            return IGRequestWrapper(message: setNicknameRequestMessage, actionID: 105)
         }
     }
     
@@ -214,7 +216,7 @@ class IGUserProfileSetNicknameRequest : IGRequest {
             return nickname
         }
         
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {
+        override class func handlePush(responseProtoMessage: Message) {
             switch responseProtoMessage {
             case let setNicknameProtoResponse as IGPUserProfileSetNicknameResponse:
                 self.interpret(response: setNicknameProtoResponse)
@@ -232,23 +234,24 @@ class IGUserProfileSetNicknameRequest : IGRequest {
 class IGUserContactsImportRequest : IGRequest {
     class Generator : IGRequest.Generator{
         class func generate(contacts: [IGContact]) -> IGRequestWrapper {
-            let contactsImportRequestBuilder = IGPUserContactsImport.Builder()
+            var contactsImportRequestMessage = IGPUserContactsImport()
             var igpContacts = Array<IGPUserContactsImport.IGPContact>()
             for contact in contacts {
-                let igpContact = IGPUserContactsImport.IGPContact.Builder()
-                if contact.firstName != nil {
-                    igpContact.setIgpFirstName(contact.firstName!)
+                var igpContact = IGPUserContactsImport.IGPContact()
+                if let firstName = contact.firstName {
+                    igpContact.igpFirstName = firstName
                 }
-                if contact.lastName != nil {
-                    igpContact.setIgpLastName(contact.lastName!)
+                if let lastName = contact.lastName {
+                    igpContact.igpLastName = lastName
                 }
-                igpContact.setIgpPhone(contact.phoneNumber!)
-                igpContact.setIgpClientId(contact.phoneNumber!)
-                try? igpContacts.append(igpContact.build())
+                igpContact.igpPhone = contact.phoneNumber!
+                igpContact.igpClientID = contact.phoneNumber!
+                igpContacts.append(igpContact)
             }
-            contactsImportRequestBuilder.setIgpContacts(igpContacts)
-            contactsImportRequestBuilder.setIgpForce(false)
-            return IGRequestWrapper(messageBuilder: contactsImportRequestBuilder, actionID: 106)
+            contactsImportRequestMessage.igpContacts = igpContacts
+            //TODO: pass force value here
+            contactsImportRequestMessage.igpForce = false
+            return IGRequestWrapper(message: contactsImportRequestMessage, actionID: 106)
         }
     }
     
@@ -257,7 +260,7 @@ class IGUserContactsImportRequest : IGRequest {
             let registredContacts = responseProtoMessage.igpRegisteredContacts
             IGFactory.shared.addRegistredContacts(registredContacts)
         }
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {}
+        override class func handlePush(responseProtoMessage: Message) {}
         override class func error() {}
         override class func timeout() {}
     }
@@ -267,8 +270,8 @@ class IGUserContactsImportRequest : IGRequest {
 class IGUserContactsGetListRequest : IGRequest {
     class Generator : IGRequest.Generator{
         class func generate() -> IGRequestWrapper {
-            let contactsImportRequestBuilder = IGPUserContactsGetList.Builder()
-            return IGRequestWrapper(messageBuilder: contactsImportRequestBuilder, actionID: 107)
+            let contactsImportRequestMessage = IGPUserContactsGetList()
+            return IGRequestWrapper(message: contactsImportRequestMessage, actionID: 107)
         }
     }
     
@@ -277,7 +280,7 @@ class IGUserContactsGetListRequest : IGRequest {
             let registredUsers = responseProtoMessage.igpRegisteredUser
             IGFactory.shared.saveRegistredContactsUsers(registredUsers)
         }
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {}
+        override class func handlePush(responseProtoMessage: Message) {}
         override class func error() {}
         override class func timeout() {}
     }
@@ -290,7 +293,7 @@ class IGUserContactsDeleteRequest : IGRequest {
     }
     
     class Handler : IGRequest.Handler{
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {}
+        override class func handlePush(responseProtoMessage: Message) {}
         override class func error() {}
         override class func timeout() {}
     }
@@ -303,7 +306,7 @@ class IGUserContactsEditRequest : IGRequest {
     }
     
     class Handler : IGRequest.Handler{
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {}
+        override class func handlePush(responseProtoMessage: Message) {}
         override class func error() {}
         override class func timeout() {}
     }
@@ -313,8 +316,8 @@ class IGUserContactsEditRequest : IGRequest {
 class IGUserProfileGetEmailRequest : IGRequest {
     class Generator : IGRequest.Generator{
         class func generate() -> IGRequestWrapper {
-            let getUserEmailRequestBuilder = IGPUserProfileGetEmail.Builder()
-            return IGRequestWrapper(messageBuilder: getUserEmailRequestBuilder, actionID: 110)
+            let getUserEmailRequestMessage = IGPUserProfileGetEmail()
+            return IGRequestWrapper(message: getUserEmailRequestMessage, actionID: 110)
         }
     }
     
@@ -325,7 +328,7 @@ class IGUserProfileGetEmailRequest : IGRequest {
             IGFactory.shared.updateUserEmail(userId!, email: userEmail)
             return userEmail
         }
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {}
+        override class func handlePush(responseProtoMessage: Message) {}
         override class func error() {}
         override class func timeout() {}
     }
@@ -335,8 +338,8 @@ class IGUserProfileGetEmailRequest : IGRequest {
 class IGUserProfileGetGenderRequest : IGRequest {
     class Generator : IGRequest.Generator{
         class func generate() -> IGRequestWrapper {
-        let getGenderRequestBuilder = IGPUserProfileGetGender.Builder()
-            return IGRequestWrapper(messageBuilder: getGenderRequestBuilder, actionID : 111)
+        let getGenderRequestMessage = IGPUserProfileGetGender()
+            return IGRequestWrapper(message: getGenderRequestMessage, actionID : 111)
             
         }
         
@@ -348,7 +351,7 @@ class IGUserProfileGetGenderRequest : IGRequest {
             IGFactory.shared.updateProfileGender(userId!, igpGender: userGender)
             return userGender
         }
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {}
+        override class func handlePush(responseProtoMessage: Message) {}
         override class func error() {}
         override class func timeout() {}
     }
@@ -358,8 +361,8 @@ class IGUserProfileGetGenderRequest : IGRequest {
 class IGUserProfileGetNicknameRequest : IGRequest {
     class Generator : IGRequest.Generator{
         class func generate() -> IGRequestWrapper {
-            let getUserNicknameRequestBuilder = IGPUserProfileGetNickname.Builder()
-            return IGRequestWrapper(messageBuilder: getUserNicknameRequestBuilder, actionID: 112)
+            let getUserNicknameRequestMessage = IGPUserProfileGetNickname()
+            return IGRequestWrapper(message: getUserNicknameRequestMessage, actionID: 112)
         }
     }
         
@@ -372,7 +375,7 @@ class IGUserProfileGetNicknameRequest : IGRequest {
             IGFactory.shared.updateUserNickname(userId!, nickname: userNickname)
             return userNickname
         }
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {}
+        override class func handlePush(responseProtoMessage: Message) {}
         override class func error() {}
         override class func timeout() {}
     }
@@ -385,7 +388,7 @@ class IGUserUsernameToIdRequest : IGRequest {
     }
     
     class Handler : IGRequest.Handler{
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {}
+        override class func handlePush(responseProtoMessage: Message) {}
         override class func error() {}
         override class func timeout() {}
     }
@@ -396,9 +399,9 @@ class IGUserAvatarAddRequest : IGRequest {
     class Generator : IGRequest.Generator{
         //114
         class func generate(token: String) -> IGRequestWrapper {
-            let userAvatarAddRequestBuilder = IGPUserAvatarAdd.Builder()
-            userAvatarAddRequestBuilder.setIgpAttachment(token)
-            return IGRequestWrapper(messageBuilder: userAvatarAddRequestBuilder, actionID: 114)
+            var userAvatarAddRequestMessage = IGPUserAvatarAdd()
+            userAvatarAddRequestMessage.igpAttachment = token
+            return IGRequestWrapper(message: userAvatarAddRequestMessage, actionID: 114)
         }
     }
     
@@ -407,7 +410,7 @@ class IGUserAvatarAddRequest : IGRequest {
             let currentUserId = IGAppManager.sharedManager.userID()
             IGFactory.shared.updateUserAvatar(currentUserId!, igpAvatar: responseProtoMessage.igpAvatar)
         }
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {
+        override class func handlePush(responseProtoMessage: Message) {
             switch responseProtoMessage {
             case let response as IGPUserAvatarAddResponse:
                 self.interpret(response: response)
@@ -420,14 +423,24 @@ class IGUserAvatarAddRequest : IGRequest {
     }
 }
 
+
 //MARK: -
 class IGUserAvatarDeleteRequest : IGRequest {
     class Generator : IGRequest.Generator{
+        class func generate(avatarID: Int64) ->IGRequestWrapper {
+            var userAvatarDeleteRequestMessage = IGPUserAvatarDelete()
+            userAvatarDeleteRequestMessage.igpID = avatarID
+            return IGRequestWrapper(message: userAvatarDeleteRequestMessage, actionID: 115)
+        }
         
     }
     
     class Handler : IGRequest.Handler{
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {}
+        class func interpret(response responseProtoMessage:IGPUserAvatarDeleteResponse) {
+            
+        }
+
+        override class func handlePush(responseProtoMessage: Message) {}
         override class func error() {}
         override class func timeout() {}
     }
@@ -437,9 +450,9 @@ class IGUserAvatarDeleteRequest : IGRequest {
 class IGUserAvatarGetListRequest : IGRequest {
     class Generator : IGRequest.Generator{
         class func generate(userId: Int64) -> IGRequestWrapper {
-            let userAvatarGetListRequestBuilder = IGPUserAvatarGetList.Builder()
-            userAvatarGetListRequestBuilder.setIgpUserId(userId)
-            return IGRequestWrapper(messageBuilder: userAvatarGetListRequestBuilder, actionID: 116)
+            var userAvatarGetListRequestMessage = IGPUserAvatarGetList()
+            userAvatarGetListRequestMessage.igpUserID = userId
+            return IGRequestWrapper(message: userAvatarGetListRequestMessage, actionID: 116)
         }
         
     }
@@ -456,7 +469,7 @@ class IGUserAvatarGetListRequest : IGRequest {
             return igAvatars
             
         }
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {}
+        override class func handlePush(responseProtoMessage: Message) {}
         override class func error() {}
         override class func timeout() {}
     }
@@ -466,16 +479,16 @@ class IGUserAvatarGetListRequest : IGRequest {
 class IGUserInfoRequest : IGRequest {
     class Generator : IGRequest.Generator{
         class func generate(userID: Int64) -> IGRequestWrapper {
-            let userInfoRequestBuilder = IGPUserInfo.Builder()
-            userInfoRequestBuilder.setIgpUserId(userID)
-            return IGRequestWrapper(messageBuilder: userInfoRequestBuilder, actionID: 117)
+            var userInfoRequestMessage = IGPUserInfo()
+            userInfoRequestMessage.igpUserID = userID
+            return IGRequestWrapper(message: userInfoRequestMessage, actionID: 117)
             
         }
     }
     
     class Handler : IGRequest.Handler{
         
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {}
+        override class func handlePush(responseProtoMessage: Message) {}
         override class func error() {}
         override class func timeout() {}
     }
@@ -485,8 +498,8 @@ class IGUserInfoRequest : IGRequest {
 class IGUserGetDeleteTokenRequest : IGRequest {
     class Generator : IGRequest.Generator{
         class func generate() -> IGRequestWrapper {
-            let userDeleteTokenRequestBuilder = IGPUserGetDeleteToken.Builder()
-            return IGRequestWrapper(messageBuilder: userDeleteTokenRequestBuilder, actionID: 118)
+            let userDeleteTokenRequestMessage = IGPUserGetDeleteToken()
+            return IGRequestWrapper(message: userDeleteTokenRequestMessage, actionID: 118)
             
         }
     }
@@ -497,7 +510,7 @@ class IGUserGetDeleteTokenRequest : IGRequest {
                            codeDigitsLenght: responseProtoMessage.igpTokenLength,
                            tokenRegex: responseProtoMessage.igpTokenRegex)
         }
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {}
+        override class func handlePush(responseProtoMessage: Message) {}
         override class func error() {}
         override class func timeout() {}
     }
@@ -507,10 +520,10 @@ class IGUserGetDeleteTokenRequest : IGRequest {
 class IGUserDeleteRequest : IGRequest {
     class Generator : IGRequest.Generator{
         class func generate(token: String , reasen: IGPUserDelete.IGPReason) -> IGRequestWrapper {
-            let userDeleteRequestBuilder = IGPUserDelete.Builder()
-            userDeleteRequestBuilder.setIgpToken(token)
-            userDeleteRequestBuilder.setIgpReason(reasen)
-            return IGRequestWrapper(messageBuilder: userDeleteRequestBuilder, actionID: 119)
+            var userDeleteRequestMessage = IGPUserDelete()
+            userDeleteRequestMessage.igpToken = token
+            userDeleteRequestMessage.igpReason = reasen
+            return IGRequestWrapper(message: userDeleteRequestMessage, actionID: 119)
         }
         
     }
@@ -520,7 +533,7 @@ class IGUserDeleteRequest : IGRequest {
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
             appDelegate.logoutAndShowRegisterViewController()
         }
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {
+        override class func handlePush(responseProtoMessage: Message) {
             switch responseProtoMessage {
             case let userDeleteProtoResponse as IGPUserDeleteResponse:
                 self.interpret(response: userDeleteProtoResponse)
@@ -538,9 +551,9 @@ class IGUserDeleteRequest : IGRequest {
 class IGUserProfileSetSelfRemoveRequest : IGRequest {
     class Generator : IGRequest.Generator{
         class func generate(selfRemove: Int32) -> IGRequestWrapper {
-            let userprofileSetSelfRemove = IGPUserProfileSetSelfRemove.Builder()
-            userprofileSetSelfRemove.setIgpSelfRemove(selfRemove)
-            return IGRequestWrapper(messageBuilder: userprofileSetSelfRemove, actionID: 120)
+            var userprofileSetSelfRemove = IGPUserProfileSetSelfRemove()
+            userprofileSetSelfRemove.igpSelfRemove = selfRemove
+            return IGRequestWrapper(message: userprofileSetSelfRemove, actionID: 120)
         }
         
     }
@@ -552,7 +565,7 @@ class IGUserProfileSetSelfRemoveRequest : IGRequest {
             IGFactory.shared.updateUserSelfRemove(currentUserId!,selfRemove: setSelfRemove)
         }
         
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {
+        override class func handlePush(responseProtoMessage: Message) {
             switch responseProtoMessage {
             case let response as IGPUserProfileSetSelfRemoveResponse:
                 self.interpret(response: response)
@@ -569,8 +582,8 @@ class IGUserProfileSetSelfRemoveRequest : IGRequest {
 class IGUserProfileGetSelfRemoveRequest : IGRequest {
     class Generator : IGRequest.Generator{
         class func generate() -> IGRequestWrapper {
-           let getSelfRemoveRequestBuilder = IGPUserProfileGetSelfRemove.Builder()
-            return IGRequestWrapper(messageBuilder : getSelfRemoveRequestBuilder, actionID: 121)
+           let getSelfRemoveRequestMessage = IGPUserProfileGetSelfRemove()
+            return IGRequestWrapper(message : getSelfRemoveRequestMessage, actionID: 121)
         }
         
     }
@@ -587,9 +600,9 @@ class IGUserProfileGetSelfRemoveRequest : IGRequest {
 class IGUserProfileCheckUsernameRequest : IGRequest {
     class Generator : IGRequest.Generator{
         class func generate(username:String) -> IGRequestWrapper {
-            let usernameRequestBuilder = IGPUserProfileCheckUsername.Builder()
-            usernameRequestBuilder.setIgpUsername(username)
-            return IGRequestWrapper(messageBuilder: usernameRequestBuilder, actionID: 122)
+            var usernameRequestMessage = IGPUserProfileCheckUsername()
+            usernameRequestMessage.igpUsername = username
+            return IGRequestWrapper(message: usernameRequestMessage, actionID: 122)
         }
         
     }
@@ -606,6 +619,8 @@ class IGUserProfileCheckUsernameRequest : IGRequest {
                 usernameStatus = .invalid
             case .taken:
                 usernameStatus = .taken
+            default:
+                usernameStatus = .available
             }
             return usernameStatus
         }
@@ -616,9 +631,9 @@ class IGUserProfileCheckUsernameRequest : IGRequest {
 class IGUserProfileUpdateUsernameRequest : IGRequest {
         class Generator : IGRequest.Generator{
             class func generate(username: String) -> IGRequestWrapper {
-                let usernameRequestBuilder = IGPUserProfileUpdateUsername.Builder()
-                usernameRequestBuilder.setIgpUsername(username)
-                return IGRequestWrapper(messageBuilder: usernameRequestBuilder, actionID: 123)
+                var usernameRequestMessage = IGPUserProfileUpdateUsername()
+                usernameRequestMessage.igpUsername = username
+                return IGRequestWrapper(message: usernameRequestMessage, actionID: 123)
             }
         }
     
@@ -632,7 +647,7 @@ class IGUserProfileUpdateUsernameRequest : IGRequest {
             return username
         }
         
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {
+        override class func handlePush(responseProtoMessage: Message) {
             switch responseProtoMessage {
             case let updateUsernameProfile as IGPUserProfileUpdateUsernameResponse:
                 self.interpret(response: updateUsernameProfile)
@@ -649,17 +664,17 @@ class IGUserProfileUpdateUsernameRequest : IGRequest {
 class IGUserUpdateStatusRequest : IGRequest {
     class Generator : IGRequest.Generator{
         class func generate(userStatus: IGRegisteredUser.IGLastSeenStatus ) -> IGRequestWrapper {
-            let userUpdateStatusRequestBuilder = IGPUserUpdateStatus.Builder()
+            var userUpdateStatusRequestMessage = IGPUserUpdateStatus()
             switch userStatus {
             case .online:
-                  userUpdateStatusRequestBuilder.setIgpStatus(.online)
+                  userUpdateStatusRequestMessage.igpStatus = .online
             case .exactly:
-                userUpdateStatusRequestBuilder.setIgpStatus(.offline)
+                userUpdateStatusRequestMessage.igpStatus = .offline
             default:
                 break
             }
             
-         return IGRequestWrapper(messageBuilder: userUpdateStatusRequestBuilder, actionID: 124)
+         return IGRequestWrapper(message: userUpdateStatusRequestMessage, actionID: 124)
         }
         
     }
@@ -667,7 +682,7 @@ class IGUserUpdateStatusRequest : IGRequest {
     class Handler : IGRequest.Handler{
          class func interpret(response responseProtoMessage: IGPUserUpdateStatusResponse) {
             let igpStatus = responseProtoMessage.igpStatus
-            let userID = responseProtoMessage.igpUserId
+            let userID = responseProtoMessage.igpUserID
             var status = IGRegisteredUser.IGLastSeenStatus.longTimeAgo
             switch igpStatus {
             case .online:
@@ -680,7 +695,7 @@ class IGUserUpdateStatusRequest : IGRequest {
             IGFactory.shared.updateUserStatus(userID, status: status)
 
         }
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {
+        override class func handlePush(responseProtoMessage: Message) {
             switch responseProtoMessage {
             case let protoMessage as IGPUserUpdateStatusResponse:
                 self.interpret(response: protoMessage)
@@ -696,8 +711,8 @@ class IGUserUpdateStatusRequest : IGRequest {
 class IGUserSessionGetActiveListRequest : IGRequest {
     class Generator: IGRequest.Generator {
         class func generate() -> IGRequestWrapper {
-            let activeSessionList = IGPUserSessionGetActiveList.Builder()
-            return IGRequestWrapper(messageBuilder: activeSessionList, actionID: 125)
+            let activeSessionList = IGPUserSessionGetActiveList()
+            return IGRequestWrapper(message: activeSessionList, actionID: 125)
         }
         
     }
@@ -709,7 +724,7 @@ class IGUserSessionGetActiveListRequest : IGRequest {
             }
             return igSessions
         }
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {}
+        override class func handlePush(responseProtoMessage: Message) {}
         override class func error() {}
         override class func timeout() {}
     }
@@ -718,26 +733,27 @@ class IGUserSessionGetActiveListRequest : IGRequest {
 class IGUserSessionTerminateRequest : IGRequest {
     class Generator: IGRequest.Generator {
         class func generate(sessionId: Int64) -> IGRequestWrapper {
-            let userSessionRequestBuilder = IGPUserSessionTerminate.Builder()
-            userSessionRequestBuilder.setIgpSessionId(sessionId)
-            return IGRequestWrapper(messageBuilder: userSessionRequestBuilder, actionID: 126)
+            var userSessionRequestMessage = IGPUserSessionTerminate()
+            userSessionRequestMessage.igpSessionID = sessionId
+            return IGRequestWrapper(message: userSessionRequestMessage, actionID: 126)
         }
         
         
     }
     class Handler : IGRequest.Handler{
         class func interpret(response responseProtoMessage: IGPUserSessionTerminateResponse){}
-        override class func handlePush(responseProtoMessage:GeneratedResponseMessage) {}//
+        override class func handlePush(responseProtoMessage:Message) {}//
         override class func error() {}
         override class func timeout() {}
     }
 }
 
+//MARK: -
 class IGUserSessionLogoutRequest : IGRequest {
     class Generator: IGRequest.Generator {
         class func genarete() -> IGRequestWrapper {
-            let userSessionLogoutRequestBuilder = IGPUserSessionLogout.Builder()
-            return IGRequestWrapper(messageBuilder: userSessionLogoutRequestBuilder, actionID: 127)
+            let userSessionLogoutRequestMessage = IGPUserSessionLogout()
+            return IGRequestWrapper(message: userSessionLogoutRequestMessage, actionID: 127)
         }
         
     }
@@ -746,7 +762,7 @@ class IGUserSessionLogoutRequest : IGRequest {
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
             appDelegate.logoutAndShowRegisterViewController()
         }
-        override class func handlePush(responseProtoMessage:GeneratedResponseMessage) {}
+        override class func handlePush(responseProtoMessage:Message) {}
         override class func error() {}
         override class func timeout() {}
         
@@ -757,19 +773,19 @@ class IGUserSessionLogoutRequest : IGRequest {
 class IGUserContactsBlockRequest : IGRequest {
     class Generator: IGRequest.Generator {
         class func generate(blockedUserId: Int64 ) ->IGRequestWrapper {
-            let userContactsBlockRequestBuilder = IGPUserContactsBlock.Builder()
-            userContactsBlockRequestBuilder.setIgpUserId(blockedUserId)
-            return IGRequestWrapper(messageBuilder: userContactsBlockRequestBuilder, actionID: 128)
+            var userContactsBlockRequestMessage = IGPUserContactsBlock()
+            userContactsBlockRequestMessage.igpUserID = blockedUserId
+            return IGRequestWrapper(message: userContactsBlockRequestMessage, actionID: 128)
         }
     }
     class Handler : IGRequest.Handler {
         class func interpret(response responseProtoMessage: IGPUserContactsBlockResponse) -> Int64 {
-            let blockedUserId = responseProtoMessage.igpUserId
+            let blockedUserId = responseProtoMessage.igpUserID
             IGFactory.shared.updateBlockedUser(blockedUserId, blocked: true)
             return blockedUserId
             
         }
-        override class func handlePush(responseProtoMessage:GeneratedResponseMessage) {
+        override class func handlePush(responseProtoMessage:Message) {
             switch responseProtoMessage {
             case let userContactBlockedProtoResponse as IGPUserContactsBlockResponse:
                 self.interpret(response: userContactBlockedProtoResponse)
@@ -785,19 +801,19 @@ class IGUserContactsBlockRequest : IGRequest {
 class IGUserContactsUnBlockRequest : IGRequest {
     class Generator: IGRequest.Generator {
         class func generate(unBlockedUserId: Int64 ) -> IGRequestWrapper {
-            let userContactsUnBlockRequestBuilder = IGPUserContactsUnblock.Builder()
-            userContactsUnBlockRequestBuilder.setIgpUserId(unBlockedUserId)
-            return IGRequestWrapper(messageBuilder: userContactsUnBlockRequestBuilder, actionID: 129)
+            var userContactsUnBlockRequestMessage = IGPUserContactsUnblock()
+            userContactsUnBlockRequestMessage.igpUserID = unBlockedUserId
+            return IGRequestWrapper(message: userContactsUnBlockRequestMessage, actionID: 129)
         }
     }
     class Handler : IGRequest.Handler{
         class func interpret(response responseProtoMessage: IGPUserContactsUnblockResponse) -> Int64 {
-            let unBlockedUserId = responseProtoMessage.igpUserId
+            let unBlockedUserId = responseProtoMessage.igpUserID
             IGFactory.shared.updateBlockedUser(unBlockedUserId, blocked: false)
             return unBlockedUserId
             
         }
-        override class func handlePush(responseProtoMessage:GeneratedResponseMessage) {
+        override class func handlePush(responseProtoMessage:Message) {
             switch responseProtoMessage {
             case let userContactBlockedProtoResponse as IGPUserContactsUnblockResponse:
                 self.interpret(response: userContactBlockedProtoResponse)
@@ -814,8 +830,8 @@ class IGUserContactsUnBlockRequest : IGRequest {
 class IGUserContactsGetBlockedListRequest : IGRequest {
     class Generator: IGRequest.Generator {
         class func generate() -> IGRequestWrapper {
-            let getBlockedListRequestBuilder = IGPUserContactsGetBlockedList.Builder()
-            return IGRequestWrapper(messageBuilder: getBlockedListRequestBuilder, actionID: 130)
+            let getBlockedListRequestMessage = IGPUserContactsGetBlockedList()
+            return IGRequestWrapper(message: getBlockedListRequestMessage, actionID: 130)
         }
         
     }
@@ -823,27 +839,253 @@ class IGUserContactsGetBlockedListRequest : IGRequest {
         class func interpret(response responseProtoMessage: IGPUserContactsGetBlockedListResponse) {
             IGFactory.shared.saveBlockedUsers(responseProtoMessage.igpUser)
         }
-        override class func handlePush(responseProtoMessage:GeneratedResponseMessage) {}//
+        override class func handlePush(responseProtoMessage:Message) {}//
         override class func error() {}
         override class func timeout() {}
     }
 }
 
+//MARK: -
+class IGUserTwoStepVerificationGetPasswordDetailRequest : IGRequest {
+    class Generator: IGRequest.Generator {
+        class func generate() -> IGRequestWrapper {
+            let getPasswordDetailRequestMessage = IGPUserTwoStepVerificationGetPasswordDetail()
+            return IGRequestWrapper(message: getPasswordDetailRequestMessage, actionID: 131)
+        }
+
+    }
+    class Handler : IGRequest.Handler{
+        class func interpret(response responseProtoMessage: IGPUserTwoStepVerificationGetPasswordDetailResponse) -> IGTwoStepVerification {
+            return IGTwoStepVerification(protoResponse: responseProtoMessage)
+        }
+    }
+}
+
+//MARK: -
+class IGUserTwoStepVerificationVerifyPasswordRequest : IGRequest {
+    class Generator: IGRequest.Generator {
+        class func generate(password:String) -> IGRequestWrapper {
+            var verifyPasswordRequestMessage = IGPUserTwoStepVerificationVerifyPassword()
+            verifyPasswordRequestMessage.igpPassword = password
+            return IGRequestWrapper(message: verifyPasswordRequestMessage, actionID: 132)
+        }
+
+    }
+    class Handler : IGRequest.Handler{
+        class func interpret(response responseProtoMessage: IGPUserTwoStepVerificationVerifyPasswordResponse) -> String {
+            return responseProtoMessage.igpToken
+        }
+    }
+}
+
+//MARK: -
+class IGUserTwoStepVerificationSetPasswordRequest : IGRequest {
+    class Generator: IGRequest.Generator {
+        class func generate(hint: String, questionOne: String, answerOne: String, questionTwo: String, answerTwo: String, newPassword: String, oldPassword: String, recoveryEmail: String) -> IGRequestWrapper {
+            var setPasswordRequestMessage = IGPUserTwoStepVerificationSetPassword()
+            setPasswordRequestMessage.igpHint = hint
+            setPasswordRequestMessage.igpQuestionOne = questionOne
+            setPasswordRequestMessage.igpAnswerOne = answerOne
+            setPasswordRequestMessage.igpQuestionTwo = questionTwo
+            setPasswordRequestMessage.igpAnswerTwo = answerTwo
+            setPasswordRequestMessage.igpNewPassword = newPassword
+            setPasswordRequestMessage.igpOldPassword = oldPassword
+            setPasswordRequestMessage.igpRecoveryEmail = recoveryEmail
+            
+            return IGRequestWrapper(message: setPasswordRequestMessage, actionID: 133)
+        }
+        
+    }
+    class Handler : IGRequest.Handler{
+        class func interpret(response responseProtoMessage: IGPUserTwoStepVerificationSetPasswordResponse) {
+            //TODO: Complete Me
+        }
+    }
+}
+
+//MARK: -
+class IGUserTwoStepVerificationUnsetPasswordRequest : IGRequest {
+    class Generator: IGRequest.Generator {
+        class func generate(password: String) -> IGRequestWrapper {
+            var unsetPasswordRequestMessage = IGPUserTwoStepVerificationUnsetPassword()
+            unsetPasswordRequestMessage.igpPassword = password
+            return IGRequestWrapper(message: unsetPasswordRequestMessage, actionID: 134)
+        }
+        
+    }
+    class Handler : IGRequest.Handler{
+        class func interpret(response responseProtoMessage: IGPUserTwoStepVerificationUnsetPasswordResponse) {
+            //TODO: Complete Me
+        }
+    }
+}
+
+//MARK: -
+class IGUserTwoStepVerificationCheckPasswordRequest : IGRequest {
+    class Generator: IGRequest.Generator {
+        class func generate(password: String) -> IGRequestWrapper {
+            var checkPasswordRequestMessage = IGPUserTwoStepVerificationCheckPassword()
+            checkPasswordRequestMessage.igpPassword = password
+            return IGRequestWrapper(message: checkPasswordRequestMessage, actionID: 135)
+        }
+        
+    }
+    class Handler : IGRequest.Handler{
+        class func interpret(response responseProtoMessage: IGPUserTwoStepVerificationCheckPasswordResponse) {
+            //TODO: Complete Me
+        }
+    }
+}
+
+//MARK: -
+class IGUserTwoStepVerificationVerifyRecoveryEmailRequest : IGRequest {
+    class Generator: IGRequest.Generator {
+        class func generate(token: String) -> IGRequestWrapper {
+            var verifyRecoveryEmailRequestMessage = IGPUserTwoStepVerificationVerifyRecoveryEmail()
+            verifyRecoveryEmailRequestMessage.igpToken = token
+            return IGRequestWrapper(message: verifyRecoveryEmailRequestMessage, actionID: 136)
+        }
+        
+    }
+    class Handler : IGRequest.Handler{
+        class func interpret(response responseProtoMessage: IGPUserTwoStepVerificationVerifyRecoveryEmailResponse) {
+            //TODO: Complete Me
+        }
+    }
+}
+
+//MARK: -
+class IGUserTwoStepVerificationChangeRecoveryEmailRequest : IGRequest {
+    class Generator: IGRequest.Generator {
+        class func generate(password: String, email: String) -> IGRequestWrapper {
+            var changeRecoveryEmailRequestMessage = IGPUserTwoStepVerificationChangeRecoveryEmail()
+            changeRecoveryEmailRequestMessage.igpPassword = password
+            changeRecoveryEmailRequestMessage.igpEmail = email
+            return IGRequestWrapper(message: changeRecoveryEmailRequestMessage, actionID: 137)
+        }
+        
+    }
+    class Handler : IGRequest.Handler{
+        class func interpret(response responseProtoMessage: IGPUserTwoStepVerificationChangeRecoveryEmailResponse) {
+            //TODO: Complete Me
+        }
+    }
+}
+
+//MARK: -
+class IGUserTwoStepVerificationRequestRecoveryTokenRequest : IGRequest {
+    class Generator: IGRequest.Generator {
+        class func generate() -> IGRequestWrapper {
+            var requestRecoveryTokenRequestMessage = IGPUserTwoStepVerificationRequestRecoveryToken()
+            return IGRequestWrapper(message: requestRecoveryTokenRequestMessage, actionID: 138)
+        }
+        
+    }
+    class Handler : IGRequest.Handler{
+        class func interpret(response responseProtoMessage: IGPUserTwoStepVerificationRequestRecoveryTokenResponse) {
+            //TODO: Complete Me
+        }
+    }
+}
+
+//MARK: -
+class IGUserTwoStepVerificationRecoverPasswordByTokenRequest : IGRequest {
+    class Generator: IGRequest.Generator {
+        class func generate(token: String) -> IGRequestWrapper {
+            var recoverPasswordByTokenRequestMessage = IGPUserTwoStepVerificationRecoverPasswordByToken()
+            recoverPasswordByTokenRequestMessage.igpToken = token
+            return IGRequestWrapper(message: recoverPasswordByTokenRequestMessage, actionID: 139)
+        }
+        
+    }
+    class Handler : IGRequest.Handler{
+        class func interpret(response responseProtoMessage: IGPUserTwoStepVerificationRecoverPasswordByTokenResponse) {
+            //TODO: Complete Me
+        }
+    }
+}
+
+//MARK: -
+class IGUserTwoStepVerificationRecoverPasswordByAnswersRequest : IGRequest {
+    class Generator: IGRequest.Generator {
+        class func generate(answerOne: String, answerTwo: String) -> IGRequestWrapper {
+            var recoverPasswordByAnswersRequestMessage = IGPUserTwoStepVerificationRecoverPasswordByAnswers()
+            recoverPasswordByAnswersRequestMessage.igpAnswerOne = answerOne
+            recoverPasswordByAnswersRequestMessage.igpAnswerTwo = answerTwo
+            return IGRequestWrapper(message: recoverPasswordByAnswersRequestMessage, actionID: 140)
+        }
+        
+    }
+    class Handler : IGRequest.Handler{
+        class func interpret(response responseProtoMessage: IGPUserTwoStepVerificationRecoverPasswordByAnswersResponse) {
+            //TODO: Complete Me
+        }
+    }
+}
+
+//MARK: -
+class IGUserTwoStepVerificationChangeRecoveryQuestionRequest : IGRequest {
+    class Generator: IGRequest.Generator {
+        class func generate(questionOne: String, answerOne: String, questionTwo: String, answerTwo: String, password: String) -> IGRequestWrapper {
+            var changeRecoveryQuestionRequestMessage = IGPUserTwoStepVerificationChangeRecoveryQuestion()
+            changeRecoveryQuestionRequestMessage.igpQuestionOne = questionOne
+            changeRecoveryQuestionRequestMessage.igpAnswerOne = answerOne
+            changeRecoveryQuestionRequestMessage.igpQuestionTwo = questionTwo
+            changeRecoveryQuestionRequestMessage.igpAnswerTwo = answerTwo
+            changeRecoveryQuestionRequestMessage.igpPassword = password
+            return IGRequestWrapper(message: changeRecoveryQuestionRequestMessage, actionID: 141)
+        }
+        
+    }
+    class Handler : IGRequest.Handler{
+        class func interpret(response responseProtoMessage: IGPUserTwoStepVerificationChangeRecoveryQuestionResponse) {
+            //TODO: Complete Me
+        }
+    }
+}
+
+//MARK: -
+class IGUserTwoStepVerificationChangehintRequest : IGRequest {
+    class Generator: IGRequest.Generator {
+        class func generate(hint: String, password: String) -> IGRequestWrapper {
+            var changeHintnRequestMessage = IGPUserTwoStepVerificationChangeHint()
+            changeHintnRequestMessage.igpHint = hint
+            changeHintnRequestMessage.igpPassword = password
+            return IGRequestWrapper(message: changeHintnRequestMessage, actionID: 142)
+        }
+        
+    }
+    class Handler : IGRequest.Handler{
+        class func interpret(response responseProtoMessage: IGPUserTwoStepVerificationChangeHintResponse) {
+            //TODO: Complete Me
+        }
+    }
+}
+
+//MARK: -
 class IGUserPrivacyGetRuleRequest: IGRequest {
     class Generator: IGRequest.Generator {
         class func generate(privacyType: IGPrivacyType) -> IGRequestWrapper {
-            let userPrivacyGetRuleRequestBuilder = IGPUserPrivacyGetRule.Builder()
+            var userPrivacyGetRuleRequestMessage = IGPUserPrivacyGetRule()
             switch privacyType {
             case .avatar:
-                userPrivacyGetRuleRequestBuilder.igpType = .avatar
+                userPrivacyGetRuleRequestMessage.igpType = .avatar
             case .channelInvite:
-                userPrivacyGetRuleRequestBuilder.igpType = .channelInvite
+                userPrivacyGetRuleRequestMessage.igpType = .channelInvite
             case .groupInvite:
-                userPrivacyGetRuleRequestBuilder.igpType = .groupInvite
+                userPrivacyGetRuleRequestMessage.igpType = .groupInvite
             case .userStatus:
-                userPrivacyGetRuleRequestBuilder.igpType = .userStatus
+                userPrivacyGetRuleRequestMessage.igpType = .userStatus
+            case .voiceCalling:
+                userPrivacyGetRuleRequestMessage.igpType = .voiceCalling
+            case .videoCalling:
+                userPrivacyGetRuleRequestMessage.igpType = .videoCalling
+            case .screenSharing:
+                userPrivacyGetRuleRequestMessage.igpType = .screenSharing
+            case .secretChat:
+                userPrivacyGetRuleRequestMessage.igpType = .secretChat
             }
-            return IGRequestWrapper(messageBuilder: userPrivacyGetRuleRequestBuilder, actionID: 143)
+            return IGRequestWrapper(message: userPrivacyGetRuleRequestMessage, actionID: 143)
         }
     }
     class Handler: IGRequest.Handler {
@@ -857,47 +1099,58 @@ class IGUserPrivacyGetRuleRequest: IGRequest {
                 privacyLevel = .allowContacts
             case .denyAll:
                 privacyLevel = .denyAll
+            default:
+                privacyLevel = .denyAll
             }
             IGFactory.shared.updateUserPrivacy(privacyType , igPrivacyLevel: privacyLevel)
             return privacyLevel
         }
-        override class func handlePush(responseProtoMessage:GeneratedResponseMessage) {}
+        override class func handlePush(responseProtoMessage:Message) {}
         override class func error() {}
         override class func timeout() {}
 
     }
 }
 
+//MARK: -
 class IGUserPrivacySetRuleRequest: IGRequest {
     class Generator: IGRequest.Generator {
         class func generate( privacyType: IGPrivacyType , privacyLevel: IGPrivacyLevel) -> IGRequestWrapper {
-            let userPrivacySetRuleRequestBuilder = IGPUserPrivacySetRule.Builder()
+            var userPrivacySetRuleRequestMessage = IGPUserPrivacySetRule()
             
             switch privacyType {
             case .avatar:
-                userPrivacySetRuleRequestBuilder.igpType = .avatar
+                userPrivacySetRuleRequestMessage.igpType = .avatar
             case .channelInvite:
-                userPrivacySetRuleRequestBuilder.igpType = .channelInvite
+                userPrivacySetRuleRequestMessage.igpType = .channelInvite
             case .groupInvite:
-                userPrivacySetRuleRequestBuilder.igpType = .groupInvite
+                userPrivacySetRuleRequestMessage.igpType = .groupInvite
             case .userStatus:
-                userPrivacySetRuleRequestBuilder.igpType = .userStatus
+                userPrivacySetRuleRequestMessage.igpType = .userStatus
+            case .voiceCalling:
+                userPrivacySetRuleRequestMessage.igpType = .voiceCalling
+            case .videoCalling:
+                userPrivacySetRuleRequestMessage.igpType = .videoCalling
+            case .screenSharing:
+                userPrivacySetRuleRequestMessage.igpType = .screenSharing
+            case .secretChat:
+                userPrivacySetRuleRequestMessage.igpType = .secretChat
             }
             switch privacyLevel {
             case .allowAll:
-                userPrivacySetRuleRequestBuilder.igpLevel = .allowAll
+                userPrivacySetRuleRequestMessage.igpLevel = .allowAll
             case .allowContacts:
-                userPrivacySetRuleRequestBuilder.igpLevel = .allowContacts
+                userPrivacySetRuleRequestMessage.igpLevel = .allowContacts
             case .denyAll:
-                userPrivacySetRuleRequestBuilder.igpLevel = .denyAll
+                userPrivacySetRuleRequestMessage.igpLevel = .denyAll
             }
-            return IGRequestWrapper(messageBuilder: userPrivacySetRuleRequestBuilder, actionID: 144)
+            return IGRequestWrapper(message: userPrivacySetRuleRequestMessage, actionID: 144)
 
         }
     }
     class Handler: IGRequest.Handler {
         class func interpret( response responseProtoMessage: IGPUserPrivacySetRuleResponse) {
-            let type: IGPrivacyType
+            var type: IGPrivacyType
             let level: IGPrivacyLevel
             let igpPrivacyType = responseProtoMessage.igpType
             let igpPrivacyLevel = responseProtoMessage.igpLevel
@@ -910,6 +1163,16 @@ class IGUserPrivacySetRuleRequest: IGRequest {
                 type = .groupInvite
             case .userStatus:
                 type = .userStatus
+            case .voiceCalling:
+                type = .voiceCalling
+            case .videoCalling:
+                type = .videoCalling
+            case .screenSharing:
+                type = .screenSharing
+            case .secretChat:
+                type = .secretChat
+            default:
+                type = .avatar
             }
             switch igpPrivacyLevel {
             case .allowAll:
@@ -918,11 +1181,13 @@ class IGUserPrivacySetRuleRequest: IGRequest {
                 level = .allowContacts
             case .denyAll:
                 level = .denyAll
+            default:
+                level = .denyAll
             }
             IGFactory.shared.updateUserPrivacy( type , igPrivacyLevel: level)
         }
         
-        override class func handlePush(responseProtoMessage:GeneratedResponseMessage) {
+        override class func handlePush(responseProtoMessage:Message) {
             switch responseProtoMessage {
             case let userSetPrivacyProtoResponse as IGPUserPrivacySetRuleResponse:
                 self.interpret(response: userSetPrivacyProtoResponse)
@@ -934,4 +1199,27 @@ class IGUserPrivacySetRuleRequest: IGRequest {
         override class func timeout() {}
     }
     
+}
+
+//MARK: -
+class IGUserVerifyNewDeviceRequest: IGRequest {
+    class Generator: IGRequest.Generator {
+        class func generate(token: String) -> IGRequestWrapper {
+            var userVerifyNewDeviceRequestMessage = IGPUserVerifyNewDevice()
+            userVerifyNewDeviceRequestMessage.igpToken = token
+            return IGRequestWrapper(message: userVerifyNewDeviceRequestMessage, actionID: 145)
+        }
+    }
+    class Handler: IGRequest.Handler {
+        class func interpret(response responseProtoMessage: IGPUserVerifyNewDeviceResponse) -> (appName: String, buildVersion: String, appVersion: String, platform: IGPlatform, platformVersion: String, device: IGDevice, devicename: String) {
+            return (appName: responseProtoMessage.igpAppName,
+                    buildVersion: "\(responseProtoMessage.igpAppBuildVersion)",
+                    appVersion: responseProtoMessage.igpAppVersion,
+                    platform: IGPlatform(rawValue: Int(responseProtoMessage.igpPlatform.rawValue))!,
+                    platformVersion: responseProtoMessage.igpPlatformVersion,
+                    device: IGDevice(rawValue: Int(responseProtoMessage.igpDevice.rawValue))!,
+                    devicename: responseProtoMessage.igpDeviceName)
+        }
+    }
+
 }

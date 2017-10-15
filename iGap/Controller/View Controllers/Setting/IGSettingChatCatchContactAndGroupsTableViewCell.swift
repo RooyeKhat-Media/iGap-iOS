@@ -29,7 +29,7 @@ class IGSettingChatCatchContactAndGroupsTableViewCell: UITableViewCell {
     func roundUserImage(){
         contactImageView.layer.borderWidth = 0
         contactImageView.layer.masksToBounds = true
-        let borderUserImageColor = UIColor(red: 49.0/255.0, green: 189.0/255.0, blue: 182.0/255.0, alpha: 1)
+        let borderUserImageColor = UIColor.organizationalColor()
         contactImageView.layer.borderColor = borderUserImageColor.cgColor
         contactImageView.layer.cornerRadius = contactImageView.frame.size.height/2
         contactImageView.clipsToBounds = true

@@ -13,7 +13,7 @@ import RealmSwift
 import MBProgressHUD
 import IGProtoBuff
 
-class IGSettingPrivacy_SecurityTableViewController: UITableViewController , UIGestureRecognizerDelegate {
+class IGSettingPrivacy_SecurityTableViewController: UITableViewController, UIGestureRecognizerDelegate {
 
     @IBOutlet weak var AlloLoginSwitch: UISwitch!
     @IBOutlet weak var whoCanSeeProfilePhotoLabel: UILabel!
@@ -21,6 +21,8 @@ class IGSettingPrivacy_SecurityTableViewController: UITableViewController , UIGe
     @IBOutlet weak var numberOfBlockedContacts: UILabel!
     @IBOutlet weak var whoCanSeeLastSeenLabel: UILabel!
     @IBOutlet weak var whoCanAddingToGroupLabel: UILabel!
+    
+    
     var selectedIndexPath : IndexPath!
     var hud = MBProgressHUD()
     var blockedUsers = try! Realm().objects(IGRegisteredUser.self).filter("isBlocked == 1" )
@@ -32,38 +34,36 @@ class IGSettingPrivacy_SecurityTableViewController: UITableViewController , UIGe
     var lastSeenUserPrivacy: IGPrivacyLevel?
     var groupInviteUserPrivacy: IGPrivacyLevel?
     var channelInviteUserPrivacy: IGPrivacyLevel?
+    var twoStepVerification: IGTwoStepVerification?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        let backImage = UIImage(named: "IG_Settigns_Bg")
-        let backgroundImageView = UIImageView(image: backImage)
-        self.tableView.backgroundView = backgroundImageView
+        
+        self.tableView.backgroundColor = UIColor(red: 247.0/255.0, green: 247.0/255.0, blue: 247.0/255.0, alpha: 1.0)
         let navigationItem = self.navigationItem as! IGNavigationItem
         navigationItem.addNavigationViewItems(rightItemText: nil, title: "Privacy & Security")
         navigationItem.navigationController = self.navigationController as? IGNavigationController
         let navigationController = self.navigationController as! IGNavigationController
         navigationController.interactivePopGestureRecognizer?.delegate = self
+        
         fetchBlockedContactsFromServer()
+        
         let predicate = NSPredicate(format: "isBlocked == 1")
         blockedUsers = try! Realm().objects(IGRegisteredUser.self).filter(predicate)
-        numberOfBlockedContacts.text = "\(blockedUsers.count) Contact"
+        numberOfBlockedContacts.text = "\(blockedUsers.count) users"
         
         self.notificationToken = blockedUsers.addNotificationBlock { (changes: RealmCollectionChange) in
             switch changes {
             case .initial:
                 self.tableView.reloadData()
                 break
-            case .update(_, let deletions, let insertions, let modifications):
-                self.tableView.reloadData()
-                
+            case .update(_,_,_,_):
                 print("updating members tableV")
-                
                 self.tableView.reloadData()
-                break
             case .error(let err):
                 // An error occurred while opening the Realm file on the background worker thread
                 fatalError("\(err)")
-                break
-                
+                break                
             }
         }
         
@@ -72,7 +72,7 @@ class IGSettingPrivacy_SecurityTableViewController: UITableViewController , UIGe
             case .initial:
                 self.tableView.reloadData()
                 break
-            case .update(_, let deletions, let insertions, let modifications):
+            case .update(_,_,_,_):
                 print("updating members tableV")
                 // Query messages have changed, so apply them to the TableView
                 self.tableView.reloadData()
@@ -143,8 +143,8 @@ class IGSettingPrivacy_SecurityTableViewController: UITableViewController , UIGe
 
             }
         }
-        
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         self.tableView.isUserInteractionEnabled = true
         fetchBlockedContactsFromServer()
@@ -208,7 +208,8 @@ class IGSettingPrivacy_SecurityTableViewController: UITableViewController , UIGe
             }
         }
     }    
-        func fetchBlockedContactsFromServer(){
+    
+    func fetchBlockedContactsFromServer(){
         IGUserContactsGetBlockedListRequest.Generator.generate().success({ (protoResponse) in
             DispatchQueue.main.async {
                 switch protoResponse {
@@ -240,60 +241,76 @@ class IGSettingPrivacy_SecurityTableViewController: UITableViewController , UIGe
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        var numberOfRows : Int = 0
         switch section {
         case 0:
-            numberOfRows = 5
+            return 5
         case 1:
-            numberOfRows = 1
+            return 2
         default:
-            break
+            return 0
         }
-        return numberOfRows
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedIndexPath = indexPath
-         if indexPath.section == 0 && indexPath.row == 0 {
-            self.tableView.isUserInteractionEnabled = false
-            performSegue(withIdentifier: "GoToBlockListPageFromPrivacyAndSecurity", sender: self)
-            //selectedIndexPath = indexPath
-         }
-        if indexPath.section == 0 && indexPath.row != 0 {
-            self.tableView.isUserInteractionEnabled = false
-            performSegue(withIdentifier: "GoToWhoCanSeeYourPrivacyAndPolicyPage", sender: self)
-        }
-        
-        if indexPath.section == 1 {
+        if indexPath.section == 0 {
+            if indexPath.row == 0 {
+                self.tableView.isUserInteractionEnabled = false
+                performSegue(withIdentifier: "GoToBlockListPageFromPrivacyAndSecurity", sender: self)
+            } else {
+                self.tableView.isUserInteractionEnabled = false
+                performSegue(withIdentifier: "GoToWhoCanSeeYourPrivacyAndPolicyPage", sender: self)
+            }
+        } else if indexPath.section == 1 {
             switch indexPath.row {
-            case 1 :
-                self.tableView.isUserInteractionEnabled = false
-                performSegue(withIdentifier: "GoToPassCodeLockSettingsPage", sender: self)
-            case 2 :
-                self.tableView.isUserInteractionEnabled = false
-                performSegue(withIdentifier: "GoToTwoStepVerificationPage", sender: self)
             case 0 :
                 self.tableView.isUserInteractionEnabled = false
                 performSegue(withIdentifier: "GoToActiveSessionListPage", sender: self)
-                default:
+            case 1 :
+                self.tableView.isUserInteractionEnabled = false
+                let hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+                hud.mode = .indeterminate
+                IGUserTwoStepVerificationGetPasswordDetailRequest.Generator.generate().success({ (protoResponse) in
+                    DispatchQueue.main.async {
+                        hud.hide(animated: true)
+                        switch protoResponse {
+                        case let getPasswordDetailsResponse as IGPUserTwoStepVerificationGetPasswordDetailResponse:
+                            self.twoStepVerification = IGUserTwoStepVerificationGetPasswordDetailRequest.Handler.interpret(response: getPasswordDetailsResponse)
+                            self.performSegue(withIdentifier: "ShowTwoStepVerificationPassword", sender: self)
+                        default:
+                            self.showAlert(title: "Alert", message: "Bad response")
+                        }
+                    }
+                }).error({ (errorCode, waitTime) in
+                    switch errorCode {
+                    case .userTwoStepVerificationGetPasswordDetailsBadPayload:
+                        self.showAlert(title: "Alert", message: "Bad payload")
+                    case .userTwoStepVerificationGetPasswordDetailsInternalServerError:
+                        self.showAlert(title: "Alert", message: "Internal Server Error")
+                    case .userTwoStepVerificationGetPasswordDetailsForbidden:
+                        self.showAlert(title: "Alert", message: "Forbidden")
+                    case .userTwoStepVerificationGetPasswordDetailsNoPassword:
+                        self.performSegue(withIdentifier: "GoToTwoStepVerificationPage", sender: self)
+                    default:
+                        break
+                    }
+                }).send()
+            case 2 :
+                self.tableView.isUserInteractionEnabled = false
+                performSegue(withIdentifier: "GoToPassCodeLockSettingsPage", sender: self)
+            default:
                 break
             }
         }
-        //selectedIndexPath = indexPath
     }
-    override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-         var footerText = ""
-        if section == 1 {
-             footerText = ""
-            //"Switch this on to use the PC and iPad version of iGap, and to login to other iGap web and mobile services."
-        }
-        return footerText
-    }
+
     @IBAction func goBackToPrivacyAndSecurityList(seque:UIStoryboardSegue){
-        numberOfBlockedContacts.text = "\(blockedUsers.count) Contact "
+        numberOfBlockedContacts.text = "\(blockedUsers.count) users"
     }
+    
+    
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
         if let whoCanSeeYourPrivacyAndSetting = segue.destination as? IGPrivacyAndSecurityWhoCanSeeTableViewController {
             if selectedIndexPath.section == 0 {
                 switch selectedIndexPath.row {
@@ -323,6 +340,8 @@ class IGSettingPrivacy_SecurityTableViewController: UITableViewController , UIGe
                 break
                 }
             }
+        } else if let destinationVC = segue.destination as? IGSettingPrivacyAndSecurityTwoStepVerificationVerifyPasswordTableViewController {
+            destinationVC.twoStepVerification = twoStepVerification
         }
     }
 }

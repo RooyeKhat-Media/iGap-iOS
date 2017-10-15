@@ -11,7 +11,7 @@
 import Foundation
 import UIKit
 import IGProtoBuff
-import ProtocolBuffers
+import SwiftProtobuf
 import RealmSwift
 import RxSwift
 

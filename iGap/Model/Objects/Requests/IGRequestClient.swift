@@ -10,31 +10,30 @@
 
 import Foundation
 import IGProtoBuff
-import ProtocolBuffers
+import SwiftProtobuf
 
 class IGClientConditionRequest : IGRequest {
     class Generator : IGRequest.Generator{
         class func generate(clientCondition:IGClientCondition) -> IGRequestWrapper {
-            let clientConditionRequestBuilder = IGPClientCondition.Builder()
+            var clientConditionRequestMessage = IGPClientCondition()
             var rooms = Array<IGPClientCondition.IGPRoom>()
             for ccRoom in clientCondition.rooms {
-                let room = IGPClientCondition.IGPRoom.Builder()
-                room.setIgpRoomId(ccRoom.id)
-                room.setIgpClearId(ccRoom.clearId)
-                room.setIgpCacheEndId(ccRoom.cacheEndId)
-                room.setIgpCacheStartId(ccRoom.cacheStartId)
-                room.setIgpDeleteVersion(ccRoom.deleteVersion)
-                room.setIgpStatusVersion(ccRoom.statusVersion)
-                room.setIgpMessageVersion(ccRoom.messageVersion)
-                //room.setIgpOfflineMute(<#T##value: IGPClientCondition.IGPRoom.IGPOfflineMute##IGPClientCondition.IGPRoom.IGPOfflineMute#>)
-                //room.setIgpOfflineSeen(<#T##value: Array<Int64>##Array<Int64>#>)
-                //room.setIgpOfflineEdited(<#T##value: Array<IGPClientCondition.IGPRoom.IGPOfflineEdited>##Array<IGPClientCondition.IGPRoom.IGPOfflineEdited>#>)
-                //room.setIgpOfflineDeleted(<#T##value: Array<Int64>##Array<Int64>#>)
-                let igpRoom = try! room.build()
-                rooms.append(igpRoom)
+                var room = IGPClientCondition.IGPRoom()
+                room.igpRoomID = ccRoom.id
+                room.igpClearID = ccRoom.clearId
+                room.igpCacheEndID = ccRoom.cacheEndId
+                room.igpCacheStartID = ccRoom.cacheStartId
+                room.igpDeleteVersion = ccRoom.deleteVersion
+                room.igpStatusVersion = ccRoom.statusVersion
+                room.igpMessageVersion = ccRoom.messageVersion
+                //room.igpOfflineMute(<#T##value: IGPClientCondition.IGPRoom.IGPOfflineMute##IGPClientCondition.IGPRoom.IGPOfflineMute#>)
+                //room.igpOfflineSeen(<#T##value: Array<Int64>##Array<Int64>#>)
+                //room.igpOfflineEdited(<#T##value: Array<IGPClientCondition.IGPRoom.IGPOfflineEdited>##Array<IGPClientCondition.IGPRoom.IGPOfflineEdited>#>)
+                //room.igpOfflineDeleted(<#T##value: Array<Int64>##Array<Int64>#>)
+                rooms.append(room)
             }
-            clientConditionRequestBuilder.setIgpRooms(rooms)
-            return IGRequestWrapper(messageBuilder: clientConditionRequestBuilder, actionID: 600)
+            clientConditionRequestMessage.igpRooms = rooms
+            return IGRequestWrapper(message: clientConditionRequestMessage, actionID: 600)
         }
     }
     
@@ -42,7 +41,7 @@ class IGClientConditionRequest : IGRequest {
         class func interpret(response responseProtoMessage:IGPClientConditionResponse) {
             
         }
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {}
+        override class func handlePush(responseProtoMessage: Message) {}
         override class func error() {}
         override class func timeout() {}
     }
@@ -51,18 +50,23 @@ class IGClientConditionRequest : IGRequest {
 
 class IGClientGetRoomListRequest : IGRequest {
     class Generator : IGRequest.Generator{
-        class func generate() -> IGRequestWrapper {
-            let clientGetRoomListRequestBuilder = IGPClientGetRoomList.Builder()
-            return IGRequestWrapper(messageBuilder: clientGetRoomListRequestBuilder, actionID: 601)
+        class func generate(offset: Int32, limit: Int32) -> IGRequestWrapper {
+            var clientGetRoomListRequestMessage = IGPClientGetRoomList()
+            var pagination = IGPPagination()
+            pagination.igpLimit = limit
+            pagination.igpOffset = offset
+            clientGetRoomListRequestMessage.igpPagination = pagination
+            return IGRequestWrapper(message: clientGetRoomListRequestMessage, actionID: 601)
         }
     }
     
     class Handler : IGRequest.Handler{
-        class func interpret(response responseProtoMessage:IGPClientGetRoomListResponse) {
+        class func interpret(response responseProtoMessage:IGPClientGetRoomListResponse) -> Int {
             let igpRooms: Array<IGPRoom> = responseProtoMessage.igpRooms
             IGFactory.shared.saveRoomsToDatabase(igpRooms, ignoreLastMessage: false)
+            return igpRooms.count
         }
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {}
+        override class func handlePush(responseProtoMessage: Message) {}
         override class func error() {}
         override class func timeout() {}
     }
@@ -72,21 +76,19 @@ class IGClientGetRoomListRequest : IGRequest {
 class IGClientGetRoomRequest : IGRequest {
     class Generator : IGRequest.Generator{
         class func generate(roomId: Int64) -> IGRequestWrapper {
-            let clientGetRoomRequestBuilder = IGPClientGetRoom.Builder()
-            clientGetRoomRequestBuilder.setIgpRoomId(roomId)
-            return IGRequestWrapper(messageBuilder: clientGetRoomRequestBuilder, actionID: 602)
+            var clientGetRoomRequestMessage = IGPClientGetRoom()
+            clientGetRoomRequestMessage.igpRoomID = roomId
+            return IGRequestWrapper(message: clientGetRoomRequestMessage, actionID: 602)
         }
     }
     
     class Handler : IGRequest.Handler{
         class func interpret(response responseProtoMessage:IGPClientGetRoomResponse) {
             let igpRoom = responseProtoMessage.igpRoom
-            if igpRoom?.igpChannelRoomExtra != nil {
-                
-            }
-            IGFactory.shared.saveRoomsToDatabase([igpRoom!], ignoreLastMessage: true)
+            
+            IGFactory.shared.saveRoomsToDatabase([igpRoom], ignoreLastMessage: true)
         }
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {}
+        override class func handlePush(responseProtoMessage: Message) {}
         override class func error() {}
         override class func timeout() {}
     }
@@ -96,14 +98,14 @@ class IGClientGetRoomRequest : IGRequest {
 class IGClientGetRoomHistoryRequest : IGRequest {
     class Generator : IGRequest.Generator{
         class func generate(roomID: Int64, firstMessageID: Int64?) -> IGRequestWrapper {
-            let getRoomHistoryRequestBuilder = IGPClientGetRoomHistory.Builder()
-            getRoomHistoryRequestBuilder.setIgpRoomId(roomID)
-            if firstMessageID != nil {
-                getRoomHistoryRequestBuilder.setIgpFirstMessageId(firstMessageID!)
+            var getRoomHistoryRequestMessage = IGPClientGetRoomHistory()
+            getRoomHistoryRequestMessage.igpRoomID = roomID
+            if let firstMessageID = firstMessageID {
+                getRoomHistoryRequestMessage.igpFirstMessageID = firstMessageID
             } else {
-                getRoomHistoryRequestBuilder.setIgpFirstMessageId(Int64(0))
+                getRoomHistoryRequestMessage.igpFirstMessageID = Int64(0)
             }
-            return IGRequestWrapper(messageBuilder: getRoomHistoryRequestBuilder, actionID: 603)
+            return IGRequestWrapper(message: getRoomHistoryRequestMessage, actionID: 603)
         }
     }
     
@@ -122,7 +124,7 @@ class IGClientGetRoomHistoryRequest : IGRequest {
         }
         
         
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {}
+        override class func handlePush(responseProtoMessage: Message) {}
         override class func error() {}
         override class func timeout() {}
     }
@@ -130,32 +132,32 @@ class IGClientGetRoomHistoryRequest : IGRequest {
 class IGClientSearchRoomHistoryRequest : IGRequest {
     class Generator : IGRequest.Generator {
         class func generate(roomId: Int64, offset : Int32 , filter : IGSharedMediaFilter ) -> IGRequestWrapper {
-            let clientSearchRoomHistoryRequestBuilder = IGPClientSearchRoomHistory.Builder()
-            clientSearchRoomHistoryRequestBuilder.setIgpRoomId(roomId)
-            clientSearchRoomHistoryRequestBuilder.setIgpOffset(offset)
+            var clientSearchRoomHistoryRequestMessage = IGPClientSearchRoomHistory()
+            clientSearchRoomHistoryRequestMessage.igpRoomID = roomId
+            clientSearchRoomHistoryRequestMessage.igpOffset = offset
             switch filter {
             case .audio:
-                clientSearchRoomHistoryRequestBuilder.setIgpFilter(.audio)
+                clientSearchRoomHistoryRequestMessage.igpFilter = .audio
                 break
             case .image:
-                clientSearchRoomHistoryRequestBuilder.setIgpFilter(.image)
+                clientSearchRoomHistoryRequestMessage.igpFilter = .image
                 break
             case .file:
-                clientSearchRoomHistoryRequestBuilder.setIgpFilter(.file)
+                clientSearchRoomHistoryRequestMessage.igpFilter = .file
                 break
             case .gif:
-                clientSearchRoomHistoryRequestBuilder.setIgpFilter(.gif)
+                clientSearchRoomHistoryRequestMessage.igpFilter = .gif
                 break
             case .url:
-                clientSearchRoomHistoryRequestBuilder.setIgpFilter(.url)
+                clientSearchRoomHistoryRequestMessage.igpFilter = .url
                 break
             case .video:
-                clientSearchRoomHistoryRequestBuilder.setIgpFilter(.video)
+                clientSearchRoomHistoryRequestMessage.igpFilter = .video
                 break
             case .voice:
-                clientSearchRoomHistoryRequestBuilder.setIgpFilter(.voice)
+                clientSearchRoomHistoryRequestMessage.igpFilter = .voice
             }
-            return IGRequestWrapper(messageBuilder: clientSearchRoomHistoryRequestBuilder, actionID: 605)
+            return IGRequestWrapper(message: clientSearchRoomHistoryRequestMessage, actionID: 605)
             
         }
     }
@@ -168,7 +170,7 @@ class IGClientSearchRoomHistoryRequest : IGRequest {
             return (totlaCount: totalCount , NotDeletedCount: notDeletedCount , messages: igpMessages)
             
         }
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {}
+        override class func handlePush(responseProtoMessage: Message) {}
 
         
     }
@@ -176,9 +178,9 @@ class IGClientSearchRoomHistoryRequest : IGRequest {
 class IGClientResolveUsernameRequest: IGRequest {
     class Generator: IGRequest.Generator {
         class func generate(username: String) -> IGRequestWrapper {
-            let clientResolveUsernameRequestBuilder = IGPClientResolveUsername.Builder()
-            clientResolveUsernameRequestBuilder.setIgpUsername(username)
-            return IGRequestWrapper(messageBuilder: clientResolveUsernameRequestBuilder, actionID: 606)
+            var clientResolveUsernameRequestMessage = IGPClientResolveUsername()
+            clientResolveUsernameRequestMessage.igpUsername = username
+            return IGRequestWrapper(message: clientResolveUsernameRequestMessage, actionID: 606)
         }
     }
     class Handler: IGRequest.Handler {
@@ -192,11 +194,13 @@ class IGClientResolveUsernameRequest: IGRequest {
                 userClientType = .room
             case .user:
                 userClientType = .user
+            case .UNRECOGNIZED(_):
+                userClientType = .user
             }
-            if responseProtoMessage.hasIgpUser == true {
+            if responseProtoMessage.hasIgpUser {
                 igUser = IGRegisteredUser(igpUser: responseProtoMessage.igpUser)
             }
-            if responseProtoMessage.hasIgpRoom == true {
+            if responseProtoMessage.hasIgpRoom {
                 igRoom = IGRoom(igpRoom: responseProtoMessage.igpRoom)
                 IGFactory.shared.saveRoomToDatabase(responseProtoMessage.igpRoom, isParticipant: nil)
             }
@@ -208,18 +212,18 @@ class IGClientResolveUsernameRequest: IGRequest {
 class IGClinetCheckInviteLinkRequest: IGRequest {
     class Generator: IGRequest.Generator {
         class func generate(invitedToken: String) -> IGRequestWrapper {
-            let clientCheckInvitedLinkRequest = IGPClientCheckInviteLink.Builder()
-            clientCheckInvitedLinkRequest.setIgpInviteToken(invitedToken)
-            return IGRequestWrapper(messageBuilder: clientCheckInvitedLinkRequest, actionID: 607)
+            var clientCheckInvitedLinkRequest = IGPClientCheckInviteLink()
+            clientCheckInvitedLinkRequest.igpInviteToken = invitedToken
+            return IGRequestWrapper(message: clientCheckInvitedLinkRequest, actionID: 607)
         }
     }
     class Handler: IGRequest.Handler {
         class func interpret( response responseProtoMessage : IGPClientCheckInviteLinkResponse) -> IGRoom {
             let igpRoom = responseProtoMessage.igpRoom
-            let room = IGRoom(igpRoom: igpRoom!)
+            let room = IGRoom(igpRoom: igpRoom)
             return room
         }
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {}
+        override class func handlePush(responseProtoMessage: Message) {}
     }
     
 }
@@ -229,40 +233,40 @@ class IGClinetCheckInviteLinkRequest: IGRequest {
 class IGClientJoinByInviteLinkRequest: IGRequest {
     class Generator: IGRequest.Generator {
         class func generate(invitedToken: String) -> IGRequestWrapper {
-            let clientJoinByInviteLinkBuilder = IGPClientJoinByInviteLink.Builder()
-            clientJoinByInviteLinkBuilder.setIgpInviteToken(invitedToken)
-            return IGRequestWrapper(messageBuilder: clientJoinByInviteLinkBuilder, actionID: 608)
+            var clientJoinByInviteLinkMessage = IGPClientJoinByInviteLink()
+            clientJoinByInviteLinkMessage.igpInviteToken = invitedToken
+            return IGRequestWrapper(message: clientJoinByInviteLinkMessage, actionID: 608)
         }
     }
     class Handler: IGRequest.Handler {
         class func interpret( response responseProtoMessage : IGPClientJoinByInviteLinkResponse) {
             
         }
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {}
+        override class func handlePush(responseProtoMessage: Message) {}
     }
 }
 
 class IGClientJoinByUsernameRequest: IGRequest {
     class Generator: IGRequest.Generator {
         class func generate(userName: String) -> IGRequestWrapper {
-            let clientJoinByUsernameRequestBuilder = IGPClientJoinByUsername.Builder()
-            clientJoinByUsernameRequestBuilder.setIgpUsername(userName)
-            return IGRequestWrapper(messageBuilder: clientJoinByUsernameRequestBuilder, actionID: 609)
+            var clientJoinByUsernameRequestMessage = IGPClientJoinByUsername()
+            clientJoinByUsernameRequestMessage.igpUsername = userName
+            return IGRequestWrapper(message: clientJoinByUsernameRequestMessage, actionID: 609)
         }
     }
     class Handler: IGRequest.Handler {
         class func interpret( response responseProtoMessage : IGPClientJoinByUsernameResponse) {
         }
-         override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {}
+         override class func handlePush(responseProtoMessage: Message) {}
     }
 }
 
 class IGClientCountRoomHistoryRequest: IGRequest {
     class Generator: IGRequest.Generator {
         class func generate(roomID: Int64) -> IGRequestWrapper {
-            let clientCountRoomHistoryRequestBuilder = IGPClientCountRoomHistory.Builder()
-            clientCountRoomHistoryRequestBuilder.setIgpRoomId(roomID)
-            return IGRequestWrapper(messageBuilder: clientCountRoomHistoryRequestBuilder, actionID: 613)
+            var clientCountRoomHistoryRequestMessage = IGPClientCountRoomHistory()
+            clientCountRoomHistoryRequestMessage.igpRoomID = roomID
+            return IGRequestWrapper(message: clientCountRoomHistoryRequestMessage, actionID: 613)
             
         }
     }
@@ -275,13 +279,13 @@ class IGClientCountRoomHistoryRequest: IGRequest {
             let voiceCount = responseProtoMessage.igpVoice
             let gifCount = responseProtoMessage.igpGif
             let fileCount = responseProtoMessage.igpFile
-            let urlCount = responseProtoMessage.igpUrl
+            let urlCount = responseProtoMessage.igpURL
             
             return (media: mediaCount , image: imageCount , video: videoCount , gif: gifCount , voice: voiceCount , file: fileCount , audio: audioCount, url: urlCount )
             
             
         }
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {}
+        override class func handlePush(responseProtoMessage: Message) {}
     }
     
 }

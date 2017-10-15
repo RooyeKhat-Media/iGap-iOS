@@ -24,13 +24,11 @@ class IGSettingNotificationTableViewController: UITableViewController {
     @IBOutlet weak var inAppSoundsSwitch: UISwitch!
     @IBOutlet weak var groupNotificationSoundLabel: UILabel!
     
-    let greenColor = UIColor(red: 49.0/255.0, green: 189.0/255.0, blue: 182.0/255.0, alpha: 1)
+    let greenColor = UIColor.organizationalColor()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let backImage = UIImage(named: "IG_Settigns_Bg")
-        let backgroundImageView = UIImageView(image: backImage)
-        self.tableView.backgroundView = backgroundImageView
+        self.tableView.backgroundColor = UIColor(red: 247.0/255.0, green: 247.0/255.0, blue: 247.0/255.0, alpha: 1.0)
         doNotDistrubSwitch.addTarget(self, action: #selector(IGSettingNotificationTableViewController.stateChanged), for: UIControlEvents.valueChanged)
     }
     

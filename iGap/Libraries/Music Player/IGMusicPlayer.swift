@@ -1,4 +1,3 @@
-//
 /*
  * This is the source code of iGap for iOS
  * It is licensed under GNU AGPL v3.0

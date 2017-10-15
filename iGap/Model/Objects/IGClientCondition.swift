@@ -34,10 +34,10 @@ class IGClientCondition {
         var deleteVersion: Int64 = 0  //The biggest delete version available in the room
         var offlineEdited = [IGOfflineEdited]()
         var offlineDeleted = [IGOfflineDeleted]()
-        var offlineSeen: Int64 = -1
+        var offlineSeen: Int64 = 0
         var clearId: Int64 = 0
-        var cacheStartId: Int64 = -1
-        var cacheEndId: Int64 = -1
+        var cacheStartId: Int64 = 0
+        var cacheEndId: Int64 = 0
         var offlineMute: OfflineMute = .unchanged
     }
     
@@ -55,21 +55,23 @@ class IGClientCondition {
             let ccRoom = IGCCRoom()
             ccRoom.id = room.id
             if let maxMessageVersion: Int64 = messages.max(ofProperty: "messageVersion") {
-                ccRoom.messageVersion = maxMessageVersion
+                ccRoom.messageVersion = max(0,maxMessageVersion)
             }
             if let maxStatusVersion: Int64 = messages.max(ofProperty: "statusVersion") {
-                ccRoom.statusVersion = maxStatusVersion
+                ccRoom.statusVersion = max(0,maxStatusVersion)
             }
             if let maxDeleteVersion: Int64 = messages.max(ofProperty: "deleteVersion") {
-                ccRoom.deleteVersion = maxDeleteVersion
+                ccRoom.deleteVersion = max(0,maxDeleteVersion)
             }
             
             if let firstMessage = messages.first {
-                ccRoom.cacheStartId = firstMessage.id
+                ccRoom.cacheStartId = max(0,firstMessage.id)
             }
             if let lastMessage = messages.last {
-                ccRoom.cacheEndId = lastMessage.id
+                ccRoom.cacheEndId = max(0,lastMessage.id)
             }
+            
+            ccRoom.clearId = room.clearId
             
             self.rooms.append(ccRoom)
         }

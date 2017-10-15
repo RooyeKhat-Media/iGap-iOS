@@ -39,7 +39,8 @@ class IGRegistrationStepTermsViewController: UIViewController {
                 switch responseProto {
                 case let pageInfoResponse as IGPInfoPageResponse:
                     let body = IGInfoPageRequest.Handler.interpret(response: pageInfoResponse)
-                    self.webView.loadHTMLString(body, baseURL: nil)
+                    let htmlString = "<font face='IRANSans' size='3'>" + body
+                    self.webView.loadHTMLString(htmlString, baseURL: nil)
                 default:
                     break
                 }

@@ -10,7 +10,7 @@
 
 import UIKit
 import AKMaskField
-import ProtocolBuffers
+import SwiftProtobuf
 import MBProgressHUD
 import RxSwift
 import IGProtoBuff
@@ -78,34 +78,42 @@ class IGRegistrationStepPhoneViewController: UIViewController {
         }, onDisposed: {
             
         }).addDisposableTo(disposeBag)
+        
+        
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapOnBackground))
+        self.view.addGestureRecognizer(tapRecognizer)
     }
 
+    
+    func didTapOnBackground() {
+        self.phoneNumberField.resignFirstResponder()
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationItem.hidesBackButton = true
-        countryBackgroundView.layer.cornerRadius = 17.0;
+        countryBackgroundView.layer.cornerRadius = 6.0;
         countryBackgroundView.layer.masksToBounds = true
         countryBackgroundView.layer.borderWidth = 1.0
-        countryBackgroundView.layer.borderColor = UIColor(red: 49.0/255.0, green: 189.0/255.0, blue: 182.0/255.0, alpha: 1.0).cgColor
+        countryBackgroundView.layer.borderColor = UIColor.organizationalColor().cgColor
         let tapOnCountry = UITapGestureRecognizer(target: self, action: #selector(showCountriesList))
         countryBackgroundView.addGestureRecognizer(tapOnCountry)
         
-        phoneNumberBackgroundView.layer.cornerRadius = 17.0;
+        phoneNumberBackgroundView.layer.cornerRadius = 6.0;
         phoneNumberBackgroundView.layer.masksToBounds = true
         phoneNumberBackgroundView.layer.borderWidth = 1.0
-        phoneNumberBackgroundView.layer.borderColor = UIColor(red: 49.0/255.0, green: 189.0/255.0, blue: 182.0/255.0, alpha: 1.0).cgColor
+        phoneNumberBackgroundView.layer.borderColor = UIColor.organizationalColor().cgColor
         
-        countryCodeBackgroundView.layer.cornerRadius = 17.0;
+        countryCodeBackgroundView.layer.cornerRadius = 6.0;
         countryCodeBackgroundView.layer.masksToBounds = true
         countryCodeBackgroundView.layer.borderWidth = 1.0
-        countryCodeBackgroundView.layer.borderColor = UIColor(red: 49.0/255.0, green: 189.0/255.0, blue: 182.0/255.0, alpha: 1.0).cgColor
+        countryCodeBackgroundView.layer.borderColor = UIColor.organizationalColor().cgColor
         
         
         let terms1 = NSMutableAttributedString(string: "By signing up you agree to our ",
                                                attributes: [NSForegroundColorAttributeName: UIColor(red: 114/255.0, green: 114/255.0, blue: 114/255.0, alpha: 1.0)])
         let terms2 = NSAttributedString(string: "Terms of Service",
-                                        attributes: [NSForegroundColorAttributeName: UIColor(red: 49.0/255.0, green: 189.0/255.0, blue: 182.0/255.0, alpha: 1.0)])
+                                        attributes: [NSForegroundColorAttributeName: UIColor.organizationalColor()])
         terms1.append(terms2)
         termLabel.attributedText = terms1
         let tapOnTerms = UITapGestureRecognizer(target: self, action: #selector(showTerms))
@@ -127,6 +135,11 @@ class IGRegistrationStepPhoneViewController: UIViewController {
     
     @IBAction func didTapOnNextBarButtonItem(_ sender: UIBarButtonItem) {
     }
+    
+    @IBAction func didTapOnLoginUsingQRCode(_ sender: UIButton) {
+        self.performSegue(withIdentifier: "showQRCode", sender: self)
+    }
+    
     
     func didTapOnNext() {
         if connectionStatus == .waitingForNetwork || connectionStatus == .connecting {

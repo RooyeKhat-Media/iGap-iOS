@@ -9,7 +9,7 @@
  */
 
 import UIKit
-import ProtocolBuffers
+import SwiftProtobuf
 import IGProtoBuff
 
 typealias DownloadCompleteHandler = (()->())?

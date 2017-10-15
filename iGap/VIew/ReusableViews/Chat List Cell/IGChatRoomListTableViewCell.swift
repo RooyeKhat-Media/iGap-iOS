@@ -12,7 +12,7 @@ import UIKit
 import MGSwipeTableCell
 import RxSwift
 import IGProtoBuff
-import ProtocolBuffers
+import SwiftProtobuf
 import GrowingTextView
 import pop
 import SnapKit
@@ -153,27 +153,28 @@ class IGChatRoomListTableViewCell: MGSwipeTableCell {
         }
         
         if room.unreadCount > 0 {
-            nameLabel.font = UIFont.systemFont(ofSize: 15.0, weight: UIFontWeightBold)
+            nameLabel.font = UIFont.igFont(ofSize: 15.0, weight: .bold)
             nameLabel.textColor = UIColor.black
             
-            lastMessageLabel.font = UIFont.systemFont(ofSize: 14.0, weight: UIFontWeightMedium)
+            lastMessageLabel.font = UIFont.igFont(ofSize: 14.0, weight: .medium)
             lastMessageLabel.textColor = UIColor(red: 34.0/255.0, green: 34.0/255.0, blue: 34.0/255.0, alpha: 1.0)
             
-            timeLabel.font = UIFont.systemFont(ofSize: 12.0, weight: UIFontWeightRegular)
+            timeLabel.font = UIFont.igFont(ofSize: 12.0, weight: .regular)
             timeLabel.textColor = UIColor.black
         } else {
-            nameLabel.font = UIFont.systemFont(ofSize: 15.0, weight: UIFontWeightRegular)
+            nameLabel.font = UIFont.igFont(ofSize: 15.0, weight: .regular)
             nameLabel.textColor = UIColor(red: 38.0/255.0, green: 38.0/255.0, blue: 38.0/255.0, alpha: 1.0)
             
-            lastMessageLabel.font = UIFont.systemFont(ofSize: 14.0, weight: UIFontWeightRegular)
+            lastMessageLabel.font = UIFont.igFont(ofSize: 14.0, weight: .regular)
             lastMessageLabel.textColor = UIColor(red: 127.0/255.0, green: 127.0/255.0, blue: 127.0/255.0, alpha: 1.0)
             
-            timeLabel.font = UIFont.systemFont(ofSize: 12.0, weight: UIFontWeightRegular)
+            timeLabel.font = UIFont.igFont(ofSize: 12.0, weight: .regular)
             timeLabel.textColor = UIColor(red: 132.0/255.0, green: 132.0/255.0, blue: 132.0/255.0, alpha: 1.0)
         }
         if room.draft != nil && (room.draft?.message != "" || room.draft?.replyTo != -1) {
-            lastMessageLabel.font = UIFont.italicSystemFont(ofSize: 14.0)
+            lastMessageLabel.font = UIFont.igFont(ofSize: 14.0)//.italic()
         }
+        
         
         self.nameLabel.text = room.title
         
@@ -258,13 +259,13 @@ class IGChatRoomListTableViewCell: MGSwipeTableCell {
     private func setLastMessage(for room: IGRoom) {
         if let draft = room.draft, (room.draft?.message != "" || room.draft?.replyTo != -1) {
             if let lastMessage = room.lastMessage {
-                self.timeLabel.text = lastMessage.creationTime?.convertToHumanReadable()
+                self.timeLabel.text = lastMessage.creationTime?.convertToHumanReadable(onlyTimeIfToday: true)
             } else {
                 self.timeLabel.text = ""
             }
             self.lastMessageLabel.text = "Draft: \(draft.message)"
         } else if let lastMessage = room.lastMessage {
-            self.timeLabel.text = lastMessage.creationTime?.convertToHumanReadable()
+            self.timeLabel.text = lastMessage.creationTime?.convertToHumanReadable(onlyTimeIfToday: true)
             if let forwarded = lastMessage.forwardedFrom {
                 if let user = forwarded.authorUser {
                     self.lastMessageLabel.text = "Forwared message from \(user.displayName)"

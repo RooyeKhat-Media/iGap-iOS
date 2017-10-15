@@ -10,15 +10,24 @@
 
 import UIKit
 
-class IGSettingAboutWebViewViewController: UIViewController {
+class IGSettingAboutWebViewViewController: UIViewController, UIGestureRecognizerDelegate {
 
     var pageUrl : String?
+    var pageTitle: String?
+    
     @IBOutlet weak var igapWebview: UIWebView!
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let navigationItem = self.navigationItem as! IGNavigationItem
+        navigationItem.addNavigationViewItems(rightItemText: nil, title: pageTitle!)
+        navigationItem.navigationController = self.navigationController as? IGNavigationController
+        let navigationController = self.navigationController as! IGNavigationController
+        navigationController.interactivePopGestureRecognizer?.delegate = self
+        
         if pageUrl != nil {
-            let url = NSURL(string: self.pageUrl!)
-            let request = NSURLRequest(url: url as! URL)
+            let url = URL(string: self.pageUrl!)!
+            let request = NSURLRequest(url: url)
             igapWebview.loadRequest(request as URLRequest)
         }
         // Do any additional setup after loading the view.

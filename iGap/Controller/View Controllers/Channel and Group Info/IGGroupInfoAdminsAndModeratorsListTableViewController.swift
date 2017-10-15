@@ -9,7 +9,7 @@
  */
 
 import UIKit
-import ProtocolBuffers
+import SwiftProtobuf
 import RealmSwift
 import MBProgressHUD
 import IGProtoBuff
@@ -92,7 +92,7 @@ class IGGroupInfoAdminsAndModeratorsListTableViewController: UITableViewControll
     func fetchAdminChannelMemberFromServer() {
         moderatorIndicator.startAnimating()
         adminsIndicator.startAnimating()
-        IGGroupGetMemberListRequest.Generator.generate(room: room!, filterRole: .all).success({ (protoResponse) in
+        IGGroupGetMemberListRequest.Generator.generate(room: room!, offset: Int32(self.adminMember.count + self.moderatorMember.count), limit: 40, filterRole: .all).success({ (protoResponse) in
             DispatchQueue.main.async {
                 switch protoResponse {
                 case let getChannelMemberList as IGPGroupGetMemberListResponse:

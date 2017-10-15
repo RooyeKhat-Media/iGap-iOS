@@ -10,12 +10,12 @@ github "MortimerGoro/MGSwipeTableCell"
 github "ashleymills/Reachability.swift" ~> 3.0
 github "artemkrachulov/AKMaskField.git"
 github "krzyzanowskim/CryptoSwift"
- 
+github "ninjaprox/NVActivityIndicatorView"
+
 github "RooyeKhat-Media/Gifu" "v2.0.0-b"
 github "RooyeKhat-Media/ALCameraViewController" "1.2.7"
-github "RooyeKhat-Media/IGProtoBuffLibrary" "build54"
-github "RooyeKhat-Media/INSPhotoGallery"  "1.1.0-d"
+github "RooyeKhat-Media/INSPhotoGallery"  "1.1.01"
 github "RooyeKhat-Media/Starscream" "2.0.4-a"
 github "RooyeKhat-Media/DBAttachmentPickerController"  "1.1.4-a"
-
-#development repos
+github "RooyeKhat-Media/swift-protobuf" "4c9b588"
+github "RooyeKhat-Media/IGProtoBuffLibrary" "18158ab"

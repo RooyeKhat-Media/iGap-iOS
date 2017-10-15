@@ -10,7 +10,7 @@
 
 import Foundation
 import IGProtoBuff
-import ProtocolBuffers
+import SwiftProtobuf
 
 class IGConnectionSecuringRequest : IGRequest {
     class Generator : IGRequest.Generator{
@@ -18,24 +18,28 @@ class IGConnectionSecuringRequest : IGRequest {
     }
     
     class Handler : IGRequest.Handler{
-        override class func handle(responseProtoMessage: GeneratedResponseMessage) {
+        override class func handle(responseProtoMessage: Message) {
             
         }
         
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {
+        override class func handlePush(responseProtoMessage: Message) {
             let connectionSecuringResponseMessage = responseProtoMessage as! IGPConnectionSecuringResponse
             let sessionPublicKey = connectionSecuringResponseMessage.igpPublicKey
             let symmetricKeyLength = Int(connectionSecuringResponseMessage.igpSymmetricKeyLength)
-            
+            let secondaryChunkSize = Int(connectionSecuringResponseMessage.igpSecondaryChunkSize)
+
+
             IGSecurityManager.sharedManager.setConnecitonPublicKey(sessionPublicKey)
+            IGWebSocketManager.sharedManager.connectionProblemTimerDelay = Double(connectionSecuringResponseMessage.igpHeartbeatInterval+5)
             
-            let generatedEncryptedSymmetricKeyData = IGSecurityManager.sharedManager.generateEncryptedSymmetricKeyData(length: symmetricKeyLength)
+            let generatedEncryptedSymmetricKeyData = IGSecurityManager.sharedManager.generateEncryptedSymmetricKeyData(length: symmetricKeyLength,secondaryChunkSize:secondaryChunkSize)
             
             
-            let connectionSecuringResponseRequest = IGPConnectionSymmetricKey.Builder()
-            connectionSecuringResponseRequest.setIgpSymmetricKey(generatedEncryptedSymmetricKeyData)
+            var connectionSecuringResponseRequest = IGPConnectionSymmetricKey()
+            connectionSecuringResponseRequest.igpSymmetricKey = generatedEncryptedSymmetricKeyData
+            connectionSecuringResponseRequest.igpVersion = 2
             
-            let requestWrapper : IGRequestWrapper = IGRequestWrapper(messageBuilder: connectionSecuringResponseRequest, actionID: 2)
+            let requestWrapper : IGRequestWrapper = IGRequestWrapper(message: connectionSecuringResponseRequest, actionID: 2)
             IGWebSocketManager.sharedManager.send(requestW: requestWrapper)
         }
         
@@ -56,18 +60,28 @@ class IGConnectionSymmetricKeyRequest : IGRequest {
     }
     
     class Handler : IGRequest.Handler{
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {
+        override class func handlePush(responseProtoMessage: Message) {
             let symmetricKeyResponseMessage = responseProtoMessage as! IGPConnectionSymmetricKeyResponse
-            //TODO: check if is accepted
-            let symmetricIVSize = Int(symmetricKeyResponseMessage.igpSymmetricIvSize)
-            let symmetricMethod = symmetricKeyResponseMessage.igpSymmetricMethod
-            
-            IGSecurityManager.sharedManager.setSymmetricIVSize(symmetricIVSize)
-            IGSecurityManager.sharedManager.setEncryptionMethod(symmetricMethod)
-            
-            IGWebSocketManager.sharedManager.setConnectionSecure()
-            //login if possible
-            IGAppManager.sharedManager.login()
+            if(symmetricKeyResponseMessage.igpSecurityIssue){
+                DispatchQueue.main.async {
+                    let alert = UIAlertController(title: "Security Issue", message: "Securing the connection is not possible at the moment!", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
+
+                }
+            }else {
+                //TODO: check if is accepted
+                let symmetricIVSize = Int(symmetricKeyResponseMessage.igpSymmetricIvSize)
+                let symmetricMethod = symmetricKeyResponseMessage.igpSymmetricMethod
+
+                IGSecurityManager.sharedManager.setSymmetricIVSize(symmetricIVSize)
+                IGSecurityManager.sharedManager.setEncryptionMethod(symmetricMethod)
+
+                IGWebSocketManager.sharedManager.setConnectionSecure()
+                //login if possible
+                IGAppManager.sharedManager.login()
+            }
         }
         
         override class func error() {
@@ -84,13 +98,13 @@ class IGConnectionSymmetricKeyRequest : IGRequest {
 class IGHeartBeatRequest : IGRequest {
     class Generator : IGRequest.Generator{
         class func generate() -> IGRequestWrapper {
-            let heartbeatRequestBuilder = IGPHeartbeat.Builder()
-            return IGRequestWrapper(messageBuilder: heartbeatRequestBuilder, actionID: 3)
+            var heartbeatRequestMessage = IGPHeartbeat()
+            return IGRequestWrapper(message: heartbeatRequestMessage, actionID: 3)
         }
     }
     
     class Handler : IGRequest.Handler{
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {
+        override class func handlePush(responseProtoMessage: Message) {
             let reqW = IGHeartBeatRequest.Generator.generate()
             IGRequestManager.sharedManager.addRequestIDAndSend(requestWrappers: reqW)
         }

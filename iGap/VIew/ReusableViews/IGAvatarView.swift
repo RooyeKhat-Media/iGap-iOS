@@ -51,17 +51,17 @@ class IGAvatarView: UIView {
         self.initialLettersLabel!.textColor = UIColor.white
         self.initialLettersLabel!.textAlignment = .center
         
-        let gradientStartColor = UIColor(red: 139.0/255.0, green: 139.0/255.0, blue: 139.0/255.0, alpha: 1.0)
-        self.gradient = CAGradientLayer()
-        self.gradient!.frame = subViewsFrame
-        self.gradient!.colors = [gradientStartColor.cgColor, UIColor.clear.cgColor]
-        self.gradient!.startPoint = CGPoint(x: 1, y: 1)
-        self.gradient!.endPoint = CGPoint(x: 0, y: 0)
-        self.initialLettersView!.layer.insertSublayer(gradient!, at: 0)
+        //let gradientStartColor = UIColor(red: 139.0/255.0, green: 139.0/255.0, blue: 139.0/255.0, alpha: 1.0)
+        //self.gradient = CAGradientLayer()
+        //self.gradient!.frame = subViewsFrame
+        //self.gradient!.colors = [gradientStartColor.cgColor, UIColor.clear.cgColor]
+        //self.gradient!.startPoint = CGPoint(x: 1, y: 1)
+        //self.gradient!.endPoint = CGPoint(x: 0, y: 0)
+        //self.initialLettersView!.layer.insertSublayer(gradient!, at: 0)
         
-        let avatarBorderColor = UIColor(red: 140.0/255.0, green: 140.0/255.0, blue: 140.0/255.0, alpha: 1.0)
-        self.layer.borderWidth = 0.5
-        self.layer.borderColor = avatarBorderColor.cgColor
+        //let avatarBorderColor = UIColor(red: 140.0/255.0, green: 140.0/255.0, blue: 140.0/255.0, alpha: 1.0)
+        //self.layer.borderWidth = 0.5
+        //self.layer.borderColor = avatarBorderColor.cgColor
     }
     
     
@@ -83,11 +83,11 @@ class IGAvatarView: UIView {
         }
         
         if self.frame.size.width < 40 {
-            self.initialLettersLabel!.font = UIFont.systemFont(ofSize: 10.0)
+            self.initialLettersLabel!.font = UIFont.igFont(ofSize: 10.0)
         } else if self.frame.size.width < 60 {
-            self.initialLettersLabel!.font = UIFont.systemFont(ofSize: 14.0)
-        }else {
-            self.initialLettersLabel!.font = UIFont.systemFont(ofSize: 17.0)
+            self.initialLettersLabel!.font = UIFont.igFont(ofSize: 14.0)
+        } else {
+            self.initialLettersLabel!.font = UIFont.igFont(ofSize: 17.0)
         }
         
     }
@@ -115,6 +115,13 @@ class IGAvatarView: UIView {
             }
         }
 
+        if self.frame.size.width < 40 {
+            self.initialLettersLabel!.font = UIFont.igFont(ofSize: 10.0)
+        } else if self.frame.size.width < 60 {
+            self.initialLettersLabel!.font = UIFont.igFont(ofSize: 14.0)
+        } else {
+            self.initialLettersLabel!.font = UIFont.igFont(ofSize: 17.0)
+        }
     }
     
     func setImage(_ image: UIImage) {

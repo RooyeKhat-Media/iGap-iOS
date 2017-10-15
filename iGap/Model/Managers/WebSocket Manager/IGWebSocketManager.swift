@@ -10,7 +10,7 @@
 
 import UIKit
 //import Starscream
-import ProtocolBuffers
+import SwiftProtobuf
 import Reachability.Swift
 
 var insecureMehotdsActionID : [Int] = [2]
@@ -26,10 +26,9 @@ class IGWebSocketManager: NSObject {
     fileprivate var websocketSendQueue = DispatchQueue(label: "im.igap.ios.queue.ws.send")
     fileprivate var websocketReceiveQueue = DispatchQueue(label: "im.igap.ios.queue.ws.receive")
     
-    fileprivate var connectionTimeoutTimer = Timer() //use this to handle timeout on connecting
     fileprivate var connectionProblemTimer = Timer() //use this to detect failure on websocket after connection
-    fileprivate var pongTimer = Timer()              //use this to detect failure in receiving ping response
-    
+    var connectionProblemTimerDelay = 3.0;
+
     private override init() {
         super.init()
         socket.delegate = self
@@ -42,12 +41,9 @@ class IGWebSocketManager: NSObject {
     public func send(requestW: IGRequestWrapper) {
         websocketSendQueue.async {
             do {
-                
                 print ("✧ \(NSDate.timeIntervalSinceReferenceDate) ----- ~~~~~~~~ Sending: \(requestW.actionId)")
                 var messageData = Data()
-                
-                let abstractPayload = try requestW.message.build()
-                let payloadData  = abstractPayload.data()
+                let payloadData = try requestW.message.serializedData()
                 let actionIdData = Data(bytes: &requestW.actionId, count: 2)
                 messageData.append(actionIdData)
                 messageData.append(payloadData)
@@ -68,18 +64,18 @@ class IGWebSocketManager: NSObject {
        
     }
     
-    public func closeConnection(reconnect: Bool) {
+    public func closeConnection() {
         self.socket.disconnect()
-        self.removeTimeout()
-        if reconnect {
-            self.connectAndAddTimeoutHandler()
-        }
     }
     
     public func setConnectionSecure() {
         isConnectionSecured = true
         socket.shouldMask = false
         IGAppManager.sharedManager.setNetworkConnectionStatus(.connected)
+    }
+
+    public func isSecureConnection()->Bool{
+        return isConnectionSecured;
     }
     
     
@@ -101,6 +97,7 @@ class IGWebSocketManager: NSObject {
             print ("Network Unreachable")
             IGAppManager.sharedManager.setNetworkConnectionStatus(.waitingForNetwork)
             IGAppManager.sharedManager.isUserLoggedIn.value = false
+            self.socket.disconnect(forceTimeout:0)
         }
         do {
             try reachability.startNotifier()
@@ -112,7 +109,8 @@ class IGWebSocketManager: NSObject {
     fileprivate func connectAndAddTimeoutHandler() {
         IGAppManager.sharedManager.setNetworkConnectionStatus(.connecting)
         self.socket.connect()
-        self.addTimeout()
+        connectionProblemTimerDelay=3.0;
+        self.resetConnectionProblemDetectorTimer()
     }
     
     
@@ -120,39 +118,22 @@ class IGWebSocketManager: NSObject {
         websocketReceiveQueue.async {
             var convertedData = NSData(data: receivedData)
             if self.isConnectionSecured {
-                convertedData = NSData(data: IGSecurityManager.sharedManager.decrypt(encryptedData: receivedData))
+                let decryptedData = IGSecurityManager.sharedManager.decrypt(encryptedData: receivedData)
+                if decryptedData==nil{
+                    return
+                }
+                convertedData = NSData(data: decryptedData!)
             }
             IGRequestManager.sharedManager.didReceive(decryptedData: convertedData)
         }
     }
-    
-    
-    //Timeout
-    private func addTimeout() {
-        connectionTimeoutTimer = Timer.scheduledTimer(timeInterval: 3.0,
-                                                      target:   self,
-                                                      selector: #selector(closeConnectionDueToTimeout),
-                                                      userInfo: nil,
-                                                      repeats:  false)
-    }
-    
-    private func removeTimeout() {
-        connectionTimeoutTimer.invalidate()
-    }
-    
-    func closeConnectionDueToTimeout() {
-        if !socket.isConnected {// && shouldTimeOut {
-            self.socket.disconnect(forceTimeout: 0, closeCode: WebSocket.CloseCode.normal.rawValue)
-        }
-    }
-    
     
     //Network connection problem detection
     //add this after connection stablishment
     fileprivate func resetConnectionProblemDetectorTimer() {
         print(#function)
         removeConnectionProblemDetectorTimer()
-        connectionProblemTimer = Timer.scheduledTimer(timeInterval: 60.0,
+        connectionProblemTimer = Timer.scheduledTimer(timeInterval: connectionProblemTimerDelay,
                                                       target:   self,
                                                       selector: #selector(thereSeemsToBeAProblemWithWebSocket),
                                                       userInfo: nil,
@@ -164,17 +145,7 @@ class IGWebSocketManager: NSObject {
     }
     
     func thereSeemsToBeAProblemWithWebSocket() {
-        self.socket.write(ping: Data())
-        pongTimer = Timer.scheduledTimer(timeInterval: 3.0,
-                                         target:   self,
-                                         selector: #selector(didNotReceivePongMessageInTime),
-                                         userInfo: nil,
-                                         repeats:  false)
-    }
-    
-    func didNotReceivePongMessageInTime() {
-        pongTimer.invalidate()
-        self.socket.disconnect(forceTimeout: 0, closeCode: WebSocket.CloseCode.normal.rawValue)
+        self.socket.disconnect(forceTimeout:1)
     }
     
 }
@@ -182,8 +153,9 @@ class IGWebSocketManager: NSObject {
 //MARK: - WebSocketDelegate
 extension IGWebSocketManager: WebSocketDelegate {
     func websocketDidConnect(socket: WebSocket) {
+        isConnectionSecured = false
+        socket.shouldMask = true
         print("Websocket Connected")
-        connectionTimeoutTimer.invalidate()
         resetConnectionProblemDetectorTimer()
     }
     
@@ -208,7 +180,6 @@ extension IGWebSocketManager: WebSocketDelegate {
 
 extension IGWebSocketManager : WebSocketPongDelegate{
     func websocketDidReceivePong(socket: WebSocket, data: Data?) {
-        pongTimer.invalidate()
         resetConnectionProblemDetectorTimer()
     }
 }

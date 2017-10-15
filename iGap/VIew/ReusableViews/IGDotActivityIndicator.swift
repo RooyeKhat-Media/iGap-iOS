@@ -15,7 +15,7 @@ class IGDotActivityIndicator : UIView {
     private var dotLayers = [CAShapeLayer]()
     private var dotsScale = 1.4
     
-    let greenColor = UIColor(red: 49.0/255.0, green: 189.0/255.0, blue: 182.0/255.0, alpha: 1)
+    let fillColor = UIColor.white
 
     @IBInspectable var dotsCount :Int = 3 {
         didSet {
@@ -44,7 +44,7 @@ class IGDotActivityIndicator : UIView {
     override var tintColor: UIColor! {
         didSet {
             for layer in dotLayers {
-                layer.fillColor = greenColor.cgColor
+                layer.fillColor = fillColor.cgColor
             }
         }
     }
@@ -91,7 +91,7 @@ class IGDotActivityIndicator : UIView {
         let layer = CAShapeLayer()
         layer.bounds = CGRect(origin: CGPoint.zero, size: CGSize(width: dotsRadius*2.0, height: dotsRadius*2.0))
         layer.path = UIBezierPath(roundedRect: layer.bounds, cornerRadius: dotsRadius).cgPath
-        layer.fillColor = greenColor.cgColor
+        layer.fillColor = fillColor.cgColor
         return layer
     }
     

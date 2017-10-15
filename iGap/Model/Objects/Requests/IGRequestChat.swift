@@ -10,27 +10,27 @@
 
 import Foundation
 import IGProtoBuff
-import ProtocolBuffers
+import SwiftProtobuf
 
 class IGChatGetRoomRequest : IGRequest {
     class Generator : IGRequest.Generator{
         //action id = 200
         class func generate(peerId: Int64) -> IGRequestWrapper {
-            let chatGetRoomRequestBuilder = IGPChatGetRoom.Builder()
-            chatGetRoomRequestBuilder.igpPeerId = peerId
-            return IGRequestWrapper(messageBuilder: chatGetRoomRequestBuilder, actionID: 200)
+            var chatGetRoomRequestMessage = IGPChatGetRoom()
+            chatGetRoomRequestMessage.igpPeerID = peerId
+            return IGRequestWrapper(message: chatGetRoomRequestMessage, actionID: 200)
         }
     }
     
     class Handler : IGRequest.Handler{
         @discardableResult
         class func interpret(response responseProtoMessage:IGPChatGetRoomResponse) -> Int64 {
-            let igpRoom = (responseProtoMessage.igpRoom)!
+            let igpRoom = responseProtoMessage.igpRoom
             IGFactory.shared.saveRoomsToDatabase([igpRoom], ignoreLastMessage: true)
-            return igpRoom.igpId
+            return igpRoom.igpID
         }
         
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {
+        override class func handlePush(responseProtoMessage: Message) {
             switch responseProtoMessage {
             case let chatGetRoomResponse as IGPChatGetRoomResponse:
                 self.interpret(response: chatGetRoomResponse)
@@ -51,92 +51,83 @@ class IGChatSendMessageRequest : IGRequest {
         //action id = 201
         
         class func generate(message: IGRoomMessage, room: IGRoom, attachmentToken: String?) -> IGRequestWrapper {
-            let sendMessageRequestBuilder = IGPChatSendMessage.Builder()
+            var sendMessageRequestMessage = IGPChatSendMessage()
             if let text = message.message {
-                sendMessageRequestBuilder.setIgpMessage(text)
+                sendMessageRequestMessage.igpMessage = text
             }
-            
-            sendMessageRequestBuilder.setIgpRoomId(room.id)
+            sendMessageRequestMessage.igpRoomID = room.id
             switch message.type {
             case .text:
-                sendMessageRequestBuilder.setIgpMessageType(.text)
+                sendMessageRequestMessage.igpMessageType = .text
             case .image:
-                sendMessageRequestBuilder.setIgpMessageType(.image)
+                sendMessageRequestMessage.igpMessageType = .image
             case .imageAndText:
-                sendMessageRequestBuilder.setIgpMessageType(.imageText)
+                sendMessageRequestMessage.igpMessageType = .imageText
             case .video:
-                sendMessageRequestBuilder.setIgpMessageType(.video)
+                sendMessageRequestMessage.igpMessageType = .video
             case .videoAndText:
-                sendMessageRequestBuilder.setIgpMessageType(.videoText)
+                sendMessageRequestMessage.igpMessageType = .videoText
             case .audio:
-                sendMessageRequestBuilder.setIgpMessageType(.audio)
+                sendMessageRequestMessage.igpMessageType = .audio
             case .audioAndText:
-                sendMessageRequestBuilder.setIgpMessageType(.audioText)
+                sendMessageRequestMessage.igpMessageType = .audioText
             case .voice:
-                sendMessageRequestBuilder.setIgpMessageType(.voice)
+                sendMessageRequestMessage.igpMessageType = .voice
             case .gif:
-                sendMessageRequestBuilder.setIgpMessageType(.gif)
+                sendMessageRequestMessage.igpMessageType = .gif
             case .file:
-                sendMessageRequestBuilder.setIgpMessageType(.file)
+                sendMessageRequestMessage.igpMessageType = .file
             case .fileAndText:
-                sendMessageRequestBuilder.setIgpMessageType(.fileText)
+                sendMessageRequestMessage.igpMessageType = .fileText
             case .location:
-                sendMessageRequestBuilder.setIgpMessageType(.location)
+                sendMessageRequestMessage.igpMessageType = .location
             case .log:
-                sendMessageRequestBuilder.setIgpMessageType(.log)
+                sendMessageRequestMessage.igpMessageType = .log
             case .contact:
-                sendMessageRequestBuilder.setIgpMessageType(.contact)
+                sendMessageRequestMessage.igpMessageType = .contact
             case .gifAndText:
-                sendMessageRequestBuilder.setIgpMessageType(.gifText)
+                sendMessageRequestMessage.igpMessageType = .gifText
             default:
                 break
             }
-            if attachmentToken != nil {
-                sendMessageRequestBuilder.setIgpAttachment(attachmentToken!)
+            if let attachmentToken = attachmentToken {
+                sendMessageRequestMessage.igpAttachment = attachmentToken
             }
             
-            if message.repliedTo != nil {
-                sendMessageRequestBuilder.igpReplyTo = message.repliedTo!.id
+            if let repliedTo = message.repliedTo {
+                sendMessageRequestMessage.igpReplyTo = repliedTo.id
             } else if let forward = message.forwardedFrom {
-                let forwardedFrom = IGPRoomMessageForwardFrom.Builder()
-                forwardedFrom.setIgpRoomId(forward.roomId)
-                forwardedFrom.setIgpMessageId(forward.id)
-                try! sendMessageRequestBuilder.igpForwardFrom = forwardedFrom.build()
+                var forwardedFrom = IGPRoomMessageForwardFrom()
+                forwardedFrom.igpRoomID = forward.roomId
+                forwardedFrom.igpMessageID = forward.id
+                sendMessageRequestMessage.igpForwardFrom = forwardedFrom
+                //try! sendMessageRequestMessage.igpForwardFrom = forwardedFrom.build()
             }
             
             if let contact = message.contact {
-                let igpContact = IGPRoomMessageContact.Builder()
+                var igpContact = IGPRoomMessageContact()
                 if let firstName = contact.firstName {
-                    igpContact.setIgpFirstName(firstName)
+                    igpContact.igpFirstName = firstName
                 }
                 if let lastName = contact.lastName {
-                    igpContact.setIgpLastName(lastName)
+                    igpContact.igpLastName = lastName
                 }
                 
                 var phones = [String]()
                 for phone in contact.phones {
                     phones.append(phone.innerString)
                 }
-                igpContact.setIgpPhone(phones)
+                igpContact.igpPhone = phones
                 
                 var emails = [String]()
                 for email in contact.emails {
                     emails.append(email.innerString)
                 }
-                igpContact.setIgpEmail(emails)
-                
-                try! sendMessageRequestBuilder.igpContact = igpContact.build()
+                igpContact.igpEmail = emails
+                sendMessageRequestMessage.igpContact = igpContact
             }
             
-            return IGRequestWrapper(messageBuilder: sendMessageRequestBuilder, actionID: 201)
-//            Request request = 1;
-//            RoomMessageType message_type = 2;
-//            string attachment = 5;
-//            RoomMessageLocation location = 6;
-//            RoomMessageLog log = 7;
-//            RoomMessageContact contact = 8;
-//            int64 reply_to = 9;
-//            RoomMessageForwardFrom forward_from = 10;
+            return IGRequestWrapper(message: sendMessageRequestMessage, actionID: 201)
         }
     }
     
@@ -145,12 +136,12 @@ class IGChatSendMessageRequest : IGRequest {
             self.handlePush(responseProtoMessage: responseProtoMessage)
         }
         
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {
+        override class func handlePush(responseProtoMessage: Message) {
             //pushed IGPRoomMessages are handled here
             switch responseProtoMessage {
             case let response as IGPChatSendMessageResponse:
                 let messages: [IGPRoomMessage] = [response.igpRoomMessage]
-                IGFactory.shared.saveIgpMessagesToDatabase(messages, for: response.igpRoomId, updateLastMessage: true, isFromSharedMedia: false)
+                IGFactory.shared.saveIgpMessagesToDatabase(messages, for: response.igpRoomID, updateLastMessage: true, isFromSharedMedia: false, isFromSendMessage: true)
             default:
                 break
             }
@@ -167,28 +158,28 @@ class IGChatUpdateStatusRequest : IGRequest {
     class Generator : IGRequest.Generator{
         //action id = 202
         class func generate(roomID: Int64, messageID: Int64, status: IGRoomMessageStatus) -> IGRequestWrapper {
-            let updateMessageStatusBuilder = IGPChatUpdateStatus.Builder()
-            updateMessageStatusBuilder.setIgpMessageId(messageID)
-            updateMessageStatusBuilder.setIgpRoomId(roomID)
+            var updateMessageStatusMessage = IGPChatUpdateStatus()
+            updateMessageStatusMessage.igpMessageID = messageID
+            updateMessageStatusMessage.igpRoomID = roomID
             switch status {
             case .delivered:
-                updateMessageStatusBuilder.setIgpStatus(.delivered)
+                updateMessageStatusMessage.igpStatus = .delivered
             case .seen:
-                updateMessageStatusBuilder.setIgpStatus(.seen)
+                updateMessageStatusMessage.igpStatus = .seen
             case .sent:
-                updateMessageStatusBuilder.setIgpStatus(.sent)
+                updateMessageStatusMessage.igpStatus = .sent
             default:
                 break
             }
-            return IGRequestWrapper(messageBuilder: updateMessageStatusBuilder, actionID: 202)
+            return IGRequestWrapper(message: updateMessageStatusMessage, actionID: 202)
         }
     }
     
     class Handler : IGRequest.Handler{
         class func interpret(response:IGPChatUpdateStatusResponse) {
-            IGFactory.shared.updateMessageStatus(response.igpMessageId, roomID: response.igpRoomId, status: response.igpStatus, statusVersion: response.igpStatusVersion)
+            IGFactory.shared.updateMessageStatus(response.igpMessageID, roomID: response.igpRoomID, status: response.igpStatus, statusVersion: response.igpStatusVersion)
         }
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {
+        override class func handlePush(responseProtoMessage: Message) {
             switch responseProtoMessage {
             case let response as IGPChatUpdateStatusResponse:
                 self.interpret(response: response)
@@ -205,24 +196,24 @@ class IGChatEditMessageRequest : IGRequest {
     class Generator : IGRequest.Generator{
         //action id = 203
         class func generate(message: IGRoomMessage, newText: String, room: IGRoom) -> IGRequestWrapper {
-            let editMessageRequestBuilder = IGPChatEditMessage.Builder()
-            editMessageRequestBuilder.setIgpMessageId(message.id)
-            editMessageRequestBuilder.setIgpMessage(newText)
-            editMessageRequestBuilder.setIgpRoomId(room.id)
-            return IGRequestWrapper(messageBuilder: editMessageRequestBuilder, actionID: 203)
+            var editMessageRequestMessage = IGPChatEditMessage()
+            editMessageRequestMessage.igpMessageID = message.id
+            editMessageRequestMessage.igpMessage = newText
+            editMessageRequestMessage.igpRoomID = room.id
+            return IGRequestWrapper(message: editMessageRequestMessage, actionID: 203)
         }
     }
     
     class Handler : IGRequest.Handler{
-        class func interpret(response responseProtoMessage:GeneratedResponseMessage) {
+        class func interpret(response responseProtoMessage:Message) {
             self.handlePush(responseProtoMessage: responseProtoMessage)
         }
         
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {
+        override class func handlePush(responseProtoMessage: Message) {
             switch responseProtoMessage {
             case let response as IGPChatEditMessageResponse:
                 let type = IGRoomMessageType.unknown.fromIGP(response.igpMessageType)
-                IGFactory.shared.editMessage(response.igpMessageId, roomID: response.igpRoomId, message: response.igpMessage, messageType: type, messageVersion: response.igpMessageVersion)
+                IGFactory.shared.editMessage(response.igpMessageID, roomID: response.igpRoomID, message: response.igpMessage, messageType: type, messageVersion: response.igpMessageVersion)
             default:
                 break
             }
@@ -236,18 +227,18 @@ class IGChatDeleteMessageRequest : IGRequest {
     class Generator : IGRequest.Generator{
         //action id = 204
         class func generate(message: IGRoomMessage, room: IGRoom) -> IGRequestWrapper {
-            let deleteMessageRequestBuilder = IGPChatDeleteMessage.Builder()
-            deleteMessageRequestBuilder.setIgpMessageId(message.id)
-            deleteMessageRequestBuilder.setIgpRoomId(room.id)
-            return IGRequestWrapper(messageBuilder: deleteMessageRequestBuilder, actionID: 204)
+            var deleteMessageRequestMessage = IGPChatDeleteMessage()
+            deleteMessageRequestMessage.igpMessageID = message.id
+            deleteMessageRequestMessage.igpRoomID = room.id
+            return IGRequestWrapper(message: deleteMessageRequestMessage, actionID: 204)
         }
     }
     
     class Handler : IGRequest.Handler{
         class func interpret(response: IGPChatDeleteMessageResponse) {
-            IGFactory.shared.setMessageDeleted(response.igpMessageId, roomID: response.igpRoomId, deleteVersion: response.igpDeleteVersion)
+            IGFactory.shared.setMessageDeleted(response.igpMessageID, roomID: response.igpRoomID, deleteVersion: response.igpDeleteVersion)
         }
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {
+        override class func handlePush(responseProtoMessage: Message) {
             switch responseProtoMessage {
             case let response as IGPChatDeleteMessageResponse:
                 self.interpret(response: response)
@@ -262,23 +253,23 @@ class IGChatDeleteMessageRequest : IGRequest {
 class IGChatClearMessageRequest : IGRequest {
     class Generator : IGRequest.Generator{
         class func generate(room: IGRoom ) -> IGRequestWrapper {
-            let clearMessageRequestBuilder = IGPGroupClearMessage.Builder()
-            clearMessageRequestBuilder.setIgpRoomId(room.id)
+            var clearMessageRequestMessage = IGPGroupClearMessage()
+            clearMessageRequestMessage.igpRoomID = room.id
             if let lastMessageID = room.lastMessage?.id {
-            clearMessageRequestBuilder.setIgpClearId(lastMessageID)
+            clearMessageRequestMessage.igpClearID = lastMessageID
             }
-            return IGRequestWrapper(messageBuilder: clearMessageRequestBuilder, actionID: 205)
+            return IGRequestWrapper(message: clearMessageRequestMessage, actionID: 205)
         }
     }
     
     class Handler : IGRequest.Handler{
         class func interpret(response responseProtoMessage:IGPChatClearMessageResponse) {
-            let roomId = responseProtoMessage.igpRoomId
-            let clearId = responseProtoMessage.igpClearId
+            let roomId = responseProtoMessage.igpRoomID
+            let clearId = responseProtoMessage.igpClearID
             IGFactory.shared.setClearMessageHistory(roomId, clearID: clearId)
         }
         
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {
+        override class func handlePush(responseProtoMessage: Message) {
             switch responseProtoMessage {
             case let clearHistoryProtoResponse as IGPChatClearMessageResponse:
                 self.interpret(response: clearHistoryProtoResponse)
@@ -295,18 +286,18 @@ class IGChatClearMessageRequest : IGRequest {
 class IGChatDeleteRequest: IGRequest {
     class Generator : IGRequest.Generator {
         class func generate(room: IGRoom) -> IGRequestWrapper {
-            let chatDeleteRequestBuilder = IGPChatDelete.Builder()
-            chatDeleteRequestBuilder.setIgpRoomId(room.id)
-            return IGRequestWrapper(messageBuilder: chatDeleteRequestBuilder, actionID: 206)
+            var chatDeleteRequestMessage = IGPChatDelete()
+            chatDeleteRequestMessage.igpRoomID = room.id
+            return IGRequestWrapper(message: chatDeleteRequestMessage, actionID: 206)
         }
         
     }
     class Handler : IGRequest.Handler {
         class func interpret(response responseProtoMessage:IGPChatDeleteResponse) {
-            let roomId = responseProtoMessage.igpRoomId
+            let roomId = responseProtoMessage.igpRoomID
             IGFactory.shared.setDeleteRoom(roomID : roomId)
         }
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {
+        override class func handlePush(responseProtoMessage: Message) {
             switch responseProtoMessage {
             case let response as IGPChatDeleteResponse:
                 self.interpret(response: response)
@@ -324,19 +315,19 @@ class IGChatDeleteRequest: IGRequest {
 class IGChatUpdateDraftRequest : IGRequest {
     class Generator : IGRequest.Generator{
         class func generate(draft: IGRoomDraft) -> IGRequestWrapper {
-            let igpChatUpdateDraftBuilder = IGPChatUpdateDraft.Builder()
-            igpChatUpdateDraftBuilder.setIgpDraft(draft.toIGP())
-            igpChatUpdateDraftBuilder.setIgpRoomId(draft.roomId)
-            return IGRequestWrapper(messageBuilder: igpChatUpdateDraftBuilder, actionID: 207)
+            var igpChatUpdateDraftMessage = IGPChatUpdateDraft()
+            igpChatUpdateDraftMessage.igpDraft = draft.toIGP()
+            igpChatUpdateDraftMessage.igpRoomID = draft.roomId
+            return IGRequestWrapper(message: igpChatUpdateDraftMessage, actionID: 207)
         }
     }
     
     class Handler : IGRequest.Handler{
         class func interpret(response responseProtoMessage:IGPChatUpdateDraftResponse) {
-            let draft = IGRoomDraft(igpDraft: responseProtoMessage.igpDraft, roomId: responseProtoMessage.igpRoomId)
+            let draft = IGRoomDraft(igpDraft: responseProtoMessage.igpDraft, roomId: responseProtoMessage.igpRoomID)
             IGFactory.shared.save(draft: draft)
         }
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {
+        override class func handlePush(responseProtoMessage: Message) {
             switch responseProtoMessage {
             case let response as IGPChatUpdateDraftResponse:
                 self.interpret(response: response)
@@ -352,9 +343,9 @@ class IGChatUpdateDraftRequest : IGRequest {
 class IGChatGetDraftRequest : IGRequest {
     class Generator : IGRequest.Generator{
         class func generate(roomId: Int64) -> IGRequestWrapper {
-            let igpChatGetDraftBuilder = IGPChatGetDraft.Builder()
-            igpChatGetDraftBuilder.setIgpRoomId(roomId)
-            return IGRequestWrapper(messageBuilder: igpChatGetDraftBuilder, actionID: 208)
+            var igpChatGetDraftMessage = IGPChatGetDraft()
+            igpChatGetDraftMessage.igpRoomID = roomId
+            return IGRequestWrapper(message: igpChatGetDraftMessage, actionID: 208)
         }
     }
     
@@ -371,18 +362,18 @@ class IGChatGetDraftRequest : IGRequest {
 class IGChatConvertToGroupRequest : IGRequest {
     class Generator : IGRequest.Generator{
         class func generate(roomId: Int64, name: String, description: String) -> IGRequestWrapper {
-            let igpChatConvertToGroupRequetBuilder = IGPChatConvertToGroup.Builder()
-            igpChatConvertToGroupRequetBuilder.setIgpRoomId(roomId)
-            igpChatConvertToGroupRequetBuilder.setIgpName(name)
-            igpChatConvertToGroupRequetBuilder.setIgpDescription(description)
-            return IGRequestWrapper(messageBuilder: igpChatConvertToGroupRequetBuilder, actionID: 209)
+            var igpChatConvertToGroupRequetMessage = IGPChatConvertToGroup()
+            igpChatConvertToGroupRequetMessage.igpRoomID = roomId
+            igpChatConvertToGroupRequetMessage.igpName = name
+            igpChatConvertToGroupRequetMessage.igpDescription = description
+            return IGRequestWrapper(message: igpChatConvertToGroupRequetMessage, actionID: 209)
         }
     }
     
     class Handler : IGRequest.Handler{
         class func interpret(response responseProtoMessage:IGPChatConvertToGroupResponse) ->(roomId: Int64 , groupName: String , groupDescription: String , groupRole: IGGroupMember.IGRole) {
             var IGRole: IGGroupMember.IGRole
-            let igpRoomId = responseProtoMessage.igpRoomId
+            let igpRoomId = responseProtoMessage.igpRoomID
             let igpGroupName = responseProtoMessage.igpName
             let igpGroupDescription = responseProtoMessage.igpDescription
             let igpGroupRole = responseProtoMessage.igpRole
@@ -395,12 +386,14 @@ class IGChatConvertToGroupRequest : IGRequest {
                 IGRole = .moderator
             case .owner:
                 IGRole = .owner           
+            case .UNRECOGNIZED(_):
+                IGRole = .member
             }
             IGFactory.shared.convertChatToGroup(roomId: igpRoomId, roomName: igpGroupName , roomRole : IGRole , roomDescription: igpGroupDescription )
             return (roomId: igpRoomId , groupName: igpGroupName , groupDescription: igpGroupDescription , groupRole:IGRole)
         }
     
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {}
+        override class func handlePush(responseProtoMessage: Message) {}
         override class func error() {}
         override class func timeout() {}
     }
@@ -410,11 +403,11 @@ class IGChatSetActionRequest : IGRequest {
     class Generator : IGRequest.Generator{
         //action id = 210
         class func generate(room: IGRoom, action: IGClientAction, actionId: Int32) -> IGRequestWrapper {
-            let requestBuilder = IGPChatSetAction.Builder()
-            requestBuilder.setIgpRoomId(room.id)
-            requestBuilder.setIgpAction(action.toIGP())
-            requestBuilder.setIgpActionId(actionId)
-            return IGRequestWrapper(messageBuilder: requestBuilder, actionID: 210)
+            var requestMessage = IGPChatSetAction()
+            requestMessage.igpRoomID = room.id
+            requestMessage.igpAction = action.toIGP()
+            requestMessage.igpActionID = actionId
+            return IGRequestWrapper(message: requestMessage, actionID: 210)
         }
     }
     
@@ -422,11 +415,11 @@ class IGChatSetActionRequest : IGRequest {
         class func interpret(response responseProtoMessage:IGPChatSetActionResponse) {
             
         }
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {
+        override class func handlePush(responseProtoMessage: Message) {
             switch responseProtoMessage {
             case let response as IGPChatSetActionResponse:
                 let action = IGClientAction.cancel.fromIGP(response.igpAction)
-                IGFactory.shared.setActionForRoom(action: action, userId: response.igpUserId, roomId: response.igpRoomId)
+                IGFactory.shared.setActionForRoom(action: action, userId: response.igpUserID, roomId: response.igpRoomID)
                 break
             default:
                 break

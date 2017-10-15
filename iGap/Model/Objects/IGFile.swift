@@ -69,21 +69,21 @@ class IGFile: Object {
     
     
     //properties
-    dynamic var primaryKeyId:       String?   //if incomming { primaryKeyId = cacheId } else { primaryKeyId = rand}
-    dynamic var cacheID:            String?   //set by server
-    dynamic var token:              String?
-    dynamic var fileNameOnDisk:     String?
-    dynamic var name:               String?
-    dynamic var smallThumbnail:     IGFile?
-    dynamic var largeThumbnail:     IGFile?
-    dynamic var waveformThumbnail:  IGFile?
-    dynamic var size:               Int                     = -1     //TODO: change to Int64
-    dynamic var width:              Double                  =  0.0
-    dynamic var height:             Double                  =  0.0
-    dynamic var duration:           Double                  =  0.0
-    //dynamic var roomIDs:            [Int64]                 = [-1]
-    dynamic var typeRaw:            FileType.RawValue       = FileType.file.rawValue
-    dynamic var previewTypeRaw:     PreviewType.RawValue    = PreviewType.originalFile.rawValue
+    @objc dynamic var primaryKeyId:       String?   //if incomming { primaryKeyId = cacheId } else { primaryKeyId = rand}
+    @objc dynamic var cacheID:            String?   //set by server
+    @objc dynamic var token:              String?
+    @objc dynamic var fileNameOnDisk:     String?
+    @objc dynamic var name:               String?
+    @objc dynamic var smallThumbnail:     IGFile?
+    @objc dynamic var largeThumbnail:     IGFile?
+    @objc dynamic var waveformThumbnail:  IGFile?
+    @objc dynamic var size:               Int                     = -1     //TODO: change to Int64
+    @objc dynamic var width:              Double                  =  0.0
+    @objc dynamic var height:             Double                  =  0.0
+    @objc dynamic var duration:           Double                  =  0.0
+    //@objc dynamic var roomIDs:            [Int64]                 = [-1]
+    @objc dynamic var typeRaw:            FileType.RawValue       = FileType.file.rawValue
+    @objc dynamic var previewTypeRaw:     PreviewType.RawValue    = PreviewType.originalFile.rawValue
     //ignored properties
     var attachedImage:  UIImage?
     var data:           Data?
@@ -134,6 +134,10 @@ class IGFile: Object {
             typeRaw = newValue.rawValue
         }
     }
+
+    override static func indexedProperties() -> [String] {
+        return ["cacheID"]
+    }
     
     override static func primaryKey() -> String {
         return "primaryKeyId"
@@ -169,22 +173,21 @@ class IGFile: Object {
         self.token = igpFile.igpToken
         self.name = igpFile.igpName
         self.size = Int(igpFile.igpSize)
-        self.cacheID = igpFile.igpCacheId
-        self.primaryKeyId = igpFile.igpCacheId
+        self.cacheID = igpFile.igpCacheID
+        self.primaryKeyId = igpFile.igpCacheID
         self.previewType = .originalFile
         self.type = type
         
-        if igpFile.hasIgpWidth {
-            self.width = Double(igpFile.igpWidth)
-        }
-        if igpFile.hasIgpHeight {
-            self.height = Double(igpFile.igpHeight)
-        }
-        if igpFile.hasIgpDuration {
-            self.duration = igpFile.igpDuration
-        }
+        
+//        if igpFile.hasIgpWidth {}
+        self.width = Double(igpFile.igpWidth)
+//        if igpFile.hasIgpHeight {}
+        self.height = Double(igpFile.igpHeight)
+//        if igpFile.hasIgpDuration {}
+        self.duration = igpFile.igpDuration
+        
         if igpFile.hasIgpSmallThumbnail {
-            let predicate = NSPredicate(format: "cacheID = %@", igpFile.igpSmallThumbnail.igpCacheId)
+            let predicate = NSPredicate(format: "cacheID = %@", igpFile.igpSmallThumbnail.igpCacheID)
             let realm = try! Realm()
             if let fileInDb = realm.objects(IGFile.self).filter(predicate).first {
                 self.smallThumbnail = fileInDb
@@ -193,7 +196,7 @@ class IGFile: Object {
             }
         }
         if igpFile.hasIgpLargeThumbnail {
-            let predicate = NSPredicate(format: "cacheID = %@", igpFile.igpLargeThumbnail.igpCacheId)
+            let predicate = NSPredicate(format: "cacheID = %@", igpFile.igpLargeThumbnail.igpCacheID)
             let realm = try! Realm()
             if let fileInDb = realm.objects(IGFile.self).filter(predicate).first {
                 self.largeThumbnail = fileInDb
@@ -236,8 +239,8 @@ class IGFile: Object {
         self.height = Double(igpThumbnail.igpHeight)
         self.previewType = previewType
         self.type = .image
-        self.cacheID = igpThumbnail.igpCacheId
-        self.primaryKeyId = igpThumbnail.igpCacheId
+        self.cacheID = igpThumbnail.igpCacheID
+        self.primaryKeyId = igpThumbnail.igpCacheID
         self.name = cacheID
     }
     

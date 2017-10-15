@@ -1,5 +1,3 @@
-//
-//  IGMessageViewController.swift
 /*
  * This is the source code of iGap for iOS
  * It is licensed under GNU AGPL v3.0
@@ -12,7 +10,7 @@
 
 import UIKit
 import IGProtoBuff
-import ProtocolBuffers
+import SwiftProtobuf
 import GrowingTextView
 import pop
 import SnapKit
@@ -150,7 +148,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
         var canBecomeFirstResponder: Bool { return true }
         let navigationItem = self.navigationItem as! IGNavigationItem
         navigationItem.setNavigationBarForRoom(room!)
-        navigationItem.navigationController = self.navigationController as! IGNavigationController
+        navigationItem.navigationController = self.navigationController as? IGNavigationController
         let navigationController = self.navigationController as! IGNavigationController
         navigationController.interactivePopGestureRecognizer?.delegate = self
         navigationItem.rightViewContainer?.addAction {
@@ -211,14 +209,16 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
         self.collectionView.keyboardDismissMode = .none
         self.collectionView.dataSource = self
         self.collectionView.delegate = self
+
+
+        let bgColor = UIColor(red: 247.0/255.0, green: 247.0/255.0, blue: 247.0/255.0, alpha: 1.0)
         
-        
-        self.view.backgroundColor = UIColor.white
-        self.view.superview?.backgroundColor = UIColor.white
-        self.view.superview?.superview?.backgroundColor = UIColor.white
-        self.view.superview?.superview?.superview?.backgroundColor = UIColor.white
-        self.view.superview?.superview?.superview?.superview?.backgroundColor = UIColor.white
-        
+        self.view.backgroundColor = bgColor
+        self.view.superview?.backgroundColor = bgColor
+        self.view.superview?.superview?.backgroundColor = bgColor
+        self.view.superview?.superview?.superview?.backgroundColor = bgColor
+        self.view.superview?.superview?.superview?.superview?.backgroundColor = bgColor
+
         
         let inputTextViewInitialHeight:CGFloat = 22.0 //initial without reply || forward || attachment || text
         self.inputTextViewHeight = inputTextViewInitialHeight
@@ -232,13 +232,13 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
         inputTextView.contentInset = UIEdgeInsets(top: -5, left: 0, bottom: -5, right: 0)
         
         
-        inputBarLeftView.layer.cornerRadius = 19.0
+        inputBarLeftView.layer.cornerRadius = 6.0//19.0
         inputBarLeftView.layer.masksToBounds = true
-        inputBarRightiew.layer.cornerRadius = 19.0
+        inputBarRightiew.layer.cornerRadius = 6.0//19.0
         inputBarRightiew.layer.masksToBounds = true
         
         
-        inputBarBackgroundView.layer.cornerRadius = 19.0
+        inputBarBackgroundView.layer.cornerRadius = 6.0//19.0
         inputBarBackgroundView.layer.masksToBounds = false
         inputBarBackgroundView.layer.shadowColor = UIColor.black.cgColor
         inputBarBackgroundView.layer.shadowOffset = CGSize(width: 0, height: 0)
@@ -247,14 +247,14 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
         inputBarBackgroundView.layer.borderColor = UIColor(red: 209.0/255.0, green: 209.0/255.0, blue: 209.0/255.0, alpha: 1.0).cgColor
         inputBarBackgroundView.layer.borderWidth  = 1.0
         
-        inputBarView.layer.cornerRadius = 19.0
+        inputBarView.layer.cornerRadius = 6.0//19.0
         inputBarView.layer.masksToBounds = true
         
-        inputBarRecordView.layer.cornerRadius = 19.0
+        inputBarRecordView.layer.cornerRadius = 6.0//19.0
         inputBarRecordView.layer.masksToBounds = false
         inputBarRecodingBlinkingView.layer.cornerRadius = 8.0
         inputBarRecodingBlinkingView.layer.masksToBounds = false
-        inputBarRecordRightView.layer.cornerRadius = 19.0
+        inputBarRecordRightView.layer.cornerRadius = 6.0//19.0
         inputBarRecordRightView.layer.masksToBounds = false
         
         inputBarRecordView.isHidden = true
@@ -2036,7 +2036,7 @@ extension IGMessageViewController {
     }
     
     func addNotificationObserverForTapOnStatusBar() {
-        NotificationCenter.default.addObserver(forName: statusBarTappedNotification.name, object: .none, queue: .none) { _ in
+        NotificationCenter.default.addObserver(forName: IGNotificationStatusBarTapped.name, object: .none, queue: .none) { _ in
             if self.collectionView.contentSize.height < self.collectionView.frame.height {
                 return
             }

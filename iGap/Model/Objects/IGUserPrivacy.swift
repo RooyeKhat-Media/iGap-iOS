@@ -16,13 +16,18 @@ import IGProtoBuff
 
 class IGUserPrivacy : Object {
     
-    dynamic private var primaryKeyId:          Int                          = 1
-    dynamic var userStatusRaw:                 IGPrivacyLevel.RawValue      = IGPrivacyLevel.allowAll.rawValue
-    dynamic var avatarRaw:                     IGPrivacyLevel.RawValue      = IGPrivacyLevel.allowAll.rawValue
-    dynamic var groupInviteRaw:                IGPrivacyLevel.RawValue      = IGPrivacyLevel.allowAll.rawValue
-    dynamic var channelInviteRaw:              IGPrivacyLevel.RawValue      = IGPrivacyLevel.allowAll.rawValue
-    
-    
+    @objc dynamic  private var primaryKeyId:          Int                          = 1
+    @objc dynamic  var userStatusRaw:                 IGPrivacyLevel.RawValue      = IGPrivacyLevel.allowAll.rawValue
+    @objc dynamic  var avatarRaw:                     IGPrivacyLevel.RawValue      = IGPrivacyLevel.allowAll.rawValue
+    @objc dynamic  var groupInviteRaw:                IGPrivacyLevel.RawValue      = IGPrivacyLevel.allowAll.rawValue
+    @objc dynamic  var channelInviteRaw:              IGPrivacyLevel.RawValue      = IGPrivacyLevel.allowAll.rawValue
+    @objc dynamic  var voiceCallingRaw:               IGPrivacyLevel.RawValue      = IGPrivacyLevel.allowAll.rawValue
+    @objc dynamic  var videoCallingRaw:               IGPrivacyLevel.RawValue      = IGPrivacyLevel.allowAll.rawValue
+    @objc dynamic  var screenSharingRaw:              IGPrivacyLevel.RawValue      = IGPrivacyLevel.allowAll.rawValue
+    @objc dynamic  var secretChatRaw:                 IGPrivacyLevel.RawValue      = IGPrivacyLevel.allowAll.rawValue
+
+
+
     var userStatus: IGPrivacyLevel {
         get {
             if let s = IGPrivacyLevel(rawValue: userStatusRaw) {
@@ -70,13 +75,60 @@ class IGUserPrivacy : Object {
         }
 
     }
+    var voiceCalling: IGPrivacyLevel {
+        get {
+            if let s = IGPrivacyLevel(rawValue: voiceCallingRaw) {
+                return s
+            }
+            return .allowAll
+        }
+        set {
+            voiceCallingRaw = newValue.rawValue
+        }
 
+    }
+    var videoCalling: IGPrivacyLevel {
+        get {
+            if let s = IGPrivacyLevel(rawValue: videoCallingRaw) {
+                return s
+            }
+            return .allowAll
+        }
+        set {
+            videoCallingRaw = newValue.rawValue
+        }
+
+    }
+    var screenSharing: IGPrivacyLevel {
+        get {
+            if let s = IGPrivacyLevel(rawValue: screenSharingRaw) {
+                return s
+            }
+            return .allowAll
+        }
+        set {
+            screenSharingRaw = newValue.rawValue
+        }
+
+    }
+    var secretChat: IGPrivacyLevel {
+        get {
+            if let s = IGPrivacyLevel(rawValue: secretChatRaw) {
+                return s
+            }
+            return .allowAll
+        }
+        set {
+            secretChatRaw = newValue.rawValue
+        }
+
+    }
     override static func primaryKey() -> String {
         return "primaryKeyId"
     }
 
     override static func ignoredProperties() -> [String] {
-        return ["userStatus", "avatar" , "groupInvite" , "channelInvite" ]
+        return ["userStatus", "avatar" , "groupInvite" , "channelInvite", "voiceCalling", "videoCalling", "screenSharing", "secretChat" ]
     }
     
 //    convenience init(igpPrivacyType: IGPPrivacyType , igpPrivacyLevel: IGPPrivacyLevel) {

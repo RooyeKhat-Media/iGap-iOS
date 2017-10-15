@@ -14,8 +14,8 @@ import IGProtoBuff
 
 class IGAvatar: Object{
     //MARK: properties
-    dynamic var id:     Int64   = 0
-    dynamic var file:   IGFile?
+    @objc dynamic var id:     Int64   = 0
+    @objc dynamic var file:   IGFile?
     
     //MARK: override
     override static func primaryKey() -> String {
@@ -25,7 +25,7 @@ class IGAvatar: Object{
     //MARK: init
     convenience init(igpAvatar: IGPAvatar) {
         self.init()
-        self.id = igpAvatar.igpId
+        self.id = igpAvatar.igpID
         self.file = IGFile(igpFile: igpAvatar.igpFile, type: .image)
     }
     

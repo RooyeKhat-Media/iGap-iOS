@@ -21,21 +21,21 @@ class IGRoom: Object {
     
     
     //properties
-    dynamic var id:                 Int64                   = -1
-    dynamic var typeRaw:            IGType.RawValue         = IGType.chat.rawValue
-    dynamic var title:              String?
-    dynamic var initilas:           String?
-    dynamic var colorString:        String                  = "FFFFFF"
-    dynamic var unreadCount:        Int32                   = 0
-    dynamic var isReadOnly:     	Bool                    = false
-    dynamic var isParticipant:  	Bool                    = false
-    dynamic var draft:              IGRoomDraft?
-    dynamic var chatRoom:           IGChatRoom?
-    dynamic var groupRoom:          IGGroupRoom?
-    dynamic var channelRoom:        IGChannelRoom?
-    dynamic var lastMessage:        IGRoomMessage?
-    dynamic var sortimgTimestamp:   Double                  = 0.0
-    
+    @objc dynamic var id:                 Int64                   = -1
+    @objc dynamic var typeRaw:            IGType.RawValue         = IGType.chat.rawValue
+    @objc dynamic var title:              String?
+    @objc dynamic var initilas:           String?
+    @objc dynamic var colorString:        String                  = "FFFFFF"
+    @objc dynamic var unreadCount:        Int32                   = 0
+    @objc dynamic var isReadOnly:     	Bool                    = false
+    @objc dynamic var isParticipant:  	Bool                    = false
+    @objc dynamic var draft:              IGRoomDraft?
+    @objc dynamic var chatRoom:           IGChatRoom?
+    @objc dynamic var groupRoom:          IGGroupRoom?
+    @objc dynamic var channelRoom:        IGChannelRoom?
+    @objc dynamic var lastMessage:        IGRoomMessage?
+    @objc dynamic var sortimgTimestamp:   Double                  = 0.0
+    @objc dynamic var clearIdString:      String?
     
     //ignored properties
     var currenctActionsByUsers = Dictionary<String, (IGRegisteredUser, IGClientAction)>() //actorId, action
@@ -56,10 +56,24 @@ class IGRoom: Object {
             return UIColor(hexString: colorString)
         }
     }
+    var clearId: Int64 {
+        get {
+            if let clearIdS = clearIdString {
+                if let intVal = Int64(clearIdS) {
+                    return intVal
+                }
+                return 0
+            }
+            return 0
+        }
+        set {
+            clearIdString = "\(newValue)"
+        }
+    }
     
     //override
     override static func ignoredProperties() -> [String] {
-        return ["currenctActionsByUsers", "color", "type"]
+        return ["currenctActionsByUsers", "color", "type", "clearId"]
     }
     
     override static func primaryKey() -> String {
@@ -69,7 +83,7 @@ class IGRoom: Object {
     //initilizer
     convenience init(igpRoom: IGPRoom) {
         self.init()
-        self.id = igpRoom.igpId
+        self.id = igpRoom.igpID
         switch igpRoom.igpType {
         case .chat:
             self.type = .chat
@@ -77,13 +91,15 @@ class IGRoom: Object {
             self.type = .group
         case .channel:
             self.type = .channel
+        default:
+            break
         }
         self.title = igpRoom.igpTitle
         self.initilas = igpRoom.igpInitials
         self.colorString = igpRoom.igpColor
         self.unreadCount = igpRoom.igpUnreadCount
-        if let lastMessage = igpRoom.igpLastMessage {
-            let predicate = NSPredicate(format: "id = %lld AND roomId = %lld",lastMessage.igpMessageId, igpRoom.igpId)
+        if igpRoom.hasIgpLastMessage {
+            let predicate = NSPredicate(format: "id = %lld AND roomId = %lld", igpRoom.igpLastMessage.igpMessageID, igpRoom.igpID)
             let realm = try! Realm()
             if let messageInDb = realm.objects(IGRoomMessage.self).filter(predicate).first {
                 self.lastMessage = IGRoomMessage(value: messageInDb)
@@ -94,17 +110,17 @@ class IGRoom: Object {
         }
         self.isReadOnly = igpRoom.igpReadOnly
         self.isParticipant = igpRoom.igpIsParticipant
-        if let draft = igpRoom.igpDraft {
-            self.draft = IGRoomDraft(igpDraft: draft, roomId: self.id)
+        if igpRoom.hasIgpDraft{
+            self.draft = IGRoomDraft(igpDraft: igpRoom.igpDraft, roomId: self.id)
         }
-        if let chatRoom = igpRoom.igpChatRoomExtra {
-            self.chatRoom = IGChatRoom(igpChatRoom: chatRoom, id: self.id)
+        if igpRoom.hasIgpChatRoomExtra {
+            self.chatRoom = IGChatRoom(igpChatRoom: igpRoom.igpChatRoomExtra, id: self.id)
         }
-        if let groupRoom = igpRoom.igpGroupRoomExtra {
-            self.groupRoom = IGGroupRoom(igpGroupRoom: groupRoom, id: self.id)
+        if igpRoom.hasIgpGroupRoomExtra {
+            self.groupRoom = IGGroupRoom(igpGroupRoom: igpRoom.igpGroupRoomExtra, id: self.id)
         }
-        if let channelRoom = igpRoom.igpChannelRoomExtra {
-            self.channelRoom = IGChannelRoom(igpChannelRoom: channelRoom, id: self.id)
+        if igpRoom.hasIgpChannelRoomExtra {
+            self.channelRoom = IGChannelRoom(igpChannelRoom: igpRoom.igpChannelRoomExtra, id: self.id)
         }
     }
     
@@ -133,7 +149,7 @@ class IGRoom: Object {
             let detachedChannelRoom = channelRoom.detach()
             detachedRoom.channelRoom = detachedChannelRoom
         }
-
+        
         return detachedRoom
     }
 }

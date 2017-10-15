@@ -21,12 +21,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         
+        
 //        let config = Realm.Configuration(schemaVersion: try! schemaVersionAtURL(Realm.Configuration.defaultConfiguration.fileURL!) + 1)
 //        Realm.Configuration.defaultConfiguration = config
 //        
 //        _ = try! Realm()
         let config = Realm.Configuration(
-            schemaVersion: 6,
+            schemaVersion: 7,
             
             // Set the block which will be called automatically when opening a Realm with
             // a schema version lower than the one set above
@@ -46,9 +47,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     //version 0.0.7 build 292
                 } else if (oldSchemaVersion < 6) {
                     //version 0.0.8 build 293
+                } else if (oldSchemaVersion < 7) { //version 0.1.0 : 7
+                    //version 0.0.11
                 }
-                
-                
         })
         Realm.Configuration.defaultConfiguration = config
         _ = try! Realm()
@@ -58,7 +59,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         _ = IGDatabaseManager.shared
         _ = IGWebSocketManager.sharedManager
         _ = IGFactory.shared
-        UITabBar.appearance().tintColor = UIColor.organizationalColor()
+        
+        UITabBar.appearance().tintColor = UIColor.white
+        //UITabBar.appearance().barTintColor = UIColor(red: 0.0, green: 176.0/255.0, blue: 191.0/255.0, alpha: 1.0)
+        
+        let tabBarItemApperance = UITabBarItem.appearance()
+        tabBarItemApperance.setTitleTextAttributes([NSForegroundColorAttributeName:UIColor.red], for: UIControlState.normal)
+        tabBarItemApperance.setTitleTextAttributes([NSForegroundColorAttributeName:UIColor.white], for: UIControlState.selected)
+        
+        
+        
         UserDefaults.standard.setValue(false, forKey:"_UIConstraintBasedLayoutLogUnsatisfiable")
         
         return true
@@ -127,7 +137,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         guard let touchPoint = event?.allTouches?.first?.location(in: self.window) else { return }
         
         if statusBarRect.contains(touchPoint) {
-            NotificationCenter.default.post(statusBarTappedNotification)
+            NotificationCenter.default.post(IGNotificationStatusBarTapped)
         }
     }
     

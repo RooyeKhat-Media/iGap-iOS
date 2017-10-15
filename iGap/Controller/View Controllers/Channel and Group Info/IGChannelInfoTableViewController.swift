@@ -9,7 +9,7 @@
  */
 
 import UIKit
-import ProtocolBuffers
+import SwiftProtobuf
 import RealmSwift
 import RxRealm
 import RxSwift
@@ -17,8 +17,10 @@ import RxCocoa
 import IGProtoBuff
 import MGSwipeTableCell
 import MBProgressHUD
+import INSPhotoGalleryFramework
+import NVActivityIndicatorView
 
-class IGChannelInfoTableViewController: UITableViewController , UIGestureRecognizerDelegate {
+class IGChannelInfoTableViewController: UITableViewController , UIGestureRecognizerDelegate , NVActivityIndicatorViewable {
 
     
     @IBOutlet weak var channelSignMessageCell: UITableViewCell!
@@ -56,11 +58,15 @@ class IGChannelInfoTableViewController: UITableViewController , UIGestureRecogni
 //    var rooms : Results<IGRoom>!
     var notificationToken: NotificationToken?
     var connectionStatus: IGAppManager.ConnectionStatus?
+    var avatars: [IGAvatar] = []
+    var deleteView: IGTappableView?
+    var userAvatar: IGAvatar?
 
 
     override func viewDidLoad() {
         super.viewDidLoad()
         requestToGetRoom()
+        requestToGetAvatarList()
         imagePicker.delegate = self
         tableView.estimatedRowHeight = 44.0
         tableView.rowHeight = UITableViewAutomaticDimension
@@ -104,7 +110,7 @@ class IGChannelInfoTableViewController: UITableViewController , UIGestureRecogni
             channelSignMessageCell.isHidden = true
             cameraButton.isHidden = false
         }
-        self.tableView.backgroundView = UIImageView(image: UIImage(named: "IG_Settigns_Bg"))
+        self.tableView.backgroundColor = UIColor(red: 247.0/255.0, green: 247.0/255.0, blue: 247.0/255.0, alpha: 1.0)
         tableView.tableFooterView = UIView()
         let navigationItem = self.navigationItem as! IGNavigationItem
         navigationItem.addNavigationViewItems(rightItemText: nil, title: "Channel Info")
@@ -152,6 +158,10 @@ class IGChannelInfoTableViewController: UITableViewController , UIGestureRecogni
 //                break
 //            }
 //        }
+        channelImage.avatarImageView?.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer.init(target: self, action: #selector(self.handleTap(recognizer:)))
+        channelImage.avatarImageView?.addGestureRecognizer(tap)
+
 
         
     }
@@ -187,6 +197,184 @@ class IGChannelInfoTableViewController: UITableViewController , UIGestureRecogni
         }
         
     }
+    
+    @objc func handleTap(recognizer:UITapGestureRecognizer) {
+        if recognizer.state == .ended {
+            if let userAvatar = room?.channelRoom?.avatar {
+                showAvatar( avatar: userAvatar)
+            }
+        }
+    }
+    
+    var avatarPhotos : [INSPhotoViewable]?
+    var galleryPhotos: INSPhotosViewController?
+    var lastIndex: Array<Any>.Index?
+    var currentAvatarId: Int64?
+    var timer = Timer()
+    func showAvatar(avatar : IGAvatar) {
+        var photos: [INSPhotoViewable] = self.avatars.map { (avatar) -> IGMedia in
+            return IGMedia(avatar: avatar)
+        }
+        avatarPhotos = photos
+        let currentPhoto = photos[0]
+        let deleteViewFrame = CGRect(x:320, y:595, width: 25 , height:25)
+        let trashImageView = UIImageView()
+        trashImageView.image = UIImage(named: "IG_Trash_avatar")
+        trashImageView.frame = CGRect(x: 0, y: 0, width: 25, height: 25)
+        if myRole == .owner || myRole == .admin {
+        deleteView = IGTappableView(frame: deleteViewFrame)
+        deleteView?.addSubview(trashImageView)
+        deleteView?.addAction {
+            self.didTapOnTrashButton()
+            }
+        } else {
+            deleteView = nil
+        }
+
+        let downloadIndicatorMainView = UIView()
+        let downloadViewFrame = self.view.bounds
+        downloadIndicatorMainView.backgroundColor = UIColor.white
+        downloadIndicatorMainView.frame = downloadViewFrame
+        let andicatorViewFrame = CGRect(x: view.bounds.midX, y: view.bounds.midY,width: 50 , height: 50)
+        let activityIndicatorView = NVActivityIndicatorView(frame: andicatorViewFrame,
+                                                            type: NVActivityIndicatorType.audioEqualizer)
+        downloadIndicatorMainView.addSubview(activityIndicatorView)
+        
+        let galleryPreview = INSPhotosViewController(photos: photos, initialPhoto: currentPhoto, referenceView: nil, deleteView: deleteView, downloadView: downloadIndicatorMainView)
+        galleryPhotos = galleryPreview
+        present(galleryPreview, animated: true, completion: nil)
+        activityIndicatorView.startAnimating()
+        activityIndicatorView.startAnimating()
+        
+        DispatchQueue.main.async {
+            let size = CGSize(width: 30, height: 30)
+            self.startAnimating(size, message: nil, type: NVActivityIndicatorType.ballRotateChase)
+            
+            let thisPhoto = galleryPreview.accessCurrentPhotoDetail()
+            
+            //self.avatarPhotos.index(of:thisPhoto)
+            if let index =  self.avatarPhotos?.index(where: {$0 === thisPhoto}) {
+                self.lastIndex = index
+                let currentAvatarFile = self.avatars[index].file
+                self.currentAvatarId = self.avatars[index].id
+                if currentAvatarFile?.status == .downloading {
+                    return
+                }
+                
+                if let attachment = currentAvatarFile {
+                    IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: {
+                        galleryPreview.hiddenDownloadView()
+                        self.stopAnimating()
+                    }, failure: {
+                        
+                    })
+                }
+                
+            }
+            
+        }
+        scheduledTimerWithTimeInterval()
+    }
+    
+    func didTapOnTrashButton() {
+        timer.invalidate()
+        let thisPhoto = galleryPhotos?.accessCurrentPhotoDetail()
+        if let index =  self.avatarPhotos?.index(where: {$0 === thisPhoto}) {
+            let thisAvatarId = self.avatars[index].id
+            IGGroupAvatarDeleteRequest.Generator.generate(avatarId: thisAvatarId, roomId: (room?.id)!).success({ (protoResponse) in
+                DispatchQueue.main.async {
+                    switch protoResponse {
+                    case let channelAvatarDeleteResponse as IGPGroupAvatarDeleteResponse :
+                        IGGroupAvatarDeleteRequest.Handler.interpret(response: channelAvatarDeleteResponse)
+                        self.avatarPhotos?.remove(at: index)
+                        self.avatars.remove(at: index)
+                    default:
+                        break
+                    }
+                }
+            }).error ({ (errorCode, waitTime) in
+                switch errorCode {
+                case .timeout:
+                    DispatchQueue.main.async {
+                        let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                default:
+                    break
+                }
+                
+            }).send()
+            
+            
+            
+            
+        }
+    }
+
+    
+    func requestToGetAvatarList() {
+        if let currentRoomID = room?.id {
+            IGGroupAvatarGetListRequest.Generator.generate(roomId: currentRoomID).success({ (protoResponse) in
+                DispatchQueue.main.async {
+                    switch protoResponse {
+                    case let channelAvatarGetListResponse as IGPGroupAvatarGetListResponse:
+                        let responseAvatars = IGGroupAvatarGetListRequest.Handler.interpret(response: channelAvatarGetListResponse)
+                        self.avatars = responseAvatars
+                    default:
+                        break
+                    }
+                }
+            }).error ({ (errorCode, waitTime) in
+                switch errorCode {
+                case .timeout:
+                    DispatchQueue.main.async {
+                        let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                default:
+                    break
+                }
+                
+            }).send()
+        }
+    }
+
+    func scheduledTimerWithTimeInterval(){
+        // Scheduling timer to Call the function **Countdown** with the interval of 1 seconds
+        timer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(self.updateCounting), userInfo: nil, repeats: true)
+    }
+    
+    @objc func updateCounting(){
+        let nextPhoto = galleryPhotos?.accessCurrentPhotoDetail()
+        if let index =  self.avatarPhotos?.index(where: {$0 === nextPhoto}) {
+            let currentAvatarFile = self.avatars[index].file
+            let nextAvatarId = self.avatars[index].id
+            if nextAvatarId != self.currentAvatarId {
+                let size = CGSize(width: 30, height: 30)
+                self.startAnimating(size, message: nil, type: NVActivityIndicatorType.ballRotateChase)
+                if currentAvatarFile?.status == .downloading {
+                    return
+                }
+                
+                if let attachment = currentAvatarFile {
+                    IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: {
+                        self.galleryPhotos?.hiddenDownloadView()
+                        self.stopAnimating()
+                    }, failure: {
+                        
+                    })
+                }
+                self.currentAvatarId = nextAvatarId
+            } else {
+                
+            }
+        }
+    }
+
 
     @IBAction func didTapOnCameraBtn(_ sender: UIButton) {
         let optionMenu = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)

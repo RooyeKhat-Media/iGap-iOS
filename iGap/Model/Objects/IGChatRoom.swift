@@ -13,8 +13,8 @@ import Foundation
 import IGProtoBuff
 
 class IGChatRoom: Object {
-    dynamic var id:     Int64               = -1
-    dynamic var peer:   IGRegisteredUser?
+    @objc dynamic  var id:     Int64               = -1
+    @objc dynamic  var peer:   IGRegisteredUser?
     
     override static func primaryKey() -> String {
         return "id"
@@ -24,7 +24,7 @@ class IGChatRoom: Object {
         self.init()
         self.id = id
         
-        let predicate = NSPredicate(format: "id = %d", igpChatRoom.igpPeer.igpId)
+        let predicate = NSPredicate(format: "id = %d", igpChatRoom.igpPeer.igpID)
         if let userInDb = try! Realm().objects(IGRegisteredUser.self).filter(predicate).first {
             self.peer = userInDb//.detach()
         } else {

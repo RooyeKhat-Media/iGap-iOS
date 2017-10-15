@@ -18,7 +18,7 @@ class IGSettingContactsTableViewController: UITableViewController,UISearchResult
     
     class User:NSObject {
         let registredUser: IGRegisteredUser
-        let name:String!
+        @objc let name:String!
         var section :Int?
         init(registredUser: IGRegisteredUser){
             self.registredUser = registredUser
@@ -40,6 +40,7 @@ class IGSettingContactsTableViewController: UITableViewController,UISearchResult
     var filteredTableData = [CNContact]()
     var resultSearchController = UISearchController()
     var hud = MBProgressHUD()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupSearchBar()
@@ -47,7 +48,7 @@ class IGSettingContactsTableViewController: UITableViewController,UISearchResult
         resultSearchController.searchBar.delegate = self
         let navigationItem = self.navigationItem as! IGNavigationItem
         navigationItem.addNavigationViewItems(rightItemText: nil, title: "Contacts")
-        navigationItem.navigationController = self.navigationController as! IGNavigationController
+        navigationItem.navigationController = self.navigationController as? IGNavigationController
         let navigationController = self.navigationController as! IGNavigationController
         navigationController.interactivePopGestureRecognizer?.delegate = self
         
@@ -55,19 +56,11 @@ class IGSettingContactsTableViewController: UITableViewController,UISearchResult
             switch changes {
             case .initial:
                 self.tableView.reloadData()
-                break
-            case .update(_, let deletions, let insertions, let modifications):
+            case .update(_,_,_,_):
                 self.tableView.reloadData()
-
-                print("updating members tableV")
-
-                self.tableView.reloadData()
-                break
             case .error(let err):
-                // An error occurred while opening the Realm file on the background worker thread
                 fatalError("\(err)")
                 break
-            
             }
         }
         
@@ -76,19 +69,9 @@ class IGSettingContactsTableViewController: UITableViewController,UISearchResult
             switch changes {
             case .initial:
                 self.tableView.reloadData()
-                break
-            case .update(_, let deletions, let insertions, let modifications):
-                print("updating members tableV")
-                // Query messages have changed, so apply them to the TableView
-                //                self.tableView.beginUpdates()
-                //                self.tableView.insertRows(at: insertions.map { IndexPath(row: $0, section: 1) }, with: .none)
-                //                self.tableView.deleteRows(at: deletions.map { IndexPath(row: $0, section: 1) }, with: .none)
-                //                self.tableView.reloadRows(at: modifications.map { IndexPath(row: $0, section: 1) }, with: .none)
-                //                self.tableView.endUpdates()
+            case .update(_,_,_,_):
                 self.tableView.reloadData()
-                break
             case .error(let err):
-                // An error occurred while opening the Realm file on the background worker thread
                 fatalError("\(err)")
                 break
             }
@@ -103,14 +86,13 @@ class IGSettingContactsTableViewController: UITableViewController,UISearchResult
 
     override func viewWillAppear(_ animated: Bool) {
         fetchBlockedContactsFromServer()
-    
     }
     
-    func addressBookDidChange() {
+    @objc func addressBookDidChange() {
         tableView.reloadData()
     }
     
-    func fetchBlockedContactsFromServer(){
+    func fetchBlockedContactsFromServer() {
         self.hud = MBProgressHUD.showAdded(to: self.view, animated: true)
         self.hud.mode = .indeterminate
         IGUserContactsGetBlockedListRequest.Generator.generate().success({ (protoResponse) in
@@ -149,6 +131,7 @@ class IGSettingContactsTableViewController: UITableViewController,UISearchResult
     @IBAction func addBarButtonClicked(_ sender: UIBarButtonItem) {
         performSegue(withIdentifier: "GoToAddNewContactPage", sender: self)
     }
+    
     var sections : [Section]{
         if self.contactSections != nil {
             return self.contactSections!
@@ -172,32 +155,26 @@ class IGSettingContactsTableViewController: UITableViewController,UISearchResult
         self.contactSections = sections
         return self.contactSections!
     }
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+    
     // MARK: - Table view data source
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         if (self.resultSearchController.isActive) {
             return 1
-        }else{
+        } else {
             return self.sections.count + 1
         }
     }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         if (self.resultSearchController.isActive) {
             return self.filteredTableData.count
-        }else{
-            if section == 0 {
-                return 1
-            }else{
-                
-                return self.sections[ section - 1 ].users.count
-            }
+        } else if section == 0 {
+            return 1
+        } else {
+            return self.sections[ section - 1 ].users.count
         }
     }
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell = UITableViewCell()
         if !(self.resultSearchController.isActive) && indexPath.section == 0 {
@@ -216,18 +193,17 @@ class IGSettingContactsTableViewController: UITableViewController,UISearchResult
         }
         return cell
     }
-    override func tableView(_ tableView: UITableView,
-                            titleForHeaderInSection section: Int)
-        -> String {
-            if section == 0 {
-                return "  "
-            }
-            tableView.headerView(forSection: section)?.backgroundColor = UIColor.red
-            if !self.sections[section - 1].users.isEmpty {
-                return self.collation.sectionTitles[section - 1]
-            }else{
-                return ""
-            }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String {
+        if section == 0 {
+            return "  "
+        }
+        tableView.headerView(forSection: section)?.backgroundColor = UIColor.red
+        if !self.sections[section - 1].users.isEmpty {
+            return self.collation.sectionTitles[section - 1]
+        }else{
+            return ""
+        }
     }
     
     override func sectionIndexTitles(for tableView: UITableView) -> [String]? {

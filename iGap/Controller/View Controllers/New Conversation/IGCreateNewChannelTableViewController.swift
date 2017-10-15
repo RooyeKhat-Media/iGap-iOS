@@ -21,7 +21,7 @@ class IGCreateNewChannelTableViewController: UITableViewController {
     let width = CGFloat(0.5)
     var invitedLink : String?
     var igpRoom : IGPRoom!
-    let greenColor = UIColor(red: 49.0/255.0, green: 189.0/255.0, blue: 182.0/255.0, alpha: 1)
+    let greenColor = UIColor.organizationalColor()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,7 +64,7 @@ class IGCreateNewChannelTableViewController: UITableViewController {
                     DispatchQueue.main.async {
                         switch protoResponse {
                         case let channelCreateRespone as IGPChannelCreateResponse :
-                            IGClientGetRoomRequest.Generator.generate(roomId: channelCreateRespone.igpRoomId).success({ (protoResponse) in
+                            IGClientGetRoomRequest.Generator.generate(roomId: channelCreateRespone.igpRoomID).success({ (protoResponse) in
                                 DispatchQueue.main.async {
                                     switch protoResponse {
                                     case let getRoomProtoResponse as IGPClientGetRoomResponse:
@@ -79,7 +79,7 @@ class IGCreateNewChannelTableViewController: UITableViewController {
                                             
                                         }, completion: { (uploadTask) in
                                             if let token = uploadTask.token {
-                                                IGChannelAddAvatarRequest.Generator.generate(attachment: token , roomID: getRoomProtoResponse.igpRoom.igpId).success({ (protoResponse) in
+                                                IGChannelAddAvatarRequest.Generator.generate(attachment: token , roomID: getRoomProtoResponse.igpRoom.igpID).success({ (protoResponse) in
                                                     DispatchQueue.main.async {
                                                         switch protoResponse {
                                                         case let channelAvatarAddResponse as IGPChannelAvatarAddResponse:

@@ -10,7 +10,7 @@
 
 import Foundation
 import IGProtoBuff
-import ProtocolBuffers
+import SwiftProtobuf
 
 enum IGFileUploadingStatus {
     case unknown
@@ -23,9 +23,9 @@ enum IGFileUploadingStatus {
 class IGFileUploadOptionRequest : IGRequest {
     class Generator : IGRequest.Generator{
         class func generate(size: Int64) -> IGRequestWrapper {
-            let uploadOptionRequestBuilder = IGPFileUploadOption.Builder()
-            uploadOptionRequestBuilder.setIgpSize(size)
-            return IGRequestWrapper(messageBuilder: uploadOptionRequestBuilder, actionID: 700)
+            var uploadOptionRequestMessage = IGPFileUploadOption()
+            uploadOptionRequestMessage.igpSize = size
+            return IGRequestWrapper(message: uploadOptionRequestMessage, actionID: 700)
         }
     }
     
@@ -35,7 +35,7 @@ class IGFileUploadOptionRequest : IGRequest {
             let finalBytesLimit = responseProtoMessage.igpLastBytesLimit
             return (initialBytesLimit: initialBytesLimit, finalBytesLimit: finalBytesLimit)
         }
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {}
+        override class func handlePush(responseProtoMessage: Message) {}
         override class func error() {}
         override class func timeout() {}
     }
@@ -45,13 +45,13 @@ class IGFileUploadOptionRequest : IGRequest {
 class IGFileUploadInitRequest : IGRequest {
     class Generator : IGRequest.Generator{
         class func generate(initialBytes: Data, finalBytes: Data, size: Int64, hash: Data, name: String) -> IGRequestWrapper {
-            let uploadInitRequestBuilder = IGPFileUploadInit.Builder()
-            uploadInitRequestBuilder.setIgpFirstBytes(initialBytes)
-            uploadInitRequestBuilder.setIgpLastBytes(finalBytes)
-            uploadInitRequestBuilder.setIgpSize(size)
-            uploadInitRequestBuilder.setIgpFileHash(hash)
-            uploadInitRequestBuilder.setIgpFileName(name)
-            return IGRequestWrapper(messageBuilder: uploadInitRequestBuilder, actionID: 701)
+            var uploadInitRequestMessage = IGPFileUploadInit()
+            uploadInitRequestMessage.igpFirstBytes = initialBytes
+            uploadInitRequestMessage.igpLastBytes = finalBytes
+            uploadInitRequestMessage.igpSize = size
+            uploadInitRequestMessage.igpFileHash = hash
+            uploadInitRequestMessage.igpFileName = name
+            return IGRequestWrapper(message: uploadInitRequestMessage, actionID: 701)
         }
     }
     
@@ -64,7 +64,7 @@ class IGFileUploadInitRequest : IGRequest {
             return (token: token, progress: progress, limit: limit, offset: offset)
         }
         
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {}
+        override class func handlePush(responseProtoMessage: Message) {}
         override class func error() {}
         override class func timeout() {}
     }
@@ -74,11 +74,11 @@ class IGFileUploadInitRequest : IGRequest {
 class IGFileUploadRequest : IGRequest {
     class Generator : IGRequest.Generator{
         class func generate(token: String, offset: Int64, data: Data) -> IGRequestWrapper {
-            let uploadRequestBuilder = IGPFileUpload.Builder()
-            uploadRequestBuilder.setIgpToken(token)
-            uploadRequestBuilder.setIgpOffset(offset)
-            uploadRequestBuilder.setIgpBytes(data)
-            return IGRequestWrapper(messageBuilder: uploadRequestBuilder, actionID: 702)
+            var uploadRequestMessage = IGPFileUpload()
+            uploadRequestMessage.igpToken = token
+            uploadRequestMessage.igpOffset = offset
+            uploadRequestMessage.igpBytes = data
+            return IGRequestWrapper(message: uploadRequestMessage, actionID: 702)
         }
     }
     
@@ -91,7 +91,7 @@ class IGFileUploadRequest : IGRequest {
             
         }
         
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {}
+        override class func handlePush(responseProtoMessage: Message) {}
         override class func error() {}
         override class func timeout() {}
     }
@@ -101,36 +101,33 @@ class IGFileUploadRequest : IGRequest {
 class IGFileUploadStatusRequest : IGRequest {
     class Generator : IGRequest.Generator{
         class func generate(token: String) -> IGRequestWrapper {
-            let uploadStatusRequestBuilder = IGPFileUploadStatus.Builder()
-            uploadStatusRequestBuilder.setIgpToken(token)
-            return IGRequestWrapper(messageBuilder: uploadStatusRequestBuilder, actionID: 703)
+            var uploadStatusRequestMessage = IGPFileUploadStatus()
+            uploadStatusRequestMessage.igpToken = token
+            return IGRequestWrapper(message: uploadStatusRequestMessage, actionID: 703)
         }
     }
     
     class Handler : IGRequest.Handler{
         class func interpret(response responseProtoMessage:IGPFileUploadStatusResponse) -> (status: IGFileUploadingStatus, progress: Double, retryDelay: Int32) {
             var status: IGFileUploadingStatus
-            if responseProtoMessage.hasIgpStatus {
-                switch responseProtoMessage.igpStatus {
-                case .uploading:
-                    status = .uploading
-                case .processing:
-                    status = .processing
-                case .processed:
-                    status = .processed
-                default:
-                    status = .unknown
-                }
-            } else {
+            switch responseProtoMessage.igpStatus {
+            case .uploading:
+                status = .uploading
+            case .processing:
+                status = .processing
+            case .processed:
+                status = .processed
+            default:
                 status = .unknown
             }
+            
             let progress = responseProtoMessage.igpProgress
             let retryDelay = responseProtoMessage.igpRecheckDelayMs
             
             return (status: status, progress: progress, retryDelay: retryDelay)
         }
         
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {}
+        override class func handlePush(responseProtoMessage: Message) {}
         override class func error() {}
         override class func timeout() {}
     }
@@ -141,14 +138,14 @@ class IGFileUploadStatusRequest : IGRequest {
 class IGFileInfoRequest: IGRequest {
     class Generator : IGRequest.Generator{
         class func generate(token: String) -> IGRequestWrapper {
-            let fileInfoRequestBuilder = IGPFileInfo.Builder()
-            fileInfoRequestBuilder.setIgpToken(token)
-            return IGRequestWrapper(messageBuilder: fileInfoRequestBuilder, actionID: 704)
+            var fileInfoRequestMessage = IGPFileInfo()
+            fileInfoRequestMessage.igpToken = token
+            return IGRequestWrapper(message: fileInfoRequestMessage, actionID: 704)
         }
     }
     
     class Handler : IGRequest.Handler{
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {}
+        override class func handlePush(responseProtoMessage: Message) {}
         override class func error() {}
         override class func timeout() {}
     }
@@ -158,32 +155,32 @@ class IGFileInfoRequest: IGRequest {
 //MARK: -
 class IGFileDownloadRequest: IGRequest {
     class Generator : IGRequest.Generator{
-        class func generate(token: String, offset:Int64, maxChunkSize: Int32, type: IGFile.PreviewType) -> IGRequestWrapper{
-            let downloadRequestbuilder = IGPFileDownload.Builder()
-            downloadRequestbuilder.setIgpToken(token)
-            downloadRequestbuilder.setIgpOffset(offset)
-            downloadRequestbuilder.setIgpMaxLimit(maxChunkSize)            
+        class func generate(token: String, offset:Int64, maxChunkSize: Int32, type: IGFile.PreviewType) -> IGRequestWrapper {
+            var downloadRequestMessage = IGPFileDownload()
+            downloadRequestMessage.igpToken = token
+            downloadRequestMessage.igpOffset = offset
+            downloadRequestMessage.igpMaxLimit = maxChunkSize
             switch type {
             case .originalFile:
-                downloadRequestbuilder.setIgpSelector(.file)
+                downloadRequestMessage.igpSelector = .file
             case .smallThumbnail:
-                downloadRequestbuilder.setIgpSelector(.smallThumbnail)
+                downloadRequestMessage.igpSelector = .smallThumbnail
             case .largeThumbnail:
-                downloadRequestbuilder.setIgpSelector(.largeThumbnail)
+                downloadRequestMessage.igpSelector = .largeThumbnail
             case .waveformThumbnail:
-                downloadRequestbuilder.setIgpSelector(.waveformThumbnail)
+                downloadRequestMessage.igpSelector = .waveformThumbnail
             }
-            return IGRequestWrapper(messageBuilder: downloadRequestbuilder, actionID: 705)
+            return IGRequestWrapper(message: downloadRequestMessage, actionID: 705)
         }
     }
     
     
-    class Handler : IGRequest.Handler{
+    class Handler : IGRequest.Handler {
         class func interpret(response responseProtoMessage:IGPFileDownloadResponse) -> Data {
             return responseProtoMessage.igpBytes
         }
         
-        override class func handlePush(responseProtoMessage: GeneratedResponseMessage) {}
+        override class func handlePush(responseProtoMessage: Message) {}
         override class func error() {}
         override class func timeout() {}
     }

@@ -27,13 +27,11 @@ class IGAccountTableViewController: UITableViewController , UINavigationControll
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.title = "Account"
-        let backImage = UIImage(named: "IG_Settigns_Bg")
-        let backgroundImageView = UIImageView(image: backImage)
-        self.tableView.backgroundView = backgroundImageView
+        self.tableView.backgroundColor = UIColor(red: 247.0/255.0, green: 247.0/255.0, blue: 247.0/255.0, alpha: 1.0)
         showAccountDetail()
         let navigationItem = self.navigationItem as! IGNavigationItem
         navigationItem.addNavigationViewItems(rightItemText: nil, title: "Account")
-        navigationItem.navigationController = self.navigationController as! IGNavigationController
+        navigationItem.navigationController = self.navigationController as? IGNavigationController
         let navigationController = self.navigationController as! IGNavigationController
         navigationController.interactivePopGestureRecognizer?.delegate = self
     }
@@ -147,7 +145,7 @@ class IGAccountTableViewController: UITableViewController , UINavigationControll
                 self.dismiss(animated: true, completion: {
                     let appDelegate = UIApplication.shared.delegate as! AppDelegate
                     appDelegate.logoutAndShowRegisterViewController()
-                    IGWebSocketManager.sharedManager.closeConnection(reconnect: true)
+                    IGWebSocketManager.sharedManager.closeConnection()
                 })
 
             })

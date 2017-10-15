@@ -38,7 +38,7 @@ class IGChooseMemberFromContactsToCreateGroup: UITableViewController , UISearchR
 //        }
 //    }
 
-    let greenColor = UIColor(red: 49.0/255.0, green: 189.0/255.0, blue: 182.0/255.0, alpha: 1)
+    let greenColor = UIColor.organizationalColor()
     var contactStore = CNContactStore()
     var contacts = [CNContact]()
     var contactSections : [Section]?

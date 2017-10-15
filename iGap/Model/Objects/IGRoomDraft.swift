@@ -1,5 +1,3 @@
-//
-//  IGMessageViewController.swift
 /*
  * This is the source code of iGap for iOS
  * It is licensed under GNU AGPL v3.0
@@ -15,9 +13,9 @@ import Foundation
 import IGProtoBuff
 
 class IGRoomDraft: Object {
-    dynamic var message: String = ""
-    dynamic var replyTo: Int64  = -1
-    dynamic var roomId:  Int64  = -1
+    @objc dynamic  var message: String = ""
+    @objc dynamic  var replyTo: Int64  = -1
+    @objc dynamic  var roomId:  Int64  = -1
     
     
     override static func primaryKey() -> String {
@@ -43,12 +41,13 @@ class IGRoomDraft: Object {
     }
         
     func toIGP() -> IGPRoomDraft {
-        let roomDraftBuider = IGPRoomDraft.Builder()
-        roomDraftBuider.setIgpMessage(self.message)
+        var roomDraftMessage = IGPRoomDraft()
+        roomDraftMessage.igpMessage = self.message
         if self.replyTo != -1 {
-            roomDraftBuider.setIgpReplyTo(self.replyTo)
+            roomDraftMessage.igpReplyTo = self.replyTo
         }
-        return try! roomDraftBuider.build()
+        return roomDraftMessage
+        //return try! roomDraftBuider.build()
     }
     
     //detach from current realm

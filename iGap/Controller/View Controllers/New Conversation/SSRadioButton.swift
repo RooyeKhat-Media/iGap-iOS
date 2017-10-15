@@ -14,7 +14,7 @@ import UIKit
 
 class SSRadioButton: UIButton {
     
-    let greenColor = UIColor(red: 49.0/255.0, green: 189.0/255.0, blue: 182.0/255.0, alpha: 1)
+    let greenColor = UIColor.organizationalColor()
     fileprivate var circleLayer = CAShapeLayer()
     fileprivate var fillCircleLayer = CAShapeLayer()
     override var isSelected: Bool {

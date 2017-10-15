@@ -14,7 +14,7 @@ class IGSettingAddContactTableViewController: UITableViewController {
 
     let borderName = CALayer()
     let width = CGFloat(0.5)
-    let greenColor = UIColor(red: 49.0/255.0, green: 189.0/255.0, blue: 182.0/255.0, alpha: 1)
+    let greenColor = UIColor.organizationalColor()
     let tableviewBackgroundColor = UIColor(red: 239/255, green: 238/255, blue: 246/255, alpha: 1)
 
     override func viewDidLoad() {
