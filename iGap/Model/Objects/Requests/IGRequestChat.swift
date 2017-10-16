@@ -39,9 +39,6 @@ class IGChatGetRoomRequest : IGRequest {
                 break
             }
         }
-        
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -146,8 +143,6 @@ class IGChatSendMessageRequest : IGRequest {
                 break
             }
         }
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -179,6 +174,7 @@ class IGChatUpdateStatusRequest : IGRequest {
         class func interpret(response:IGPChatUpdateStatusResponse) {
             IGFactory.shared.updateMessageStatus(response.igpMessageID, roomID: response.igpRoomID, status: response.igpStatus, statusVersion: response.igpStatusVersion)
         }
+        
         override class func handlePush(responseProtoMessage: Message) {
             switch responseProtoMessage {
             case let response as IGPChatUpdateStatusResponse:
@@ -187,8 +183,6 @@ class IGChatUpdateStatusRequest : IGRequest {
                 break
             }
         }
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -218,8 +212,6 @@ class IGChatEditMessageRequest : IGRequest {
                 break
             }
         }
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -246,8 +238,6 @@ class IGChatDeleteMessageRequest : IGRequest {
                 break
             }
         }
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 class IGChatClearMessageRequest : IGRequest {
@@ -278,8 +268,6 @@ class IGChatClearMessageRequest : IGRequest {
             }
 
         }
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -306,8 +294,6 @@ class IGChatDeleteRequest: IGRequest {
                 break
             }
         }
-        override class func error() {}
-        override class func timeout() {}
     }
     
 }
@@ -335,8 +321,6 @@ class IGChatUpdateDraftRequest : IGRequest {
                 break
             }
         }
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -354,8 +338,6 @@ class IGChatGetDraftRequest : IGRequest {
             let draft = IGRoomDraft(igpDraft: responseProtoMessage.igpDraft, roomId: roomId)
             IGFactory.shared.save(draft: draft)
         }
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -394,8 +376,6 @@ class IGChatConvertToGroupRequest : IGRequest {
         }
     
         override class func handlePush(responseProtoMessage: Message) {}
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -415,6 +395,7 @@ class IGChatSetActionRequest : IGRequest {
         class func interpret(response responseProtoMessage:IGPChatSetActionResponse) {
             
         }
+        
         override class func handlePush(responseProtoMessage: Message) {
             switch responseProtoMessage {
             case let response as IGPChatSetActionResponse:
@@ -425,8 +406,6 @@ class IGChatSetActionRequest : IGRequest {
                 break
             }
         }
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 

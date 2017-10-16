@@ -63,8 +63,6 @@ class IGUserRegisterRequest : IGRequest {
         }
         
         override class func handle(responseProtoMessage: Message) {}
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -86,8 +84,6 @@ class IGUserVerifyRequest : IGRequest {
         }
         
         override class func handlePush(responseProtoMessage: Message) {}
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -131,8 +127,6 @@ class IGUserLoginRequest : IGRequest {
     
     class Handler : IGRequest.Handler{
         override class func handlePush(responseProtoMessage: Message) {}
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -164,8 +158,6 @@ class IGUserProfileSetEmailRequest : IGRequest {
             }
         }
         
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -192,8 +184,6 @@ class IGUserProfileSetGenderRequest : IGRequest {
         override class func handlePush(responseProtoMessage: Message) {
             
         }
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -225,8 +215,6 @@ class IGUserProfileSetNicknameRequest : IGRequest {
             }
             
         }
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -261,8 +249,6 @@ class IGUserContactsImportRequest : IGRequest {
             IGFactory.shared.addRegistredContacts(registredContacts)
         }
         override class func handlePush(responseProtoMessage: Message) {}
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -281,8 +267,6 @@ class IGUserContactsGetListRequest : IGRequest {
             IGFactory.shared.saveRegistredContactsUsers(registredUsers)
         }
         override class func handlePush(responseProtoMessage: Message) {}
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -294,8 +278,6 @@ class IGUserContactsDeleteRequest : IGRequest {
     
     class Handler : IGRequest.Handler{
         override class func handlePush(responseProtoMessage: Message) {}
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -307,8 +289,6 @@ class IGUserContactsEditRequest : IGRequest {
     
     class Handler : IGRequest.Handler{
         override class func handlePush(responseProtoMessage: Message) {}
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -329,8 +309,6 @@ class IGUserProfileGetEmailRequest : IGRequest {
             return userEmail
         }
         override class func handlePush(responseProtoMessage: Message) {}
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -352,8 +330,6 @@ class IGUserProfileGetGenderRequest : IGRequest {
             return userGender
         }
         override class func handlePush(responseProtoMessage: Message) {}
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -376,8 +352,6 @@ class IGUserProfileGetNicknameRequest : IGRequest {
             return userNickname
         }
         override class func handlePush(responseProtoMessage: Message) {}
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -389,8 +363,6 @@ class IGUserUsernameToIdRequest : IGRequest {
     
     class Handler : IGRequest.Handler{
         override class func handlePush(responseProtoMessage: Message) {}
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -418,8 +390,6 @@ class IGUserAvatarAddRequest : IGRequest {
                 break
             }
         }
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -441,8 +411,6 @@ class IGUserAvatarDeleteRequest : IGRequest {
         }
 
         override class func handlePush(responseProtoMessage: Message) {}
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -470,8 +438,6 @@ class IGUserAvatarGetListRequest : IGRequest {
             
         }
         override class func handlePush(responseProtoMessage: Message) {}
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -489,8 +455,6 @@ class IGUserInfoRequest : IGRequest {
     class Handler : IGRequest.Handler{
         
         override class func handlePush(responseProtoMessage: Message) {}
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -511,8 +475,6 @@ class IGUserGetDeleteTokenRequest : IGRequest {
                            tokenRegex: responseProtoMessage.igpTokenRegex)
         }
         override class func handlePush(responseProtoMessage: Message) {}
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -542,8 +504,6 @@ class IGUserDeleteRequest : IGRequest {
             }
 
         }
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -573,8 +533,6 @@ class IGUserProfileSetSelfRemoveRequest : IGRequest {
                 break
             }
         }
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -655,8 +613,6 @@ class IGUserProfileUpdateUsernameRequest : IGRequest {
                 break
             }
         }
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -703,8 +659,6 @@ class IGUserUpdateStatusRequest : IGRequest {
                 break
             }
         }
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 //MARK: -
@@ -725,8 +679,6 @@ class IGUserSessionGetActiveListRequest : IGRequest {
             return igSessions
         }
         override class func handlePush(responseProtoMessage: Message) {}
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 //MARK: -
@@ -743,8 +695,6 @@ class IGUserSessionTerminateRequest : IGRequest {
     class Handler : IGRequest.Handler{
         class func interpret(response responseProtoMessage: IGPUserSessionTerminateResponse){}
         override class func handlePush(responseProtoMessage:Message) {}//
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -763,8 +713,6 @@ class IGUserSessionLogoutRequest : IGRequest {
             appDelegate.logoutAndShowRegisterViewController()
         }
         override class func handlePush(responseProtoMessage:Message) {}
-        override class func error() {}
-        override class func timeout() {}
         
     }
 }
@@ -793,8 +741,6 @@ class IGUserContactsBlockRequest : IGRequest {
                 break
             }
         }
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -821,8 +767,6 @@ class IGUserContactsUnBlockRequest : IGRequest {
                 break
             }
         }
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -840,8 +784,6 @@ class IGUserContactsGetBlockedListRequest : IGRequest {
             IGFactory.shared.saveBlockedUsers(responseProtoMessage.igpUser)
         }
         override class func handlePush(responseProtoMessage:Message) {}//
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -1106,8 +1048,6 @@ class IGUserPrivacyGetRuleRequest: IGRequest {
             return privacyLevel
         }
         override class func handlePush(responseProtoMessage:Message) {}
-        override class func error() {}
-        override class func timeout() {}
 
     }
 }
@@ -1195,8 +1135,6 @@ class IGUserPrivacySetRuleRequest: IGRequest {
                 break
             }
         }
-        override class func error() {}
-        override class func timeout() {}
     }
     
 }

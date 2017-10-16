@@ -42,8 +42,6 @@ class IGClientConditionRequest : IGRequest {
             
         }
         override class func handlePush(responseProtoMessage: Message) {}
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -67,8 +65,6 @@ class IGClientGetRoomListRequest : IGRequest {
             return igpRooms.count
         }
         override class func handlePush(responseProtoMessage: Message) {}
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -89,8 +85,6 @@ class IGClientGetRoomRequest : IGRequest {
             IGFactory.shared.saveRoomsToDatabase([igpRoom], ignoreLastMessage: true)
         }
         override class func handlePush(responseProtoMessage: Message) {}
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -125,8 +119,6 @@ class IGClientGetRoomHistoryRequest : IGRequest {
         
         
         override class func handlePush(responseProtoMessage: Message) {}
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 class IGClientSearchRoomHistoryRequest : IGRequest {

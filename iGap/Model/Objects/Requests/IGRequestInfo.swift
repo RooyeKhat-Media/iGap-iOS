@@ -34,8 +34,6 @@ class IGInfoLocationRequest : IGRequest {
             
         }
         override class func handlePush(responseProtoMessage: Message) {}
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -51,8 +49,6 @@ class IGInfoCountryRequest : IGRequest {
     
     class Handler : IGRequest.Handler{
         override class func handlePush(responseProtoMessage: Message) {}
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -67,8 +63,6 @@ class IGInfoTimeRequest : IGRequest {
     
     class Handler : IGRequest.Handler{
         override class func handlePush(responseProtoMessage: Message) {}
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -88,8 +82,6 @@ class IGInfoPageRequest : IGRequest {
         }
         
         override class func handlePush(responseProtoMessage: Message) {}
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 

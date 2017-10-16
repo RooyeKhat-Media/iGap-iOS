@@ -56,7 +56,5 @@ class IGQrCodeNewDeviceRequest : IGRequest {
         
         override class func handlePush(responseProtoMessage: Message) {}
         
-        override class func error() {}
-        override class func timeout() {}
     }
 }

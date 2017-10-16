@@ -42,14 +42,6 @@ class IGConnectionSecuringRequest : IGRequest {
             let requestWrapper : IGRequestWrapper = IGRequestWrapper(message: connectionSecuringResponseRequest, actionID: 2)
             IGWebSocketManager.sharedManager.send(requestW: requestWrapper)
         }
-        
-        override class func error() {
-            
-        }
-        
-        override class func timeout() {
-            
-        }
     }
 }
 
@@ -83,14 +75,6 @@ class IGConnectionSymmetricKeyRequest : IGRequest {
                 IGAppManager.sharedManager.login()
             }
         }
-        
-        override class func error() {
-            
-        }
-        
-        override class func timeout() {
-            
-        }
     }
 }
 
@@ -98,7 +82,7 @@ class IGConnectionSymmetricKeyRequest : IGRequest {
 class IGHeartBeatRequest : IGRequest {
     class Generator : IGRequest.Generator{
         class func generate() -> IGRequestWrapper {
-            var heartbeatRequestMessage = IGPHeartbeat()
+            let heartbeatRequestMessage = IGPHeartbeat()
             return IGRequestWrapper(message: heartbeatRequestMessage, actionID: 3)
         }
     }
@@ -107,14 +91,6 @@ class IGHeartBeatRequest : IGRequest {
         override class func handlePush(responseProtoMessage: Message) {
             let reqW = IGHeartBeatRequest.Generator.generate()
             IGRequestManager.sharedManager.addRequestIDAndSend(requestWrappers: reqW)
-        }
-        
-        override class func error() {
-            
-        }
-        
-        override class func timeout() {
-            
         }
     }
 }

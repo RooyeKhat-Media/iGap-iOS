@@ -36,8 +36,6 @@ class IGFileUploadOptionRequest : IGRequest {
             return (initialBytesLimit: initialBytesLimit, finalBytesLimit: finalBytesLimit)
         }
         override class func handlePush(responseProtoMessage: Message) {}
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -65,8 +63,6 @@ class IGFileUploadInitRequest : IGRequest {
         }
         
         override class func handlePush(responseProtoMessage: Message) {}
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -92,8 +88,6 @@ class IGFileUploadRequest : IGRequest {
         }
         
         override class func handlePush(responseProtoMessage: Message) {}
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -128,8 +122,6 @@ class IGFileUploadStatusRequest : IGRequest {
         }
         
         override class func handlePush(responseProtoMessage: Message) {}
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -146,8 +138,6 @@ class IGFileInfoRequest: IGRequest {
     
     class Handler : IGRequest.Handler{
         override class func handlePush(responseProtoMessage: Message) {}
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -181,8 +171,6 @@ class IGFileDownloadRequest: IGRequest {
         }
         
         override class func handlePush(responseProtoMessage: Message) {}
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 

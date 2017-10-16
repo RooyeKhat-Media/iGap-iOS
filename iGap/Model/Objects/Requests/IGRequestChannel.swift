@@ -38,8 +38,6 @@ class IGChannelCreateRequest : IGRequest {
                 break
             }
         }
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -87,8 +85,6 @@ class IGChannelAddMemberRequest : IGRequest {
                 break
             }
         }
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -357,8 +353,6 @@ class IGChannelSendMessageRequest: IGRequest {
                 break
             }
         }
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -384,8 +378,6 @@ class IGChannelAddAvatarRequest: IGRequest {
                 break
             }
         }
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -544,8 +536,6 @@ class IGChannelUpdateUsernameRequest : IGRequest {
             }
         }
         
-        override class func error() {}
-        override class func timeout() {}
     }
 
 }

@@ -40,8 +40,6 @@ class IGGroupCreateRequest : IGRequest {
                 break
             }
         }
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -91,8 +89,6 @@ class IGGroupAddMemberRequest : IGRequest {
                 break
             }
         }
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -396,8 +392,6 @@ class IGGroupSendMessageRequest : IGRequest {
                 break
             }
         }
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -435,8 +429,6 @@ class IGGroupUpdateStatusRequest : IGRequest {
                 break
             }
         }
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -464,8 +456,6 @@ class IGGroupAvatarAddRequest : IGRequest {
                 break
             }
         }
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -652,8 +642,6 @@ class IGGroupSetActionRequest : IGRequest {
                 break
             }
         }
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 

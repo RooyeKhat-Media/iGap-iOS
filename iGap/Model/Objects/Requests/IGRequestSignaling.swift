@@ -35,8 +35,6 @@ class IGSignalingGetConfigurationRequest : IGRequest {
             }
         }
 
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -65,8 +63,6 @@ class IGSignalingOfferRequest : IGRequest {
             }
         }
 
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -93,8 +89,6 @@ class IGSignalingRingingRequest : IGRequest {
             }
         }
 
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -122,8 +116,6 @@ class IGSignalingAcceptRequest : IGRequest {
             }
         }
 
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -153,8 +145,6 @@ class IGSignalingCandidateRequest : IGRequest {
             }
         }
 
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -181,8 +171,6 @@ class IGSignalingLeaveRequest : IGRequest {
             }
         }
 
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -210,8 +198,6 @@ class IGSignalingSessionHoldRequest : IGRequest {
             }
         }
 
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -238,8 +224,6 @@ class IGSignalingGetLogRequest : IGRequest {
             }
         }
 
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -267,8 +251,6 @@ class IGSignalingClearLogRequest : IGRequest {
             }
         }
 
-        override class func error() {}
-        override class func timeout() {}
     }
 }
 
@@ -298,7 +280,5 @@ class IGSignalingRateRequest : IGRequest {
             }
         }
 
-        override class func error() {}
-        override class func timeout() {}
     }
 }

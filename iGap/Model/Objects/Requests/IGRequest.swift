@@ -13,14 +13,11 @@ import IGProtoBuff
 import SwiftProtobuf
 
 class IGRequest {
-    class Generator {
-        
-    }
+    class Generator {}
     
     class Handler {
-        class func handle(responseProtoMessage: Message) {} //I think we can remove this function
+        //TODO: check if we can merge these two functions into one
+        class func handle(responseProtoMessage: Message) {}
         class func handlePush(responseProtoMessage: Message) {}
-        class func error() {}
-        class func timeout() {}
     }
 }
