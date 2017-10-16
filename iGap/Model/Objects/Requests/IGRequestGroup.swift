@@ -223,7 +223,7 @@ class IGGroupKickAdminRequest: IGRequest {
         class func interpret (response responseProtoMessage: IGPGroupKickAdminResponse) {
             let igpRoomId = responseProtoMessage.igpRoomID
             let igpmemberID = responseProtoMessage.igpMemberID
-            IGFactory.shared.demoateRoleInGroup(roomId: igpRoomId, memberId: igpmemberID)
+            IGFactory.shared.demoteRoleInGroup(roomId: igpRoomId, memberId: igpmemberID)
             
         }
         override class func handlePush(responseProtoMessage : Message) {
@@ -252,7 +252,7 @@ class IGGroupKickMemberRequest: IGRequest {
         class func interpret(response responseProtoMessage: IGPGroupKickMemberResponse) {
             let igpRoomId = responseProtoMessage.igpRoomID
             let igpMemberId = responseProtoMessage.igpMemberID
-            IGFactory.shared.kickGroupMembersFromDataBase(roomId: igpRoomId, memberId: igpMemberId)
+            IGFactory.shared.kickGroupMembersFromDatabase(roomId: igpRoomId, memberId: igpMemberId)
             
         }
         override class func handlePush(responseProtoMessage : Message) {
@@ -281,7 +281,7 @@ class IGGroupKickModeratorRequest : IGRequest {
         class func interpret (response responseProtoMessage : IGPGroupKickModeratorResponse) {
             let igpRoomId = responseProtoMessage.igpRoomID
             let igpMemberId = responseProtoMessage.igpMemberID
-            IGFactory.shared.demoateRoleInGroup(roomId: igpRoomId, memberId: igpMemberId)
+            IGFactory.shared.demoteRoleInGroup(roomId: igpRoomId, memberId: igpMemberId)
             
         }
         override class func handlePush(responseProtoMessage : Message) {
@@ -394,9 +394,6 @@ class IGGroupSendMessageRequest : IGRequest {
         }
     }
 }
-
-
-
 
 class IGGroupUpdateStatusRequest : IGRequest {
     class Generator : IGRequest.Generator{
@@ -582,10 +579,9 @@ class IGGroupGetMemberListRequest : IGRequest {
     class Handler: IGRequest.Handler {
         class func interpret(response responseProtoMessage: IGPGroupGetMemberListResponse, roomId: Int64) -> [IGPGroupGetMemberListResponse.IGPMember] {
             let members = responseProtoMessage.igpMember
-            IGFactory.shared.saveGroupMemberListToDataBase(members, roomId: roomId)
+            IGFactory.shared.saveGroupMemberListToDatabase(members, roomId: roomId)
             return members
         }
-
         
         override class func handlePush(responseProtoMessage : Message) {
 
@@ -681,21 +677,21 @@ class IGGroupCheckUsernameRequest : IGRequest {
         }
     }
     class Handler: IGRequest.Handler {
-        class func interpret(response responseProtoMessage: IGPGroupCheckUsernameResponse) ->             IGCheckUsernameStatus {
-                let igpUsernameStatus = responseProtoMessage.igpStatus
-                var usernameStatus : IGCheckUsernameStatus
-                switch igpUsernameStatus {
-                case .available:
-                    usernameStatus = .available
-                case .invalid:
-                    usernameStatus = .invalid
-                case .taken:
-                    usernameStatus = .taken
-                default:
-                    usernameStatus = .invalid
-                }
-                return usernameStatus
+        class func interpret(response responseProtoMessage: IGPGroupCheckUsernameResponse) -> IGCheckUsernameStatus {
+            let igpUsernameStatus = responseProtoMessage.igpStatus
+            var usernameStatus : IGCheckUsernameStatus
+            switch igpUsernameStatus {
+            case .available:
+                usernameStatus = .available
+            case .invalid:
+                usernameStatus = .invalid
+            case .taken:
+                usernameStatus = .taken
+            default:
+                usernameStatus = .invalid
             }
+            return usernameStatus
+        }
         
         override class func handlePush(responseProtoMessage : Message) {
             
@@ -724,7 +720,6 @@ class IGGroupUpdateUsernameRequest : IGRequest {
             switch responseProtoMessage {
             case let response as IGPGroupUpdateUsernameResponse:
                 self.interpret(response: response)
-                break
             default:
                 break
             }
@@ -739,25 +734,24 @@ class IGGroupRemoveUsernameRequest: IGRequest {
         class func generate(roomId: Int64) -> IGRequestWrapper {
             var groupRemoveUsernameRequestMessage = IGPGroupRemoveUsername()
             groupRemoveUsernameRequestMessage.igpRoomID = roomId
-            
             return IGRequestWrapper(message: groupRemoveUsernameRequestMessage, actionID: 323)
         }
     }
+    
     class Handler : IGRequest.Handler {
         class func interpret( response responseProtoMessage : IGPGroupRemoveUsernameResponse) -> Int64 {
             let igpRoomId = responseProtoMessage.igpRoomID
             IGFactory.shared.removeGroupUserName (igpRoomId )
             return igpRoomId
         }
+        
         override class func handlePush(responseProtoMessage : Message) {
             switch responseProtoMessage {
             case let response as IGPGroupRemoveUsernameResponse:
                 self.interpret(response: response)
-                break
             default:
                 break
             }
-
         }
 
     }
@@ -771,6 +765,7 @@ class IGGroupRevokLinkRequest: IGRequest {
             return IGRequestWrapper(message: groupRevokLinkRequestMessage, actionID: 324)
         }
     }
+    
     class Handler: IGRequest.Handler {
         class func interpret( response responseProtoMessage : IGPGroupRevokeLinkResponse) ->(roomId: Int64 , invitedLink: String , InvitedToken: String){
             let roomID = responseProtoMessage.igpRoomID
@@ -779,11 +774,11 @@ class IGGroupRevokLinkRequest: IGRequest {
             IGFactory.shared.revokePrivateRoomLink(roomId: roomID , invitedLink: invitedLink , invitedToken: invitedToken)
             return (roomId: roomID , invitedLink: invitedLink , InvitedToken: invitedToken)
         }
+        
         override class func handlePush(responseProtoMessage : Message) {
             switch responseProtoMessage {
             case let response as IGPGroupRevokeLinkResponse:
                 self.interpret(response: response)
-                break
             default:
                 break
             }
@@ -808,6 +803,7 @@ class IGGroupEditMessageRequest : IGRequest {
         class func interpret(response: IGPGroupEditMessageResponse) {
             IGFactory.shared.editMessage(response.igpMessageID, roomID: response.igpRoomID, message: response.igpMessage, messageType: IGRoomMessageType.unknown.fromIGP(response.igpMessageType), messageVersion: response.igpMessageVersion)
         }
+        
         override class func handlePush(responseProtoMessage: Message) {
             switch responseProtoMessage {
             case let response as IGPGroupEditMessageResponse:

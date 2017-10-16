@@ -196,7 +196,7 @@ class IGChannelKickAdminRequest : IGRequest {
         class func interpret (response responseProtoMessage:IGPChannelKickAdminResponse) -> (roomId: Int64 , memberId: Int64) {
             let igpMemberId = responseProtoMessage.igpMemberID
             let igpRoomId = responseProtoMessage.igpRoomID
-            IGFactory.shared.demoatRoleInChannel(roomId: igpRoomId, memberId: igpMemberId)
+            IGFactory.shared.demoteRoleInChannel(roomId: igpRoomId, memberId: igpMemberId)
             return (roomId: igpRoomId , memberId: igpMemberId)
             
         }
@@ -225,7 +225,7 @@ class IGChannelKickMemberRequest: IGRequest {
         class func interpret (response responseProtoMessage:IGPChannelKickMemberResponse) -> (roomId: Int64 , memberId: Int64) {
             let igpRoomId = responseProtoMessage.igpRoomID
             let igpMemberId = responseProtoMessage.igpMemberID
-            IGFactory.shared.kickChannelMemberFromDataBase(roomId: igpRoomId, memberId: igpMemberId)
+            IGFactory.shared.kickChannelMemberFromDatabase(roomId: igpRoomId, memberId: igpMemberId)
             return(roomId: igpRoomId , memberId: igpMemberId)
         }
         override class func handlePush(responseProtoMessage: Message) {
@@ -252,7 +252,7 @@ class IGChannelKickModeratorRequest : IGRequest {
         class func interpret(response responseProtoMessage:IGPChannelKickModeratorResponse) {
             let igpMemberId = responseProtoMessage.igpMemberID
             let igpRoomId = responseProtoMessage.igpRoomID
-            IGFactory.shared.demoatRoleInChannel(roomId: igpRoomId, memberId: igpMemberId)
+            IGFactory.shared.demoteRoleInChannel(roomId: igpRoomId, memberId: igpMemberId)
         }
         
         override class func handlePush(responseProtoMessage: Message) {
@@ -503,7 +503,7 @@ class IGChannelGetMemberListRequest: IGRequest {
     class Handler : IGRequest.Handler{
         class func interpret(response responseProtoMessage:IGPChannelGetMemberListResponse, roomId: Int64) -> [IGPChannelGetMemberListResponse.IGPMember] {
             let members = responseProtoMessage.igpMember
-            IGFactory.shared.saveChannelMemberListToDataBase(members, roomId: roomId)
+            IGFactory.shared.saveChannelMemberListToDatabase(members, roomId: roomId)
             return members
         }
         override class func handlePush(responseProtoMessage: Message) {

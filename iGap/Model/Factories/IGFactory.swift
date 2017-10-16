@@ -666,6 +666,7 @@ class IGFactory: NSObject {
         self.performNextFactoryTaskIfPossible()
     }
     
+    //TODO: merge with leftRoomInDatabase
     func setDeleteRoom(roomID : Int64){
         let task = IGFactoryTask()
         task.task = {
@@ -681,7 +682,6 @@ class IGFactory: NSObject {
                     task.success!()
                 }
             }
-            
         }
         task.success {
             self.removeTaskFromQueueAndPerformNext(task)
@@ -797,7 +797,7 @@ class IGFactory: NSObject {
     
 
     
-    func saveGroupMemberListToDataBase(_ igpMembers: [IGPGroupGetMemberListResponse.IGPMember], roomId: Int64) {
+    func saveGroupMemberListToDatabase(_ igpMembers: [IGPGroupGetMemberListResponse.IGPMember], roomId: Int64) {
         var memberUserIDs = Set<Int64>()
         for igpMember in igpMembers {
             if igpMember.igpUserID != 0 {
@@ -817,7 +817,7 @@ class IGFactory: NSObject {
             print ("◉ Executing Task: " + #function)
             IGDatabaseManager.shared.perfrmOnDatabaseThread {
                 IGDatabaseManager.shared.realm.beginWrite()
-                for (index, igpMember) in igpMembers.enumerated() {
+                for igpMember in igpMembers {
                     let predicate = NSPredicate(format: "id = %lld", igpMember.igpUserID )
                     if let userInDb = IGDatabaseManager.shared.realm.objects(IGRegisteredUser.self).filter(predicate).first {
                         let groupMember = IGGroupMember(igpMember: igpMember, roomId: roomId)
@@ -860,7 +860,7 @@ class IGFactory: NSObject {
     }
     
     
-    func saveChannelMemberListToDataBase(_ igpMembers: [IGPChannelGetMemberListResponse.IGPMember], roomId: Int64) {
+    func saveChannelMemberListToDatabase(_ igpMembers: [IGPChannelGetMemberListResponse.IGPMember], roomId: Int64) {
         var memberUserIDs = Set<Int64>()
         for igpMember in igpMembers {
             if igpMember.igpUserID != 0 {
@@ -921,7 +921,7 @@ class IGFactory: NSObject {
         self.performNextFactoryTaskIfPossible()
     }
     
-    func kickChannelMemberFromDataBase(roomId: Int64 , memberId: Int64) {
+    func kickChannelMemberFromDatabase(roomId: Int64 , memberId: Int64) {
         let task = IGFactoryTask()
         task.task = {
             IGDatabaseManager.shared.perfrmOnDatabaseThread {
@@ -947,17 +947,18 @@ class IGFactory: NSObject {
         self.performNextFactoryTaskIfPossible()
     }
     
-    func demoatRoleInChannel(roomId: Int64 , memberId: Int64) {
+    //TODO: Merge with demoteRoleInGroup
+    func demoteRoleInChannel(roomId: Int64 , memberId: Int64) {
         let task = IGFactoryTask()
         task.task = {
             IGDatabaseManager.shared.perfrmOnDatabaseThread {
                 print("====> demoate member with userID \(memberId) in room \(roomId)")
-            let predicate = NSPredicate(format: "userID = %lld AND roomID = %lld", memberId, roomId)
-            if let memberInDb = try! Realm().objects(IGChannelMember.self).filter(predicate).first {
-              try! IGDatabaseManager.shared.realm.write {
-                    memberInDb.role = .member
+                let predicate = NSPredicate(format: "userID = %lld AND roomID = %lld", memberId, roomId)
+                if let memberInDb = try! Realm().objects(IGChannelMember.self).filter(predicate).first {
+                    try! IGDatabaseManager.shared.realm.write {
+                        memberInDb.role = .member
+                    }
                 }
-            }
                 IGFactory.shared.performInFactoryQueue {
                     task.success!()
                 }
@@ -972,6 +973,7 @@ class IGFactory: NSObject {
 
     }
     
+    //TODO: merge with setDeleteRoom
     func leftRoomInDatabase(roomID: Int64) {
         let task = IGFactoryTask()
         task.task = {
@@ -995,7 +997,7 @@ class IGFactory: NSObject {
         self.performNextFactoryTaskIfPossible()
     }
     
-    func kickGroupMembersFromDataBase(roomId: Int64 , memberId: Int64) {
+    func kickGroupMembersFromDatabase(roomId: Int64 , memberId: Int64) {
         let task = IGFactoryTask()
         task.task = {
             IGDatabaseManager.shared.perfrmOnDatabaseThread {
@@ -1020,7 +1022,8 @@ class IGFactory: NSObject {
         self.performNextFactoryTaskIfPossible()
     }
     
-    func demoateRoleInGroup (roomId: Int64 , memberId : Int64) {
+    //TODO: Merge with demoteRoleInChannel
+    func demoteRoleInGroup(roomId: Int64 , memberId : Int64) {
         let task = IGFactoryTask()
         task.task = {
             IGDatabaseManager.shared.perfrmOnDatabaseThread {

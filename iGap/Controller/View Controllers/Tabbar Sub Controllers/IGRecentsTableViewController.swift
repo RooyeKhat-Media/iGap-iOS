@@ -148,29 +148,9 @@ class IGRecentsTableViewController: UITableViewController {
         super.viewWillAppear(animated)
         self.tableView.isUserInteractionEnabled = true
         
-        self.notificationToken = rooms!.addNotificationBlock { (changes: RealmCollectionChange) in
-            switch changes {
-            case .initial:
-                self.tableView.reloadData()
-                self.setTabbarBadge()
-                break
-            case .update(_, let deletions, let insertions, let modifications):
-                print("updating recents VC")
-                // Query messages have changed, so apply them to the TableView
-                self.tableView.beginUpdates()
-                self.tableView.insertRows(at: insertions.map { IndexPath(row: $0, section: 0) }, with: .none)
-                self.tableView.deleteRows(at: deletions.map { IndexPath(row: $0, section: 0) }, with: .none)
-                self.tableView.reloadRows(at: modifications.map { IndexPath(row: $0, section: 0) }, with: .none)
-                self.tableView.endUpdates()
-                self.tableView.reloadData()
-                self.setTabbarBadge()
-                break
-            case .error(let err):
-                // An error occurred while opening the Realm file on the background worker thread
-                fatalError("\(err)")
-                break
-            }
-        }
+        self.addRoomChangeNotificationBlock()
+        
+        
         if IGAppManager.sharedManager.isUserLoggiedIn() {
             self.fetchRoomList()
             self.saveAndSendContacts()
@@ -208,9 +188,37 @@ class IGRecentsTableViewController: UITableViewController {
     
     //MARK: Room List actions
     @objc private func userDidLogin() {
+        self.addRoomChangeNotificationBlock()
         self.fetchRoomList()
         self.saveAndSendContacts()
         self.requestToGetUserPrivacy()
+    }
+    
+    private func addRoomChangeNotificationBlock() {
+        self.notificationToken?.stop()
+        self.notificationToken = rooms!.addNotificationBlock { (changes: RealmCollectionChange) in
+            switch changes {
+            case .initial:
+                self.tableView.reloadData()
+                self.setTabbarBadge()
+                break
+            case .update(_, let deletions, let insertions, let modifications):
+                print("updating recents VC")
+                // Query messages have changed, so apply them to the TableView
+                self.tableView.beginUpdates()
+                self.tableView.insertRows(at: insertions.map { IndexPath(row: $0, section: 0) }, with: .none)
+                self.tableView.deleteRows(at: deletions.map { IndexPath(row: $0, section: 0) }, with: .none)
+                self.tableView.reloadRows(at: modifications.map { IndexPath(row: $0, section: 0) }, with: .none)
+                self.tableView.endUpdates()
+                //                self.tableView.reloadData()
+                self.setTabbarBadge()
+                break
+            case .error(let err):
+                // An error occurred while opening the Realm file on the background worker thread
+                fatalError("\(err)")
+                break
+            }
+        }
     }
     
     private func sendClientCondition(clientCondition: IGClientCondition) {
