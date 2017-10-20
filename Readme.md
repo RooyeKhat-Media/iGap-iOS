@@ -12,7 +12,7 @@ We welcome all developers to use our API and source code to create applications 
 ## Installation
 1. Fork this repository
 2. Clone the forked repository in your local machine
-3. Run ```carthage update```
+3. Run ```carthage bootstrap```
 
 ## API documentation
 iGap API manuals: https://github.com/RooyeKhat-Media/iGap-API
