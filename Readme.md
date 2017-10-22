@@ -3,7 +3,7 @@
 ![Build: Passing](https://img.shields.io/badge/build-passing-brightgreen.svg)
 ![Swift 3.2.x](https://img.shields.io/badge/swift-3.2.x-orange.svg)
 ![Platform iOS](https://img.shields.io/badge/platform-ios-lightgrey.svg)
-![AGPL 3.0](https://img.shields.io/badge/License-AGPL%203.0-blue.svg)
+![AGPL 3.0](https://img.shields.io/badge/license-AGPL%203.0-blue.svg)
 
 ## iGap messenger for iOS
 iGap is a messaging application and has been created using all latest modern technologies. iGap allows all users and programmers to use all its features, possibilities and potentials.
@@ -11,7 +11,7 @@ iGap is a messaging application and has been created using all latest modern tec
 ## Creating your iGap Application
 We welcome all developers to use our API and source code to create applications on our platform. There are several things we require from all developers for the moment.
 
-* Assign your own api_id (Random integer between 1000-100000 ) for your application. [userLoginRequestBuilder.setIgpAppId(your_api_id)](https://github.com/RooyeKhat-Media/iGap-iOS/blob/master/iGap/Model/Objects/Requests/IGRequestUser.swift#L116)
+* Assign your own api_id (Random integer between 1000-100000 ) for your application. [userLoginRequestMessage.igpAppID = your_api_id](https://github.com/RooyeKhat-Media/iGap-iOS/blob/master/iGap/Model/Objects/Requests/IGRequestUser.swift#L112)
 * Please do not use the name iGap for your app — or make sure your users understand that it is unofficial.
 * Kindly do not use our standard logo as your app's logo.
 * Please remember to publish your code too in order to comply with the licences.
