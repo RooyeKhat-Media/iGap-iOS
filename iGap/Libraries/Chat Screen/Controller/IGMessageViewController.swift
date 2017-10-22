@@ -1212,10 +1212,10 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
     }
     
     
-    fileprivate func deleteMessage(_ message: IGRoomMessage) {
+    fileprivate func deleteMessage(_ message: IGRoomMessage, both: Bool = false) {
         switch room!.type {
         case .chat:
-            IGChatDeleteMessageRequest.Generator.generate(message: message, room: self.room!).success { (responseProto) in
+            IGChatDeleteMessageRequest.Generator.generate(message: message, room: self.room!, both: both).success { (responseProto) in
                 switch responseProto {
                 case let response as IGPChatDeleteMessageResponse:
                     IGChatDeleteMessageRequest.Handler.interpret(response: response)
@@ -1698,6 +1698,13 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
         let delete = UIAlertAction(title: "Delete", style: .destructive, handler: { (action) in
             self.deleteMessage(cellMessage)
         })
+        let deleteForMe = UIAlertAction(title: "Delete for me", style: .destructive, handler: { (action) in
+            self.deleteMessage(cellMessage)
+        })
+        let roomTitle = self.room?.title != nil ? self.room!.title! : ""
+        let deleteForBoth = UIAlertAction(title: "Delete for me and " + roomTitle, style: .destructive, handler: { (action) in
+            self.deleteMessage(cellMessage, both: true)
+        })
         let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
         })
         
@@ -1729,7 +1736,16 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
             (self.room!.type == .channel && self.room!.channelRoom!.role == .owner) ||
             (self.room!.type == .group   && self.room!.groupRoom!.role   == .owner)
         {
-            alertC.addAction(delete)
+            //If user can delete message for all participants
+            if (self.room!.type == .chat) &&
+                (cellMessage.creationTime != nil) &&
+                (Date().timeIntervalSince1970 - cellMessage.creationTime!.timeIntervalSince1970 < 2 * 3600)
+            {
+                alertC.addAction(deleteForMe)
+                alertC.addAction(deleteForBoth)
+            } else {
+                alertC.addAction(deleteForMe)
+            }
         }
         
         alertC.addAction(cancel)

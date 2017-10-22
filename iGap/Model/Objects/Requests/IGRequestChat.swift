@@ -218,10 +218,11 @@ class IGChatEditMessageRequest : IGRequest {
 class IGChatDeleteMessageRequest : IGRequest {
     class Generator : IGRequest.Generator{
         //action id = 204
-        class func generate(message: IGRoomMessage, room: IGRoom) -> IGRequestWrapper {
+        class func generate(message: IGRoomMessage, room: IGRoom, both: Bool = false) -> IGRequestWrapper {
             var deleteMessageRequestMessage = IGPChatDeleteMessage()
             deleteMessageRequestMessage.igpMessageID = message.id
             deleteMessageRequestMessage.igpRoomID = room.id
+            deleteMessageRequestMessage.igpBoth = both
             return IGRequestWrapper(message: deleteMessageRequestMessage, actionID: 204)
         }
     }
