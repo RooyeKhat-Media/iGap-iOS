@@ -255,7 +255,6 @@
 		FAF985A61E2E10EC00B26940 /* MBProgressHUD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAF9858F1E2E10EC00B26940 /* MBProgressHUD.framework */; };
 		FAF985A71E2E10EC00B26940 /* MGSwipeTableCell.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAF985901E2E10EC00B26940 /* MGSwipeTableCell.framework */; };
 		FAF985A81E2E10EC00B26940 /* pop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAF985911E2E10EC00B26940 /* pop.framework */; };
-		FAF985A91E2E10EC00B26940 /* ProtocolBuffers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAF985921E2E10EC00B26940 /* ProtocolBuffers.framework */; };
 		FAF985AA1E2E10EC00B26940 /* Reachability.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAF985931E2E10EC00B26940 /* Reachability.framework */; };
 		FAF985AB1E2E10EC00B26940 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAF985941E2E10EC00B26940 /* Realm.framework */; };
 		FAF985AC1E2E10EC00B26940 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAF985951E2E10EC00B26940 /* RealmSwift.framework */; };
@@ -524,7 +523,6 @@
 		FAF9858F1E2E10EC00B26940 /* MBProgressHUD.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MBProgressHUD.framework; path = Carthage/Build/iOS/MBProgressHUD.framework; sourceTree = "<group>"; };
 		FAF985901E2E10EC00B26940 /* MGSwipeTableCell.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MGSwipeTableCell.framework; path = Carthage/Build/iOS/MGSwipeTableCell.framework; sourceTree = "<group>"; };
 		FAF985911E2E10EC00B26940 /* pop.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = pop.framework; path = Carthage/Build/iOS/pop.framework; sourceTree = "<group>"; };
-		FAF985921E2E10EC00B26940 /* ProtocolBuffers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ProtocolBuffers.framework; path = Carthage/Build/iOS/ProtocolBuffers.framework; sourceTree = "<group>"; };
 		FAF985931E2E10EC00B26940 /* Reachability.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Reachability.framework; path = Carthage/Build/iOS/Reachability.framework; sourceTree = "<group>"; };
 		FAF985941E2E10EC00B26940 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = Carthage/Build/iOS/Realm.framework; sourceTree = "<group>"; };
 		FAF985951E2E10EC00B26940 /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealmSwift.framework; path = Carthage/Build/iOS/RealmSwift.framework; sourceTree = "<group>"; };
@@ -555,7 +553,6 @@
 				FAF985A71E2E10EC00B26940 /* MGSwipeTableCell.framework in Frameworks */,
 				FAC42C851E36267400F2CB5C /* Fabric.framework in Frameworks */,
 				FAF985A81E2E10EC00B26940 /* pop.framework in Frameworks */,
-				FAF985A91E2E10EC00B26940 /* ProtocolBuffers.framework in Frameworks */,
 				FAF985AA1E2E10EC00B26940 /* Reachability.framework in Frameworks */,
 				FAF985AB1E2E10EC00B26940 /* Realm.framework in Frameworks */,
 				FAF985AC1E2E10EC00B26940 /* RealmSwift.framework in Frameworks */,
@@ -1224,7 +1221,6 @@
 				FAF9858F1E2E10EC00B26940 /* MBProgressHUD.framework */,
 				FAF985901E2E10EC00B26940 /* MGSwipeTableCell.framework */,
 				FAF985911E2E10EC00B26940 /* pop.framework */,
-				FAF985921E2E10EC00B26940 /* ProtocolBuffers.framework */,
 				FAF985931E2E10EC00B26940 /* Reachability.framework */,
 				FAF985941E2E10EC00B26940 /* Realm.framework */,
 				FAF985951E2E10EC00B26940 /* RealmSwift.framework */,
@@ -1378,7 +1374,6 @@
 				"$(SRCROOT)/Carthage/Build/iOS/MBProgressHUD.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/MGSwipeTableCell.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/pop.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/ProtocolBuffers.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Reachability.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Realm.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/RealmSwift.framework",
