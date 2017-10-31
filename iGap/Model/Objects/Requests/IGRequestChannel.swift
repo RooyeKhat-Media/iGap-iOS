@@ -25,9 +25,8 @@ class IGChannelCreateRequest : IGRequest {
     }
     class Handler : IGRequest.Handler {
         class func interpret(response responseProtoMessage:IGPChannelCreateResponse) ->(String) {
-            let invitedLink = responseProtoMessage.igpInviteLink
             
-            return (invitedLink: invitedLink ) as! (String)
+            return responseProtoMessage.igpInviteLink
         }
         
         override class func handlePush(responseProtoMessage: Message) {
