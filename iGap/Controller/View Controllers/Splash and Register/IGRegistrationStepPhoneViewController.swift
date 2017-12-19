@@ -25,6 +25,7 @@ class IGRegistrationStepPhoneViewController: UIViewController {
     @IBOutlet weak var countryNameLabel: UILabel!
     @IBOutlet weak var countryCodeLabel: UILabel!
     
+    internal static var allowGetCountry:Bool = true
     var phone: String?
     var selectedCountry : IGCountryInfo?
     var registrationResponse : (username:String, userId:Int64, authorHash:String, verificationMethod: IGVerificationCodeSendMethod, resendDelay:Int32, codeDigitsCount:Int32, codeRegex:String)?
@@ -125,7 +126,9 @@ class IGRegistrationStepPhoneViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        getUserCurrentLocation()
+        if(IGRegistrationStepPhoneViewController.allowGetCountry){
+            getUserCurrentLocation()
+        }
     }
     
     override func didReceiveMemoryWarning() {

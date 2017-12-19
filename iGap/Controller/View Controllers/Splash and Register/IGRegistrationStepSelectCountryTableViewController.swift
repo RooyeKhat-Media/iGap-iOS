@@ -32,6 +32,7 @@ class IGRegistrationStepSelectCountryTableViewController: UITableViewController 
         let navItem = self.navigationItem as! IGNavigationItem
         navItem.addModalViewItems(leftItemText: nil, rightItemText: "Close", title: "Country")
         navItem.rightViewContainer?.addAction {
+            IGRegistrationStepPhoneViewController.allowGetCountry = false
             self.dismiss(animated: true, completion: nil)
         }
         
@@ -93,6 +94,7 @@ class IGRegistrationStepSelectCountryTableViewController: UITableViewController 
                     let countryInfo = IGCountryInfo(responseProtoMessage: countryInfoReponse)
                     countryInfo.countryISO = isoCode
                     self.delegate?.didSelectCountry(country: countryInfo)
+                    IGRegistrationStepPhoneViewController.allowGetCountry = false
                     self.dismiss(animated: true, completion: nil)
                 default:
                     break

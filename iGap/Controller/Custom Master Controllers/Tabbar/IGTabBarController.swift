@@ -36,7 +36,7 @@ class IGTabBarController: UITabBarController {
                 let selectedTitleFont = UIFont.systemFont(ofSize: 9, weight: UIFontWeightBold)
                 let selectedTitleColor = UIColor.white
                 item.setTitleTextAttributes([NSFontAttributeName: selectedTitleFont, NSForegroundColorAttributeName: selectedTitleColor], for: UIControlState.normal)
-            }else{
+            } else {
                 let normalTitleFont = UIFont.systemFont(ofSize: 9, weight: UIFontWeightRegular)
                 let normalTitleColor = UIColor(red: 176.0/255.0, green: 224.0/255.0, blue: 230.0/255.0, alpha: 1.0)
                 item.setTitleTextAttributes([NSFontAttributeName: normalTitleFont, NSForegroundColorAttributeName: normalTitleColor], for: UIControlState.normal)

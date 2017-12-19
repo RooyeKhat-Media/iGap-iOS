@@ -26,7 +26,7 @@ class IGNavigationItem: UINavigationItem {
     var isUpdatingUserStatusForAction : Bool = false
     var isProccesing: Bool = true
     var hud = MBProgressHUD()
-//    var centerViewSubText:   UITextField?
+    //    var centerViewSubText:   UITextField?
     
     private var tapOnRightView:  (()->())?
     private var tapOncenterView: (()->())?
@@ -60,7 +60,7 @@ class IGNavigationItem: UINavigationItem {
     func setNavigationItemForWaitingForNetwork() {
         setNavigationItemWithCenterActivityIndicator(text: "Waiting for network")
     }
-
+    
     
     private func setNavigationItemWithCenterActivityIndicator(text: String) {
         self.centerViewContainer?.subviews.forEach { $0.removeFromSuperview() }
@@ -89,7 +89,7 @@ class IGNavigationItem: UINavigationItem {
         }
         
         self.titleView = centerViewContainer
-    
+        
     }
     
     
@@ -117,7 +117,7 @@ class IGNavigationItem: UINavigationItem {
         self.title = ""
         backViewContainer?.addAction {
             self.backViewContainer?.isUserInteractionEnabled = false
-           _ = self.navigationController?.popViewController(animated: true)
+            _ = self.navigationController?.popViewController(animated: true)
         }        
     }
     
@@ -224,9 +224,13 @@ class IGNavigationItem: UINavigationItem {
     
     func updateNavigationBarForRoom(_ room: IGRoom) {
         self.centerViewMainLabel!.text = room.title
-        if room.chatRoom?.peer?.id == IGAppManager.sharedManager.userID() {
-            //my cloud
-            self.centerViewSubLabel!.text = "My Cloud"
+        //        if room.chatRoom?.peer?.id == IGAppManager.sharedManager.userID() {
+        //            //my cloud
+        //            self.centerViewSubLabel!.text = "My Cloud"
+        //            return
+        //        }
+        
+        if isCloud(room: room){
             return
         }
         
@@ -246,7 +250,7 @@ class IGNavigationItem: UINavigationItem {
                 make.top.equalTo(self.centerViewMainLabel!.snp.bottom).offset(3)
                 make.centerX.equalTo(self.centerViewContainer!.snp.centerX).offset(20)
             }
-                
+            
             self.centerViewSubLabel!.text = room.currentActionString()
         } else {
             
@@ -258,10 +262,10 @@ class IGNavigationItem: UINavigationItem {
             }
             if let peer = room.chatRoom?.peer {
                 if room.currenctActionsByUsers.first?.value.1 != .typing {
-                setLastSeenLabelForUser(peer, room: room)
+                    setLastSeenLabelForUser(peer, room: room)
                 }
             } else if let groupRoom = room.groupRoom {
-                    
+                
                 self.centerViewSubLabel!.text = "\(groupRoom.participantCount) member\(groupRoom.participantCount>1 ? "s" : "")"
             } else if let channelRoom = room.channelRoom {
                 self.centerViewSubLabel!.text = "\(channelRoom.participantCount) member\(channelRoom.participantCount>1 ? "s" : "")"
@@ -284,7 +288,7 @@ class IGNavigationItem: UINavigationItem {
         DispatchQueue.main.asyncAfter(deadline: .now() + 10.0) {
             self.setRoomAvatar(room)
         }
-
+        
     }
     
     private func setRoomInfo(_ room: IGRoom) {
@@ -293,11 +297,11 @@ class IGNavigationItem: UINavigationItem {
         self.centerViewContainer = IGTappableView(frame: CGRect(x: 0, y: 0, width: 200, height: 45))
         
         self.titleView = self.centerViewContainer
-//        if (UIScreen.main.bounds.width) == 320.0 {
-//            self.centerViewMainLabel = UILabel(frame: CGRect(x: -10, y: 0, width: 200, height: 18))
-//        } else {
-//            self.centerViewMainLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 18))
-//        }
+        //        if (UIScreen.main.bounds.width) == 320.0 {
+        //            self.centerViewMainLabel = UILabel(frame: CGRect(x: -10, y: 0, width: 200, height: 18))
+        //        } else {
+        //            self.centerViewMainLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 18))
+        //        }
         self.centerViewMainLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 18))
         self.centerViewMainLabel!.text = room.title
         self.centerViewMainLabel!.textColor = UIColor.white
@@ -324,47 +328,57 @@ class IGNavigationItem: UINavigationItem {
         } else if let channelRoom = room.channelRoom {
             self.centerViewSubLabel!.text = "\(channelRoom.participantCount) member\(channelRoom.participantCount>1 ? "s" : "")"
         }
-
+        
     }
     
     private func setLastSeenLabelForUser(_ user: IGRegisteredUser , room : IGRoom) {
-        if room.currenctActionsByUsers.first?.value.1 != .typing && typingIndicatorView == nil {
-        switch user.lastSeenStatus {
-        case .longTimeAgo:
-            self.centerViewSubLabel!.text = "A long time ago"
-            break
-        case .lastMonth:
-            self.centerViewSubLabel!.text = "Last month"
-            break
-        case .lastWeek:
-            self.centerViewSubLabel!.text = "Last week"
-            break
-        case .online:
-            
-            self.centerViewSubLabel!.text = "Online"
-            
-            break
-        case .exactly:
-            self.centerViewSubLabel!.text = "\(user.lastSeen!.humanReadableForLastSeen())"
-            break
-        case .recently:
-            self.centerViewSubLabel!.text = "A few seconds ago"
-            break
-        case .support:
-            self.centerViewSubLabel!.text = "iGap Support"
-            break
-        case .serviceNotification:
-            self.centerViewSubLabel!.text = "Service Notification"
-            break
+        
+        if isCloud(room: room){
+            return
         }
-          
+        
+        if room.currenctActionsByUsers.first?.value.1 != .typing && typingIndicatorView == nil {
+            
+            switch user.lastSeenStatus {
+            case .longTimeAgo:
+                self.centerViewSubLabel!.text = "A long time ago"
+                break
+            case .lastMonth:
+                self.centerViewSubLabel!.text = "Last month"
+                break
+            case .lastWeek:
+                self.centerViewSubLabel!.text = "Last week"
+                break
+            case .online:
+                self.centerViewSubLabel!.text = "Online"
+                break
+            case .exactly:
+                self.centerViewSubLabel!.text = "\(user.lastSeen!.humanReadableForLastSeen())"
+                break
+            case .recently:
+                self.centerViewSubLabel!.text = "A few seconds ago"
+                break
+            case .support:
+                self.centerViewSubLabel!.text = "iGap Support"
+                break
+            case .serviceNotification:
+                self.centerViewSubLabel!.text = "Service Notification"
+                break
+            }
+            
             DispatchQueue.main.asyncAfter(deadline: .now() + 10.0) {
                 self.setLastSeenLabelForUser(user , room: room)
             }
         }
     }
     
-        
     
+    private func isCloud(room: IGRoom) -> Bool {
+        if room.chatRoom?.peer?.id == IGAppManager.sharedManager.userID() {
+            self.centerViewSubLabel!.text = "My Cloud"
+            return true
+        }
+        return false
+    }
     
 }

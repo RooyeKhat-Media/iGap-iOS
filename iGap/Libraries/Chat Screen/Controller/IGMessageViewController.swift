@@ -651,6 +651,9 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
         if currentAttachment == nil && inputTextView.text == "" && selectedMessageToForwardToThisRoom == nil {
             return
         }
+        
+        inputTextView.text = inputTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
+        
         if connectionStatus == .waitingForNetwork || connectionStatus == .connecting {
             let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
             let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
