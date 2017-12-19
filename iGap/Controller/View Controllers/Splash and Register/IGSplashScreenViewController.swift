@@ -13,7 +13,7 @@ import Gifu
 import SnapKit
 
 class IGSplashScreenViewController: UIViewController {
-
+    
     
     @IBOutlet weak var backgroundLayer: UIView!
     @IBOutlet weak var gifImageView: GIFImageView!
@@ -27,14 +27,14 @@ class IGSplashScreenViewController: UIViewController {
     @IBOutlet weak var greenTreeImageView: UIImageView!
     @IBOutlet weak var startButton: UIButton!
     
-
-
+    
+    
     var numberOfPages: Int = 6
     var pageIndex: Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         self.navigationController?.isNavigationBarHidden = true
         
@@ -47,7 +47,7 @@ class IGSplashScreenViewController: UIViewController {
         startButton.layer.borderWidth = 0
         startButton.layer.cornerRadius = 15
         startButton.alpha = 0.0
-
+        
         skipButton.layer.borderWidth = 0
         skipButton.layer.cornerRadius = 8
         
@@ -134,31 +134,31 @@ class IGSplashScreenViewController: UIViewController {
         gifImageView.prepareForAnimation(withGIFNamed: "Splash", loopCount: 1) { (Void) in
             DispatchQueue.main.async( execute: {
                 UIView.animate(withDuration: 0.4, animations: {
-                    let frame = self.gifImageView.frame
-                    self.gifImageView.frame = CGRect(x: frame.origin.x + frame.size.width/10.0,
-                                                     y: frame.origin.y + frame.size.height/10.0,
-                                                     width: frame.size.width - frame.size.width/5.0,
-                                                     height: frame.size.height - frame.size.height/5.0)
+//                    let frame = self.gifImageView.frame
+//                    self.gifImageView.frame = CGRect(x: frame.origin.x + frame.size.width/10.0,
+//                                                     y: frame.origin.y + frame.size.height/10.0,
+//                                                     width: frame.size.width - frame.size.width/5.0,
+//                                                     height: frame.size.height - frame.size.height/5.0)
                     
+                }, completion: { (Bool) in
+                    UIView.animate(withDuration: 0.2, animations: {
+                        let frame = self.gifImageView.frame
+                        self.gifImageView.frame = CGRect(x: frame.origin.x - frame.size.width/2.0,
+                                                         y: frame.origin.y - frame.size.height/2.0,
+                                                         width: frame.size.width * 2.0,
+                                                         height: frame.size.height * 2.0)
+                        self.gifImageView.alpha = 0.0
+                        self.backgroundLayer.alpha = 0.0
                     }, completion: { (Bool) in
-                        UIView.animate(withDuration: 0.2, animations: {
-                            let frame = self.gifImageView.frame
-                            self.gifImageView.frame = CGRect(x: frame.origin.x - frame.size.width/2.0,
-                                                             y: frame.origin.y - frame.size.height/2.0,
-                                                             width: frame.size.width * 2.0,
-                                                             height: frame.size.height * 2.0)
-                            self.gifImageView.alpha = 0.0
-                            self.backgroundLayer.alpha = 0.0
-                        }, completion: { (Bool) in
-                            //
-                        })
+                        //
+                    })
                 })
-
+                
             })
         }
         gifImageView.startAnimatingGIF()
     }
-
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.navigationController?.isNavigationBarHidden = false
@@ -168,7 +168,7 @@ class IGSplashScreenViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
     
     @IBAction func didTapOnSkipButton(_ sender: UIButton) {
         self.performSegue(withIdentifier: "showPhoneNumber", sender: self)
@@ -202,7 +202,7 @@ class IGSplashScreenViewController: UIViewController {
             secondAnimationImageView.frame = secondAnimationImageView.frame.offsetBy(dx: -1 * secondAnimationImageView.frame.size.width, dy: 0.0)
         }, completion: nil)
     }
-
+    
     
     func addSwipegestureRecognizer() {
         let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(self.respondToSwipeGesture(_:)))

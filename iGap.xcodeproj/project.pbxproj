@@ -126,7 +126,6 @@
 		FA11E28A1DE8A8A900A2F87C /* IGAttachmentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA11E2891DE8A8A900A2F87C /* IGAttachmentManager.swift */; };
 		FA11E28D1DE99BF400A2F87C /* IGFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA11E28C1DE99BF400A2F87C /* IGFactory.swift */; };
 		FA1C449C1DC716A20016C346 /* IGCountry.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1C449B1DC716A20016C346 /* IGCountry.swift */; };
-		FA2EBB941E2F44BD00BD8E9F /* Splash.gif in Resources */ = {isa = PBXBuildFile; fileRef = FA2EBB931E2F44BD00BD8E9F /* Splash.gif */; };
 		FA3306361F445A570096031A /* IRANSans.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FA3306351F445A570096031A /* IRANSans.ttf */; };
 		FA33063B1F445AE80096031A /* IRANSans_Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FA3306371F445AE80096031A /* IRANSans_Bold.ttf */; };
 		FA33063C1F445AE80096031A /* IRANSans_Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FA3306381F445AE80096031A /* IRANSans_Light.ttf */; };
@@ -207,6 +206,7 @@
 		FAA9DFBE1F4B23390076A22F /* IGTwoStepVerification.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA9DFBD1F4B23380076A22F /* IGTwoStepVerification.swift */; };
 		FAAC57D31DE2CE9F00A28058 /* IGDownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAAC57D21DE2CE9F00A28058 /* IGDownloadManager.swift */; };
 		FAB09D9B1DB76F81001A27C4 /* IGRequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB09D9A1DB76F81001A27C4 /* IGRequestManager.swift */; };
+		FAB0F9461FE956D1008F23EB /* Splash.gif in Resources */ = {isa = PBXBuildFile; fileRef = FAB0F9451FE956D1008F23EB /* Splash.gif */; };
 		FAB2C2DF1DF7F6E8001F30B5 /* IGSessionInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB2C2DE1DF7F6E8001F30B5 /* IGSessionInfo.swift */; };
 		FABB9B061DB25E5E00D794A4 /* IGSecurityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABB9B051DB25E5E00D794A4 /* IGSecurityManager.swift */; };
 		FAC34DB41E1A3F7E00BB9823 /* IGRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC34DB31E1A3F7E00BB9823 /* IGRealm.swift */; };
@@ -387,7 +387,6 @@
 		FA11E2891DE8A8A900A2F87C /* IGAttachmentManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGAttachmentManager.swift; sourceTree = "<group>"; };
 		FA11E28C1DE99BF400A2F87C /* IGFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGFactory.swift; sourceTree = "<group>"; };
 		FA1C449B1DC716A20016C346 /* IGCountry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGCountry.swift; sourceTree = "<group>"; };
-		FA2EBB931E2F44BD00BD8E9F /* Splash.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = Splash.gif; sourceTree = "<group>"; };
 		FA3306351F445A570096031A /* IRANSans.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = IRANSans.ttf; sourceTree = "<group>"; };
 		FA3306371F445AE80096031A /* IRANSans_Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = IRANSans_Bold.ttf; sourceTree = "<group>"; };
 		FA3306381F445AE80096031A /* IRANSans_Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = IRANSans_Light.ttf; sourceTree = "<group>"; };
@@ -472,6 +471,7 @@
 		FAA9DFBD1F4B23380076A22F /* IGTwoStepVerification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGTwoStepVerification.swift; sourceTree = "<group>"; };
 		FAAC57D21DE2CE9F00A28058 /* IGDownloadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGDownloadManager.swift; sourceTree = "<group>"; };
 		FAB09D9A1DB76F81001A27C4 /* IGRequestManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IGRequestManager.swift; path = "Request Manager/IGRequestManager.swift"; sourceTree = "<group>"; };
+		FAB0F9451FE956D1008F23EB /* Splash.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = Splash.gif; sourceTree = "<group>"; };
 		FAB2C2DE1DF7F6E8001F30B5 /* IGSessionInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGSessionInfo.swift; sourceTree = "<group>"; };
 		FABB9B051DB25E5E00D794A4 /* IGSecurityManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IGSecurityManager.swift; path = "Security Manager/IGSecurityManager.swift"; sourceTree = "<group>"; };
 		FAC34DB31E1A3F7E00BB9823 /* IGRealm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGRealm.swift; sourceTree = "<group>"; };
@@ -748,7 +748,7 @@
 		FA2EBB921E2F44BD00BD8E9F /* Gif */ = {
 			isa = PBXGroup;
 			children = (
-				FA2EBB931E2F44BD00BD8E9F /* Splash.gif */,
+				FAB0F9451FE956D1008F23EB /* Splash.gif */,
 			);
 			path = Gif;
 			sourceTree = "<group>";
@@ -1271,8 +1271,8 @@
 				TargetAttributes = {
 					FAF795E91DAA330C0030509B = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = MZ7XTDD264;
-						ProvisioningStyle = Manual;
+						DevelopmentTeam = 7FDJN5W8J4;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 0;
@@ -1321,10 +1321,10 @@
 				FA3306361F445A570096031A /* IRANSans.ttf in Resources */,
 				FAF7960A1DAA39460030509B /* Info.plist in Resources */,
 				FA4BD8A41DF2A53400CCB239 /* IGMusicViewController.xib in Resources */,
-				FA2EBB941E2F44BD00BD8E9F /* Splash.gif in Resources */,
 				FA0CC80A1E5D7D4400556283 /* Info.plist in Resources */,
 				FAF8BFEA1E34AF00002AF525 /* GoogleService-Info.plist in Resources */,
 				FAF796061DAA392F0030509B /* LaunchScreen.storyboard in Resources */,
+				FAB0F9461FE956D1008F23EB /* Splash.gif in Resources */,
 				FAF796051DAA392F0030509B /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1746,9 +1746,9 @@
 				CODE_SIGN_ENTITLEMENTS = iGap/iGap.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: RooyeKhat Media (MZ7XTDD264)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = MZ7XTDD264;
+				DEVELOPMENT_TEAM = 7FDJN5W8J4;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -1760,8 +1760,8 @@
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = net.iGap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "5cf7b122-99b1-4f8a-8b4f-6dfec169b3e8";
-				PROVISIONING_PROFILE_SPECIFIER = RooyeKhat;
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "iGap/Supporting FIles/iGap-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
@@ -1774,8 +1774,8 @@
 				CODE_SIGN_ENTITLEMENTS = iGap/iGap.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: RooyeKhat Media (MZ7XTDD264)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = MZ7XTDD264;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7FDJN5W8J4;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -1787,8 +1787,8 @@
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = net.iGap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "5cf7b122-99b1-4f8a-8b4f-6dfec169b3e8";
-				PROVISIONING_PROFILE_SPECIFIER = RooyeKhat;
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "iGap/Supporting FIles/iGap-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
