@@ -3207,12 +3207,6 @@ Cg
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JEa-j6-JpT" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
-                                                    <rect key="frame" x="311" y="14" width="42" height="15.5"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Wsy-0I-Spq">
                                                     <rect key="frame" x="17" y="8" width="342" height="30"/>
                                                     <constraints>
@@ -3228,11 +3222,8 @@ Cg
                                                 </textField>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="JEa-j6-JpT" firstAttribute="top" secondItem="i69-SR-lrR" secondAttribute="topMargin" constant="3" id="Kbh-co-VR3"/>
                                                 <constraint firstItem="Wsy-0I-Spq" firstAttribute="top" secondItem="i69-SR-lrR" secondAttribute="top" constant="8" id="Xpb-4w-ov4"/>
                                                 <constraint firstItem="Wsy-0I-Spq" firstAttribute="leading" secondItem="i69-SR-lrR" secondAttribute="leading" constant="17" id="ZUa-jI-7Ml"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="JEa-j6-JpT" secondAttribute="trailing" constant="6" id="aY6-Nj-SD5"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="JEa-j6-JpT" secondAttribute="bottom" constant="3.6666666666666643" id="x7F-cY-sy1"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -3247,7 +3238,6 @@ Cg
                     <navigationItem key="navigationItem" id="Vny-zb-hL0" customClass="IGNavigationItem" customModule="iGap" customModuleProvider="target"/>
                     <connections>
                         <outlet property="channelNameTextField" destination="Wsy-0I-Spq" id="xEq-m4-Kba"/>
-                        <outlet property="numberOfCharacter" destination="JEa-j6-JpT" id="XcE-Hq-y1T"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FvG-dB-hwG" userLabel="First Responder" sceneMemberID="firstResponder"/>
