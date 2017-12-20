@@ -15,8 +15,8 @@ import MBProgressHUD
 import IGProtoBuff
 
 class IGChannelInfoEditNameTableViewController: UITableViewController , UITextFieldDelegate, UIGestureRecognizerDelegate {
-
-  
+    
+    
     @IBOutlet weak var channelNameTextField: UITextField!
     @IBOutlet weak var numberOfCharacter: UILabel!
     var room : IGRoom?
@@ -40,19 +40,19 @@ class IGChannelInfoEditNameTableViewController: UITableViewController , UITextFi
         }
         channelNameTextField.tintColor = UIColor.organizationalColor()
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
     // MARK: - Table view data source
-
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return 1
@@ -61,7 +61,7 @@ class IGChannelInfoEditNameTableViewController: UITableViewController , UITextFi
         self.hud = MBProgressHUD.showAdded(to: self.view, animated: true)
         self.hud.mode = .indeterminate
         if let name = channelNameTextField.text {
-            IGChannelEditRequest.Generator.generate(roomId: (room?.id)!, channelName: name, description: nil).success({ (protoResponse) in
+            IGChannelEditRequest.Generator.generate(roomId: (room?.id)!, channelName: name, description: room?.channelRoom?.roomDescription).success({ (protoResponse) in
                 DispatchQueue.main.async {
                     switch protoResponse {
                     case let editChannelResponse as IGPChannelEditResponse:
@@ -71,7 +71,7 @@ class IGChannelInfoEditNameTableViewController: UITableViewController , UITextFi
                         if self.navigationController is IGNavigationController {
                             self.navigationController?.popViewController(animated: true)
                         }
-
+                        
                     default:
                         break
                     }
@@ -94,6 +94,6 @@ class IGChannelInfoEditNameTableViewController: UITableViewController , UITextFi
             
         }
     }
-        
+    
 }
 

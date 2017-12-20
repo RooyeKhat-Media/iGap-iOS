@@ -124,25 +124,7 @@ class IGGroupInfoTableViewController: UITableViewController , UIGestureRecognize
         let predicate = NSPredicate(format: "id = %lld", (room?.id)!)
         groupRoom =  try! Realm().objects(IGRoom.self).filter(predicate)
         self.notificationToken = groupRoom.addNotificationBlock { (changes: RealmCollectionChange) in
-            switch changes {
-            case .initial:
-                self.tableView.reloadData()
-                break
-            case .update(_, let deletions, let insertions, let modifications):
-                print("updating members tableV")
-                // Query messages have changed, so apply them to the TableView
-                //                self.tableView.beginUpdates()
-                //                self.tableView.insertRows(at: insertions.map { IndexPath(row: $0, section: 1) }, with: .none)
-                //                self.tableView.deleteRows(at: deletions.map { IndexPath(row: $0, section: 1) }, with: .none)
-                //                self.tableView.reloadRows(at: modifications.map { IndexPath(row: $0, section: 1) }, with: .none)
-                //                self.tableView.endUpdates()
-                self.tableView.reloadData()
-                break
-            case .error(let err):
-                // An error occurred while opening the Realm file on the background worker thread
-                fatalError("\(err)")
-                break
-            }
+            self.showGroupInfo()
         }
         
         IGAppManager.sharedManager.connectionStatus.asObservable().subscribe(onNext: { (connectionStatus) in

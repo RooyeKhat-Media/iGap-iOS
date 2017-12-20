@@ -15,7 +15,7 @@ import MBProgressHUD
 import IGProtoBuff
 
 class IGGroupEditDescriptionTableViewController: UITableViewController , UIGestureRecognizerDelegate  {
-
+    
     @IBOutlet weak var groupDescriptionTextView: UITextView!
     
     var room: IGRoom?
@@ -59,19 +59,19 @@ class IGGroupEditDescriptionTableViewController: UITableViewController , UIGestu
             }
         }
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
     // MARK: - Table view data source
-
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return 1
@@ -80,7 +80,8 @@ class IGGroupEditDescriptionTableViewController: UITableViewController , UIGestu
     func changeGroupDescription() {
         self.hud = MBProgressHUD.showAdded(to: self.view, animated: true)
         self.hud.mode = .indeterminate
-        if let desc = groupDescriptionTextView.text {
+        
+        if let desc = groupDescriptionTextView.text?.trimmingCharacters(in: .whitespacesAndNewlines) {
             if room != nil {
                 IGGroupEditRequest.Generator.generate(groupName:(room?.title)! , groupDescription: desc , groupRoomId: (room?.id)!).success({ (protoResponse) in
                     DispatchQueue.main.async {
@@ -90,7 +91,7 @@ class IGGroupEditDescriptionTableViewController: UITableViewController , UIGestu
                             self.groupDescriptionTextView.text = groupEditResponse.groupDesc
                             self.hud.hide(animated: true)
                             if self.navigationController is IGNavigationController {
-                             self.navigationController?.popViewController(animated: true)
+                                self.navigationController?.popViewController(animated: true)
                             }
                             
                         default:
@@ -116,10 +117,9 @@ class IGGroupEditDescriptionTableViewController: UITableViewController , UIGestu
             }
         }
     }
-
+    
 }
 extension IGGroupEditDescriptionTableViewController: UITextViewDelegate {
-    
     func textViewDidChange(_ textView: UITextView) {
         placeholderLabel.isHidden = !groupDescriptionTextView.text.isEmpty
     }

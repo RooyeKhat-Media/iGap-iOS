@@ -63,7 +63,7 @@ class IGGroupInfoEditNameTableViewController: UITableViewController , UITextFiel
         self.hud = MBProgressHUD.showAdded(to: self.view, animated: true)
         self.hud.mode = .indeterminate
         if let name = groupNameTextField.text {
-            IGGroupEditRequest.Generator.generate(groupName: name, groupDescription: nil, groupRoomId: (room?.id)!).success({ (protoResponse) in
+            IGGroupEditRequest.Generator.generate(groupName: name, groupDescription: room?.groupRoom?.roomDescription , groupRoomId: (room?.id)!).success({ (protoResponse) in
                 DispatchQueue.main.async {
                     switch protoResponse {
                     case let editChannelResponse as IGPGroupEditResponse:

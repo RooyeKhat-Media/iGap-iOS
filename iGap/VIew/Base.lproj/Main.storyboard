@@ -568,7 +568,7 @@ Please wait 0:59</string>
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <searchBar key="tableHeaderView" contentMode="redraw" id="UjG-6f-Sfz">
+                        <searchBar key="tableHeaderView" contentMode="redraw" text="" id="UjG-6f-Sfz">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <textInputTraits key="textInputTraits"/>
@@ -3906,7 +3906,7 @@ Cg
         <!--Group Info Edit Name Table View Controller-->
         <scene sceneID="I8x-1n-H2H">
             <objects>
-                <tableViewController id="qtc-Jn-EEn" customClass="IGGroupInfoEditNameTableViewController" customModule="iGap" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="IGGroupInfoEditNameTableViewController" id="qtc-Jn-EEn" customClass="IGGroupInfoEditNameTableViewController" customModule="iGap" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="D1N-hW-ULi">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -4965,11 +4965,11 @@ Cg
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="ehT-Mj-Jjc"/>
-        <segue reference="k1z-sz-mLi"/>
-        <segue reference="r07-ys-LGb"/>
+        <segue reference="Whh-xk-YjW"/>
+        <segue reference="xjE-gJ-o8r"/>
         <segue reference="wn7-BR-347"/>
         <segue reference="liy-Td-nok"/>
         <segue reference="R4P-x7-LEg"/>
-        <segue reference="ptN-gz-SpA"/>
+        <segue reference="OlC-Gu-0Zm"/>
     </inferredMetricsTieBreakers>
 </document>

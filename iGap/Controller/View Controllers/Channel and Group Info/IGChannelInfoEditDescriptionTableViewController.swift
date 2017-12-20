@@ -14,7 +14,7 @@ import RealmSwift
 import MBProgressHUD
 import IGProtoBuff
 class IGChannelInfoEditDescriptionTableViewController: UITableViewController , UIGestureRecognizerDelegate {
-
+    
     @IBOutlet weak var channelDescriptionTextView: UITextView!
     var room: IGRoom?
     var hud = MBProgressHUD()
@@ -27,8 +27,8 @@ class IGChannelInfoEditDescriptionTableViewController: UITableViewController , U
         navigationItem.navigationController =  self.navigationController as! IGNavigationController
         let navigationController = self.navigationController as! IGNavigationController
         navigationController.interactivePopGestureRecognizer?.delegate = self
-                channelDescriptionTextView.delegate = self
-                myRole = room?.channelRoom?.role
+        channelDescriptionTextView.delegate = self
+        myRole = room?.channelRoom?.role
         if myRole == .owner || myRole == .admin {
             channelDescriptionTextView.isUserInteractionEnabled = true
             navigationItem.addNavigationViewItems(rightItemText: "Done", title: "Description")
@@ -55,19 +55,19 @@ class IGChannelInfoEditDescriptionTableViewController: UITableViewController , U
         }
         
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
     // MARK: - Table view data source
-
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return 1
@@ -75,7 +75,7 @@ class IGChannelInfoEditDescriptionTableViewController: UITableViewController , U
     func changeChannelDescription() {
         self.hud = MBProgressHUD.showAdded(to: self.view, animated: true)
         self.hud.mode = .indeterminate
-        if let desc = channelDescriptionTextView.text {
+        if let desc = channelDescriptionTextView.text?.trimmingCharacters(in: .whitespacesAndNewlines) {
             if room != nil {
                 IGChannelEditRequest.Generator.generate(roomId: (room?.id)!, channelName: (room?.title)!, description: desc).success({ (protoResponse) in
                     DispatchQueue.main.async {
@@ -116,5 +116,5 @@ extension IGChannelInfoEditDescriptionTableViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         placeholderLabel.isHidden = !channelDescriptionTextView.text.isEmpty
     }
-
+    
 }
