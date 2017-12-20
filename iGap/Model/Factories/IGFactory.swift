@@ -1690,10 +1690,20 @@ class IGFactory: NSObject {
             IGDatabaseManager.shared.perfrmOnDatabaseThread {
                 print("    ======> room type changed for room id: \(roomId)")
                 let roomPredicate = NSPredicate(format: "id = %lld", roomId)
+                
+                let publicExtraPredicate = NSPredicate(format: "id = %lld", roomId)
+                var publicExtra: IGGroupPublicExtra!
+                if let publicExtraInDb = IGDatabaseManager.shared.realm.objects(IGGroupPublicExtra.self).filter(publicExtraPredicate).first {
+                    publicExtra = publicExtraInDb
+                } else {
+                    publicExtra = IGGroupPublicExtra(id: roomId, username: username)
+                }
+                
                 if let roomInDb = IGDatabaseManager.shared.realm.objects(IGRoom.self).filter(roomPredicate).first {
                     try! IGDatabaseManager.shared.realm.write {
+                        publicExtra.username = username
                         roomInDb.groupRoom?.type = .publicRoom
-                        roomInDb.groupRoom?.publicExtra?.username = username
+                        roomInDb.groupRoom?.publicExtra = publicExtra
                     }
                 }
                 IGFactory.shared.performInFactoryQueue {

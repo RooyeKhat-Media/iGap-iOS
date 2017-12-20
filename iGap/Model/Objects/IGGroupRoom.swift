@@ -243,6 +243,12 @@ class IGGroupPublicExtra: Object {
         self.username = igpPublicExtra.igpUsername
     }
     
+    convenience init(id: Int64, username: String) {
+        self.init()
+        self.id = id
+        self.username = username
+    }
+    
     //detach from current realm
     func detach() -> IGGroupPublicExtra {
         return IGGroupPublicExtra(value: self)

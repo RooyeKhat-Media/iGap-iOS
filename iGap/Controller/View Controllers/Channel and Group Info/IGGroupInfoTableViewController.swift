@@ -124,6 +124,10 @@ class IGGroupInfoTableViewController: UITableViewController , UIGestureRecognize
         let predicate = NSPredicate(format: "id = %lld", (room?.id)!)
         groupRoom =  try! Realm().objects(IGRoom.self).filter(predicate)
         self.notificationToken = groupRoom.addNotificationBlock { (changes: RealmCollectionChange) in
+            
+            let predicatea = NSPredicate(format: "id = %lld", (self.room?.id)!)
+            self.room =  try! Realm().objects(IGRoom.self).filter(predicatea).first!
+            
             self.showGroupInfo()
         }
         
@@ -535,7 +539,7 @@ class IGGroupInfoTableViewController: UITableViewController , UIGestureRecognize
         }
         if room?.groupRoom?.type == .publicRoom {
             if let groupUsername = room?.groupRoom?.publicExtra?.username {
-            groupLink = "iGap.net/\(groupUsername)"
+                groupLink = "iGap.net/\(groupUsername)"
             }
         }
         groupLinkLabel.text = groupLink
