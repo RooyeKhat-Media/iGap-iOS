@@ -640,17 +640,12 @@ class IGChannelInfoTableViewController: UITableViewController , UIGestureRecogni
             case .privateRoom:
                 channelTypeLabel.text = "Private"
                 if let link = room?.channelRoom?.privateExtra?.inviteLink {
-                    print(room?.channelRoom?.privateExtra?.inviteToken)
                     channelLinkLabel.text = link
-                } else {
-                    print("private room without a link")
                 }
             case .publicRoom:
                 channelTypeLabel.text = "Public"
                 if let username = room?.channelRoom?.publicExtra?.username {
                     channelLinkLabel.text = "iGap.net/" + username
-                } else {
-                    print("public room without a username")
                 }
             }
         }
@@ -659,18 +654,6 @@ class IGChannelInfoTableViewController: UITableViewController , UIGestureRecogni
             numberOfMemberJoinedThisChannelLabel.text = "\(memberCount)"
         }
         
-        
-        
-//        var channelLink: String? = ""
-//        if room?.channelRoom?.type == .privateRoom {
-//            
-//        }
-//        if room?.channelRoom?.type == .publicRoom {
-//            
-//        }
-//        if let linkTitile = channelLink {
-//            
-//        }
         if room?.channelRoom?.isSignature == true {
             signMessageSwtich.isOn = true
         } else { //if room?.channelRoom?.isSignature == false {

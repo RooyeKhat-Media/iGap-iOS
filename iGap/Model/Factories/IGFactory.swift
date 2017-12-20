@@ -1617,7 +1617,6 @@ class IGFactory: NSObject {
                 let predicate = NSPredicate(format: "id = %lld", roomID)
                 if let roomInDb = IGDatabaseManager.shared.realm.objects(IGRoom.self).filter(predicate).first {
                     try! IGDatabaseManager.shared.realm.write {
-                        roomInDb.id = roomID
                         roomInDb.groupRoom?.type = .privateRoom
                         roomInDb.groupRoom?.publicExtra?.username = ""
                     }
