@@ -143,6 +143,7 @@ class IGRecentsTableViewController: UITableViewController {
             
         }).addDisposableTo(disposeBag)
         
+        self.addRoomChangeNotificationBlock()
         
         if IGAppManager.sharedManager.isUserLoggiedIn() {
             self.fetchRoomList()
@@ -164,7 +165,7 @@ class IGRecentsTableViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tableView.isUserInteractionEnabled = true
-        self.addRoomChangeNotificationBlock()
+        //self.addRoomChangeNotificationBlock()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -175,7 +176,7 @@ class IGRecentsTableViewController: UITableViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tableView.isUserInteractionEnabled = true
-        self.notificationToken?.stop()
+        //self.notificationToken?.stop()
     }
 
     override func didReceiveMemoryWarning() {
