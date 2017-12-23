@@ -142,13 +142,6 @@ class IGRecentsTableViewController: UITableViewController {
         }, onDisposed: {
             
         }).addDisposableTo(disposeBag)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.tableView.isUserInteractionEnabled = true
-        
-        self.addRoomChangeNotificationBlock()
         
         
         if IGAppManager.sharedManager.isUserLoggiedIn() {
@@ -166,7 +159,12 @@ class IGRecentsTableViewController: UITableViewController {
                                                selector: #selector(segueToChatNotificationReceived(_:)),
                                                name: NSNotification.Name(rawValue: kIGNotificationNameDidCreateARoom),
                                                object: nil)
+    }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tableView.isUserInteractionEnabled = true
+        self.addRoomChangeNotificationBlock()
     }
     
     override func viewDidAppear(_ animated: Bool) {

@@ -439,7 +439,13 @@ class IGRequestManager {
             actionID = actionID | Int(byte)
         }
         
-        print("✦ \(NSDate.timeIntervalSinceReferenceDate) ----- ➤➤➤ Action ID: \(actionID)")
+        //print("✦ \(NSDate.timeIntervalSinceReferenceDate) ----- ➤➤➤ Action ID: \(actionID)")
+        if let wrapper = protoClassesLookupTable[actionID] {
+            print("\n\n RESPONSE ➤➤➤ Action ID: \(actionID)   || \(protoClassesLookupTable[actionID]!) \n\n")
+        } else {
+            print("\n\n RESPONSE ➤➤➤ Action ID: \(actionID)   || This id not exist in LookUpTable \n\n")
+        }
+        
 
         if !IGWebSocketManager.sharedManager.isSecureConnection() && !unsecureResponseActionID.contains(actionID) {
             return

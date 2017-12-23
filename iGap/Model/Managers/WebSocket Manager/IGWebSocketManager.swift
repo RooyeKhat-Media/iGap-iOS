@@ -41,7 +41,8 @@ class IGWebSocketManager: NSObject {
     public func send(requestW: IGRequestWrapper) {
         websocketSendQueue.async {
             do {
-                print ("✧ \(NSDate.timeIntervalSinceReferenceDate) ----- ~~~~~~~~ Sending: \(requestW.actionId)")
+                //print ("✧ \(NSDate.timeIntervalSinceReferenceDate) ----- ~~~~~~~~ Sending: \(requestW.actionId)")
+                print ("\n\n REQUEST ➤➤➤ Action ID : \(requestW.actionId) \n\n")
                 var messageData = Data()
                 let payloadData = try requestW.message.serializedData()
                 let actionIdData = Data(bytes: &requestW.actionId, count: 2)
