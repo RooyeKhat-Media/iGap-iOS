@@ -307,9 +307,7 @@ class IGGroupLeftRequest : IGRequest {
     }
     class Handler : IGRequest.Handler {
         class func interpret(response responseProtoMessage : IGPGroupLeftResponse) {
-            let igpRoomId = responseProtoMessage.igpRoomID
-            IGFactory.shared.leftRoomInDatabase(roomID: igpRoomId)
-            
+            IGFactory.shared.leftRoomInDatabase(roomID: responseProtoMessage.igpRoomID, memberId: responseProtoMessage.igpMemberID)
         }
         override class func handlePush(responseProtoMessage : Message) {
             switch responseProtoMessage {

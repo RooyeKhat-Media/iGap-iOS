@@ -143,9 +143,16 @@ class IGChannelDeleteRequest: IGRequest {
     class Handler : IGRequest.Handler {
         class func interpret(response responseProtoMessage: IGPChannelDeleteResponse) -> Int64 {
             let igpRoomId = responseProtoMessage.igpRoomID
+            IGFactory.shared.setDeleteRoom(roomID: igpRoomId)
             return igpRoomId
         }
         override class func handlePush(responseProtoMessage: Message) {
+            switch responseProtoMessage {
+            case let channelDeleteResponse as IGPChannelDeleteResponse:
+                self.interpret(response: channelDeleteResponse)
+            default:
+                break
+            }
         }
     }
 }
@@ -275,7 +282,7 @@ class IGChannelLeftRequest : IGRequest {
     }
     class Handler : IGRequest.Handler {
         class func interpret(response responseProtoMessage:IGPChannelLeftResponse) {
-            IGFactory.shared.leftRoomInDatabase(roomID: responseProtoMessage.igpMemberID)
+            IGFactory.shared.leftRoomInDatabase(roomID: responseProtoMessage.igpRoomID, memberId: responseProtoMessage.igpMemberID)
         }
         override class func handlePush(responseProtoMessage: Message) {
             switch responseProtoMessage {

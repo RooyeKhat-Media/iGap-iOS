@@ -439,14 +439,6 @@ class IGRequestManager {
             actionID = actionID | Int(byte)
         }
         
-        //print("✦ \(NSDate.timeIntervalSinceReferenceDate) ----- ➤➤➤ Action ID: \(actionID)")
-        if let wrapper = protoClassesLookupTable[actionID] {
-            print("\n\n RESPONSE ➤➤➤ Action ID: \(actionID)   || \(protoClassesLookupTable[actionID]!) \n\n")
-        } else {
-            print("\n\n RESPONSE ➤➤➤ Action ID: \(actionID)   || This id not exist in LookUpTable \n\n")
-        }
-        
-
         if !IGWebSocketManager.sharedManager.isSecureConnection() && !unsecureResponseActionID.contains(actionID) {
             return
         }
@@ -457,6 +449,8 @@ class IGRequestManager {
             do {
                 let responseProtoMessage = try protoClassName.init(serializedData: payload) 
                 let requestHandlerClassName = lookupTableResult.reponseHandler
+                
+                print("\n\n RESPONSE ➤➤➤ Action ID: \(actionID)   || \(responseProtoMessage) \n\n")
                 
                 let response = responseProtoMessage.igpResponse
                 //check if this is a `reponse` or a `push`
@@ -500,7 +494,7 @@ class IGRequestManager {
             //at this point ignore this data
             //maybe new command (protos) added to server but
             //not supported yet by this version of iOS client
-            print ("✦ \(NSDate.timeIntervalSinceReferenceDate) ----- Unsupported action ID")
+            print("\n\n RESPONSE ➤➤➤ Action ID: \(actionID)   || This id not exist in LookUpTable \n\n")
         }
     }
     

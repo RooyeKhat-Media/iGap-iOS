@@ -974,7 +974,7 @@ class IGFactory: NSObject {
     }
     
     //TODO: merge with setDeleteRoom
-    func leftRoomInDatabase(roomID: Int64) {
+    func leftRoomInDatabase(roomID: Int64, memberId: Int64) {
         let task = IGFactoryTask()
         task.task = {
             IGDatabaseManager.shared.perfrmOnDatabaseThread {
