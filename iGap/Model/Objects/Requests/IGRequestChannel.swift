@@ -527,6 +527,13 @@ class IGChannelUpdateUsernameRequest : IGRequest {
             channelUpdateUsernameRequestMessage.igpUsername = userName
             return IGRequestWrapper(message: channelUpdateUsernameRequestMessage, actionID: 419)
         }
+        
+        class func generate(roomId: Int64 , username: String) -> IGRequestWrapper {
+            var channelUpdateUsernameRequestMessage = IGPChannelUpdateUsername()
+            channelUpdateUsernameRequestMessage.igpRoomID = roomId
+            channelUpdateUsernameRequestMessage.igpUsername = username
+            return IGRequestWrapper(message: channelUpdateUsernameRequestMessage, actionID: 419)
+        }
 
     }
     class Handler : IGRequest.Handler {
@@ -541,9 +548,7 @@ class IGChannelUpdateUsernameRequest : IGRequest {
                 break
             }
         }
-        
     }
-
 }
 
 class IGChannelRemoveUsernameRequest: IGRequest {

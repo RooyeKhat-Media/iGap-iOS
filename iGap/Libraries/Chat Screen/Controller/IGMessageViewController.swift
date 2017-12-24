@@ -310,10 +310,12 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
                 }
                 
                 if self.messages!.count == self.collectionView.numberOfSections + insertions.count - deletions.count {
-                    print("insersation   => \(insertions.count)")
-                    print("deletions     => \(deletions.count)")
-                    print("modifications => \(modifications.count)")
-                    print("all messages  => \(self.messages!.count)")
+                    if AppDelegate.showPrint {
+                        print("insersation   => \(insertions.count)")
+                        print("deletions     => \(deletions.count)")
+                        print("modifications => \(modifications.count)")
+                        print("all messages  => \(self.messages!.count)")
+                    }
                     
                     self.collectionView.performBatchUpdates({
                         self.collectionView.insertSections(IndexSet(insertions))

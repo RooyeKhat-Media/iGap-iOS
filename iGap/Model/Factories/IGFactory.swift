@@ -39,7 +39,9 @@ fileprivate class IGFactoryTask: NSObject {
     convenience init(messageTask igpMessage: IGPRoomMessage, for roomId: Int64, shouldFetchBefore: Bool?) {
         self.init()
         let task = {
-            print("    ======> saving message id: \(igpMessage.igpMessageID)")
+            if AppDelegate.showPrint {
+                print("    ======> saving message id: \(igpMessage.igpMessageID)")
+            }
             IGFactoryTask(dependencyUserTask: igpMessage.igpAuthor.igpUser.igpUserID, cacheID: igpMessage.igpAuthor.igpUser.igpCacheID).success({
                 IGFactoryTask(dependencyRoomTask: igpMessage.igpAuthor.igpRoom.igpRoomID, isParticipane: true).success({
                     
@@ -61,7 +63,9 @@ fileprivate class IGFactoryTask: NSObject {
                             IGDatabaseManager.shared.realm.add(message, update: true)
                         }
                         IGFactory.shared.performInFactoryQueue {
-                            print("    ======> success in saving message id: \(igpMessage.igpMessageID)")
+                            if AppDelegate.showPrint {
+                                print("    ======> success in saving message id: \(igpMessage.igpMessageID)")
+                            }
                             self.success!()
                         }
                     }
@@ -70,11 +74,15 @@ fileprivate class IGFactoryTask: NSObject {
                     
                     
                 }).error {
-                    print("    ======> failure in saving message id: \(igpMessage.igpMessageID) due to room dep")
+                    if AppDelegate.showPrint {
+                        print("    ======> failure in saving message id: \(igpMessage.igpMessageID) due to room dep")
+                    }
                     self.error!()
                 }.execute()
             }).error {
-                print("    ======> failure in saving message id: \(igpMessage.igpMessageID) due to user dep")
+                if AppDelegate.showPrint {
+                    print("    ======> failure in saving message id: \(igpMessage.igpMessageID) due to user dep")
+                }
                 self.error!()
             }.execute()
         }
@@ -117,7 +125,10 @@ fileprivate class IGFactoryTask: NSObject {
     convenience init(dependencyUserTask userID: Int64?, cacheID: String?) {
         self.init()
         let task = {
-            print("    ======> 1. checking user id: \(String(describing: userID))")
+            if AppDelegate.showPrint {
+                print("    ======> 1. checking user id: \(String(describing: userID))")
+            }
+            
             if let id = userID, id != 0 {
                 var isUserInfoInDatabaseValid = false
                 let predicate = NSPredicate(format: "id = %lld", id)
@@ -134,11 +145,15 @@ fileprivate class IGFactoryTask: NSObject {
                 if isUserInfoInDatabaseValid {
                     self.success!()
                 } else {
-                    print("    ======> 2. getting user id: \(String(describing: userID))")
+                    if AppDelegate.showPrint {
+                        print("    ======> 2. getting user id: \(String(describing: userID))")
+                    }
                     IGUserInfoRequest.Generator.generate(userID: id).success({ (responseProtoMessage) in
                         
                         IGDatabaseManager.shared.perfrmOnDatabaseThread {
-                            print("    ======> 3. saving user id: \(String(describing: userID))")
+                            if AppDelegate.showPrint {
+                                print("    ======> 3. saving user id: \(String(describing: userID))")
+                            }
                             switch responseProtoMessage {
                             case let response as IGPUserInfoResponse:
                                 let user = IGRegisteredUser(igpUser: response.igpUser)
