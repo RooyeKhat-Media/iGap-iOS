@@ -450,18 +450,14 @@ class IGRequestManager {
                 let responseProtoMessage = try protoClassName.init(serializedData: payload) 
                 let requestHandlerClassName = lookupTableResult.reponseHandler
                 
-                print("\n\n RESPONSE ➤➤➤ Action ID: \(actionID)   || \(responseProtoMessage) \n\n")
+                print("\n______________________________\nRESPONSE ➤➤➤ Action ID: \(actionID)   || \(responseProtoMessage) \n------------------------------\n")
                 
                 let response = responseProtoMessage.igpResponse
                 //check if this is a `reponse` or a `push`
                 if let correspondingRequestWrapper = pendingRequests[response.igpID] {
                     if actionID == 0 { //-> failed
                         let errorProtoMessage = responseProtoMessage as! IGPErrorResponse
-                        print("✘ \(NSDate.timeIntervalSinceReferenceDate) ----- ✘✘✘✘✘✘ Major Code: \(errorProtoMessage.igpMajorCode)")
-                        print("✘ \(NSDate.timeIntervalSinceReferenceDate) ----- ✘✘✘✘✘✘ Minor Code: \(errorProtoMessage.igpMinorCode)")
-
                         let errorData = IGErrorRequest.Handler.interpret(response: errorProtoMessage)
-
                         if let error = correspondingRequestWrapper.error {
                             error(errorData.error, errorData.wait)
                         }
@@ -481,10 +477,6 @@ class IGRequestManager {
                     //call its corresponding handler class to handle push
                     requestHandlerClassName.handlePush(responseProtoMessage: responseProtoMessage)
                 }
-//            }
-//            else {
-//                    print ("✦ \(NSDate.timeIntervalSinceReferenceDate) ----- Response without IGResponse Property")
-//                }
             } catch let error {
                 print ("✦ \(NSDate.timeIntervalSinceReferenceDate) ----- Error Parsing Proto From Binary Data")
                 print (error)

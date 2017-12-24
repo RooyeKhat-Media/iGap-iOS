@@ -173,6 +173,7 @@ class IGChannelsTableViewController: UITableViewController {
                         } else {
                             self.deleteChat(room: room)
                         }
+                        break
                     case .group:
                         if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
                             let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
@@ -183,6 +184,18 @@ class IGChannelsTableViewController: UITableViewController {
                         } else {
                             self.deleteGroup(room: room)
                         }
+                        break
+                    case .channel:
+                        if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
+                            let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
+                            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                            alert.addAction(okAction)
+                            self.present(alert, animated: true, completion: nil)
+                            
+                        } else {
+                            self.deleteChannel(room: room)
+                        }
+                        break
                     default:
                         break
                     }
@@ -489,6 +502,35 @@ extension IGChannelsTableViewController {
                     self.hud.hide(animated: true)
                 }
             }.send()
+    }
+    
+    func deleteChannel(room: IGRoom) {
+        self.hud = MBProgressHUD.showAdded(to: self.view.superview!, animated: true)
+        self.hud.mode = .indeterminate
+        IGChannelDeleteRequest.Generator.generate(roomID: room.id).success({ (protoResponse) in
+            DispatchQueue.main.async {
+                switch protoResponse {
+                case let deleteChannel as IGPChannelDeleteResponse:
+                    IGChannelDeleteRequest.Handler.interpret(response: deleteChannel)
+                default:
+                    break
+                }
+                self.hud.hide(animated: true)
+            }
+        }).error({ (errorCode , waitTime) in
+            DispatchQueue.main.async {
+                switch errorCode {
+                case .timeout:
+                    let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: nil)
+                default:
+                    break
+                }
+                self.hud.hide(animated: true)
+            }
+        }).send()
     }
 }
 

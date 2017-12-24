@@ -41,8 +41,7 @@ class IGWebSocketManager: NSObject {
     public func send(requestW: IGRequestWrapper) {
         websocketSendQueue.async {
             do {
-                //print ("✧ \(NSDate.timeIntervalSinceReferenceDate) ----- ~~~~~~~~ Sending: \(requestW.actionId)")
-                print ("\n\n REQUEST ➤➤➤ Action ID : \(requestW.actionId) \n\n")
+                print ("\n______________________________\nREQUEST ➤➤➤ Action ID : \(requestW.actionId) \n------------------------------\n")
                 var messageData = Data()
                 let payloadData = try requestW.message.serializedData()
                 let actionIdData = Data(bytes: &requestW.actionId, count: 2)
@@ -132,7 +131,9 @@ class IGWebSocketManager: NSObject {
     //Network connection problem detection
     //add this after connection stablishment
     fileprivate func resetConnectionProblemDetectorTimer() {
-        print(#function)
+        if AppDelegate.showPrint {
+            print(#function)
+        }
         removeConnectionProblemDetectorTimer()
         connectionProblemTimer = Timer.scheduledTimer(timeInterval: connectionProblemTimerDelay,
                                                       target:   self,
