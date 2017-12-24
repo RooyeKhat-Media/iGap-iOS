@@ -29,6 +29,14 @@ class IGChannelInfoEditTypeTableViewController: UITableViewController ,UITextFie
     var userWantsToChangeThisChannelToPublic = false
     var userWantsToChangeThisChannelToPrivate = false
     
+    @IBAction func edtTextChange(_ sender: UITextField) {
+        if let text = sender.text {
+            if text.count >= 5 {
+                checkUsername(username: sender.text!)
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         privateIndexPath = IndexPath(row: 1, section: 0)
@@ -79,18 +87,39 @@ class IGChannelInfoEditTypeTableViewController: UITableViewController ,UITextFie
             channelLinkTextField.text = room?.channelRoom?.privateExtra?.inviteLink
             channelLinkTextField.isUserInteractionEnabled = false
         }
-        
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    func checkUsername(username: String){
+        IGChannelCheckUsernameRequest.Generator.generate(roomId:room!.id ,username: username).success({ (protoResponse) in
+            DispatchQueue.main.async {
+                switch protoResponse {
+                case let usernameResponse as IGPChannelCheckUsernameResponse :
+                    if usernameResponse.igpStatus == IGPChannelCheckUsernameResponse.IGPStatus.available {
+                        self.channelLinkTextField.textColor = UIColor.black
+                    } else {
+                        self.channelLinkTextField.textColor = UIColor.red
+                    }
+                    break
+                default:
+                    break
+                }
+            }
+        }).error ({ (errorCode, waitTime) in
+            DispatchQueue.main.async {
+                switch errorCode {
+                case .timeout:
+                    let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: nil)
+                default:
+                    break
+                }
+            }
+        }).send()
     }
-
-    // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 2
     }
 
@@ -227,6 +256,16 @@ class IGChannelInfoEditTypeTableViewController: UITableViewController ,UITextFie
                 self.present(alert, animated: true, completion: nil)
                 return
             }
+            
+            if channelUserName.count < 5 {
+                let alert = UIAlertController(title: "Error", message: "Enter at least 5 letters", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alert.addAction(okAction)
+                self.hud.hide(animated: true)
+                self.present(alert, animated: true, completion: nil)
+                return
+            }
+            
             self.hud = MBProgressHUD.showAdded(to: self.view, animated: true)
             self.hud.mode = .indeterminate
             IGChannelUpdateUsernameRequest.Generator.generate(userName:channelUserName ,room: room!).success({ (protoResponse) in
@@ -247,12 +286,11 @@ class IGChannelInfoEditTypeTableViewController: UITableViewController ,UITextFie
                         let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
                         let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
                         alert.addAction(okAction)
-                        self.hud.hide(animated: true)
                         self.present(alert, animated: true, completion: nil)
                     default:
-                        self.hud.hide(animated: true)
                         break
                     }
+                    self.hud.hide(animated: true)
                 }
                 
             }).send()

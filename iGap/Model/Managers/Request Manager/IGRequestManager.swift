@@ -228,6 +228,8 @@ let protoClassesLookupTable: [Int: (proto: ResponseMessage.Type, reponseHandler:
             IGChannelGetDraftRequest.Handler.self           as IGRequest.Handler.Type),
     30417: (IGPChannelGetMemberListResponse.self            as ResponseMessage.Type,
             IGChannelGetMemberListRequest.Handler.self      as IGRequest.Handler.Type),
+    30418: (IGPChannelCheckUsernameResponse.self            as ResponseMessage.Type,
+            IGChannelCheckUsernameRequest.Handler.self      as IGRequest.Handler.Type),
     30419: (IGPChannelUpdateUsernameResponse.self           as ResponseMessage.Type,
             IGChannelUpdateUsernameRequest.Handler.self     as IGRequest.Handler.Type),
     30420: (IGPChannelRemoveUsernameResponse.self           as ResponseMessage.Type,

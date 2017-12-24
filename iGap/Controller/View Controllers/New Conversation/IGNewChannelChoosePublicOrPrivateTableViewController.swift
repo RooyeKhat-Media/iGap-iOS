@@ -26,6 +26,14 @@ class IGNewChannelChoosePublicOrPrivateTableViewController: UITableViewControlle
     var igpRoom : IGPRoom!
     var hud = MBProgressHUD()
     
+    @IBAction func edtTextChange(_ sender: UITextField) {
+        if let text = sender.text {
+            if text.count >= 5 {
+                checkUsername(username: sender.text!)
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         radioButtonController = SSRadioButtonsController(buttons: publicChannelButton, privateChannel)
@@ -65,6 +73,16 @@ class IGNewChannelChoosePublicOrPrivateTableViewController: UITableViewControlle
                 self.present(alert, animated: true, completion: nil)
                 return
             }
+            
+            if channelUserName.count < 5 {
+                let alert = UIAlertController(title: "Error", message: "Enter at least 5 letters", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alert.addAction(okAction)
+                self.hud.hide(animated: true)
+                self.present(alert, animated: true, completion: nil)
+                return
+            }
+            
             self.hud = MBProgressHUD.showAdded(to: self.view, animated: true)
             self.hud.mode = .indeterminate
             IGChannelUpdateUsernameRequest.Generator.generate(roomId:igpRoom.igpID ,username:channelUserName).success({ (protoResponse) in
@@ -95,6 +113,36 @@ class IGNewChannelChoosePublicOrPrivateTableViewController: UITableViewControlle
                 
             }).send()
         }
+    }
+    
+    func checkUsername(username: String){
+        IGChannelCheckUsernameRequest.Generator.generate(roomId:igpRoom.igpID ,username: username).success({ (protoResponse) in
+            DispatchQueue.main.async {
+                switch protoResponse {
+                case let usernameResponse as IGPChannelCheckUsernameResponse :
+                    if usernameResponse.igpStatus == IGPChannelCheckUsernameResponse.IGPStatus.available {
+                        self.channelLinkTextField.textColor = UIColor.black
+                    } else {
+                        self.channelLinkTextField.textColor = UIColor.red
+                    }
+                    break
+                default:
+                    break
+                }
+            }
+        }).error ({ (errorCode, waitTime) in
+            DispatchQueue.main.async {
+                switch errorCode {
+                case .timeout:
+                    let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: nil)
+                default:
+                    break
+                }
+            }
+        }).send()
     }
     
     func didSelectButton(_ aButton: UIButton?) {

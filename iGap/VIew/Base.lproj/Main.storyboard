@@ -1518,6 +1518,7 @@ Cg
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                     <connections>
+                                                        <action selector="edtTextChange:" destination="zQ9-UJ-7To" eventType="editingChanged" id="yQX-wK-EEo"/>
                                                         <outlet property="delegate" destination="zQ9-UJ-7To" id="jXX-Uh-zP5"/>
                                                     </connections>
                                                 </textField>
@@ -3161,6 +3162,9 @@ Cg
                                                     <nil key="textColor"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
+                                                    <connections>
+                                                        <action selector="edtTextChange:" destination="YqC-si-KOH" eventType="editingChanged" id="phN-fv-CDo"/>
+                                                    </connections>
                                                 </textField>
                                             </subviews>
                                             <constraints>
@@ -4065,6 +4069,9 @@ Cg
                                                     <nil key="textColor"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
+                                                    <connections>
+                                                        <action selector="edtTextChange:" destination="sHz-nT-2SL" eventType="editingChanged" id="9lV-1U-ig0"/>
+                                                    </connections>
                                                 </textField>
                                             </subviews>
                                             <constraints>

@@ -25,6 +25,15 @@ class IGGroupInfoEditTypeTableViewController: UITableViewController , UITextFiel
     var hud = MBProgressHUD()
     var userWantsToChangeGroupTypeToPrivate: Bool = false
     var userWantsToChangeGroupTypeToPublic: Bool = false
+    
+    @IBAction func edtTextChange(_ sender: UITextField) {
+        if let text = sender.text {
+            if text.count >= 5 {
+                checkUsername(username: sender.text!)
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         privateIndexPath = IndexPath(row: 1, section: 0)
@@ -39,10 +48,12 @@ class IGGroupInfoEditTypeTableViewController: UITableViewController , UITextFiel
                 self.changedGroupTypeToPublic()
             } else if self.userWantsToChangeGroupTypeToPrivate {
                 self.changedGroupTypeToPrivate()
-            }else {
-                self.changedGroupTypeToPrivate()
+            } else {
+                //update user name
+                if self.room?.groupRoom?.type == .publicRoom {
+                    self.changedGroupTypeToPublic()
+                }
             }
-            
         }
         if self.room?.groupRoom?.type == .publicRoom {
             tableView.selectRow(at: publicIndexPath, animated: true, scrollPosition: .none)
@@ -72,19 +83,39 @@ class IGGroupInfoEditTypeTableViewController: UITableViewController , UITextFiel
             groupLinkTextField.text = room?.groupRoom?.privateExtra?.inviteLink
             groupLinkTextField.isUserInteractionEnabled = false
         }
-        
-        
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func checkUsername(username: String){
+        IGGroupCheckUsernameRequest.Generator.generate(roomId:room!.id ,username: username).success({ (protoResponse) in
+            DispatchQueue.main.async {
+                switch protoResponse {
+                case let usernameResponse as IGPGroupCheckUsernameResponse :
+                    if usernameResponse.igpStatus == IGPGroupCheckUsernameResponse.IGPStatus.available {
+                        self.groupLinkTextField.textColor = UIColor.black
+                    } else {
+                        self.groupLinkTextField.textColor = UIColor.red
+                    }
+                    break
+                default:
+                    break
+                }
+            }
+        }).error ({ (errorCode, waitTime) in
+            DispatchQueue.main.async {
+                switch errorCode {
+                case .timeout:
+                    let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: nil)
+                default:
+                    break
+                }
+            }
+        }).send()
     }
-    
-    // MARK: - Table view data source
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 2
     }
     
@@ -178,7 +209,32 @@ class IGGroupInfoEditTypeTableViewController: UITableViewController , UITextFiel
     }
     
     func changedGroupTypeToPublic(){
+        
+        if room!.groupRoom!.type == .publicRoom && room?.groupRoom?.publicExtra?.username == groupLinkTextField.text {
+            _ = self.navigationController?.popViewController(animated: true)
+            return
+        }
+        
         if let groupUserName = groupLinkTextField.text {
+            
+            if groupUserName == "" {
+                let alert = UIAlertController(title: "Error", message: "Group link cannot be empty", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alert.addAction(okAction)
+                self.hud.hide(animated: true)
+                self.present(alert, animated: true, completion: nil)
+                return
+            }
+            
+            if groupUserName.count < 5 {
+                let alert = UIAlertController(title: "Error", message: "Enter at least 5 letters", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alert.addAction(okAction)
+                self.hud.hide(animated: true)
+                self.present(alert, animated: true, completion: nil)
+                return
+            }
+            
             self.hud = MBProgressHUD.showAdded(to: self.view, animated: true)
             self.hud.mode = .indeterminate
             IGGroupUpdateUsernameRequest.Generator.generate(roomID: room!.id ,userName:groupUserName).success({ (protoResponse) in
@@ -196,19 +252,18 @@ class IGGroupInfoEditTypeTableViewController: UITableViewController , UITextFiel
                     }
                 }
             }).error ({ (errorCode, waitTime) in
-                switch errorCode {
-                case .timeout:
-                    DispatchQueue.main.async {
+                DispatchQueue.main.async {
+                    switch errorCode {
+                    case .timeout:
                         let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
                         let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
                         alert.addAction(okAction)
-                        self.hud.hide(animated: true)
                         self.present(alert, animated: true, completion: nil)
+                    default:
+                        break
                     }
-                default:
-                    break
+                    self.hud.hide(animated: true)
                 }
-                
             }).send()
         }
     }

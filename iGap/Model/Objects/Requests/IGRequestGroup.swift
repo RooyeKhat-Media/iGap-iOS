@@ -675,22 +675,6 @@ class IGGroupCheckUsernameRequest : IGRequest {
         }
     }
     class Handler: IGRequest.Handler {
-        class func interpret(response responseProtoMessage: IGPGroupCheckUsernameResponse) -> IGCheckUsernameStatus {
-            let igpUsernameStatus = responseProtoMessage.igpStatus
-            var usernameStatus : IGCheckUsernameStatus
-            switch igpUsernameStatus {
-            case .available:
-                usernameStatus = .available
-            case .invalid:
-                usernameStatus = .invalid
-            case .taken:
-                usernameStatus = .taken
-            default:
-                usernameStatus = .invalid
-            }
-            return usernameStatus
-        }
-        
         override class func handlePush(responseProtoMessage : Message) {
             
         }

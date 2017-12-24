@@ -516,8 +516,26 @@ class IGChannelGetMemberListRequest: IGRequest {
             
         }
     }
-    
 }
+
+
+class IGChannelCheckUsernameRequest : IGRequest {
+    class Generator : IGRequest.Generator {
+        class func generate(roomId: Int64, username: String) -> IGRequestWrapper {
+            var checkUsername = IGPChannelCheckUsername()
+            checkUsername.igpRoomID = roomId
+            checkUsername.igpUsername = username
+            return IGRequestWrapper(message: checkUsername, actionID: 418)
+        }
+    }
+    
+    class Handler : IGRequest.Handler {
+        override class func handlePush(responseProtoMessage: Message) {
+            
+        }
+    }
+}
+
 
 class IGChannelUpdateUsernameRequest : IGRequest {
     class Generator : IGRequest.Generator {
