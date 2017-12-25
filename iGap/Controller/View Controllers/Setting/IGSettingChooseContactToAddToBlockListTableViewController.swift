@@ -14,7 +14,7 @@ import RealmSwift
 import MBProgressHUD
 import IGProtoBuff
 
-class IGSettingChooseContactToAddToBlockListTableViewController: UITableViewController , UISearchResultsUpdating {
+class IGSettingChooseContactToAddToBlockListTableViewController: UITableViewController , UISearchResultsUpdating ,UINavigationControllerDelegate , UIGestureRecognizerDelegate {
     
     var chooseBlockContactFromPrivacyandSecurityPage : Bool = true
     class User:NSObject {
@@ -55,13 +55,17 @@ class IGSettingChooseContactToAddToBlockListTableViewController: UITableViewCont
             segmentControl.tintColor = UIColor.organizationalColor()
             segmentControl.addTarget(self, action: #selector(IGSettingChooseContactToAddToBlockListTableViewController.segmentIndexChanged), for: UIControlEvents.valueChanged)
             //centerSegmentView.addSubview(segmentControl)
+            
             let navigationItem = self.navigationItem as! IGNavigationItem
-            navigationItem.addNavigationViewItems(rightItemText: "Cancel", title: nil)
-            navigationItem.titleView = centerSegmentView
+            navigationItem.addNavigationViewItems(rightItemText: "Cancle", title: "Choose Contact")
+            //navigationItem.titleView = centerSegmentView
+            navigationItem.navigationController = self.navigationController as? IGNavigationController
+            let navigationController = self.navigationController as! IGNavigationController
+            navigationController.interactivePopGestureRecognizer?.delegate = self
             navigationItem.rightViewContainer?.addAction {
-                self.dismiss(animated: true, completion: {
-                    
-                })
+                if self.navigationController is IGNavigationController {
+                    self.navigationController?.popViewController(animated: true)
+                }
             }
         }
     }
@@ -261,10 +265,9 @@ class IGSettingChooseContactToAddToBlockListTableViewController: UITableViewCont
         let blockAction = UIAlertAction(title: "Block", style:.default , handler: {
             (alert: UIAlertAction) -> Void in
             self.blockedSelectedContact(blockedUserId : userID )
-            self.dismiss(animated: true, completion: {
-
-            })
-            
+            if self.navigationController is IGNavigationController {
+                self.navigationController?.popViewController(animated: true)
+            }
         })
         let cancelAction = UIAlertAction(title: "Cancel", style:.cancel , handler: {
             (alert: UIAlertAction) -> Void in

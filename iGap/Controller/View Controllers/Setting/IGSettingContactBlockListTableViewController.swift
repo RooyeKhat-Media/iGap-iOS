@@ -16,7 +16,7 @@ import IGProtoBuff
 class IGSettingContactBlockListTableViewController: UITableViewController , UIGestureRecognizerDelegate {
     
     var chooseBlockContactFromPrivacyandSecurityPage:Bool = false
-    var blockedUsers = try! Realm().objects(IGRegisteredUser.self).filter("isInContacts == 1" )
+    var blockedUsers = try! Realm().objects(IGRegisteredUser.self).filter("isInContacts == 1")
     var notificationToken: NotificationToken?
     
     var hud = MBProgressHUD()
