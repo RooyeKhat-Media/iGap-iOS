@@ -1610,7 +1610,6 @@ class IGFactory: NSObject {
         let task = IGFactoryTask()
         task.task = {
             IGDatabaseManager.shared.perfrmOnDatabaseThread {
-                print("    ======> edit room for room id: \(roomID)")
                 let predicate = NSPredicate(format: "id = %lld", roomID)
                 if let roomInDb = IGDatabaseManager.shared.realm.objects(IGRoom.self).filter(predicate).first {
                     try! IGDatabaseManager.shared.realm.write {
@@ -1635,7 +1634,6 @@ class IGFactory: NSObject {
         let task = IGFactoryTask()
         task.task = {
             IGDatabaseManager.shared.perfrmOnDatabaseThread {
-                print("    ======> change type room to pribate for room id: \(roomID)")
                 let predicate = NSPredicate(format: "id = %lld", roomID)
                 if let roomInDb = IGDatabaseManager.shared.realm.objects(IGRoom.self).filter(predicate).first {
                     try! IGDatabaseManager.shared.realm.write {
@@ -1975,7 +1973,7 @@ class IGFactory: NSObject {
         let task = IGFactoryTask()
         task.task = {
             IGDatabaseManager.shared.perfrmOnDatabaseThread {
-                print("    ======> update avatar for room Id: \(roomId)")
+                
                 let avatar = IGAvatar(igpAvatar: igpAvatar)
                 let predicate = NSPredicate(format: "id = %lld", roomId)
                 if let roomInDb = try! Realm().objects(IGChannelRoom.self).filter(predicate).first {

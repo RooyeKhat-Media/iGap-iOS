@@ -26,7 +26,21 @@ class IGAvatar: Object{
     convenience init(igpAvatar: IGPAvatar) {
         self.init()
         self.id = igpAvatar.igpID
-        self.file = IGFile(igpFile: igpAvatar.igpFile, type: .image)
+        
+        // if file exist reuse it
+        let predicateAvatar = NSPredicate(format: "primaryKeyId = %@", igpAvatar.igpFile.igpCacheID)
+        let avatarFile = try! Realm().objects(IGFile.self).filter(predicateAvatar).first
+        if avatarFile == nil {
+            self.file = IGFile(igpFile: igpAvatar.igpFile, type: .image)
+        } else {
+            self.file = avatarFile
+        }
+    }
+    
+    convenience init(avatarId: Int64, file: IGFile) {
+        self.init()
+        self.id = avatarId
+        self.file = file
     }
     
     //detach from current realm
