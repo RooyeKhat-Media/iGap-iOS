@@ -159,10 +159,11 @@ class IGNewChannelChoosePublicOrPrivateTableViewController: UITableViewControlle
             channelLinkTextField.delegate = self
         }
         if radioButtonController?.selectedButton() == privateChannel {
-           channelLinkTextField.leftView = nil
-           channelLinkTextField.text = invitedLink
-           channelLinkTextField.isUserInteractionEnabled = false
-           channelLinkTextField.delegate = self
+            channelLinkTextField.leftView = nil
+            channelLinkTextField.text = invitedLink
+            channelLinkTextField.textColor = UIColor.black
+            channelLinkTextField.isUserInteractionEnabled = false
+            channelLinkTextField.delegate = self
             tableView.reloadData()
         }
     }
