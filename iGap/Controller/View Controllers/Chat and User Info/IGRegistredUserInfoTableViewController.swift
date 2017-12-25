@@ -105,6 +105,9 @@ class IGRegistredUserInfoTableViewController: UITableViewController , UIGestureR
             if let room = self.room {
                 switch room.type {
                 case .chat:
+                    if isCloud() { // hide block contact for mine profile
+                        return 2
+                    }
                     return 3
                 case .group:
                     return 2
@@ -120,6 +123,16 @@ class IGRegistredUserInfoTableViewController: UITableViewController , UIGestureR
         default:
             return 0
         }
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if isCloud() && indexPath.section == 1 { // hide block contact for mine profile
+            if indexPath.row == 1 {
+                return super.tableView(tableView, cellForRowAt: IndexPath(row: indexPath.row + 1, section: 1))
+            }
+            return super.tableView(tableView, cellForRowAt: indexPath)
+        }
+        return super.tableView(tableView, cellForRowAt: indexPath)
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -604,7 +617,9 @@ class IGRegistredUserInfoTableViewController: UITableViewController , UIGestureR
         }).send()
     }
 
-
+    func isCloud() -> Bool{
+        return room!.chatRoom?.peer?.id == IGAppManager.sharedManager.userID()
+    }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destination = segue.destination as! IGChooseMemberFromContactsToCreateGroupViewController
