@@ -11,6 +11,8 @@
 import UIKit
 import RealmSwift
 import IGProtoBuff
+import MBProgressHUD
+
 class IGCreateNewChannelTableViewController: UITableViewController {
 
     @IBOutlet weak var channelAvatarImage: UIImageView!
@@ -22,6 +24,7 @@ class IGCreateNewChannelTableViewController: UITableViewController {
     var invitedLink : String?
     var igpRoom : IGPRoom!
     let greenColor = UIColor.organizationalColor()
+    var hud = MBProgressHUD()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,6 +62,10 @@ class IGCreateNewChannelTableViewController: UITableViewController {
     func createChannel(){
         if let roomName = self.channelnameTextField.text {
             if roomName != "" {
+                
+                self.hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+                self.hud.mode = .indeterminate
+                
                 let roomDescription = self.descriptionTextField.text
                 IGChannelCreateRequest.Generator.generate(name: roomName, description: roomDescription).success({ (protoResponse) in
                     DispatchQueue.main.async {
@@ -66,6 +73,8 @@ class IGCreateNewChannelTableViewController: UITableViewController {
                         case let channelCreateRespone as IGPChannelCreateResponse :
                             IGClientGetRoomRequest.Generator.generate(roomId: channelCreateRespone.igpRoomID).success({ (protoResponse) in
                                 DispatchQueue.main.async {
+                                    self.invitedLink = IGChannelCreateRequest.Handler.interpret(response: channelCreateRespone)
+                                    
                                     switch protoResponse {
                                     case let getRoomProtoResponse as IGPClientGetRoomResponse:
                                         let avatar = IGFile()
@@ -84,29 +93,27 @@ class IGCreateNewChannelTableViewController: UITableViewController {
                                                         switch protoResponse {
                                                         case let channelAvatarAddResponse as IGPChannelAvatarAddResponse:
                                                             IGChannelAddAvatarRequest.Handler.interpret(response: channelAvatarAddResponse)
+                                                            self.hideProgress()
+                                                            self.performSegue(withIdentifier: "GotoChooseTypeOfChannelToCreate", sender: self)
                                                         default:
                                                             break
                                                         }
                                                     }
                                                 }).error({ (error, waitTime) in
-                                                    
+                                                    self.hideProgress()
                                                 }).send()
                                             }
                                         }, failure: {
-                                            
+                                            self.hideProgress()
                                         })
                                         IGClientGetRoomRequest.Handler.interpret(response: getRoomProtoResponse)
                                         self.igpRoom = getRoomProtoResponse.igpRoom
                                     default:
                                         break
                                     }
-                                    self.invitedLink = IGChannelCreateRequest.Handler.interpret(response: channelCreateRespone)
-                                    self.performSegue(withIdentifier: "GotoChooseTypeOfChannelToCreate", sender: self)
-                                    
-                                    
                                 }
                             }).error({ (errorCode, waitTime) in
-                                
+                                self.hideProgress()
                             }).send()
                             break
                         default:
@@ -114,17 +121,22 @@ class IGCreateNewChannelTableViewController: UITableViewController {
                         }
                     }
                 }).error({ (errorCode, waitTime) in
-                    
+                    self.hideProgress()
                 }).send()
                 
                 
             }
         }
     }
+
+    func hideProgress(){
+        DispatchQueue.main.async {
+            self.hud.hide(animated: true)
+        }
+    }
     
     func didTapOnChangeImage() {
         choosePhotoActionSheet(sender : channelAvatarImage)
-        
     }
     
     func roundUserImage(_ roundView:UIView){

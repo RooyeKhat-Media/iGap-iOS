@@ -10,6 +10,7 @@
 
 import UIKit
 import IGProtoBuff
+import MBProgressHUD
 
 class IGCreateNewGroupTableViewController: UITableViewController , UIGestureRecognizerDelegate {
 
@@ -25,6 +26,7 @@ class IGCreateNewGroupTableViewController: UITableViewController , UIGestureReco
     var mode : String?
     var roomId : Int64?
     var selectedUsersToCreateGroup = [IGRegisteredUser]()
+    var hud = MBProgressHUD()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -201,55 +203,30 @@ class IGCreateNewGroupTableViewController: UITableViewController , UIGestureReco
     func requestToCreateGroup() {
         if let roomName = self.groupNameTextField.text {
             if roomName != "" {
+                
+                self.hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+                self.hud.mode = .indeterminate
+                
                 let roomDescription = self.descriptionTextField.text
                 IGGroupCreateRequest.Generator.generate(name: roomName, description: roomDescription).success({ (protoResponse) in
                     DispatchQueue.main.async {
+                        
                         switch protoResponse {
                         case let groupCreateRespone as IGPGroupCreateResponse:
                             IGClientGetRoomRequest.Generator.generate(roomId: groupCreateRespone.igpRoomID).success({ (protoResponse) in
                                 DispatchQueue.main.async {
                                     switch protoResponse {
                                     case let getRoomProtoResponse as IGPClientGetRoomResponse:
+                                        
+                                        IGClientGetRoomRequest.Handler.interpret(response: getRoomProtoResponse)
+                                        
                                         for member in self.selectedUsersToCreateGroup {
                                             let groupRoom = IGRoom(igpRoom:getRoomProtoResponse.igpRoom)
                                             IGGroupAddMemberRequest.Generator.generate(userID: member.id , group: groupRoom ).success({ (protoResponse) in
                                                 DispatchQueue.main.async {
                                                     switch protoResponse {
                                                     case let groupAddMemberResponse as IGPGroupAddMemberResponse :
-                                                        let avatar = IGFile()
-                                                        avatar.attachedImage = self.groupAvatarImage.image
-                                                        let randString = IGGlobal.randomString(length: 32)
-                                                        avatar.primaryKeyId = randString
-                                                        avatar.name = randString
-                                                        
-                                                        IGUploadManager.sharedManager.upload(file: avatar, start: {
-                                                            
-                                                        }, progress: { (progress) in
-                                                            
-                                                        }, completion: { (uploadTask) in
-                                                            if let token = uploadTask.token {
-                                                                IGGroupAvatarAddRequest.Generator.generate(attachment: token , roomID: getRoomProtoResponse.igpRoom.igpID).success({ (protoResponse) in
-                                                                    DispatchQueue.main.async {
-                                                                        
-                                                                        
-                                                                        switch protoResponse {
-                                                                            
-                                                                        case let groupAvatarAddResponse as IGPGroupAvatarAddResponse:
-                                                                            IGGroupAvatarAddRequest.Handler.interpret(response: groupAvatarAddResponse)
-                                                                        default:
-                                                                            break
-                                                                        }
-                                                                    }
-                                                                }).error({ (error, waitTime) in
-                                                                    
-                                                                }).send()
-                                                            }
-                                                        }, failure: {
-                                                            
-                                                        })
-                                                        
                                                         IGGroupAddMemberRequest.Handler.interpret(response: groupAddMemberResponse)
-                                                        
                                                     default:
                                                         break
                                                     }
@@ -257,24 +234,58 @@ class IGCreateNewGroupTableViewController: UITableViewController , UIGestureReco
                                             }).error({ (errorCode, waitTime) in
                                                 
                                             }).send()
-                                            
-                                            
                                         }
                                         
-                                        IGClientGetRoomRequest.Handler.interpret(response: getRoomProtoResponse)
-                                       
-                                        self.dismiss(animated: true, completion: {
-                                            NotificationCenter.default.post(name: NSNotification.Name(rawValue: kIGNotificationNameDidCreateARoom),
-                                                                            object: nil,
-                                                                            userInfo: ["room": getRoomProtoResponse.igpRoom.igpID])
+                                        if self.groupAvatarImage.image != nil {
+                                            let avatar = IGFile()
+                                            avatar.attachedImage = self.groupAvatarImage.image
+                                            let randString = IGGlobal.randomString(length: 32)
+                                            avatar.primaryKeyId = randString
+                                            avatar.name = randString
                                             
-                                        })
+                                            IGUploadManager.sharedManager.upload(file: avatar, start: {
+                                            }, progress: { (progress) in
+                                                
+                                            }, completion: { (uploadTask) in
+                                                if let token = uploadTask.token {
+                                                    IGGroupAvatarAddRequest.Generator.generate(attachment: token , roomID: getRoomProtoResponse.igpRoom.igpID).success({ (protoResponse) in
+                                                        DispatchQueue.main.async {
+                                                            switch protoResponse {
+                                                            case let groupAvatarAddResponse as IGPGroupAvatarAddResponse:
+                                                                IGGroupAvatarAddRequest.Handler.interpret(response: groupAvatarAddResponse)
+                                                                self.hideProgress()
+                                                                self.dismiss(animated: true, completion: {
+                                                                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: kIGNotificationNameDidCreateARoom),
+                                                                                                    object: nil,
+                                                                                                    userInfo: ["room": getRoomProtoResponse.igpRoom.igpID])
+                                                                })
+                                                                
+                                                            default:
+                                                                break
+                                                            }
+                                                        }
+                                                    }).error({ (error, waitTime) in
+                                                        self.hideProgress()
+                                                    }).send()
+                                                }
+                                            }, failure: {
+                                                self.hideProgress()
+                                            })
+                                        } else {
+                                            self.hideProgress()
+                                            self.dismiss(animated: true, completion: {
+                                                NotificationCenter.default.post(name: NSNotification.Name(rawValue: kIGNotificationNameDidCreateARoom),
+                                                                                object: nil,
+                                                                                userInfo: ["room": getRoomProtoResponse.igpRoom.igpID])
+                                            })
+                                        }
+
                                     default:
                                         break
                                     }
                                 }
                             }).error({ (errorCode, waitTime) in
-                                
+                                self.hideProgress()
                             }).send()
                             break
                         default:
@@ -282,11 +293,16 @@ class IGCreateNewGroupTableViewController: UITableViewController , UIGestureReco
                         }
                     }
                 }).error({ (errorCode, waitTime) in
-                    
+                    self.hideProgress()
                 }).send()
             }
         }
-        
+    }
+    
+    func hideProgress(){
+        DispatchQueue.main.async {
+            self.hud.hide(animated: true)
+        }
     }
     
     func requestToConvertChatToGroup() {
