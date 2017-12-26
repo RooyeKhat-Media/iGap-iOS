@@ -3952,7 +3952,7 @@ Cg
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bNo-be-vBr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6063" y="-8997"/>
+            <point key="canvasLocation" x="4770" y="-7427"/>
         </scene>
         <!--Group Edit Description Table View Controller-->
         <scene sceneID="AFo-Up-ftf">
@@ -4002,7 +4002,7 @@ Cg
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Sir-KN-qFe" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6066" y="-7950"/>
+            <point key="canvasLocation" x="6065" y="-7427"/>
         </scene>
         <!--Title-->
         <scene sceneID="M5O-lv-6CH">
@@ -4098,7 +4098,7 @@ Cg
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Zm6-bv-sUM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6063" y="-6937"/>
+            <point key="canvasLocation" x="6062" y="-6600"/>
         </scene>
         <!--Group Info Member List Table View Controller-->
         <scene sceneID="2Fc-DM-dUe">
@@ -4179,7 +4179,7 @@ Cg
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dys-cr-and" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6066" y="-5938"/>
+            <point key="canvasLocation" x="6062" y="-5605"/>
         </scene>
         <!--Group Info Admins And Moderators List Table View Controller-->
         <scene sceneID="Ge4-18-S1k">
@@ -4363,7 +4363,7 @@ Cg
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CM8-rH-BKB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="7081" y="-5962"/>
+            <point key="canvasLocation" x="7162" y="-4918"/>
         </scene>
         <!--Group Shared Media List Table View Controller-->
         <scene sceneID="kvx-He-bhG">
@@ -4654,7 +4654,7 @@ Cg
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Zyf-hL-b7f" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="7026.5625" y="-4264.4366197183099"/>
+            <point key="canvasLocation" x="7081" y="-3866"/>
         </scene>
         <!--Channel And Group Shared Media Audio And Link Table View Controller-->
         <scene sceneID="9Xo-cs-353">
@@ -4915,7 +4915,7 @@ Cg
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="e1u-2U-DnM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="7026.5625" y="-3250.3521126760565"/>
+            <point key="canvasLocation" x="6065" y="-3075"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="GZg-Q4-akl">
@@ -4963,10 +4963,10 @@ Cg
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="ehT-Mj-Jjc"/>
-        <segue reference="Whh-xk-YjW"/>
+        <segue reference="k1z-sz-mLi"/>
         <segue reference="xjE-gJ-o8r"/>
         <segue reference="Whi-Zq-oPV"/>
-        <segue reference="liy-Td-nok"/>
+        <segue reference="Exk-Vs-qqA"/>
         <segue reference="I27-tX-EAz"/>
         <segue reference="OlC-Gu-0Zm"/>
     </inferredMetricsTieBreakers>

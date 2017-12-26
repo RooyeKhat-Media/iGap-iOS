@@ -446,9 +446,11 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
             case 0:
                 destination.navigationTitle = "Images"
                 destination.sharedMedia = sharedMediaImageFile
+                destination.sharedMediaFilter = .image
             case 2:
                 destination.navigationTitle = "Videos"
                 destination.sharedMedia = sharedMediaVideoFile
+                destination.sharedMediaFilter = .video
             default:
                 break
             }
@@ -460,20 +462,20 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
             switch selectedRowNum {
             case 1:
                 destination.navigationTitle = "Audio"
-                
                 destination.sharedMedia = sharedMediaAudioFile
+                destination.sharedMediaFilter = .audio
             case 3:
                 destination.navigationTitle = "Files"
                 destination.sharedMedia = sharedMediaFile
+                destination.sharedMediaFilter = .file
             case 4:
                 destination.navigationTitle = "Voices"
-                print( sharedMediaVoiceFile.count)
                 destination.sharedMedia = sharedMediaVoiceFile
+                destination.sharedMediaFilter = .voice
             case 5:
                 destination.navigationTitle = "Links"
-                print( sharedMediaLinkFile.count)
                 destination.sharedMedia = sharedMediaLinkFile
-                
+                destination.sharedMediaFilter = .url
             default:
                 break
             }
