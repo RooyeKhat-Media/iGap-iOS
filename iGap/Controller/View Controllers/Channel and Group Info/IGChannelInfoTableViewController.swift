@@ -426,6 +426,12 @@ class IGChannelInfoTableViewController: UITableViewController , UIGestureRecogni
                 }
             }
         })
+        
+        let deleteAction = UIAlertAction(title: "Delete Main Avatar", style: .destructive, handler: {
+            (alert: UIAlertAction!) -> Void in
+            self.deleteAvatar()
+        })
+        
         let ChoosePhoto = UIAlertAction(title: "Choose Photo", style: .default, handler: {
             (alert: UIAlertAction!) -> Void in
             print("Choose Photo")
@@ -446,6 +452,9 @@ class IGChannelInfoTableViewController: UITableViewController , UIGestureRecogni
             (alert: UIAlertAction!) -> Void in
             print("Cancelled")
         })
+        if myRole == .owner || myRole == .admin {
+            optionMenu.addAction(deleteAction)
+        }
         optionMenu.addAction(ChoosePhoto)
         optionMenu.addAction(cancelAction)
         if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) == true {
@@ -458,6 +467,37 @@ class IGChannelInfoTableViewController: UITableViewController , UIGestureRecogni
         self.present(optionMenu, animated: true, completion: nil)
     }
 
+    /*
+     * this method will be deleted main(latest) avatar
+     */
+    func deleteAvatar(){
+        let avatar = self.avatars[0]
+        IGChannelAvatarDeleteRequest.Generator.generate(avatarId: avatar.id, roomId: (room?.id)!).success({ (protoResponse) in
+            DispatchQueue.main.async {
+                switch protoResponse {
+                case let channelAvatarDeleteResponse as IGPChannelAvatarDeleteResponse :
+                    IGChannelAvatarDeleteRequest.Handler.interpret(response: channelAvatarDeleteResponse)
+                    self.avatarPhotos?.remove(at: 0)
+                    self.avatars.remove(at: 0)
+                default:
+                    break
+                }
+            }
+        }).error ({ (errorCode, waitTime) in
+            switch errorCode {
+            case .timeout:
+                DispatchQueue.main.async {
+                    let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: nil)
+                }
+            default:
+                break
+            }
+            
+        }).send()
+    }
 
     // MARK: - Table view data source
 
