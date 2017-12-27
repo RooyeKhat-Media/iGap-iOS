@@ -213,6 +213,11 @@ class IGRegistredUserInfoTableViewController: UITableViewController , UIGestureR
         var photos: [INSPhotoViewable] = self.avatars.map { (avatar) -> IGMedia in
             return IGMedia(avatar: avatar)
         }
+        
+        if(photos.count == 0){
+            return
+        }
+        
         avatarPhotos = photos
         let currentPhoto = photos[0]
         let deleteViewFrame = CGRect(x:320, y:595, width: 25 , height:25)
