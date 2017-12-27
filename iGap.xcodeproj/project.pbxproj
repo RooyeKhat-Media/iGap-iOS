@@ -1271,7 +1271,7 @@
 				TargetAttributes = {
 					FAF795E91DAA330C0030509B = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = 7FDJN5W8J4;
+						DevelopmentTeam = MZ7XTDD264;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Push = {
@@ -1748,7 +1748,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 7FDJN5W8J4;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -1775,7 +1775,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution: RooyeKhat Media (MZ7XTDD264)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 7FDJN5W8J4;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",

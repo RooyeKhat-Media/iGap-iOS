@@ -1552,7 +1552,7 @@ Cg
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="REY-2F-sVJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3030" y="-1219"/>
+            <point key="canvasLocation" x="2289" y="-1182"/>
         </scene>
         <!--Forward Message Table View Controller-->
         <scene sceneID="oQf-k8-o4J">
@@ -4962,12 +4962,12 @@ Cg
         <image name="IG_Tabbar_Recent_On" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="ehT-Mj-Jjc"/>
+        <segue reference="Z1Q-fW-ByF"/>
         <segue reference="k1z-sz-mLi"/>
         <segue reference="xjE-gJ-o8r"/>
         <segue reference="Whi-Zq-oPV"/>
-        <segue reference="Exk-Vs-qqA"/>
-        <segue reference="I27-tX-EAz"/>
+        <segue reference="liy-Td-nok"/>
+        <segue reference="m3u-p1-8tV"/>
         <segue reference="OlC-Gu-0Zm"/>
     </inferredMetricsTieBreakers>
 </document>

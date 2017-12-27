@@ -216,22 +216,22 @@ class IGRegistredUserInfoTableViewController: UITableViewController , UIGestureR
         avatarPhotos = photos
         let currentPhoto = photos[0]
         let deleteViewFrame = CGRect(x:320, y:595, width: 25 , height:25)
-        let trashImageView = UIImageView()
-        trashImageView.image = UIImage(named: "IG_Trash_avatar")
-        trashImageView.frame = CGRect(x: 0, y: 0, width: 25, height: 25)
-        let currentUserID = IGAppManager.sharedManager.userID()
-        if let userID = user?.id {
-            if userID == currentUserID {
-                deleteView = IGTappableView(frame: deleteViewFrame)
-                deleteView?.addSubview(trashImageView)
-                deleteView?.addAction {
-                    self.didTapOnTrashButton()
-                }
-                
-            } else {
-                deleteView = nil
-            }
-        }
+//        let trashImageView = UIImageView()
+//        trashImageView.image = UIImage(named: "IG_Trash_avatar")
+//        trashImageView.frame = CGRect(x: 0, y: 0, width: 25, height: 25)
+//        let currentUserID = IGAppManager.sharedManager.userID()
+//        if let userID = user?.id {
+//            if userID == currentUserID {
+//                deleteView = IGTappableView(frame: deleteViewFrame)
+//                deleteView?.addSubview(trashImageView)
+//                deleteView?.addAction {
+//                    self.didTapOnTrashButton()
+//                }
+//
+//            } else {
+//                deleteView = nil
+//            }
+//        }
         
         let downloadIndicatorMainView = UIView()
         let downloadViewFrame = self.view.bounds
@@ -257,10 +257,18 @@ class IGRegistredUserInfoTableViewController: UITableViewController , UIGestureR
                     return
                 }
                 
+                if UIImage.originalImage(for: currentAvatarFile!) != nil {
+                    self.galleryPhotos?.hiddenDownloadView()
+                    self.stopAnimating()
+                    return
+                }
+                
                 if let attachment = currentAvatarFile {
                     IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: {
-                        galleryPreview.hiddenDownloadView()
-                        self.stopAnimating()
+                        DispatchQueue.main.async {
+                            galleryPreview.hiddenDownloadView()
+                            self.stopAnimating()
+                        }
                     }, failure: {
                         
                     })
@@ -274,11 +282,11 @@ class IGRegistredUserInfoTableViewController: UITableViewController , UIGestureR
     
     func scheduledTimerWithTimeInterval(){
         // Scheduling timer to Call the function **Countdown** with the interval of 1 seconds
-        timer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(self.updateCounting), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.updateCounting), userInfo: nil, repeats: true)
     }
     
     func updateCounting(){
-        timer.invalidate()
+        //timer.invalidate()
         let nextPhoto = galleryPhotos?.accessCurrentPhotoDetail()
         if let index =  self.avatarPhotos?.index(where: {$0 === nextPhoto}) {
             let currentAvatarFile = self.avatars[index].file
@@ -290,10 +298,23 @@ class IGRegistredUserInfoTableViewController: UITableViewController , UIGestureR
                     return
                 }
                 
-                if let attachment = currentAvatarFile {
-                    IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: {
+                if UIImage.originalImage(for: currentAvatarFile!) != nil {
+                    DispatchQueue.main.async {
                         self.galleryPhotos?.hiddenDownloadView()
                         self.stopAnimating()
+                    }
+                    
+                    self.currentAvatarId = nextAvatarId
+                    return
+                }
+
+                
+                if let attachment = currentAvatarFile {
+                    IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: {
+                        DispatchQueue.main.async {
+                            self.galleryPhotos?.hiddenDownloadView()
+                            self.stopAnimating()
+                        }
                     }, failure: {
                         
                     })
@@ -303,7 +324,7 @@ class IGRegistredUserInfoTableViewController: UITableViewController , UIGestureR
                 
             }
         }
-        scheduledTimerWithTimeInterval()
+        //scheduledTimerWithTimeInterval()
     }
     
     

@@ -220,20 +220,24 @@ class IGChannelInfoTableViewController: UITableViewController , UIGestureRecogni
         }
         avatarPhotos = photos
         let currentPhoto = photos[0]
-        let deleteViewFrame = CGRect(x:320, y:595, width: 25 , height:25)
-        let trashImageView = UIImageView()
-        trashImageView.image = UIImage(named: "IG_Trash_avatar")
-        trashImageView.frame = CGRect(x: 0, y: 0, width: 25, height: 25)
-        if myRole == .owner || myRole == .admin {
-        deleteView = IGTappableView(frame: deleteViewFrame)
-        deleteView?.addSubview(trashImageView)
-        deleteView?.addAction {
-            self.didTapOnTrashButton()
-            }
-        } else {
-            deleteView = nil
-        }
-
+        
+//        let galleryPreview = INSPhotosViewController(photos: photos, initialPhoto: currentPhoto, referenceView: nil)
+//        present(galleryPreview, animated: true, completion: nil)
+        
+//        let deleteViewFrame = CGRect(x:320, y:595, width: 25 , height:25)
+//        let trashImageView = UIImageView()
+//        trashImageView.image = UIImage(named: "IG_Trash_avatar")
+//        trashImageView.frame = CGRect(x: 0, y: 0, width: 25, height: 25)
+//        if myRole == .owner || myRole == .admin {
+//        deleteView = IGTappableView(frame: deleteViewFrame)
+//        deleteView?.addSubview(trashImageView)
+//        deleteView?.addAction {
+//            self.didTapOnTrashButton()
+//            }
+//        } else {
+//            deleteView = nil
+//        }
+//
         let downloadIndicatorMainView = UIView()
         let downloadViewFrame = self.view.bounds
         downloadIndicatorMainView.backgroundColor = UIColor.white
@@ -247,8 +251,7 @@ class IGChannelInfoTableViewController: UITableViewController , UIGestureRecogni
         galleryPhotos = galleryPreview
         present(galleryPreview, animated: true, completion: nil)
         activityIndicatorView.startAnimating()
-        activityIndicatorView.startAnimating()
-        
+
         DispatchQueue.main.async {
             let size = CGSize(width: 30, height: 30)
             self.startAnimating(size, message: nil, type: NVActivityIndicatorType.ballRotateChase)
@@ -264,17 +267,28 @@ class IGChannelInfoTableViewController: UITableViewController , UIGestureRecogni
                     return
                 }
                 
+                if UIImage.originalImage(for: currentAvatarFile!) != nil {
+                    galleryPreview.hiddenDownloadView()
+                    self.stopAnimating()
+                    return
+                }
+
                 if let attachment = currentAvatarFile {
                     IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: {
-                        galleryPreview.hiddenDownloadView()
-                        self.stopAnimating()
+                        DispatchQueue.main.async {
+                            galleryPreview.hiddenDownloadView()
+                            self.stopAnimating()
+                        }
                     }, failure: {
-                        
+                        DispatchQueue.main.async {
+                            galleryPreview.hiddenDownloadView()
+                            self.stopAnimating()
+                        }
                     })
                 }
-                
+
             }
-            
+
         }
         scheduledTimerWithTimeInterval()
     }
@@ -319,11 +333,11 @@ class IGChannelInfoTableViewController: UITableViewController , UIGestureRecogni
     
     func requestToGetAvatarList() {
         if let currentRoomID = room?.id {
-            IGGroupAvatarGetListRequest.Generator.generate(roomId: currentRoomID).success({ (protoResponse) in
+            IGChannelAvatarGetListRequest.Generator.generate(roomId: currentRoomID).success({ (protoResponse) in
                 DispatchQueue.main.async {
                     switch protoResponse {
-                    case let channelAvatarGetListResponse as IGPGroupAvatarGetListResponse:
-                        let responseAvatars = IGGroupAvatarGetListRequest.Handler.interpret(response: channelAvatarGetListResponse)
+                    case let channelAvatarGetListResponse as IGPChannelAvatarGetListResponse:
+                        let responseAvatars = IGChannelAvatarGetListRequest.Handler.interpret(response: channelAvatarGetListResponse)
                         self.avatars = responseAvatars
                     default:
                         break
@@ -348,7 +362,7 @@ class IGChannelInfoTableViewController: UITableViewController , UIGestureRecogni
 
     func scheduledTimerWithTimeInterval(){
         // Scheduling timer to Call the function **Countdown** with the interval of 1 seconds
-        timer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(self.updateCounting), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.updateCounting), userInfo: nil, repeats: true)
     }
     
     @objc func updateCounting(){
@@ -363,10 +377,22 @@ class IGChannelInfoTableViewController: UITableViewController , UIGestureRecogni
                     return
                 }
                 
-                if let attachment = currentAvatarFile {
-                    IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: {
+                if UIImage.originalImage(for: currentAvatarFile!) != nil {
+                    DispatchQueue.main.async {
                         self.galleryPhotos?.hiddenDownloadView()
                         self.stopAnimating()
+                    }
+                    
+                    self.currentAvatarId = nextAvatarId
+                    return
+                }
+                
+                if let attachment = currentAvatarFile {
+                    IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: {
+                        DispatchQueue.main.async {
+                            self.galleryPhotos?.hiddenDownloadView()
+                            self.stopAnimating()
+                        }
                     }, failure: {
                         
                     })
