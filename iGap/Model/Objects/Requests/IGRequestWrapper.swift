@@ -30,7 +30,8 @@ class IGRequestWrapper :NSObject {
     var messageSenderTask: IGMessageSenderTask?
     var room: IGRoom?
     
-    var success: ((ResponseMessage)->())?
+    var success: ((ResponseMessage)->())? // simple success just return server response
+    var successPowerful: ((ResponseMessage, IGRequestWrapper)->())? //successPowerful has IGRequestWrapper for use identity or another info that used in send request
     var error: ((IGError, IGErrorWaitTime?)->())?
     
     
@@ -39,9 +40,21 @@ class IGRequestWrapper :NSObject {
         self.actionId = actionID
     }
     
+    init(message: RequestMessage!, identity:String, actionID:Int) {
+        self.message = message
+        self.identity = identity
+        self.actionId = actionID
+    }
+    
     @discardableResult
     func success(_ sucess: @escaping (ResponseMessage)->()) -> IGRequestWrapper {
         self.success = sucess
+        return self
+    }
+    
+    @discardableResult
+    func successPowerful(_ successPowerful: @escaping (ResponseMessage, IGRequestWrapper)->()) -> IGRequestWrapper {
+        self.successPowerful = successPowerful
         return self
     }
     
