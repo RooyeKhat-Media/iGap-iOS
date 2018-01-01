@@ -41,29 +41,30 @@ class IGSettingPrivacyAndSecurityTwoStepVerificationVerifyPasswordTableViewContr
         return ""
     }
     
+    var twoStepPassword:String?
+    
+    
     func verifyPassword() {
-        self.performSegue(withIdentifier: "showTwoStepOptions", sender: self)
-        return
         if let password = passwordTextField.text, password != "" {
             self.tableView.isUserInteractionEnabled = false
             self.tableView.isScrollEnabled = false
             let hud = MBProgressHUD.showAdded(to: self.view, animated: true)
             hud.mode = .indeterminate
             
-            IGUserTwoStepVerificationCheckPasswordRequest.Generator.generate(password: password).success({ (protoResponse) in
+            IGUserTwoStepVerificationCheckPasswordRequest.Generator.generate(password: password).successPowerful({ (protoResponse, requestWrapper) in
                 DispatchQueue.main.async {
                     if protoResponse is IGPUserTwoStepVerificationCheckPasswordResponse {
-                        hud.hide(animated: true)
-                        self.tableView.isUserInteractionEnabled = true
-                        self.tableView.isScrollEnabled = true
-                        self.performSegue(withIdentifier: "showTwoStepOptions", sender: self)
+                        if let message = requestWrapper.message as? IGPUserTwoStepVerificationCheckPassword {
+                            self.twoStepPassword = message.igpPassword
+                            self.tableView.isUserInteractionEnabled = true
+                            self.tableView.isScrollEnabled = true
+                            self.performSegue(withIdentifier: "showTwoStepOptions", sender: self)
+                        }
                     } else {
-                        //invalid proto response class
-                        //should never happen!
-                        hud.hide(animated: true)
                         self.tableView.isUserInteractionEnabled = true
                         self.tableView.isScrollEnabled = true
                     }
+                    hud.hide(animated: true)
                 }
             }).error({ (errorCode, waitTime) in
                 DispatchQueue.main.async {
@@ -122,6 +123,7 @@ class IGSettingPrivacyAndSecurityTwoStepVerificationVerifyPasswordTableViewContr
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationVC = segue.destination as? IGSettingPrivacyAndSecurityTwoStepVerificationOptionsTableViewController {
             destinationVC.twoStepVerification = twoStepVerification
+            destinationVC.password = twoStepPassword
         }
     }
 }

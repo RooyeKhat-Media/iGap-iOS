@@ -27,6 +27,7 @@ class IGCreateNewGroupTableViewController: UITableViewController , UIGestureReco
     var roomId : Int64?
     var selectedUsersToCreateGroup = [IGRegisteredUser]()
     var hud = MBProgressHUD()
+    var defualtImage = UIImage(named: "IG_New_Group_Generic_Avatar")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -126,15 +127,15 @@ class IGCreateNewGroupTableViewController: UITableViewController , UIGestureReco
         })
         let removeAction = UIAlertAction(title: "Remove Photo", style: .default, handler: {
             (alert: UIAlertAction!) -> Void in
-            let defualtImgae = UIImage(named: "IG_New_Group_Generic_Avatar")
-            self.groupAvatarImage.image = defualtImgae
+            self.defualtImage = UIImage(named: "IG_New_Group_Generic_Avatar")
+            self.groupAvatarImage.image = self.defualtImage
         })
 
         optionMenu.addAction(ChoosePhoto)
         
         optionMenu.addAction(cancelAction)
-        let defualtImgae = UIImage(named: "IG_New_Group_Generic_Avatar")
-        if groupAvatarImage.image != defualtImgae {
+        self.defualtImage = UIImage(named: "IG_New_Group_Generic_Avatar")
+        if groupAvatarImage.image != self.defualtImage {
             optionMenu.addAction(removeAction)
         }
         
@@ -236,7 +237,7 @@ class IGCreateNewGroupTableViewController: UITableViewController , UIGestureReco
                                             }).send()
                                         }
                                         
-                                        if self.groupAvatarImage.image != nil {
+                                        if self.groupAvatarImage.image != self.defualtImage {
                                             let avatar = IGFile()
                                             avatar.attachedImage = self.groupAvatarImage.image
                                             let randString = IGGlobal.randomString(length: 32)

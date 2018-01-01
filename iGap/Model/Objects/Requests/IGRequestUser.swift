@@ -868,7 +868,7 @@ class IGUserTwoStepVerificationCheckPasswordRequest : IGRequest {
         class func generate(password: String) -> IGRequestWrapper {
             var checkPasswordRequestMessage = IGPUserTwoStepVerificationCheckPassword()
             checkPasswordRequestMessage.igpPassword = password
-            return IGRequestWrapper(message: checkPasswordRequestMessage, actionID: 135)
+            return IGRequestWrapper(message: checkPasswordRequestMessage, identity: "identity", actionID: 135)
         }
         
     }

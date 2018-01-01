@@ -137,6 +137,9 @@ class IGSettingPrivacyAndSecurityActiveSessionMoreDetailsTableViewController: UI
                     switch protoResponse {
                     case let terminateSessionProtoResponse as IGPUserSessionTerminateResponse:
                         IGUserSessionTerminateRequest.Handler.interpret(response: terminateSessionProtoResponse)
+                        if self.navigationController is IGNavigationController {
+                            _ = self.navigationController?.popViewController(animated: true)
+                        }
                         self.hud.hide(animated: true)
                     default:
                         break

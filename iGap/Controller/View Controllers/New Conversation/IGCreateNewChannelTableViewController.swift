@@ -25,6 +25,7 @@ class IGCreateNewChannelTableViewController: UITableViewController {
     var igpRoom : IGPRoom!
     let greenColor = UIColor.organizationalColor()
     var hud = MBProgressHUD()
+    var defaultImage = UIImage(named: "IG_New_Channel_Generic_Avatar")
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,37 +78,44 @@ class IGCreateNewChannelTableViewController: UITableViewController {
                                     
                                     switch protoResponse {
                                     case let getRoomProtoResponse as IGPClientGetRoomResponse:
-                                        let avatar = IGFile()
-                                        avatar.attachedImage = self.channelAvatarImage.image
-                                        let randString = IGGlobal.randomString(length: 32)
-                                        avatar.primaryKeyId = randString
-                                        avatar.name = randString
-                                        IGUploadManager.sharedManager.upload(file: avatar, start: {
-                                            
-                                        }, progress: { (progress) in
-                                            
-                                        }, completion: { (uploadTask) in
-                                            if let token = uploadTask.token {
-                                                IGChannelAddAvatarRequest.Generator.generate(attachment: token , roomID: getRoomProtoResponse.igpRoom.igpID).success({ (protoResponse) in
-                                                    DispatchQueue.main.async {
-                                                        switch protoResponse {
-                                                        case let channelAvatarAddResponse as IGPChannelAvatarAddResponse:
-                                                            IGChannelAddAvatarRequest.Handler.interpret(response: channelAvatarAddResponse)
-                                                            self.hideProgress()
-                                                            self.performSegue(withIdentifier: "GotoChooseTypeOfChannelToCreate", sender: self)
-                                                        default:
-                                                            break
+                                        if self.channelAvatarImage.image != self.defaultImage {
+                                            let avatar = IGFile()
+                                            avatar.attachedImage = self.channelAvatarImage.image
+                                            let randString = IGGlobal.randomString(length: 32)
+                                            avatar.primaryKeyId = randString
+                                            avatar.name = randString
+                                            IGUploadManager.sharedManager.upload(file: avatar, start: {
+                                                
+                                            }, progress: { (progress) in
+                                                
+                                            }, completion: { (uploadTask) in
+                                                if let token = uploadTask.token {
+                                                    IGChannelAddAvatarRequest.Generator.generate(attachment: token , roomID: getRoomProtoResponse.igpRoom.igpID).success({ (protoResponse) in
+                                                        DispatchQueue.main.async {
+                                                            switch protoResponse {
+                                                            case let channelAvatarAddResponse as IGPChannelAvatarAddResponse:
+                                                                IGChannelAddAvatarRequest.Handler.interpret(response: channelAvatarAddResponse)
+                                                                self.hideProgress()
+                                                                self.performSegue(withIdentifier: "GotoChooseTypeOfChannelToCreate", sender: self)
+                                                            default:
+                                                                break
+                                                            }
                                                         }
-                                                    }
-                                                }).error({ (error, waitTime) in
-                                                    self.hideProgress()
-                                                }).send()
-                                            }
-                                        }, failure: {
+                                                    }).error({ (error, waitTime) in
+                                                        self.hideProgress()
+                                                    }).send()
+                                                }
+                                            }, failure: {
+                                                self.hideProgress()
+                                            })
+                                            IGClientGetRoomRequest.Handler.interpret(response: getRoomProtoResponse)
+                                            self.igpRoom = getRoomProtoResponse.igpRoom
+                                        } else {
                                             self.hideProgress()
-                                        })
-                                        IGClientGetRoomRequest.Handler.interpret(response: getRoomProtoResponse)
-                                        self.igpRoom = getRoomProtoResponse.igpRoom
+                                            self.performSegue(withIdentifier: "GotoChooseTypeOfChannelToCreate", sender: self)
+                                            IGClientGetRoomRequest.Handler.interpret(response: getRoomProtoResponse)
+                                            self.igpRoom = getRoomProtoResponse.igpRoom
+                                        }
                                     default:
                                         break
                                     }
@@ -193,14 +201,14 @@ class IGCreateNewChannelTableViewController: UITableViewController {
         })
         let removeAction = UIAlertAction(title: "Remove Photo", style: .default, handler: {
             (alert: UIAlertAction!) -> Void in
-            let defualtImgae = UIImage(named: "IG_New_Channel_Generic_Avatar")
-            self.channelAvatarImage.image = defualtImgae
+            self.defaultImage = UIImage(named: "IG_New_Channel_Generic_Avatar")
+            self.channelAvatarImage.image = self.defaultImage
         })
 
         optionMenu.addAction(ChoosePhoto)
         optionMenu.addAction(cancelAction)
-        let defualtImgae = UIImage(named: "IG_New_Channel_Generic_Avatar")
-        if self.channelAvatarImage.image != defualtImgae {
+        self.defaultImage = UIImage(named: "IG_New_Channel_Generic_Avatar")
+        if self.channelAvatarImage.image != self.defaultImage {
             optionMenu.addAction(removeAction)
         }
         let alertActions = optionMenu.actions

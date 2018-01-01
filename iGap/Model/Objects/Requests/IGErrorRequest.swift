@@ -127,7 +127,7 @@ enum IGError: String {
     //in response to ... (User Two-Step Verification Check Password)
     case userTwoStepVerificationCheckPasswordBadPayload = "10103"
     case userTwoStepVerificationCheckPasswordInternalServerError = "10104"
-    case userTwoStepVerificationCheckPasswordInvalidPassword = "10150"
+    case userTwoStepVerificationCheckPasswordInvalidPassword = "10105"
     case userTwoStepVerificationCheckPasswordMaxTryLock = "10106"
     case userTwoStepVerificationCheckPasswordNoPassword = "10107"
     

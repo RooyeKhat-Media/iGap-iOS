@@ -289,17 +289,20 @@ class IGSettingPrivacy_SecurityTableViewController: UITableViewController, UIGes
                         }
                     }
                 }).error({ (errorCode, waitTime) in
-                    switch errorCode {
-                    case .userTwoStepVerificationGetPasswordDetailsBadPayload:
-                        self.showAlert(title: "Alert", message: "Bad payload")
-                    case .userTwoStepVerificationGetPasswordDetailsInternalServerError:
-                        self.showAlert(title: "Alert", message: "Internal Server Error")
-                    case .userTwoStepVerificationGetPasswordDetailsForbidden:
-                        self.showAlert(title: "Alert", message: "Forbidden")
-                    case .userTwoStepVerificationGetPasswordDetailsNoPassword:
-                        self.performSegue(withIdentifier: "GoToTwoStepVerificationPage", sender: self)
-                    default:
-                        break
+                    DispatchQueue.main.async {
+                        hud.hide(animated: true)
+                        switch errorCode {
+                        case .userTwoStepVerificationGetPasswordDetailsBadPayload:
+                            self.showAlert(title: "Alert", message: "Bad payload")
+                        case .userTwoStepVerificationGetPasswordDetailsInternalServerError:
+                            self.showAlert(title: "Alert", message: "Internal Server Error")
+                        case .userTwoStepVerificationGetPasswordDetailsForbidden:
+                            self.showAlert(title: "Alert", message: "Forbidden")
+                        case .userTwoStepVerificationGetPasswordDetailsNoPassword:
+                            self.performSegue(withIdentifier: "GoToTwoStepVerificationPage", sender: self)
+                        default:
+                            break
+                        }
                     }
                 }).send()
             case 2 :
