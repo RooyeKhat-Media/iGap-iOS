@@ -145,6 +145,18 @@ enum IGError: String {
     case userTwoStepVerificationVerifyPasswordForbidden = "192"
     case userTwoStepVerificationVerifyPasswordNoPassword = "193"
     case userTwoStepVerificationVerifyPasswordInvalidPassword = "194"
+
+    case userTwoStepVerificationSetPasswordNewPasswordIsInvalid = "195.2"
+    case userTwoStepVerificationSetPasswordRecoveryEmailIsNotValid_Minor3 = "195.3"
+    case userTwoStepVerificationSetPasswordRecoveryEmailIsNotValid_Minor4 = "195.4"
+    case userTwoStepVerificationSetPasswordFirstRecoveryQuestionIsInvalid = "195.5"
+    case userTwoStepVerificationSetPasswordAnswerOfTheFirstRecoveryQuestionIsInvalid = "195.6"
+    case userTwoStepVerificationSetPasswordSecondRecoveryQuestionIsInvalid = "195.7"
+    case userTwoStepVerificationSetPasswordAnswerOfTheSecondRecoveryQuestionIsInvalid = "195.8"
+    case userTwoStepVerificationSetPasswordHintIsNotValid = "195.9"
+    
+    case userTwoStepVerificationSetPasswordMaxTryLock = "197"
+
     
     case canNotAddThisUserAsAdminToGroup        = "323.3"
     case canNotAddThisUserAsModeratorToGroup    = "320.3"

@@ -24,40 +24,103 @@ class IGSettingPrivacyAndSecurityTwoStepVerificationSetTwoStepVerificationTableV
     @IBOutlet weak var hintTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
     
+    var oldPassword: String = ""
+    var email: String = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         let navigationController = self.navigationController as! IGNavigationController
         navigationController.interactivePopGestureRecognizer?.delegate = self
+        let navigationItem = self.navigationItem as! IGNavigationItem
+        navigationItem.addNavigationViewItems(rightItemText: "Done", title: "Change Password")
+        navigationItem.navigationController = self.navigationController as? IGNavigationController
+        navigationItem.rightViewContainer?.addAction {
+            self.setPassword()
+        }
     }
     
+    func setPassword(){
+        
+        if passwordTextField.text == "" || verifyTextField.text == "" || question1TextField.text == "" || answer1TextField.text == "" || question2TextField.text == "" || answer2TextField.text == "" || hintTextField.text == "" {
+            alertController(title: "Error", message: "Please Set All Required Items")
+            return
+        }
+        
+        if passwordTextField.text != verifyTextField.text {
+            alertController(title: "Error", message: "Password And Verify Are Not Same")
+            return
+        }
+        
+        if emailTextField.text != nil {
+            email = emailTextField.text!
+        }
+        
+        let hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+        hud.mode = .indeterminate
+        IGUserTwoStepVerificationSetPasswordRequest.Generator.generate(oldPassword: oldPassword, newPassword: passwordTextField.text!,questionOne: question1TextField.text!,answerOne: answer1TextField.text!,questionTwo: question2TextField.text!,answerTwo: answer2TextField.text!,hint: hintTextField.text!,recoveryEmail: emailTextField.text!).success({ (protoResponse) in
+            DispatchQueue.main.async {
+                hud.hide(animated: true)
+                switch protoResponse {
+                case let unsetPassword as IGPUserTwoStepVerificationSetPasswordResponse :
+                    IGUserTwoStepVerificationSetPasswordRequest.Handler.interpret(response: unsetPassword)
+                    self.navigationController?.popViewController(animated: true)
+                default:
+                    break
+                }
+            }
+        }).error ({ (errorCode, waitTime) in
+            DispatchQueue.main.async {
+                switch errorCode {
+                case .timeout:
+                    self.alertController(title: "Error", message: "Please try again later")
+                    break
+                    
+                case .userTwoStepVerificationSetPasswordNewPasswordIsInvalid :
+                    self.alertController(title: "Error", message: "Password Is Invalid")
+                    break
+                    
+                case .userTwoStepVerificationSetPasswordRecoveryEmailIsNotValid_Minor3 :
+                    self.alertController(title: "Error", message: "Email Is Invalid")
+                    break
+                    
+                case .userTwoStepVerificationSetPasswordRecoveryEmailIsNotValid_Minor4 :
+                    self.alertController(title: "Error", message: "Email Is Invalid")
+                    break
+                    
+                case .userTwoStepVerificationSetPasswordFirstRecoveryQuestionIsInvalid :
+                    self.alertController(title: "Error", message: "First Recovery Question Is Invalid")
+                    break
 
+                case .userTwoStepVerificationSetPasswordAnswerOfTheFirstRecoveryQuestionIsInvalid :
+                    self.alertController(title: "Error", message: "Answer Of The First Question Is Invalid")
+                    break
+                    
+                case .userTwoStepVerificationSetPasswordSecondRecoveryQuestionIsInvalid :
+                    self.alertController(title: "Error", message: "Second Recovery Question Is Invalid")
+                    break
+                    
+                case .userTwoStepVerificationSetPasswordAnswerOfTheSecondRecoveryQuestionIsInvalid :
+                    self.alertController(title: "Error", message: "Answer Of The Second Question Is Invalid")
+                    break
+                    
+                case .userTwoStepVerificationSetPasswordHintIsNotValid :
+                    self.alertController(title: "Error", message: "Password Hint Is Not Valid")
+                    break
+                    
+                default:
+                    break
+                }
+                hud.hide(animated: true)
+            }
+        }).send()
+    }
     
-//    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-//        let header: UITableViewHeaderFooterView = view as! UITableViewHeaderFooterView
-//        header.textLabel?.text = header.textLabel?.text?.capitalized
-//        header.textLabel?.textAlignment = .center
-//    }
-//    
-//    func setupNextBarButtonItem(){
-//        let doneBtn = UIButton()
-//        doneBtn.frame = CGRect(x: 8, y: 300, width: 60, height: 0)
-//        let normalTitleFont = UIFont.systemFont(ofSize: UIFont.buttonFontSize, weight: UIFontWeightSemibold)
-//        let normalTitleColor = greenColor
-//        let attributeText = [NSFontAttributeName: normalTitleFont, NSForegroundColorAttributeName: normalTitleColor]
-//        let doneTitle = NSAttributedString(string: "Done", attributes: attributeText)
-//        doneBtn.setAttributedTitle(doneTitle, for: .normal)
-//        doneBtn.addTarget(self, action: #selector(doneButtonClicked), for: UIControlEvents.touchUpInside)
-//        let topRightBarbuttonItem = UIBarButtonItem(customView: doneBtn)
-//        self.navigationItem.rightBarButtonItem = topRightBarbuttonItem
-//    }
-//    
-//    func doneButtonClicked(){
-//        let alert = UIAlertController(title: "Check Your E-mail", message: "Please check your e-mail and click on the vallidation link to complete Two-Step Verification setup. ", preferredStyle: UIAlertControllerStyle.alert)
-//        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
-//        alert.view.tintColor = greenColor
-//        self.present(alert, animated: true, completion: nil)
-//    }
-
+    func alertController(title: String, message: String){
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(okAction)
+        self.present(alert, animated: true, completion: nil)
+    }
 }
 

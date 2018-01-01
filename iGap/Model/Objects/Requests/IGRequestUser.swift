@@ -823,24 +823,23 @@ class IGUserTwoStepVerificationVerifyPasswordRequest : IGRequest {
 //MARK: -
 class IGUserTwoStepVerificationSetPasswordRequest : IGRequest {
     class Generator: IGRequest.Generator {
-        class func generate(hint: String, questionOne: String, answerOne: String, questionTwo: String, answerTwo: String, newPassword: String, oldPassword: String, recoveryEmail: String) -> IGRequestWrapper {
+        class func generate(oldPassword: String, newPassword: String, questionOne: String, answerOne: String, questionTwo: String, answerTwo: String, hint: String, recoveryEmail: String) -> IGRequestWrapper {
             var setPasswordRequestMessage = IGPUserTwoStepVerificationSetPassword()
-            setPasswordRequestMessage.igpHint = hint
+            setPasswordRequestMessage.igpOldPassword = oldPassword
+            setPasswordRequestMessage.igpNewPassword = newPassword
             setPasswordRequestMessage.igpQuestionOne = questionOne
             setPasswordRequestMessage.igpAnswerOne = answerOne
             setPasswordRequestMessage.igpQuestionTwo = questionTwo
             setPasswordRequestMessage.igpAnswerTwo = answerTwo
-            setPasswordRequestMessage.igpNewPassword = newPassword
-            setPasswordRequestMessage.igpOldPassword = oldPassword
+            setPasswordRequestMessage.igpHint = hint
             setPasswordRequestMessage.igpRecoveryEmail = recoveryEmail
-            
             return IGRequestWrapper(message: setPasswordRequestMessage, actionID: 133)
         }
         
     }
     class Handler : IGRequest.Handler{
         class func interpret(response responseProtoMessage: IGPUserTwoStepVerificationSetPasswordResponse) {
-            //TODO: Complete Me
+            
         }
     }
 }
