@@ -132,6 +132,7 @@ enum IGError: String {
     case userTwoStepVerificationCheckPasswordNoPassword = "10107"
     
     case userTwoStepVerificationChangeHintMaxTryLock = "10143"
+    case userTwoStepVerificationChangeRecoveryQuestionMaxTryLock = "10138"
     
     case userTwoStepVerificationVerifyPasswordBadPayload = "189"
     case userTwoStepVerificationVerifyPasswordInternalServerError = "190"

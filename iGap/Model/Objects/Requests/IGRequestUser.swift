@@ -968,7 +968,7 @@ class IGUserTwoStepVerificationRecoverPasswordByAnswersRequest : IGRequest {
 //MARK: -
 class IGUserTwoStepVerificationChangeRecoveryQuestionRequest : IGRequest {
     class Generator: IGRequest.Generator {
-        class func generate(questionOne: String, answerOne: String, questionTwo: String, answerTwo: String, password: String) -> IGRequestWrapper {
+        class func generate(password: String, questionOne: String, answerOne: String, questionTwo: String, answerTwo: String) -> IGRequestWrapper {
             var changeRecoveryQuestionRequestMessage = IGPUserTwoStepVerificationChangeRecoveryQuestion()
             changeRecoveryQuestionRequestMessage.igpQuestionOne = questionOne
             changeRecoveryQuestionRequestMessage.igpAnswerOne = answerOne
@@ -981,7 +981,7 @@ class IGUserTwoStepVerificationChangeRecoveryQuestionRequest : IGRequest {
     }
     class Handler : IGRequest.Handler{
         class func interpret(response responseProtoMessage: IGPUserTwoStepVerificationChangeRecoveryQuestionResponse) {
-            //TODO: Complete Me
+            
         }
     }
 }
@@ -999,7 +999,7 @@ class IGUserTwoStepVerificationChangehintRequest : IGRequest {
     }
     class Handler : IGRequest.Handler{
         class func interpret(response responseProtoMessage: IGPUserTwoStepVerificationChangeHintResponse) {
-            //TODO: Complete Me
+            
         }
     }
 }

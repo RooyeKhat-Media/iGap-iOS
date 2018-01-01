@@ -65,7 +65,7 @@ class IGSettingPrivacyAndSecurityTwoStepVerificationChangeHintTableViewControlle
                     alert.addAction(okAction)
                     self.present(alert, animated: true, completion: nil)
                 case .userTwoStepVerificationChangeHintMaxTryLock:
-                    let alert = UIAlertController(title: "Max Try Lock", message: "Please try again later", preferredStyle: .alert)
+                    let alert = UIAlertController(title: "Error", message: "Max Try Lock", preferredStyle: .alert)
                     let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
                     alert.addAction(okAction)
                     self.present(alert, animated: true, completion: nil)
