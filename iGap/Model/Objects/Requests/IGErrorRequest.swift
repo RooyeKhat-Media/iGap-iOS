@@ -131,6 +131,8 @@ enum IGError: String {
     case userTwoStepVerificationCheckPasswordMaxTryLock = "10106"
     case userTwoStepVerificationCheckPasswordNoPassword = "10107"
     
+    case userTwoStepVerificationChangeHintMaxTryLock = "10143"
+    
     case userTwoStepVerificationVerifyPasswordBadPayload = "189"
     case userTwoStepVerificationVerifyPasswordInternalServerError = "190"
     case userTwoStepVerificationVerifyPasswordMaxTryLock = "191"
@@ -151,7 +153,7 @@ enum IGError: String {
     //client Join by InvitedLink
     case clientJoinByInviteLinkForbidden = "632.100"
     case clientJoinByInviteLinkAlreadyJoined = "633.1"
-
+    
 }
 
 //MARK: -

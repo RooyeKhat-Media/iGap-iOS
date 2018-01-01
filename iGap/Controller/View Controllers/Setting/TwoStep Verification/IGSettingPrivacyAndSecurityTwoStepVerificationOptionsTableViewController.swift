@@ -80,4 +80,10 @@ class IGSettingPrivacyAndSecurityTwoStepVerificationOptionsTableViewController: 
             }
         }).send()
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destinationVC = segue.destination as? IGSettingPrivacyAndSecurityTwoStepVerificationChangeHintTableViewController {
+            destinationVC.password = password
+        }
+    }
 }

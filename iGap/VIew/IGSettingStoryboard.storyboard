@@ -5006,6 +5006,7 @@ kay*****@gm**.com</string>
                     <navigationItem key="navigationItem" title="Title" id="Hcm-Nk-wa3" customClass="IGNavigationItem" customModule="iGap" customModuleProvider="target"/>
                     <connections>
                         <outlet property="hintTextField" destination="BLh-J9-J8i" id="xH3-QO-BaV"/>
+                        <outlet property="txtHint" destination="BLh-J9-J8i" id="jlV-jS-Bbo"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MGR-Y8-lzH" userLabel="First Responder" sceneMemberID="firstResponder"/>
