@@ -4517,9 +4517,6 @@ Please wait 0:59</string>
                                                 <constraint firstAttribute="bottom" secondItem="fHP-wP-wSy" secondAttribute="bottom" constant="7" id="hzh-qt-eWP"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <connections>
-                                            <segue destination="8aK-dM-Tut" kind="show" identifier="showTwoStepOptions" id="eci-pL-iym"/>
-                                        </connections>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -4533,6 +4530,7 @@ Please wait 0:59</string>
                     <connections>
                         <outlet property="passwordTextField" destination="fHP-wP-wSy" id="K7W-Ca-m4V"/>
                         <segue destination="WSF-fg-HtC" kind="show" identifier="changePasswordWithQuestions" id="PsW-HD-WBp"/>
+                        <segue destination="8aK-dM-Tut" kind="show" identifier="showTwoStepOptions" id="1Fr-Vf-hq4"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4v9-MX-fGw" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -5490,7 +5488,7 @@ Afg
         </image>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="xDF-ci-8mT"/>
+        <segue reference="xOF-Qo-3Kd"/>
         <segue reference="v0b-nh-nsK"/>
         <segue reference="7wc-J4-g56"/>
     </inferredMetricsTieBreakers>
