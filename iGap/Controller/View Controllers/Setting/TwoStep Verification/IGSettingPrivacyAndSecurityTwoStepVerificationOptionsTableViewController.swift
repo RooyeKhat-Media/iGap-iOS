@@ -89,5 +89,9 @@ class IGSettingPrivacyAndSecurityTwoStepVerificationOptionsTableViewController: 
         if let destinationVC = segue.destination as? IGSettingPrivacyAndSecurityTwoStepVerificationChangeSecurityQuestionsTableViewController {
             destinationVC.password = password
         }
+        
+        if let destinationVC = segue.destination as? IGSettingPrivacyAndSecurityTwoStepVerificationChangeEmailTableViewController {
+            destinationVC.password = password
+        }
     }
 }

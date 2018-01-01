@@ -909,7 +909,7 @@ class IGUserTwoStepVerificationChangeRecoveryEmailRequest : IGRequest {
     }
     class Handler : IGRequest.Handler{
         class func interpret(response responseProtoMessage: IGPUserTwoStepVerificationChangeRecoveryEmailResponse) {
-            //TODO: Complete Me
+            
         }
     }
 }
