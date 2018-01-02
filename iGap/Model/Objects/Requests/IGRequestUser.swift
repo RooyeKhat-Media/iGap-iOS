@@ -1003,6 +1003,21 @@ class IGUserTwoStepVerificationChangehintRequest : IGRequest {
     }
 }
 
+class IGUserTwoStepVerificationResendVerifyEmailRequest : IGRequest {
+    class Generator: IGRequest.Generator {
+        class func generate() -> IGRequestWrapper {
+            let resendVerifyEmail = IGPUserTwoStepVerificationResendVerifyEmail()
+            return IGRequestWrapper(message: resendVerifyEmail, actionID: 146)
+        }
+        
+    }
+    class Handler : IGRequest.Handler{
+        class func interpret(response responseProtoMessage: IGPUserTwoStepVerificationResendVerifyEmailResponse) {
+            
+        }
+    }
+}
+
 //MARK: -
 class IGUserPrivacyGetRuleRequest: IGRequest {
     class Generator: IGRequest.Generator {

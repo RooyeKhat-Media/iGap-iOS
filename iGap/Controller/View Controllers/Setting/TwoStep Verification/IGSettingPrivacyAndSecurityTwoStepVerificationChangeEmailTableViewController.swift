@@ -47,7 +47,8 @@ class IGSettingPrivacyAndSecurityTwoStepVerificationChangeEmailTableViewControll
         IGUserTwoStepVerificationChangeRecoveryEmailRequest.Generator.generate(password: self.password!, email: emailTextField.text!).success({ (protoResponse) in
             DispatchQueue.main.async {
                 hud.hide(animated: true)
-                if ((protoResponse as? IGPUserTwoStepVerificationChangeRecoveryEmailResponse) != nil) {
+                if let recoveryEmail = protoResponse as? IGPUserTwoStepVerificationChangeRecoveryEmailResponse {
+                    IGSettingPrivacyAndSecurityTwoStepVerificationOptionsTableViewController.unconfirmedEmailPattern = recoveryEmail.igpUnconfirmedEmailPattern
                     self.navigationController?.popViewController(animated: true)
                 }
             }

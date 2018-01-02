@@ -17,9 +17,18 @@ class IGSettingPrivacyAndSecurityTwoStepVerificationOptionsTableViewController: 
 
     @IBOutlet weak var unverifiedEmailContainerView: UIView!
     @IBOutlet weak var unverifiedEmailAddressLabel: IGLabel!
+    @IBOutlet weak var txtUnconfirmedEmail: IGLabel!
+    @IBOutlet weak var btnOutletVerify: UIButton!
+    
+    internal static var verifiedEmail = false
+    internal static var unconfirmedEmailPattern: String?
     
     var twoStepVerification: IGTwoStepVerification?
     var password: String?
+    
+    @IBAction func btnResendVerificationCode(_ sender: Any) {
+        self.performSegue(withIdentifier: "showVerifyEmail", sender: self)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,6 +39,32 @@ class IGSettingPrivacyAndSecurityTwoStepVerificationOptionsTableViewController: 
         let navigationItem = self.navigationItem as! IGNavigationItem
         navigationItem.addNavigationViewItems(rightItemText: "", title: "Options")
         navigationItem.navigationController = self.navigationController as? IGNavigationController
+        
+        if let pattern = twoStepVerification?.unverifiedEmailPattern {
+            txtUnconfirmedEmail.text = pattern
+        } else {
+            txtUnconfirmedEmail.isHidden = true
+            btnOutletVerify.isHidden = true
+        }
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        
+        if IGSettingPrivacyAndSecurityTwoStepVerificationOptionsTableViewController.verifiedEmail {
+            IGSettingPrivacyAndSecurityTwoStepVerificationOptionsTableViewController.verifiedEmail = false
+            txtUnconfirmedEmail.isHidden = true
+            btnOutletVerify.isHidden = true
+        }
+        
+        if IGSettingPrivacyAndSecurityTwoStepVerificationOptionsTableViewController.unconfirmedEmailPattern != nil && IGSettingPrivacyAndSecurityTwoStepVerificationOptionsTableViewController.unconfirmedEmailPattern != "" {
+            
+            txtUnconfirmedEmail.text = IGSettingPrivacyAndSecurityTwoStepVerificationOptionsTableViewController.unconfirmedEmailPattern
+            txtUnconfirmedEmail.isHidden = false
+            btnOutletVerify.isHidden = false
+            
+            IGSettingPrivacyAndSecurityTwoStepVerificationOptionsTableViewController.unconfirmedEmailPattern = ""
+        }
     }
 
     
@@ -47,10 +82,6 @@ class IGSettingPrivacyAndSecurityTwoStepVerificationOptionsTableViewController: 
         }
     }
 
-    @IBAction func didTapOnResentVerifyCodeButton(_ sender: UIButton) {
-        
-    }
-    
     func unsetPassword(){
         let hud = MBProgressHUD.showAdded(to: self.view, animated: true)
         hud.mode = .indeterminate
@@ -97,6 +128,11 @@ class IGSettingPrivacyAndSecurityTwoStepVerificationOptionsTableViewController: 
         
         if let destinationVC = segue.destination as? IGSettingPrivacyAndSecurityTwoStepVerificationSetTwoStepVerificationTableViewController {
             destinationVC.oldPassword = password!
+        }
+        
+        if let destinationVC = segue.destination as? IGSettingPrivacyAndSecurityTwoStepVerificationVerifyUnconfirmedEmail {
+            destinationVC.placeholder = (twoStepVerification?.unverifiedEmailPattern)!
+            destinationVC.pageAction = IGTwoStepEmail.verifyEmail
         }
     }
 }

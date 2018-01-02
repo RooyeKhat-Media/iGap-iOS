@@ -131,6 +131,10 @@ enum IGError: String {
     case userTwoStepVerificationCheckPasswordMaxTryLock = "10106"
     case userTwoStepVerificationCheckPasswordNoPassword = "10107"
     
+    case userTwoStepVerificationVerifyRecoveryEmailMaxTryLock = "10110"
+    case userTwoStepVerificationVerifyRecoveryEmailExpiredToken = "10111"
+    case userTwoStepVerificationVerifyRecoveryEmailInvalidToken = "10113"
+    
     case userTwoStepVerificationChangeRecoveryEmailIsIncorrect_Minor2 = "10114.2"
     case userTwoStepVerificationChangeRecoveryEmailIsIncorrect_Minor3 = "10114.3"
     case userTwoStepVerificationChangeRecoveryEmailMaxTryLock = "10116"
@@ -139,6 +143,10 @@ enum IGError: String {
     case userTwoStepVerificationRequestRecoveryTokenNoRecoVeryEmail = "10123"
     case userTwoStepVerificationRequestRecoveryTokenMaxTryLock = "10124"
     case userTwoStepVerificationRequestRecoveryTokenForbidden = "10154"
+    
+    case userTwoStepVerificationRecoverPasswordByTokenMaxTryLock = "10127"
+    case userTwoStepVerificationRecoverPasswordByTokenExpiredToken = "10128"
+    case userTwoStepVerificationRecoverPasswordByTokenInvalidToken = "10129"
 
     case userTwoStepVerificationRecoverPasswordByAnswersMaxTryLock = "10133"
     case userTwoStepVerificationRecoverPasswordByAnswersInvalidAnswers = "10134"

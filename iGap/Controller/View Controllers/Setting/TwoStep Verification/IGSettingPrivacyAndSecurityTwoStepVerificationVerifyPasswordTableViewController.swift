@@ -95,37 +95,8 @@ class IGSettingPrivacyAndSecurityTwoStepVerificationVerifyPasswordTableViewContr
     @IBAction func didTapOnForgotPasswordButton(_ sender: UIButton) {
         let alertVC = UIAlertController(title: "Forgot Password?", message: "Which option do you want to use to change your password?", preferredStyle: .actionSheet)
         
-        
         let email = UIAlertAction(title: "Email", style: .default) { (action) in
-            let hud = MBProgressHUD.showAdded(to: self.view, animated: true)
-            hud.mode = .indeterminate
-            self.tableView.isScrollEnabled = false
-            IGUserTwoStepVerificationRequestRecoveryTokenRequest.Generator.generate().success({ (success) in
-                DispatchQueue.main.async {
-                    hud.hide(animated: true)
-                    self.showAlert(title: "Success", message: "Please Check Your Email")
-                }
-            }).error({ (errorCode, waitTime) in
-                DispatchQueue.main.async {
-                    hud.hide(animated: true)
-                    switch errorCode {
-                    case .userTwoStepVerificationRequestRecoveryTokenNoRecoVeryEmail:
-                        self.showAlert(title: "Error", message: "Not Exist Verified Email")
-                        break
-                        
-                    case .userTwoStepVerificationRequestRecoveryTokenMaxTryLock:
-                        self.showAlert(title: "Error", message: "Recovery Max Try Lock, Please Try Later!")
-                        break
-                        
-                    case .userTwoStepVerificationRequestRecoveryTokenForbidden:
-                        self.showAlert(title: "Error", message: "Recovery Token Forbidden")
-                        break
-                        
-                    default:
-                        break
-                    }
-                }
-            }).send()
+            self.performSegue(withIdentifier: "showRecoverByEmail", sender: self)
         }
         let questions = UIAlertAction(title: "Recovery Questions", style: .default) { (action) in
             self.performSegue(withIdentifier: "changePasswordWithQuestions", sender: self)
@@ -133,7 +104,9 @@ class IGSettingPrivacyAndSecurityTwoStepVerificationVerifyPasswordTableViewContr
         let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
             
         }
-        alertVC.addAction(email)
+        if (twoStepVerification?.hasVerifiedEmailAddress)! {
+            alertVC.addAction(email)
+        }
         alertVC.addAction(questions)
         alertVC.addAction(cancel)
         
@@ -152,6 +125,10 @@ class IGSettingPrivacyAndSecurityTwoStepVerificationVerifyPasswordTableViewContr
             destinationVC.questionOne = twoStepVerification?.question1
             destinationVC.questionTwo = twoStepVerification?.question2
             destinationVC.pageAction = IGTwoStepQuestion.questionRecoveryPassword
+        }
+        
+        if let destinationVC = segue.destination as? IGSettingPrivacyAndSecurityTwoStepVerificationVerifyUnconfirmedEmail {
+            destinationVC.pageAction = IGTwoStepEmail.recoverPassword
         }
     }
 }

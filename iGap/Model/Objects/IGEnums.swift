@@ -310,3 +310,7 @@ enum IGTwoStepQuestion: Int {
     case questionRecoveryPassword
 }
 
+enum IGTwoStepEmail: Int {
+    case verifyEmail
+    case recoverPassword
+}

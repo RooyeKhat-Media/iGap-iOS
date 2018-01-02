@@ -106,6 +106,8 @@ let protoClassesLookupTable: [Int: (proto: ResponseMessage.Type, reponseHandler:
             IGUserTwoStepVerificationChangeRecoveryQuestionRequest.Handler.self     as IGRequest.Handler.Type),
     30142: (IGPUserTwoStepVerificationChangeHintResponse.self                       as ResponseMessage.Type,
             IGUserTwoStepVerificationChangehintRequest.Handler.self                 as IGRequest.Handler.Type),
+    30146: (IGPUserTwoStepVerificationResendVerifyEmailResponse.self                as ResponseMessage.Type,
+            IGUserTwoStepVerificationResendVerifyEmailRequest.Handler.self          as IGRequest.Handler.Type),
     30143: (IGPUserPrivacyGetRuleResponse.self              as ResponseMessage.Type,
             IGUserPrivacyGetRuleRequest.Handler.self        as IGRequest.Handler.Type),
     30144: (IGPUserPrivacySetRuleResponse.self              as ResponseMessage.Type,

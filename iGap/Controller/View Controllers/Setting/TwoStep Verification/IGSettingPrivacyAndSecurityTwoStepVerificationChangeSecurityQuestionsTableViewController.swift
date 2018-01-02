@@ -31,7 +31,13 @@ class IGSettingPrivacyAndSecurityTwoStepVerificationChangeSecurityQuestionsTable
         let navigationController = self.navigationController as! IGNavigationController
         navigationController.interactivePopGestureRecognizer?.delegate = self
         let navigationItem = self.navigationItem as! IGNavigationItem
-        navigationItem.addNavigationViewItems(rightItemText: "Done", title: "Change Recovery Question")
+        
+        if self.pageAction == IGTwoStepQuestion.changeRecoveryQuestion {
+            navigationItem.addNavigationViewItems(rightItemText: "Done", title: "Change Recovery Question")
+        } else if self.pageAction == IGTwoStepQuestion.questionRecoveryPassword {
+            navigationItem.addNavigationViewItems(rightItemText: "Done", title: "Recover Password")
+        }
+        
         navigationItem.navigationController = self.navigationController as? IGNavigationController
         navigationItem.rightViewContainer?.addAction {
             if self.pageAction == IGTwoStepQuestion.changeRecoveryQuestion {

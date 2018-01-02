@@ -4464,6 +4464,7 @@ Please wait 0:59</string>
                         <outlet property="passwordTextField" destination="fHP-wP-wSy" id="K7W-Ca-m4V"/>
                         <segue destination="8aK-dM-Tut" kind="show" identifier="showTwoStepOptions" id="1Fr-Vf-hq4"/>
                         <segue destination="rcJ-Dc-4E0" kind="show" identifier="changePasswordWithQuestions" id="v4b-3a-R6D"/>
+                        <segue destination="kbG-6g-gOy" kind="show" identifier="showRecoverByEmail" id="Pqu-UA-ZWb"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4v9-MX-fGw" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -4495,9 +4496,9 @@ kay*****@gm**.com</string>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="30" id="16B-nw-6LY"/>
                                     </constraints>
-                                    <state key="normal" title="Resend verification code"/>
+                                    <state key="normal" title="Vefiry Email"/>
                                     <connections>
-                                        <action selector="didTapOnResentVerifyCodeButton:" destination="8aK-dM-Tut" eventType="touchUpInside" id="R4n-K2-2QU"/>
+                                        <action selector="btnResendVerificationCode:" destination="8aK-dM-Tut" eventType="touchUpInside" id="lBG-iv-XuX"/>
                                     </connections>
                                 </button>
                             </subviews>
@@ -4628,6 +4629,8 @@ kay*****@gm**.com</string>
                     </tableView>
                     <navigationItem key="navigationItem" title="Title" id="tzY-lb-lYU" customClass="IGNavigationItem" customModule="iGap" customModuleProvider="target"/>
                     <connections>
+                        <outlet property="btnOutletVerify" destination="eEB-V3-o0L" id="Fav-qA-Gg3"/>
+                        <outlet property="txtUnconfirmedEmail" destination="iCI-Tf-Ydw" id="hU5-2b-lfH"/>
                         <outlet property="unverifiedEmailAddressLabel" destination="iCI-Tf-Ydw" id="ZUx-84-BcI"/>
                         <outlet property="unverifiedEmailContainerView" destination="ygN-Pr-zXg" id="VEg-VF-0Ha"/>
                         <segue destination="w3b-IG-IlK" kind="show" identifier="showChangeHint" id="Dop-6C-Q0h"/>
@@ -4635,6 +4638,7 @@ kay*****@gm**.com</string>
                         <segue destination="hes-pc-p5N" kind="show" identifier="showChangePassword" id="xOF-Qo-3Kd"/>
                         <segue destination="hwj-YY-NEn" kind="show" identifier="showChangeEmail" id="kV5-VR-mkT"/>
                         <segue destination="0jv-MU-WcS" kind="show" identifier="ShowSetPassword" id="P15-0g-TjZ"/>
+                        <segue destination="kbG-6g-gOy" kind="show" identifier="showVerifyEmail" id="DaW-k4-iW0"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7Iz-ps-EbI" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -5383,6 +5387,84 @@ kay*****@gm**.com</string>
             </objects>
             <point key="canvasLocation" x="-164" y="-42"/>
         </scene>
+        <!--Title-->
+        <scene sceneID="LU9-Ol-Scc">
+            <objects>
+                <tableViewController id="kbG-6g-gOy" customClass="IGSettingPrivacyAndSecurityTwoStepVerificationVerifyUnconfirmedEmail" customModule="iGap" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="vHR-L8-UPh">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <view key="tableFooterView" contentMode="scaleToFill" id="3lN-uC-pYl">
+                            <rect key="frame" x="0.0" y="97" width="414" height="119"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vLx-Mg-A93">
+                                    <rect key="frame" x="16" y="0.0" width="382" height="30"/>
+                                    <state key="normal" title="Resend Verification Code"/>
+                                    <connections>
+                                        <action selector="btnResendVerificationCode:" destination="kbG-6g-gOy" eventType="touchUpInside" id="tpp-sI-qRl"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="vLx-Mg-A93" firstAttribute="leading" secondItem="3lN-uC-pYl" secondAttribute="leading" constant="16" id="9Pl-0F-zH9"/>
+                                <constraint firstItem="vLx-Mg-A93" firstAttribute="centerX" secondItem="3lN-uC-pYl" secondAttribute="centerX" id="AXr-v8-lO2"/>
+                                <constraint firstItem="vLx-Mg-A93" firstAttribute="top" secondItem="3lN-uC-pYl" secondAttribute="top" id="aZe-Ia-AFl"/>
+                            </constraints>
+                        </view>
+                        <sections>
+                            <tableViewSection id="WP6-Ed-3kW">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="3qh-tv-rcn">
+                                        <rect key="frame" x="0.0" y="35" width="414" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="3qh-tv-rcn" id="1NK-y1-0JI">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.666666666666664"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter Code:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l3d-dK-SQs" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
+                                                    <rect key="frame" x="16" y="7.0000000000000018" width="90.333333333333329" height="29.666666666666671"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Required" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="HV3-l5-jB1">
+                                                    <rect key="frame" x="122.33333333333334" y="7" width="275.66666666666663" height="30"/>
+                                                    <nil key="textColor"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits"/>
+                                                </textField>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="bottom" secondItem="HV3-l5-jB1" secondAttribute="bottom" constant="7" id="1ac-Ji-5wE"/>
+                                                <constraint firstItem="l3d-dK-SQs" firstAttribute="top" secondItem="1NK-y1-0JI" secondAttribute="top" constant="7" id="2Xw-8k-cpX"/>
+                                                <constraint firstItem="l3d-dK-SQs" firstAttribute="leading" secondItem="1NK-y1-0JI" secondAttribute="leading" constant="16" id="2vq-lm-nhc"/>
+                                                <constraint firstItem="HV3-l5-jB1" firstAttribute="leading" secondItem="l3d-dK-SQs" secondAttribute="trailing" constant="16" id="DDS-cW-K2d"/>
+                                                <constraint firstAttribute="bottom" secondItem="l3d-dK-SQs" secondAttribute="bottom" constant="7" id="WIe-p5-Pkn"/>
+                                                <constraint firstAttribute="trailing" secondItem="HV3-l5-jB1" secondAttribute="trailing" constant="16" id="cF8-cX-NxY"/>
+                                                <constraint firstItem="HV3-l5-jB1" firstAttribute="top" secondItem="1NK-y1-0JI" secondAttribute="top" constant="7" id="nYP-PP-BzS"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="kbG-6g-gOy" id="ZXm-fc-QFJ"/>
+                            <outlet property="delegate" destination="kbG-6g-gOy" id="FHt-c6-bFs"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Title" id="qw8-eG-d4l" customClass="IGNavigationItem" customModule="iGap" customModuleProvider="target"/>
+                    <connections>
+                        <outlet property="btnOutletResendCode" destination="vLx-Mg-A93" id="l2I-Km-537"/>
+                        <outlet property="edtVerifyCode" destination="HV3-l5-jB1" id="iFj-dN-DDI"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="x5G-CL-hgZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1477" y="1712"/>
+        </scene>
     </scenes>
     <resources>
         <image name="IG_Settings_Camera" width="25" height="25"/>
@@ -5423,8 +5505,9 @@ Afg
         </image>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="v4b-3a-R6D"/>
-        <segue reference="Qum-5d-uYe"/>
+        <segue reference="DaW-k4-iW0"/>
+        <segue reference="Oa0-mY-XGu"/>
+        <segue reference="P15-0g-TjZ"/>
         <segue reference="v0b-nh-nsK"/>
         <segue reference="7wc-J4-g56"/>
     </inferredMetricsTieBreakers>
