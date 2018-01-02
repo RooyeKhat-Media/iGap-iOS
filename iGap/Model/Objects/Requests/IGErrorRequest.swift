@@ -136,6 +136,14 @@ enum IGError: String {
     case userTwoStepVerificationChangeRecoveryEmailMaxTryLock = "10116"
     case userTwoStepVerificationChangeRecoveryEmailConfirmedBefore = "10119"
     
+    case userTwoStepVerificationRequestRecoveryTokenNoRecoVeryEmail = "10123"
+    case userTwoStepVerificationRequestRecoveryTokenMaxTryLock = "10124"
+    case userTwoStepVerificationRequestRecoveryTokenForbidden = "10154"
+
+    case userTwoStepVerificationRecoverPasswordByAnswersMaxTryLock = "10133"
+    case userTwoStepVerificationRecoverPasswordByAnswersInvalidAnswers = "10134"
+    case userTwoStepVerificationRecoverPasswordByAnswersForbidden = "10156"
+
     case userTwoStepVerificationChangeHintMaxTryLock = "10143"
     case userTwoStepVerificationChangeRecoveryQuestionMaxTryLock = "10138"
     

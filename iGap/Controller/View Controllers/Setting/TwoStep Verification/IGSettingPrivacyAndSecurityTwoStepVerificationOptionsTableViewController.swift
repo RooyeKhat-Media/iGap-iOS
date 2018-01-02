@@ -37,7 +37,7 @@ class IGSettingPrivacyAndSecurityTwoStepVerificationOptionsTableViewController: 
         if indexPath.row == 0 {
             self.unsetPassword()
         } else if indexPath.row == 1 {
-            self.performSegue(withIdentifier: "showChangePassword", sender: self)
+            self.performSegue(withIdentifier: "ShowSetPassword", sender: self)
         } else if indexPath.row == 2 {
             self.performSegue(withIdentifier: "showChangeHint", sender: self)
         } else if indexPath.row == 3 {
@@ -88,10 +88,15 @@ class IGSettingPrivacyAndSecurityTwoStepVerificationOptionsTableViewController: 
         
         if let destinationVC = segue.destination as? IGSettingPrivacyAndSecurityTwoStepVerificationChangeSecurityQuestionsTableViewController {
             destinationVC.password = password
+            destinationVC.pageAction = IGTwoStepQuestion.changeRecoveryQuestion
         }
         
         if let destinationVC = segue.destination as? IGSettingPrivacyAndSecurityTwoStepVerificationChangeEmailTableViewController {
             destinationVC.password = password
+        }
+        
+        if let destinationVC = segue.destination as? IGSettingPrivacyAndSecurityTwoStepVerificationSetTwoStepVerificationTableViewController {
+            destinationVC.oldPassword = password!
         }
     }
 }

@@ -101,9 +101,30 @@ class IGSettingPrivacyAndSecurityTwoStepVerificationVerifyPasswordTableViewContr
             hud.mode = .indeterminate
             self.tableView.isScrollEnabled = false
             IGUserTwoStepVerificationRequestRecoveryTokenRequest.Generator.generate().success({ (success) in
-                
+                DispatchQueue.main.async {
+                    hud.hide(animated: true)
+                    self.showAlert(title: "Success", message: "Please Check Your Email")
+                }
             }).error({ (errorCode, waitTime) in
-                
+                DispatchQueue.main.async {
+                    hud.hide(animated: true)
+                    switch errorCode {
+                    case .userTwoStepVerificationRequestRecoveryTokenNoRecoVeryEmail:
+                        self.showAlert(title: "Error", message: "Not Exist Verified Email")
+                        break
+                        
+                    case .userTwoStepVerificationRequestRecoveryTokenMaxTryLock:
+                        self.showAlert(title: "Error", message: "Recovery Max Try Lock, Please Try Later!")
+                        break
+                        
+                    case .userTwoStepVerificationRequestRecoveryTokenForbidden:
+                        self.showAlert(title: "Error", message: "Recovery Token Forbidden")
+                        break
+                        
+                    default:
+                        break
+                    }
+                }
             }).send()
         }
         let questions = UIAlertAction(title: "Recovery Questions", style: .default) { (action) in
@@ -124,6 +145,13 @@ class IGSettingPrivacyAndSecurityTwoStepVerificationVerifyPasswordTableViewContr
         if let destinationVC = segue.destination as? IGSettingPrivacyAndSecurityTwoStepVerificationOptionsTableViewController {
             destinationVC.twoStepVerification = twoStepVerification
             destinationVC.password = twoStepPassword
+        }
+        
+        if let destinationVC = segue.destination as? IGSettingPrivacyAndSecurityTwoStepVerificationChangeSecurityQuestionsTableViewController {
+            destinationVC.password = twoStepPassword
+            destinationVC.questionOne = twoStepVerification?.question1
+            destinationVC.questionTwo = twoStepVerification?.question2
+            destinationVC.pageAction = IGTwoStepQuestion.questionRecoveryPassword
         }
     }
 }

@@ -52,6 +52,11 @@ class IGSettingPrivacyAndSecurityTwoStepVerificationSetTwoStepVerificationTableV
             return
         }
         
+        if passwordTextField.text == hintTextField.text {
+            alertController(title: "Error", message: "Hint Can't Be The Same As Password")
+            return
+        }
+        
         if emailTextField.text != nil {
             email = emailTextField.text!
         }

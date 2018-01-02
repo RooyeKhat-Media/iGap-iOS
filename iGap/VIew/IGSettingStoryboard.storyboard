@@ -4380,73 +4380,6 @@ Please wait 0:59</string>
             <point key="canvasLocation" x="-1109" y="2630"/>
         </scene>
         <!--Title-->
-        <scene sceneID="wqD-g1-WMM">
-            <objects>
-                <tableViewController id="WSF-fg-HtC" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="TY9-Bi-n1v">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <sections>
-                            <tableViewSection id="LVl-gj-zeq">
-                                <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="101" id="7zE-PA-RI1">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="101"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="7zE-PA-RI1" id="H5b-cJ-yc6">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="100.66666666666667"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RVV-MJ-s5z">
-                                                    <rect key="frame" x="8" y="11" width="398" height="78"/>
-                                                    <string key="text">LabelLabelLabelLabelLabelLabelLabelLab elLabelLabelLabelLabelLabelLabelLabelLabelLabel LabelLabelLabelLabelLabelLabelLabelLab elLabelLabelLabelLabelLabelLabelLabelLabelLabel LabelLabelLabelLabelLabelLabelLabelLab elLabelLabelLabelLabelLabelLabelLabelLabelLabel LabelLabelLabelLabelLabelLabelLabelLab elLabelLabelLabelLabelLabelLabelLabelLabelLabel</string>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="RVV-MJ-s5z" firstAttribute="leading" secondItem="H5b-cJ-yc6" secondAttribute="leading" constant="8" id="KI0-11-hKV"/>
-                                                <constraint firstAttribute="trailing" secondItem="RVV-MJ-s5z" secondAttribute="trailing" constant="8" id="MOJ-R1-UHJ"/>
-                                                <constraint firstAttribute="bottom" secondItem="RVV-MJ-s5z" secondAttribute="bottom" constant="11.67" id="V9K-7W-1aU"/>
-                                                <constraint firstItem="RVV-MJ-s5z" firstAttribute="top" secondItem="H5b-cJ-yc6" secondAttribute="top" constant="11" id="Y7u-2x-AnO"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="AgQ-Vs-oCw">
-                                        <rect key="frame" x="0.0" y="101" width="414" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="AgQ-Vs-oCw" id="rf9-Hr-xkF">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.666666666666664"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="GGf-Di-zma">
-                                        <rect key="frame" x="0.0" y="145" width="414" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="GGf-Di-zma" id="oEH-rJ-dwv">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.666666666666664"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                </cells>
-                            </tableViewSection>
-                        </sections>
-                        <connections>
-                            <outlet property="dataSource" destination="WSF-fg-HtC" id="O6L-zm-s0n"/>
-                            <outlet property="delegate" destination="WSF-fg-HtC" id="gPW-Wu-1fa"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="Title" id="g5y-Uf-SeR" customClass="IGNavigationItem" customModule="iGap" customModuleProvider="target"/>
-                    <connections>
-                        <segue destination="hes-pc-p5N" kind="show" id="xDF-ci-8mT"/>
-                    </connections>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="IB8-4y-MfF" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-193.47826086956522" y="2629.8913043478265"/>
-        </scene>
-        <!--Title-->
         <scene sceneID="lzQ-iv-yfu">
             <objects>
                 <tableViewController id="8pi-iP-ugm" customClass="IGSettingPrivacyAndSecurityTwoStepVerificationVerifyPasswordTableViewController" customModule="iGap" customModuleProvider="target" sceneMemberID="viewController">
@@ -4529,8 +4462,8 @@ Please wait 0:59</string>
                     <navigationItem key="navigationItem" title="Title" id="Nz8-Sy-pxl" customClass="IGNavigationItem" customModule="iGap" customModuleProvider="target"/>
                     <connections>
                         <outlet property="passwordTextField" destination="fHP-wP-wSy" id="K7W-Ca-m4V"/>
-                        <segue destination="WSF-fg-HtC" kind="show" identifier="changePasswordWithQuestions" id="PsW-HD-WBp"/>
                         <segue destination="8aK-dM-Tut" kind="show" identifier="showTwoStepOptions" id="1Fr-Vf-hq4"/>
+                        <segue destination="rcJ-Dc-4E0" kind="show" identifier="changePasswordWithQuestions" id="v4b-3a-R6D"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4v9-MX-fGw" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -4701,6 +4634,7 @@ kay*****@gm**.com</string>
                         <segue destination="rcJ-Dc-4E0" kind="show" identifier="showChangeSecurityQuestions" id="Oa0-mY-XGu"/>
                         <segue destination="hes-pc-p5N" kind="show" identifier="showChangePassword" id="xOF-Qo-3Kd"/>
                         <segue destination="hwj-YY-NEn" kind="show" identifier="showChangeEmail" id="kV5-VR-mkT"/>
+                        <segue destination="0jv-MU-WcS" kind="show" identifier="ShowSetPassword" id="P15-0g-TjZ"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7Iz-ps-EbI" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -5489,7 +5423,8 @@ Afg
         </image>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="xOF-Qo-3Kd"/>
+        <segue reference="v4b-3a-R6D"/>
+        <segue reference="Qum-5d-uYe"/>
         <segue reference="v0b-nh-nsK"/>
         <segue reference="7wc-J4-g56"/>
     </inferredMetricsTieBreakers>
