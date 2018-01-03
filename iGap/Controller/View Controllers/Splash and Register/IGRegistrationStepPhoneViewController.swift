@@ -152,116 +152,120 @@ class IGRegistrationStepPhoneViewController: UIViewController {
             self.present(alert, animated: true, completion: nil)
 
         } else {
-        if let phone = phoneNumberField.text {
-            let phoneSpaceLess = phone.replacingOccurrences(of: " ", with: "")
-            if IGGlobal.matches(for: (selectedCountry?.codeRegex)!, in: phoneSpaceLess) {
-                let fullPhone = "+"+String(Int((self.selectedCountry?.countryCode)!))+" "+phone
-                let alertVC = UIAlertController(title: "Is this correct",
-                                                message: "Is this phone correct:\n"+fullPhone,
-                                                preferredStyle: .alert)
-                let yes = UIAlertAction(title: "Yes", style: .cancel, handler: { (action) in
-                    
-                    self.hud = MBProgressHUD.showAdded(to: self.view, animated: true)
-                    self.hud.mode = .indeterminate
-                    
-                    let reqW = IGUserRegisterRequest.Generator.generate(countryCode: (self.selectedCountry?.countryISO)!,
-                                                                        phoneNumber: Int64(phoneSpaceLess)!)
-                    reqW.success { (responseProto) in
-                        DispatchQueue.main.async {
-                            switch responseProto {
-                            case let userRegisterReponse as IGPUserRegisterResponse:
-                                self.registrationResponse = IGUserRegisterRequest.Handler.intrepret(response: userRegisterReponse)
-                                IGAppManager.sharedManager.save(userID: self.registrationResponse?.userId)
-                                IGAppManager.sharedManager.save(username: self.registrationResponse?.username)
-                                IGAppManager.sharedManager.save(authorHash: self.registrationResponse?.authorHash)
-                                self.hud.hide(animated: true)
-                                self.performSegue(withIdentifier: "showRegistration", sender: self)
-                            default:
-                                break
-                            }
-                        }
-
-                    }.error { (errorCode, waitTime) in
-                        var errorTitle = ""
-                        var errorBody = ""
-                        switch errorCode {
-                        case .userRegisterBadPaylaod:
-                            errorTitle = "Error"
-                            errorBody = "Invalid data\nCode \(errorCode)"
-                            break
-                        case .userRegisterInvalidCountryCode:
-                            errorTitle = "Error"
-                            errorBody = "Invalid country"
-                            break
-                        case .userRegisterInvalidPhoneNumber:
-                            errorTitle = "Error"
-                            errorBody = "Invalid phone number"
-                            break
-                        case .userRegisterInternalServerError:
-                            errorTitle = "Error"
-                            errorBody = "Internal Server Error"
-                            break
-                        case .userRegisterBlockedUser:
-                            errorTitle = "Error"
-                            errorBody = "This phone number is blocked"
-                            break
-                        case .userRegisterLockedManyCodeTries:
-                            errorTitle = "Error"
-                            errorBody = "To many failed code verification attempt."
-                            break
-                        case .userRegisterLockedManyResnedRequest:
-                            errorTitle = "Error"
-                            errorBody = "To many code sending request."
-                            break
-                        case .timeout:
-                            errorTitle = "Timeout"
-                            errorBody = "Please try again later"
-                            break
-                        default:
-                            errorTitle = "Unknown error"
-                            errorBody = "An error occured. Please try again later.\nCode \(errorCode)"
-                            break
-                        }
-                        
-                        
-                        if waitTime != nil  && waitTime! != 0 {
-                            errorBody += "\nPlease try again in \(waitTime! ) seconds."
-                        }
-                        
-                        DispatchQueue.main.async {
-                            let alert = UIAlertController(title: errorTitle, message: errorBody, preferredStyle: .alert)
-                            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                            alert.addAction(okAction)
-                            self.hud.hide(animated: true)
-                            self.present(alert, animated: true, completion: nil)
-                        }
-                        
-                    }.send()
-                })
-                let no = UIAlertAction(title: "Edit", style: .default, handler: { (action) in
-                    
-                })
-                
-                
-                alertVC.addAction(yes)
-                alertVC.addAction(no)
-                self.present(alertVC, animated: true, completion: {
-                    
-                })
-                
-                return;
+            
+            var phoneSpaceLess: String?
+            let phone = phoneNumberField.text
+            if phone != nil && phone != "" {
+                phoneSpaceLess = phone?.replacingOccurrences(of: " ", with: "")
             }
-        }
-        let alertVC = UIAlertController(title: "Invalid Phone", message: "Please enter a valid phone number", preferredStyle: .alert)
-        let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) in
+
+            if phoneSpaceLess != nil && phoneSpaceLess != "" && Int64(phoneSpaceLess!) != nil{
+                if IGGlobal.matches(for: (selectedCountry?.codeRegex)!, in: phoneSpaceLess!) {
+                    let countryCode = String(Int((self.selectedCountry?.countryCode)!))
+                    let fullPhone = "+" + countryCode + " " + phone!
+                    let alertVC = UIAlertController(title: "Is this correct",message: "Is this phone correct:\n"+fullPhone,preferredStyle: .alert)
+                    let yes = UIAlertAction(title: "Yes", style: .cancel, handler: { (action) in
+                        
+                        self.hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+                        self.hud.mode = .indeterminate
+                        
+                        let reqW = IGUserRegisterRequest.Generator.generate(countryCode: (self.selectedCountry?.countryISO)!, phoneNumber: Int64(phoneSpaceLess!)!)
+                        reqW.success { (responseProto) in
+                            DispatchQueue.main.async {
+                                switch responseProto {
+                                case let userRegisterReponse as IGPUserRegisterResponse:
+                                    self.registrationResponse = IGUserRegisterRequest.Handler.intrepret(response: userRegisterReponse)
+                                    IGAppManager.sharedManager.save(userID: self.registrationResponse?.userId)
+                                    IGAppManager.sharedManager.save(username: self.registrationResponse?.username)
+                                    IGAppManager.sharedManager.save(authorHash: self.registrationResponse?.authorHash)
+                                    self.hud.hide(animated: true)
+                                    self.performSegue(withIdentifier: "showRegistration", sender: self)
+                                default:
+                                    break
+                                }
+                            }
+                            
+                            }.error { (errorCode, waitTime) in
+                                var errorTitle = ""
+                                var errorBody = ""
+                                switch errorCode {
+                                case .userRegisterBadPaylaod:
+                                    errorTitle = "Error"
+                                    errorBody = "Invalid data\nCode \(errorCode)"
+                                    break
+                                case .userRegisterInvalidCountryCode:
+                                    errorTitle = "Error"
+                                    errorBody = "Invalid country"
+                                    break
+                                case .userRegisterInvalidPhoneNumber:
+                                    errorTitle = "Error"
+                                    errorBody = "Invalid phone number"
+                                    break
+                                case .userRegisterInternalServerError:
+                                    errorTitle = "Error"
+                                    errorBody = "Internal Server Error"
+                                    break
+                                case .userRegisterBlockedUser:
+                                    errorTitle = "Error"
+                                    errorBody = "This phone number is blocked"
+                                    break
+                                case .userRegisterLockedManyCodeTries:
+                                    errorTitle = "Error"
+                                    errorBody = "To many failed code verification attempt."
+                                    break
+                                case .userRegisterLockedManyResnedRequest:
+                                    errorTitle = "Error"
+                                    errorBody = "To many code sending request."
+                                    break
+                                case .timeout:
+                                    errorTitle = "Timeout"
+                                    errorBody = "Please try again later"
+                                    break
+                                default:
+                                    errorTitle = "Unknown error"
+                                    errorBody = "An error occured. Please try again later.\nCode \(errorCode)"
+                                    break
+                                }
+                                
+                                
+                                if waitTime != nil  && waitTime! != 0 {
+                                    errorBody += "\nPlease try again in \(waitTime! ) seconds."
+                                }
+                                
+                                DispatchQueue.main.async {
+                                    let alert = UIAlertController(title: errorTitle, message: errorBody, preferredStyle: .alert)
+                                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                                    alert.addAction(okAction)
+                                    self.hud.hide(animated: true)
+                                    self.present(alert, animated: true, completion: nil)
+                                }
+                                
+                            }.send()
+                    })
+                    let no = UIAlertAction(title: "Edit", style: .default, handler: { (action) in
+                        
+                    })
+                    
+                    
+                    alertVC.addAction(yes)
+                    alertVC.addAction(no)
+                    self.present(alertVC, animated: true, completion: {
+                        
+                    })
+                    
+                    return;
+                }
+            }
+            let alertVC = UIAlertController(title: "Invalid Phone", message: "Please enter a valid phone number", preferredStyle: .alert)
+            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) in
+                
+            })
             
-        })
-        
-        alertVC.addAction(ok)
-        self.present(alertVC, animated: true, completion: {
-            
-        })
-        //self.performSegue(withIdentifier: "showRegistration", sender: self)
+            alertVC.addAction(ok)
+            self.present(alertVC, animated: true, completion: {
+                
+            })
+            //self.performSegue(withIdentifier: "showRegistration", sender: self)
         }
     }
     
