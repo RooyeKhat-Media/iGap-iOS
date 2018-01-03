@@ -15,7 +15,6 @@ class IGSettingPrivacyAndSecurityTwoStepVerificationVerifyUnconfirmedEmail: UITa
     @IBOutlet weak var edtVerifyCode: UITextField!
     @IBOutlet weak var btnOutletResendCode: UIButton!
     
-    var placeholder: String = ""
     var token: String = ""
     var manuallyResendCode = false
     var pageAction: IGTwoStepEmail?

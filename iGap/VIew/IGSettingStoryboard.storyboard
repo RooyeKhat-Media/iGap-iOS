@@ -4605,8 +4605,8 @@ kay*****@gm**.com</string>
                                             <rect key="frame" x="0.0" y="0.0" width="376" height="43.666666666666664"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Change Recovery Email" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s4D-Sl-db8">
-                                                    <rect key="frame" x="16" y="0.0" width="180" height="44"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Set/Change Recovery Email" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s4D-Sl-db8">
+                                                    <rect key="frame" x="16" y="0.0" width="211" height="44"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -5505,8 +5505,8 @@ Afg
         </image>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="DaW-k4-iW0"/>
-        <segue reference="Oa0-mY-XGu"/>
+        <segue reference="Pqu-UA-ZWb"/>
+        <segue reference="v4b-3a-R6D"/>
         <segue reference="P15-0g-TjZ"/>
         <segue reference="v0b-nh-nsK"/>
         <segue reference="7wc-J4-g56"/>

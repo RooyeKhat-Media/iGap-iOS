@@ -1361,7 +1361,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#!/bin/bash\n# Set the build number to the count of Git commits\npreviousCommits=400\ncommitsCount=$(git rev-list HEAD | wc -l | tr -d ' ')\nbuildNumber=$(expr \"$previousCommits\" + \"$commitsCount\")\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\"";
+			shellScript = "";
 		};
 		FAF985B71E2E110900B26940 /* [RS] Copy Carthage Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;

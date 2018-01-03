@@ -42,28 +42,28 @@ class IGSettingPrivacyAndSecurityTwoStepVerificationSetTwoStepVerificationTableV
     
     func setPassword(){
         
-        if passwordTextField.text == "" || verifyTextField.text == "" || question1TextField.text == "" || answer1TextField.text == "" || question2TextField.text == "" || answer2TextField.text == "" || hintTextField.text == "" {
+        if passwordTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" || verifyTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" || question1TextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" || answer1TextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" || question2TextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" || answer2TextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" || hintTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
             alertController(title: "Error", message: "Please Set All Required Items")
             return
         }
         
-        if passwordTextField.text != verifyTextField.text {
+        if passwordTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) != verifyTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) {
             alertController(title: "Error", message: "Password And Verify Are Not Same")
             return
         }
         
-        if passwordTextField.text == hintTextField.text {
+        if passwordTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == hintTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) {
             alertController(title: "Error", message: "Hint Can't Be The Same As Password")
             return
         }
         
-        if emailTextField.text != nil {
-            email = emailTextField.text!
+        if emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) != nil && emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) != ""{
+            email = (emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines))!
         }
         
         let hud = MBProgressHUD.showAdded(to: self.view, animated: true)
         hud.mode = .indeterminate
-        IGUserTwoStepVerificationSetPasswordRequest.Generator.generate(oldPassword: oldPassword, newPassword: passwordTextField.text!,questionOne: question1TextField.text!,answerOne: answer1TextField.text!,questionTwo: question2TextField.text!,answerTwo: answer2TextField.text!,hint: hintTextField.text!,recoveryEmail: emailTextField.text!).success({ (protoResponse) in
+        IGUserTwoStepVerificationSetPasswordRequest.Generator.generate(oldPassword: oldPassword, newPassword: (passwordTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines))!,questionOne: (question1TextField.text?.trimmingCharacters(in: .whitespacesAndNewlines))!,answerOne: (answer1TextField.text?.trimmingCharacters(in: .whitespacesAndNewlines))!,questionTwo: (question2TextField.text?.trimmingCharacters(in: .whitespacesAndNewlines))!,answerTwo: (answer2TextField.text?.trimmingCharacters(in: .whitespacesAndNewlines))!,hint: (hintTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines))!,recoveryEmail: (emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines))!).success({ (protoResponse) in
             DispatchQueue.main.async {
                 hud.hide(animated: true)
                 switch protoResponse {

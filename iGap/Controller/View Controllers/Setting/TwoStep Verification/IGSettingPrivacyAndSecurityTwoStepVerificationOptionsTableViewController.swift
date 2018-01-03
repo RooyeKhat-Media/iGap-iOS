@@ -25,6 +25,7 @@ class IGSettingPrivacyAndSecurityTwoStepVerificationOptionsTableViewController: 
     
     var twoStepVerification: IGTwoStepVerification?
     var password: String?
+    let EMAIL_PREFIX = "You have an unverifies email address:\n"
     
     @IBAction func btnResendVerificationCode(_ sender: Any) {
         self.performSegue(withIdentifier: "showVerifyEmail", sender: self)
@@ -41,7 +42,7 @@ class IGSettingPrivacyAndSecurityTwoStepVerificationOptionsTableViewController: 
         navigationItem.navigationController = self.navigationController as? IGNavigationController
         
         if let pattern = twoStepVerification?.unverifiedEmailPattern {
-            txtUnconfirmedEmail.text = pattern
+            txtUnconfirmedEmail.text = EMAIL_PREFIX + pattern
         } else {
             txtUnconfirmedEmail.isHidden = true
             btnOutletVerify.isHidden = true
@@ -59,7 +60,7 @@ class IGSettingPrivacyAndSecurityTwoStepVerificationOptionsTableViewController: 
         
         if IGSettingPrivacyAndSecurityTwoStepVerificationOptionsTableViewController.unconfirmedEmailPattern != nil && IGSettingPrivacyAndSecurityTwoStepVerificationOptionsTableViewController.unconfirmedEmailPattern != "" {
             
-            txtUnconfirmedEmail.text = IGSettingPrivacyAndSecurityTwoStepVerificationOptionsTableViewController.unconfirmedEmailPattern
+            txtUnconfirmedEmail.text = EMAIL_PREFIX + IGSettingPrivacyAndSecurityTwoStepVerificationOptionsTableViewController.unconfirmedEmailPattern!
             txtUnconfirmedEmail.isHidden = false
             btnOutletVerify.isHidden = false
             
@@ -131,7 +132,6 @@ class IGSettingPrivacyAndSecurityTwoStepVerificationOptionsTableViewController: 
         }
         
         if let destinationVC = segue.destination as? IGSettingPrivacyAndSecurityTwoStepVerificationVerifyUnconfirmedEmail {
-            destinationVC.placeholder = (twoStepVerification?.unverifiedEmailPattern)!
             destinationVC.pageAction = IGTwoStepEmail.verifyEmail
         }
     }
