@@ -107,6 +107,19 @@ class IGAppManager: NSObject {
     
     public func save(token: String?) {
         _loginToken = token
+        
+        if _username == nil || _username == "" {
+            _username = AppDelegate.usernameRegister
+        }
+        
+        if _userID == nil || _userID == 0 {
+            _userID = AppDelegate.userIdRegister
+        }
+        
+        if _authorHash == nil || _authorHash == "" {
+            _authorHash = AppDelegate.authorHashRegister
+        }
+        
         if let sessionInto = realm.objects(IGSessionInfo.self).first {
             try! realm.write {
                 sessionInto.loginToken = token
@@ -127,6 +140,7 @@ class IGAppManager: NSObject {
     }
     
     public func save(username: String?) {
+        AppDelegate.usernameRegister = username
         _username = username
         if let sessionInto = realm.objects(IGSessionInfo.self).first {
             try! realm.write {
@@ -142,6 +156,7 @@ class IGAppManager: NSObject {
     }
     
     public func save(userID: Int64?) {
+        AppDelegate.userIdRegister = userID
         _userID = userID
         var userId: Int64 = -1
         if userID != nil {
@@ -161,6 +176,7 @@ class IGAppManager: NSObject {
     }
     
     public func save(authorHash: String?) {
+        AppDelegate.authorHashRegister = authorHash
         _authorHash = authorHash
         if let sessionInto = realm.objects(IGSessionInfo.self).first {
             try! realm.write {

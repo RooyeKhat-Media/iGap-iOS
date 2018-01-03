@@ -19,6 +19,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var isNeedToSetNickname : Bool = true
     internal static let showPrint = false
+    internal static var userIdRegister: Int64?
+    internal static var usernameRegister: String?
+    internal static var authorHashRegister: String?
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         
