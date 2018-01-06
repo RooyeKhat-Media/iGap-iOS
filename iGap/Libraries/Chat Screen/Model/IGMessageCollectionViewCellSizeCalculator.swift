@@ -192,7 +192,7 @@ class IGMessageCollectionViewCellSizeCalculator: NSObject {
             finalSize.height = 30.0
         } else if message.type == .contact {
             let contactSize = IGContactInMessageCellView.sizeForContact(message.contact!)
-            finalSize.width = min(finalSize.width, contactSize.width)
+            finalSize.width = contactSize.width
             finalSize.height += contactSize.height
         } else {
             finalSize.height = max(IGMessageCollectionViewCell.ConstantSizes.Bubble.Height.Minimum.TextOnly + 6, finalSize.height)

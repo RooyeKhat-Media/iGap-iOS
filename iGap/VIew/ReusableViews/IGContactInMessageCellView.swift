@@ -23,7 +23,7 @@ class IGContactInMessageCellView: UIView {
     //MARK: Class Methods
     class func sizeForContact(_ contact: IGRoomMessageContact) -> CGSize {
         let numberOfInfos = contact.emails.count + contact.phones.count
-        let height = numberOfInfos * 15 + 20 + 16 + 10
+        let height = numberOfInfos * 15 + 20
         let width = 200
         return CGSize(width: width, height: height)
     }
@@ -56,7 +56,6 @@ class IGContactInMessageCellView: UIView {
         nameLabel!.snp.makeConstraints { (make) in
             make.left.equalTo(avatarImageView!.snp.right).offset(10)
             make.top.equalTo(self.snp.top).offset(10.0)
-            make.right.equalTo(self.snp.right).offset(10)
         }
 
         phonesLabel = UILabel()
@@ -78,27 +77,28 @@ class IGContactInMessageCellView: UIView {
             make.width.equalTo(8.0)
             make.height.equalTo(8.0)
         }
+
         
-        emailsLabel = UILabel()
-        emailsLabel!.font = UIFont.systemFont(ofSize: 12.0, weight: UIFontWeightMedium)
-        emailsLabel!.numberOfLines = 0
-        self.addSubview(emailsLabel!)
-        emailsLabel!.snp.makeConstraints { (make) in
-            make.left.equalTo(avatarImageView!.snp.right).offset(22)
-            make.top.equalTo(phonesLabel!.snp.bottom).offset(-12.0)
-            make.right.equalTo(self.snp.right).offset(10)
-        }
         
-        emailImageView = UIImageView()
-        emailImageView!.contentMode = .scaleAspectFit
-        self.addSubview(emailImageView!)
-        emailImageView!.snp.makeConstraints { (make) in
-            make.left.equalTo(avatarImageView!.snp.right).offset(10)
-            make.top.equalTo(emailsLabel!.snp.top).offset(4.0)
-            make.width.equalTo(8.0)
-            make.height.equalTo(8.0)
-        }
-        
+//        emailsLabel = UILabel()
+//        emailsLabel!.font = UIFont.systemFont(ofSize: 12.0, weight: UIFontWeightMedium)
+//        emailsLabel!.numberOfLines = 0
+//        self.addSubview(emailsLabel!)
+//        emailsLabel!.snp.makeConstraints { (make) in
+//            make.left.equalTo(avatarImageView!.snp.right).offset(22)
+//            make.top.equalTo(phonesLabel!.snp.bottom).offset(-12.0)
+//            make.right.equalTo(self.snp.right).offset(10)
+//        }
+//
+//        emailImageView = UIImageView()
+//        emailImageView!.contentMode = .scaleAspectFit
+//        self.addSubview(emailImageView!)
+//        emailImageView!.snp.makeConstraints { (make) in
+//            make.left.equalTo(avatarImageView!.snp.right).offset(10)
+//            make.top.equalTo(emailsLabel!.snp.top).offset(4.0)
+//            make.width.equalTo(8.0)
+//            make.height.equalTo(8.0)
+//        }
     }
     
     
@@ -106,17 +106,17 @@ class IGContactInMessageCellView: UIView {
         if isIncommingMessage {
             avatarImageView?.image = UIImage(named: "IG_Message_Cell_Contact_Generic_Avatar_Incomming")
             phoneImageView?.image = UIImage(named: "IG_Message_Cell_Contact_Phone_Incomming")
-            emailImageView?.image = UIImage(named: "IG_Message_Cell_Contact_Email_Incomming")
+            //emailImageView?.image = UIImage(named: "IG_Message_Cell_Contact_Email_Incomming")
             nameLabel?.textColor = UIColor(red: 85.0/255.0, green: 85.0/255.0, blue: 85.0/255.0, alpha: 1.0)
             phonesLabel?.textColor = UIColor(red: 106.0/255.0, green: 106.0/255.0, blue: 106.0/255.0, alpha: 1.0)
-            emailsLabel?.textColor = UIColor(red: 106.0/255.0, green: 106.0/255.0, blue: 106.0/255.0, alpha: 1.0)
+            //emailsLabel?.textColor = UIColor(red: 106.0/255.0, green: 106.0/255.0, blue: 106.0/255.0, alpha: 1.0)
         } else {
             avatarImageView?.image = UIImage(named: "IG_Message_Cell_Contact_Generic_Avatar_Outgoing")
             phoneImageView?.image = UIImage(named: "IG_Message_Cell_Contact_Phone_Outgoing")
-            emailImageView?.image = UIImage(named: "IG_Message_Cell_Contact_Email_Outgoing")
-            nameLabel?.textColor = UIColor.white
-            phonesLabel?.textColor = UIColor(red: 239.0/255.0, green: 239.0/255.0, blue: 239.0/255.0, alpha: 1.0)
-            emailsLabel?.textColor = UIColor(red: 239.0/255.0, green: 239.0/255.0, blue: 239.0/255.0, alpha: 1.0)
+            //emailImageView?.image = UIImage(named: "IG_Message_Cell_Contact_Email_Outgoing")
+            nameLabel?.textColor = UIColor(red: 85.0/255.0, green: 85.0/255.0, blue: 85.0/255.0, alpha: 1.0)
+            phonesLabel?.textColor = UIColor(red: 106.0/255.0, green: 106.0/255.0, blue: 106.0/255.0, alpha: 1.0)
+            //emailsLabel?.textColor = UIColor(red: 239.0/255.0, green: 239.0/255.0, blue: 239.0/255.0, alpha: 1.0)
         }
         
         let firstName = conatct.firstName == nil ? "" : conatct.firstName! + " "
@@ -130,13 +130,13 @@ class IGContactInMessageCellView: UIView {
         if conatct.phones.count == 0 {
             phoneImageView?.image = nil
         }
-        self.emailsLabel!.text = ""
-        for email in conatct.emails {
-            self.emailsLabel!.text = self.emailsLabel!.text! + email.innerString + "\n"
-        }
-        if conatct.emails.count == 0 {
-            emailImageView?.image = nil
-        }
+//        self.emailsLabel!.text = ""
+//        for email in conatct.emails {
+//            self.emailsLabel!.text = self.emailsLabel!.text! + email.innerString + "\n"
+//        }
+//        if conatct.emails.count == 0 {
+//            emailImageView?.image = nil
+//        }
     }
 
 }
