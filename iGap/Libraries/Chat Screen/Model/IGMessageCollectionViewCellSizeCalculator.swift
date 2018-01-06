@@ -201,6 +201,13 @@ class IGMessageCollectionViewCellSizeCalculator: NSObject {
         
         finalSize.height += 7.5
         
+        if message.forwardedFrom != nil {
+            if message.forwardedFrom?.type == .contact {
+                finalSize.width = 200
+            }
+        }
+        
+        
         let result = (finalSize,
                       forwardedMessageBodyHeight,
                       forwardedMessageAttachmentHeight,

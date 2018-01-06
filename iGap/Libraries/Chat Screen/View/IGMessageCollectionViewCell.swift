@@ -521,8 +521,8 @@ class IGMessageCollectionViewCell: IGMessageGeneralCollectionViewCell {
             self.forwardedFromViewHeightConstraint.constant = 20
             
             //MARK: ▶︎ Forward Body
-            if let text = originalMessage.message {
-                
+            let text = originalMessage.message
+            if text != nil && text != "" {
                 forwardedMessageBodyLabel.isHidden = false
                 forwardedMessageBodyLabel.text = text
                 self.forwardedMessageBodyContainerViewHeightConstraint.constant = messageSizes.forwardedMessageBodyHeight
@@ -593,8 +593,20 @@ class IGMessageCollectionViewCell: IGMessageGeneralCollectionViewCell {
                     break
                 }
             } else {
-                self.forwardedMessageMediaContainerViewHeightConstraint.constant = 0
-                self.forwardedMessageAudioAndVoiceViewHeightConstraint.constant = 0
+                if originalMessage.type == .contact {
+                    forwardedMessageBodyContainerView.isHidden = true
+                    forwardedMessageBodyLabel.isHidden = true
+                    self.forwardedFromViewHeightConstraint.constant = 20
+                    timeLabel.backgroundColor = UIColor.clear
+                    contactsContainerView.isHidden = false
+                    contactsContainerViewHeightConstraint.constant = 100
+                    contactsContainerView.setContact((message.forwardedFrom?.contact!)!, isIncommingMessage: isIncommingMessage)
+                    
+                    self.forwardedMessageAudioAndVoiceViewHeightConstraint.constant = 0
+                } else {
+                    self.forwardedMessageMediaContainerViewHeightConstraint.constant = 0
+                    self.forwardedMessageAudioAndVoiceViewHeightConstraint.constant = 0
+                }
             }
         } else {
             self.forwardedFromViewHeightConstraint.constant = 0
@@ -776,23 +788,13 @@ class IGMessageCollectionViewCell: IGMessageGeneralCollectionViewCell {
         }
         
         //MARK: Body Text (message)
-        if let body = message.message {
-//            let start = Date.timeIntervalSinceReferenceDate
+        if  message.message != nil && message.message != "" {
+            let body = message.message
             bodyViewHeightConstraint.constant = messageSizes.messageBodyHeight
-//            let step1 = Date.timeIntervalSinceReferenceDate
-//            print("message.id: \(message.id) Step1: -> \(step1 - start)")
             bodyLabel.text = body
-//            let step2 = Date.timeIntervalSinceReferenceDate
-//            print("message.id: \(message.id) Step2: -> \(step2 - step1)")
             bodyView.isHidden = false
-//            let step3 = Date.timeIntervalSinceReferenceDate
-//            print("message.id: \(message.id) Step3: -> \(step3 - step2)")
             bodyLabel.isHidden = false
-//            let step4 = Date.timeIntervalSinceReferenceDate
-//            print("message.id: \(message.id) Step4: -> \(step4 - step3)")
             timeLabelBottomConstraint.constant = 11.0
-//            let step5 = Date.timeIntervalSinceReferenceDate
-//            print("message.id: \(message.id) Step4: -> \(step5 - step4)")
             timeLabel.backgroundColor = UIColor.clear
             bodyView.backgroundColor = UIColor.clear
             bodyLabel.textColor = UIColor.chatBubbleTextColor(isIncommingMessage: isIncommingMessage)
