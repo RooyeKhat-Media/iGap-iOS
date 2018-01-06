@@ -308,6 +308,9 @@ class IGNavigationItem: UINavigationItem {
         self.centerViewMainLabel!.textAlignment = .center
         self.centerViewMainLabel!.font = UIFont.igFont(ofSize: 16.0, weight: .bold)//boldSystemFont(ofSize: 16)
         self.centerViewContainer!.addSubview(self.centerViewMainLabel!)
+        self.centerViewMainLabel!.snp.makeConstraints { (make) in
+            make.centerX.equalTo(self.centerViewContainer!.snp.centerX)
+        }
         
         self.centerViewSubLabel = UILabel()//frame: CGRect(x: 0, y: 20, width: 200, height: 16))
         self.centerViewSubLabel!.textColor = UIColor.white

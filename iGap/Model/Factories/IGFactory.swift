@@ -665,21 +665,21 @@ class IGFactory: NSObject {
                 let messages = IGDatabaseManager.shared.realm.objects(IGRoomMessage.self).filter(predicate)
                 
                 let roomPredicate = NSPredicate(format: "id = %lld", roomID)
-                let room = IGDatabaseManager.shared.realm.objects(IGRoom.self).filter(roomPredicate).first!
-                
-                //TODO: This is not efficient (try to commit write after changing data)
-                IGDatabaseManager.shared.realm.beginWrite()
-                for message in messages {
-                    if message.id <= clearID {
-                        message.isDeleted = true
+                if  let room = IGDatabaseManager.shared.realm.objects(IGRoom.self).filter(roomPredicate).first {
+                    //TODO: This is not efficient (try to commit write after changing data)
+                    IGDatabaseManager.shared.realm.beginWrite()
+                    for message in messages {
+                        if message.id <= clearID {
+                            message.isDeleted = true
+                        }
                     }
-                }
-                room.clearId = clearID
-                try! IGDatabaseManager.shared.realm.commitWrite()
-                
-                self.updateRoomLastMessageIfPossible(roomID: roomID)
-                IGFactory.shared.performInFactoryQueue {
-                    task.success!()
+                    room.clearId = clearID
+                    try! IGDatabaseManager.shared.realm.commitWrite()
+                    
+                    self.updateRoomLastMessageIfPossible(roomID: roomID)
+                    IGFactory.shared.performInFactoryQueue {
+                        task.success!()
+                    }
                 }
             }
         }
