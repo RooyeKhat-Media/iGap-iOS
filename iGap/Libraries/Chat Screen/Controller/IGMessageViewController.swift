@@ -285,11 +285,9 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
         tapAndHoldOnRecord.minimumPressDuration = 0.5
         inputBarRecordButton.addGestureRecognizer(tapAndHoldOnRecord)
         
-        
-        // Set messages notification block
-        let predicate = NSPredicate(format: "roomId = %d AND isDeleted == false", self.room!.id)
-        messages = try! Realm().objects(IGRoomMessage.self).filter(predicate).sorted(by: sortProperties)
-        
+        //let predicate = NSPredicate(format: "roomId = %d AND isDeleted == false", self.room!.id)
+        let filter = "roomId == \(self.room!.id) AND isDeleted == false"
+        messages = try! Realm().objects(IGRoomMessage.self).filter(filter).sorted(by: sortProperties)
         self.notificationToken = messages?.addNotificationBlock { (changes: RealmCollectionChange) in
             switch changes {
             case .initial:
