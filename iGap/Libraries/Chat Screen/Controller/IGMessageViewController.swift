@@ -1762,6 +1762,11 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
         //TODO: check forwarded attachment
         let message = cellMessage
         if message.attachment == nil {
+            
+            if message.forwardedFrom?.attachment != nil {
+                didTapOnForwardedAttachment(cellMessage: cellMessage, cell: cell)
+            }
+            
             return
         }
         
