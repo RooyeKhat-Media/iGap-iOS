@@ -24,7 +24,7 @@ class IGChatRoom: Object {
         self.init()
         self.id = id
         
-        let predicate = NSPredicate(format: "id = %d", igpChatRoom.igpPeer.igpID)
+        let predicate = NSPredicate(format: "id = %lld", igpChatRoom.igpPeer.igpID)
         if let userInDb = try! Realm().objects(IGRegisteredUser.self).filter(predicate).first {
             self.peer = userInDb//.detach()
         } else {

@@ -584,7 +584,7 @@ class IGRecentsTableViewController: UITableViewController {
     
     func segueToChatNotificationReceived(_ aNotification: Notification) {
         if let roomId = aNotification.userInfo?["room"] as? Int64 {
-            let predicate = NSPredicate(format: "id = %d", roomId)
+            let predicate = NSPredicate(format: "id = %lld", roomId)
             if let room = rooms!.filter(predicate).first {
                 selectedRoomForSegue = room
                 performSegue(withIdentifier: "showRoomMessages", sender: self)

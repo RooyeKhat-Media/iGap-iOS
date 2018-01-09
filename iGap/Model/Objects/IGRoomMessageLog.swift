@@ -203,7 +203,7 @@ class IGRoomMessageLog: Object {
         }
         
         if igpRoomMessageLog.hasIgpTargetUser {
-            let predicate = NSPredicate(format: "id = %d", igpRoomMessageLog.igpTargetUser.igpID)
+            let predicate = NSPredicate(format: "id = %lld", igpRoomMessageLog.igpTargetUser.igpID)
             let realm = try! Realm()
             if let userInDb = realm.objects(IGRegisteredUser.self).filter(predicate).first {
                 self.targetUser = userInDb

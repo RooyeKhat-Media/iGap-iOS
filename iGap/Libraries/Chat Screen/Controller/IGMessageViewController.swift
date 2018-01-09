@@ -285,9 +285,8 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
         tapAndHoldOnRecord.minimumPressDuration = 0.5
         inputBarRecordButton.addGestureRecognizer(tapAndHoldOnRecord)
         
-        //let predicate = NSPredicate(format: "roomId = %d AND isDeleted == false", self.room!.id)
-        let filter = "roomId == \(self.room!.id) AND isDeleted == false"
-        messages = try! Realm().objects(IGRoomMessage.self).filter(filter).sorted(by: sortProperties)
+        let predicate = NSPredicate(format: "roomId = %lld AND isDeleted == false", self.room!.id)
+        messages = try! Realm().objects(IGRoomMessage.self).filter(predicate).sorted(by: sortProperties)
         self.notificationToken = messages?.addNotificationBlock { (changes: RealmCollectionChange) in
             switch changes {
             case .initial:
@@ -1508,7 +1507,7 @@ extension IGMessageViewController: UICollectionViewDelegateFlowLayout {
         //500 is an arbitrary number. can be anything
         if spaceToTop < 500 {
             //near top of the screen (real bottom of scrollview)
-            let predicate = NSPredicate(format: "roomId = %d", self.room!.id)
+            let predicate = NSPredicate(format: "roomId = %lld", self.room!.id)
             if let message = try! Realm().objects(IGRoomMessage.self).filter(predicate).sorted(by: sortProperties).last {
                 self.fetchRoomHistoryIfPossibleBefore(message: message)
             }

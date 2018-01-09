@@ -50,7 +50,7 @@ class IGClientCondition {
         
         for room in rooms {
             // Set messages notification block
-            let predicate = NSPredicate(format: "roomId = %d AND isDeleted == false", room.id)
+            let predicate = NSPredicate(format: "roomId = %lld AND isDeleted == false", room.id)
             let messages = try! Realm().objects(IGRoomMessage.self).filter(predicate).sorted(byKeyPath: "creationTime")
             let ccRoom = IGCCRoom()
             ccRoom.id = room.id

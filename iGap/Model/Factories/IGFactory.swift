@@ -491,11 +491,11 @@ class IGFactory: NSObject {
     func updateRoomLastMessageIfPossible(roomID: Int64) {
         IGDatabaseManager.shared.perfrmOnDatabaseThread {
             print("    ======> updating room last message and unread count")
-            let predicate = NSPredicate(format: "id = %d", roomID)
+            let predicate = NSPredicate(format: "id = %lld", roomID)
             if let roomInDb = IGDatabaseManager.shared.realm.objects(IGRoom.self).filter(predicate).first {
                 var shouldIncreamentUnreadCount = true
                 var lastMessage: IGRoomMessage?
-                let messagePredicate = NSPredicate(format: "roomId = %d AND isDeleted == false", roomID)
+                let messagePredicate = NSPredicate(format: "roomId = %lld AND isDeleted == false", roomID)
                 
                 if let lastMessageInDb = IGDatabaseManager.shared.realm.objects(IGRoomMessage.self).filter(messagePredicate).sorted(byKeyPath: "creationTime").last {
                     if let authorHash = lastMessageInDb.authorHash {

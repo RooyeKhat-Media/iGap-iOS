@@ -224,7 +224,7 @@ class IGRoomMessage: Object {
         self.status = IGRoomMessageStatus.sending
         self.temporaryId = IGGlobal.randomString(length: 64)
         self.primaryKeyId = IGGlobal.randomString(length: 64)
-        let predicate = NSPredicate(format: "id = %d", IGAppManager.sharedManager.userID()!)
+        let predicate = NSPredicate(format: "id = %lld", IGAppManager.sharedManager.userID()!)
         let realm = try! Realm()
         if let userInDb = realm.objects(IGRegisteredUser.self).filter(predicate).first {
             self.authorUser = userInDb
