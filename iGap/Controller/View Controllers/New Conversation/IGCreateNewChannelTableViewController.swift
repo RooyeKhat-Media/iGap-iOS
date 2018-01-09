@@ -111,10 +111,10 @@ class IGCreateNewChannelTableViewController: UITableViewController {
                                             IGClientGetRoomRequest.Handler.interpret(response: getRoomProtoResponse)
                                             self.igpRoom = getRoomProtoResponse.igpRoom
                                         } else {
-                                            self.hideProgress()
-                                            self.performSegue(withIdentifier: "GotoChooseTypeOfChannelToCreate", sender: self)
                                             IGClientGetRoomRequest.Handler.interpret(response: getRoomProtoResponse)
                                             self.igpRoom = getRoomProtoResponse.igpRoom
+                                            self.hideProgress()
+                                            self.performSegue(withIdentifier: "GotoChooseTypeOfChannelToCreate", sender: self)
                                         }
                                     default:
                                         break

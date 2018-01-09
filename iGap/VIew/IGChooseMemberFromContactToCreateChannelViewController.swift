@@ -146,7 +146,13 @@ class IGChooseMemberFromContactToCreateChannelViewController: UIViewController ,
     }
     
     func requestToAddmember() {
-        if let member = selectUser {
+        
+        if selectedUsers.count == 0 {
+            self.showAlert(title: "Hint", message: "Please choose member")
+            return
+        }
+        
+        for member in selectedUsers {
             IGChannelAddMemberRequest.Generator.generate(userID: member.registredUser.id, channel: room!).success({ (protoResponse) in
                 DispatchQueue.main.async {
                     switch protoResponse {
@@ -189,7 +195,12 @@ class IGChooseMemberFromContactToCreateChannelViewController: UIViewController ,
     }
     
     func requestToAddAdminInChannel() {
-        if let member = selectUser {
+        if selectedUsers.count == 0 {
+            self.showAlert(title: "Hint", message: "Please choose member")
+            return
+        }
+        
+        for member in selectedUsers {
             if let channelRoom = room {
                 print(channelRoom.id)
                 self.hud = MBProgressHUD.showAdded(to: self.view, animated: true)
@@ -238,7 +249,12 @@ class IGChooseMemberFromContactToCreateChannelViewController: UIViewController ,
     }
     
     func requestToAddModeratorInChannel() {
-        if let member = selectUser {
+        if selectedUsers.count == 0 {
+            self.showAlert(title: "Hint", message: "Please choose member")
+            return
+        }
+        
+        for member in selectedUsers {
             if let channelRoom = room {
                 self.hud = MBProgressHUD.showAdded(to: self.view, animated: true)
                 self.hud.mode = .indeterminate
@@ -381,34 +397,31 @@ extension IGChooseMemberFromContactToCreateChannelViewController : UITableViewDe
                 contactTableSelectedIndexPath = indexPath
                 selectUser = currentCell?.user
                 if self.mode == "Admin" {
-                    self.requestToAddAdminInChannel()
+                     selectedUsers.append((currentCell?.user)!)
                 }
                 if self.mode == "Moderator" {
-                    self.requestToAddModeratorInChannel()
+                    selectedUsers.append((currentCell?.user)!)
                 }
                 if self.mode == "Members" {
-                    self.requestToAddmember()
+                     selectedUsers.append((currentCell?.user)!)
                 }
                 if self.mode == "CreateChannel" {
-                selectedUsers.append((currentCell?.user)!)
-                selectedIndexPath = indexPath
-                
-                self.contactViewBottomConstraizt.constant = 0
-                UIView.animate(withDuration: 0.2, animations: {
-                    self.selectedContactsView.alpha = 1
-                    self.view.layoutIfNeeded()
-                })
-                
-                collectionView.performBatchUpdates({
-                    let a = IndexPath(row: self.selectedUsers.count - 1, section: 0)
-                    self.collectionView.insertItems(at: [a])
-                }, completion: { (completed) in
-                    //
-                })
+                    selectedUsers.append((currentCell?.user)!)
+                    selectedIndexPath = indexPath
                     
+                    self.contactViewBottomConstraizt.constant = 0
+                    UIView.animate(withDuration: 0.2, animations: {
+                        self.selectedContactsView.alpha = 1
+                        self.view.layoutIfNeeded()
+                    })
+                    
+                    collectionView.performBatchUpdates({
+                        let a = IndexPath(row: self.selectedUsers.count - 1, section: 0)
+                        self.collectionView.insertItems(at: [a])
+                    }, completion: { (completed) in
+                        //
+                    })
                 }
-
-                
             }
         }
     }

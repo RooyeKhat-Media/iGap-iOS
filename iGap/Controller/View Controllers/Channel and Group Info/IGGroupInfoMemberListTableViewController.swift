@@ -55,10 +55,8 @@ class IGGroupInfoMemberListTableViewController: UITableViewController , UIGestur
         let navigationController = self.navigationController as! IGNavigationController
         navigationController.interactivePopGestureRecognizer?.delegate = self
         navigationItem.rightViewContainer?.addAction {
-        self.performSegue(withIdentifier: "showContactToAddMember", sender: self)
-            
+            self.performSegue(withIdentifier: "showContactToAddMember", sender: self)
         }
-
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -174,7 +172,7 @@ class IGGroupInfoMemberListTableViewController: UITableViewController , UIGestur
                         self.allMember.append(igmember)
                     }
                     self.hud.hide(animated: true)
-                    self.tableView.reloadData()
+                    //self.tableView.reloadData()
                     
                 default:
                     break

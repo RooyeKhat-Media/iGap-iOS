@@ -99,16 +99,16 @@ class IGChooseMemberFromContactsToCreateGroupViewController: UIViewController , 
         let navigationController = self.navigationController as! IGNavigationController
         navigationController.interactivePopGestureRecognizer?.delegate = self
         if mode == "Admin" {
-            navigationItem.addModalViewItems(leftItemText: "Close", rightItemText: nil , title: "Add Admin")
+            navigationItem.addModalViewItems(leftItemText: "Close", rightItemText: "Add" , title: "Add Admin")
         }
         if mode == "Moderator" {
-            navigationItem.addModalViewItems(leftItemText: "Close", rightItemText: nil , title: "Add Moderator")
+            navigationItem.addModalViewItems(leftItemText: "Close", rightItemText: "Add" , title: "Add Moderator")
         }
         if mode == "CreateGroup" {
             navigationItem.addModalViewItems(leftItemText: "Close", rightItemText: "Create", title: "New Group")
         }
         if mode == "Members" {
-            navigationItem.addModalViewItems(leftItemText: "Close", rightItemText: nil , title: "Add Member")
+            navigationItem.addModalViewItems(leftItemText: "Close", rightItemText: "Add" , title: "Add Member")
         }
         if mode == "Convert Chat To Group" {
             navigationItem.addModalViewItems(leftItemText: "Close", rightItemText: "Create" , title: "Add member to")
@@ -128,11 +128,16 @@ class IGChooseMemberFromContactsToCreateGroupViewController: UIViewController , 
         }
         
         navigationItem.rightViewContainer?.addAction {
-            
-          self.performSegue(withIdentifier: "CreateGroupPage", sender: self)
-            
+            if self.mode == "Members" {
+                self.requestToAddmember()
+            } else if self.mode == "Moderator" {
+                self.requestToAddModeratorInGroup()
+            } else if self.mode == "Admin"{
+                self.requestToAddAdminInGroup()
+            } else {
+                self.performSegue(withIdentifier: "CreateGroupPage", sender: self)
+            }
         }
-        
     }
     
     /*
@@ -213,32 +218,40 @@ class IGChooseMemberFromContactsToCreateGroupViewController: UIViewController , 
 //        self.contactsTableView.reloadData()
     }
 
-
-
-func requestToAddmember() {
-    if let member = selectUser {
-        IGGroupAddMemberRequest.Generator.generate(userID:member.registredUser.id, group: room!).success({ (protoResponse) in
-            DispatchQueue.main.async {
-                switch protoResponse {
-                case let groupAddMemberResponse as IGPGroupAddMemberResponse:
-                    IGGroupAddMemberRequest.Handler.interpret(response: groupAddMemberResponse)
-                    if self.navigationController is IGNavigationController {
-                        self.navigationController?.popViewController(animated: true)
+    func requestToAddmember() {
+        
+        if selectedUsers.count == 0 {
+            self.showAlert(title: "Hint", message: "Please choose member")
+            return
+        }
+        
+        for member in selectedUsers {
+            IGGroupAddMemberRequest.Generator.generate(userID:member.registredUser.id, group: room!).success({ (protoResponse) in
+                DispatchQueue.main.async {
+                    switch protoResponse {
+                    case let groupAddMemberResponse as IGPGroupAddMemberResponse:
+                        IGGroupAddMemberRequest.Handler.interpret(response: groupAddMemberResponse)
+                        if self.navigationController is IGNavigationController {
+                            self.navigationController?.popViewController(animated: true)
+                        }
+                    default:
+                        break
                     }
-
-                default:
-                    break
                 }
-            }
-        }).error({ (errorCode, waitTime) in
-            
-        }).send()
+            }).error({ (errorCode, waitTime) in
+                
+            }).send()
+        }
+    }
+
+func requestToAddAdminInGroup() {
+    
+    if selectedUsers.count == 0 {
+        self.showAlert(title: "Hint", message: "Please choose member")
+        return
     }
     
-}
-
-func requestToAddAdminInChannel() {
-    if let member = selectUser {
+    for member in selectedUsers {
         if let groupRoom = room {
             print(groupRoom.id)
             self.hud = MBProgressHUD.showAdded(to: self.view, animated: true)
@@ -290,8 +303,13 @@ func requestToAddAdminInChannel() {
     }
 }
 
-    func requestToAddModeratorInChannel() {
-        if let member = selectUser {
+    func requestToAddModeratorInGroup() {
+        if selectedUsers.count == 0 {
+            self.showAlert(title: "Hint", message: "Please choose member")
+            return
+        }
+        
+        for member in selectedUsers {
             if let channelRoom = room {
                 self.hud = MBProgressHUD.showAdded(to: self.view, animated: true)
                 self.hud.mode = .indeterminate
@@ -410,13 +428,13 @@ extension IGChooseMemberFromContactsToCreateGroupViewController : UITableViewDel
                 contactTableSelectedIndexPath = indexPath
                 selectUser = currentCell?.user
                 if self.mode == "Admin" {
-                    self.requestToAddAdminInChannel()
+                    selectedUsers.append((currentCell?.user)!)
                 }
                 if self.mode == "Moderator" {
-                    self.requestToAddModeratorInChannel()
+                    selectedUsers.append((currentCell?.user)!)
                 }
                 if self.mode == "Members" {
-                    self.requestToAddmember()
+                    selectedUsers.append((currentCell?.user)!)
                 }
                 if self.mode == "CreateGroup" {
                     selectedUsers.append((currentCell?.user)!)
@@ -426,9 +444,9 @@ extension IGChooseMemberFromContactsToCreateGroupViewController : UITableViewDel
                         self.selectedContactsView.alpha = 1
                         self.view.layoutIfNeeded()
                     })
-
+                    
                 }
-                    if self.mode == "CreateGroup" {
+                if self.mode == "CreateGroup" {
                     collectionView.performBatchUpdates({
                         let a = IndexPath(row: self.selectedUsers.count - 1, section: 0)
                         self.collectionView.insertItems(at: [a])
