@@ -309,6 +309,7 @@ class IGNavigationItem: UINavigationItem {
         self.centerViewMainLabel!.font = UIFont.igFont(ofSize: 16.0, weight: .bold)//boldSystemFont(ofSize: 16)
         self.centerViewContainer!.addSubview(self.centerViewMainLabel!)
         self.centerViewMainLabel!.snp.makeConstraints { (make) in
+            make.top.equalTo(self.centerViewContainer!.snp.top).offset(0)
             make.centerX.equalTo(self.centerViewContainer!.snp.centerX)
         }
         
