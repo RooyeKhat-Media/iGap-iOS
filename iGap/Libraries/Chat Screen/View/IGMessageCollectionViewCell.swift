@@ -637,6 +637,25 @@ class IGMessageCollectionViewCell: IGMessageGeneralCollectionViewCell {
                     contactsContainerViewHeightConstraint.constant = 100
                     
                     timeLabel.backgroundColor = UIColor.clear
+                    
+                case .file, .fileAndText:
+                    
+                    self.forwardedMessageAudioAndVoiceViewHeightConstraint.constant = 0
+                    self.attachmentThumbnailImageView.isHidden = false
+                    self.attachmentFileNameLabel.isHidden = false
+                    self.attachmentTimeOrSizeLabel.isHidden = false
+                    self.attachmentContainreView.isHidden = false
+                    self.mediaContainerViewHeightConstraint.constant = 0
+                    self.attachmentViewHeightConstraint.constant = 55.0
+                    self.attachmentFileNameLabel.text = attachment.name
+                    self.attachmentThumbnailImageView.setThumbnail(for: attachment)
+                    self.attachmentTimeOrSizeLabel.text = attachment.sizeToString()
+                    if self.attachment?.status != .ready {
+                        self.attachmentDownloadUploadIndicatorView.layer.cornerRadius = 16.0
+                        self.attachmentDownloadUploadIndicatorView.layer.masksToBounds = true
+                        self.attachmentDownloadUploadIndicatorView.delegate = self
+                    }
+                    
                 default:
                     break
                 }
@@ -839,6 +858,9 @@ class IGMessageCollectionViewCell: IGMessageGeneralCollectionViewCell {
             if let forwardMessage = message.forwardedFrom {
                 if forwardMessage.type == .audio  || forwardMessage.type == .audioAndText {
                     // do nothing
+                } else if forwardMessage.type == .file  || forwardMessage.type == .fileAndText {
+                    mediaContainerView.isHidden = true
+                    mediaContainerViewHeightConstraint.constant = 0
                 } else {
                     mediaContainerView.isHidden = true
                     mediaContainerViewHeightConstraint.constant = 0

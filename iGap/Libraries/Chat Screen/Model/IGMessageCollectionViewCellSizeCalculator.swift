@@ -205,7 +205,9 @@ class IGMessageCollectionViewCellSizeCalculator: NSObject {
             if message.forwardedFrom?.type == .contact {
                 finalSize.width = 200
             } else if message.forwardedFrom?.type == .audio || message.forwardedFrom?.type == .audioAndText {
-               finalSize.width = 220
+                finalSize.width = 220
+            } else if message.forwardedFrom?.type == .file || message.forwardedFrom?.type == .fileAndText {
+                finalSize.width = 220
             } else if message.forwardedFrom?.type == .voice {
                 finalSize.width = 250
             }
