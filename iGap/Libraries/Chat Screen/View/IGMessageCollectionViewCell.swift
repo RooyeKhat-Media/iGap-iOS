@@ -732,6 +732,7 @@ class IGMessageCollectionViewCell: IGMessageGeneralCollectionViewCell {
                 self.mediaContainerViewHeightConstraint.constant = 0
                 self.attachmentProgressSliderLeadingConstraint.constant = 30.0
                 self.attachmentViewHeightConstraint.constant = 68.0
+                self.attachmentThumbnailImageView.isHidden = false
                 self.attachmentContainreView.isHidden = false
                 self.attachmentPlayVoiceButton.isHidden = false
                 self.attachmentFileNameLabel.isHidden = false
@@ -816,12 +817,14 @@ class IGMessageCollectionViewCell: IGMessageGeneralCollectionViewCell {
                 break
             case .file, .fileAndText:
                 
+                self.attachmentThumbnailImageView.isHidden = false
                 self.attachmentFileNameLabel.isHidden = false
                 self.attachmentTimeOrSizeLabel.isHidden = false
                 self.attachmentContainreView.isHidden = false
                 self.mediaContainerViewHeightConstraint.constant = 0
                 self.attachmentViewHeightConstraint.constant = 55.0
                 self.attachmentFileNameLabel.text = attachment.name
+                self.attachmentThumbnailImageView.setThumbnail(for: attachment)
                 self.attachmentTimeOrSizeLabel.text = attachment.sizeToString()
                 if self.attachment?.status != .ready {
                     self.attachmentDownloadUploadIndicatorView.layer.cornerRadius = 16.0
@@ -1000,7 +1003,7 @@ class IGMessageCollectionViewCell: IGMessageGeneralCollectionViewCell {
             
             if attachment.status == .ready {
                 self.mediaDownloadUploadIndicatorView.setState(attachment.status)
-                setThumbnailForAttachments()
+                //setThumbnailForAttachments()
                 if attachment.type == .gif {
                     attachment.loadData()
                     if let data = attachment.data {
@@ -1062,7 +1065,7 @@ class IGMessageCollectionViewCell: IGMessageGeneralCollectionViewCell {
             
             if attachment.status == .ready {
                 self.forwardedMediaDownloadUploadIndicatorView.setState(attachment.status)
-                setThumbnailForForwardedAttachments()
+                //setThumbnailForForwardedAttachments()
                 if attachment.type == .gif {
                     attachment.loadData()
                     if let data = attachment.data {
