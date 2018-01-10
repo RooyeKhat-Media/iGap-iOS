@@ -651,7 +651,6 @@ class IGMessageCollectionViewCell: IGMessageGeneralCollectionViewCell {
                     self.attachmentThumbnailImageView.setThumbnail(for: attachment)
                     self.attachmentTimeOrSizeLabel.text = attachment.sizeToString()
                     if self.attachment?.status != .ready {
-                        self.attachmentDownloadUploadIndicatorView.layer.cornerRadius = 16.0
                         self.attachmentDownloadUploadIndicatorView.layer.masksToBounds = true
                         self.attachmentDownloadUploadIndicatorView.delegate = self
                     }

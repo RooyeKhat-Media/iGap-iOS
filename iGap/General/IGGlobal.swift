@@ -334,7 +334,9 @@ extension UIImageView {
         } else if attachment.type == .audio {
             self.image = UIImage(named:"IG_Message_Cell_Player_Default_Cover")
         } else {
-            if let thumbnail = attachment.smallThumbnail {
+            if let image = UIImage.originalImage(for: attachment) {
+                self.image = image
+            } else if let thumbnail = attachment.smallThumbnail {
                 do {
                     var path = URL(string: "")
                     if attachment.attachedImage != nil {

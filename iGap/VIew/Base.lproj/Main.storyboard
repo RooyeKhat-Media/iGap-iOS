@@ -734,11 +734,10 @@ Please wait 0:59</string>
                                 </cells>
                             </collectionView>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uLc-FX-WjP">
-                                <rect key="frame" x="9" y="619" width="304" height="38"/>
+                                <rect key="frame" x="5" y="622" width="365" height="40"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="304" id="F1h-1f-Sid"/>
-                                    <constraint firstAttribute="height" constant="38" id="RW0-kj-5Ez"/>
+                                    <constraint firstAttribute="height" constant="40" id="aud-T9-6SW"/>
                                 </constraints>
                                 <state key="normal" title="JOIN"/>
                                 <connections>
@@ -1043,17 +1042,18 @@ Please wait 0:59</string>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="uLc-FX-WjP" firstAttribute="leading" secondItem="ziz-lj-PYe" secondAttribute="leadingMargin" constant="-7" id="5lp-4e-8FK"/>
+                            <constraint firstItem="uLc-FX-WjP" firstAttribute="leading" secondItem="ziz-lj-PYe" secondAttribute="leading" constant="5" id="62H-fk-IXR"/>
                             <constraint firstItem="4eQ-gi-PNj" firstAttribute="trailing" secondItem="9G6-WI-YVj" secondAttribute="trailing" id="74i-Qd-PtK"/>
                             <constraint firstItem="4eQ-gi-PNj" firstAttribute="leading" secondItem="ziz-lj-PYe" secondAttribute="leading" id="9rZ-uo-M4r"/>
                             <constraint firstItem="4eQ-gi-PNj" firstAttribute="top" secondItem="5mR-SM-BTR" secondAttribute="bottom" id="Obr-Bc-Azv"/>
+                            <constraint firstItem="7LG-Y0-Ncx" firstAttribute="top" secondItem="uLc-FX-WjP" secondAttribute="bottom" constant="5" id="OnJ-wA-E9b"/>
+                            <constraint firstAttribute="trailing" secondItem="uLc-FX-WjP" secondAttribute="trailing" constant="5" id="PwG-7u-wmd"/>
                             <constraint firstAttribute="trailingMargin" secondItem="5mR-SM-BTR" secondAttribute="trailing" constant="-8" id="RBW-9Z-t7u"/>
                             <constraint firstItem="9G6-WI-YVj" firstAttribute="top" secondItem="v1Y-Qo-n3M" secondAttribute="bottom" id="Ry3-td-qgA"/>
                             <constraint firstAttribute="trailing" secondItem="4eQ-gi-PNj" secondAttribute="trailing" id="STr-jl-Csu"/>
                             <constraint firstItem="9G6-WI-YVj" firstAttribute="bottom" secondItem="4eQ-gi-PNj" secondAttribute="bottom" id="bg0-rO-guD"/>
                             <constraint firstItem="7LG-Y0-Ncx" firstAttribute="top" secondItem="4eQ-gi-PNj" secondAttribute="bottom" id="l9j-I8-pUw"/>
                             <constraint firstItem="4eQ-gi-PNj" firstAttribute="leading" secondItem="9G6-WI-YVj" secondAttribute="leading" id="n0a-xe-TX1"/>
-                            <constraint firstItem="7LG-Y0-Ncx" firstAttribute="top" secondItem="uLc-FX-WjP" secondAttribute="bottom" constant="10" id="n6d-V0-zfO"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Title" id="yRi-nN-wYI" customClass="IGNavigationItem" customModule="iGap" customModuleProvider="target"/>
