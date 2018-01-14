@@ -688,6 +688,7 @@ Please wait 0:59</string>
                         <segue destination="Tms-xQ-fpG" kind="presentation" identifier="createANewChannel" id="xIk-je-mZv"/>
                         <segue destination="KAm-kE-MQe" kind="presentation" identifier="createANewChat" id="fQp-QT-GFJ"/>
                         <segue destination="fZY-DA-os7" kind="presentation" identifier="createANewGroup" id="406-yW-OVG"/>
+                        <segue destination="u0S-Sh-Wik" kind="show" identifier="showReportPage" id="k9M-cr-cw2"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3hZ-9r-pPP" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1156,6 +1157,7 @@ Please wait 0:59</string>
                     <navigationItem key="navigationItem" title="Chats" id="O9t-Iy-ktM"/>
                     <connections>
                         <segue destination="KJT-Hl-jm5" kind="show" identifier="showRoomMessages" id="m3u-p1-8tV"/>
+                        <segue destination="u0S-Sh-Wik" kind="show" identifier="showReportPage" id="hbz-f8-Hpu"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NcG-vN-1HE" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1215,6 +1217,7 @@ Please wait 0:59</string>
                     <navigationItem key="navigationItem" title="Groups" id="lxH-uI-Dp1"/>
                     <connections>
                         <segue destination="KJT-Hl-jm5" kind="show" identifier="showRoomMessages" id="4Pl-n5-pIH"/>
+                        <segue destination="u0S-Sh-Wik" kind="show" identifier="showReportPage" id="skX-lt-yXs"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="j5m-zA-McG" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1255,6 +1258,7 @@ Please wait 0:59</string>
                     <navigationItem key="navigationItem" title="Channel" id="PXt-DS-2oY"/>
                     <connections>
                         <segue destination="KJT-Hl-jm5" kind="show" identifier="showRoomMessages" id="I27-tX-EAz"/>
+                        <segue destination="u0S-Sh-Wik" kind="show" identifier="showReportPage" id="l1W-zY-RFK"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gzb-g4-KQB" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -4960,6 +4964,56 @@ Cg
             </objects>
             <point key="canvasLocation" x="4132.5" y="-1182.0422535211267"/>
         </scene>
+        <!--Report-->
+        <scene sceneID="jCV-2M-SGV">
+            <objects>
+                <tableViewController id="u0S-Sh-Wik" customClass="IGReport" customModule="iGap" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="Bys-n6-siz">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <sections>
+                            <tableViewSection headerTitle="Report Description" id="ZFU-FT-tMn">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="88" id="kf1-qh-X67">
+                                        <rect key="frame" x="0.0" y="55.5" width="375" height="88"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kf1-qh-X67" id="t0H-u4-5Sj">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="87.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dhI-xl-id4">
+                                                    <rect key="frame" x="16" y="11" width="343" height="66"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                                </textView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="dhI-xl-id4" firstAttribute="leading" secondItem="t0H-u4-5Sj" secondAttribute="leadingMargin" id="Gbn-BQ-ePs"/>
+                                                <constraint firstItem="dhI-xl-id4" firstAttribute="top" secondItem="t0H-u4-5Sj" secondAttribute="topMargin" id="MB3-wp-oEC"/>
+                                                <constraint firstItem="dhI-xl-id4" firstAttribute="trailing" secondItem="t0H-u4-5Sj" secondAttribute="trailingMargin" id="iWj-3J-bCA"/>
+                                                <constraint firstItem="dhI-xl-id4" firstAttribute="bottom" secondItem="t0H-u4-5Sj" secondAttribute="bottomMargin" id="s8i-Ny-hDh"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="u0S-Sh-Wik" id="7N9-GO-4IL"/>
+                            <outlet property="delegate" destination="u0S-Sh-Wik" id="t1b-W2-eSl"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="MJM-oB-wFn" customClass="IGNavigationItem" customModule="iGap" customModuleProvider="target"/>
+                    <connections>
+                        <outlet property="txtReportDescription" destination="dhI-xl-id4" id="CQO-uN-gk8"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="h6P-d8-kqG" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1470" y="-5606"/>
+        </scene>
     </scenes>
     <resources>
         <image name="IG_Chat_Screen_Attachment" width="38" height="38"/>
@@ -4987,12 +5041,13 @@ Cg
         <image name="IG_Tabbar_Recent_On" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="l1W-zY-RFK"/>
         <segue reference="Z1Q-fW-ByF"/>
         <segue reference="k1z-sz-mLi"/>
         <segue reference="xjE-gJ-o8r"/>
         <segue reference="Whi-Zq-oPV"/>
         <segue reference="liy-Td-nok"/>
-        <segue reference="R4P-x7-LEg"/>
+        <segue reference="I27-tX-EAz"/>
         <segue reference="OlC-Gu-0Zm"/>
     </inferredMetricsTieBreakers>
 </document>

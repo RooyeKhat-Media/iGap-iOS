@@ -166,6 +166,7 @@
 		FA5EC5DA1E06728C006E2850 /* IGChatRoomListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5EC5D81E06728C006E2850 /* IGChatRoomListTableViewCell.swift */; };
 		FA5EC5DB1E06728C006E2850 /* IGChatRoomListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA5EC5D91E06728C006E2850 /* IGChatRoomListTableViewCell.xib */; };
 		FA5EC5E11E069A1E006E2850 /* IGTextAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5EC5E01E069A1E006E2850 /* IGTextAttachment.swift */; };
+		FA60ADD4200BA39B004EE151 /* IGReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA60ADD3200BA39B004EE151 /* IGReport.swift */; };
 		FA63BA9B1DD6DF32000B60AD /* IGUploadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA63BA9A1DD6DF32000B60AD /* IGUploadManager.swift */; };
 		FA63BA9D1DD6E030000B60AD /* IGFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA63BA9C1DD6E030000B60AD /* IGFile.swift */; };
 		FA63BAA01DD70D60000B60AD /* IGRequestWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA63BA9F1DD70D60000B60AD /* IGRequestWrapper.swift */; };
@@ -432,6 +433,7 @@
 		FA5EC5D81E06728C006E2850 /* IGChatRoomListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGChatRoomListTableViewCell.swift; sourceTree = "<group>"; };
 		FA5EC5D91E06728C006E2850 /* IGChatRoomListTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IGChatRoomListTableViewCell.xib; sourceTree = "<group>"; };
 		FA5EC5E01E069A1E006E2850 /* IGTextAttachment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGTextAttachment.swift; sourceTree = "<group>"; };
+		FA60ADD3200BA39B004EE151 /* IGReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGReport.swift; sourceTree = "<group>"; };
 		FA63BA9A1DD6DF32000B60AD /* IGUploadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGUploadManager.swift; sourceTree = "<group>"; };
 		FA63BA9C1DD6E030000B60AD /* IGFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGFile.swift; sourceTree = "<group>"; };
 		FA63BA9F1DD70D60000B60AD /* IGRequestWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGRequestWrapper.swift; sourceTree = "<group>"; };
@@ -936,6 +938,7 @@
 			isa = PBXGroup;
 			children = (
 				FA77C2A61E2B85E4001B2152 /* IGRegistredUserInfoTableViewController.swift */,
+				FA60ADD3200BA39B004EE151 /* IGReport.swift */,
 			);
 			path = "Chat and User Info";
 			sourceTree = "<group>";
@@ -1572,6 +1575,7 @@
 				FA42EF0E1E5C224F00CF8A32 /* CGSize.swift in Sources */,
 				FA35DA171DE0245600F171EE /* IGDatabaseManager.swift in Sources */,
 				FA4BD8A31DF2A53400CCB239 /* IGMusicViewController.swift in Sources */,
+				FA60ADD4200BA39B004EE151 /* IGReport.swift in Sources */,
 				FA42EF101E5C224F00CF8A32 /* UIImageView.swift in Sources */,
 				FAEEB0C11E1BC04E00B6775F /* IGContactManager.swift in Sources */,
 				93AA67C61E4F38620053380C /* IGChannelInfoSharedMediaDetailTableViewController.swift in Sources */,

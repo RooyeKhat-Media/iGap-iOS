@@ -1220,7 +1220,7 @@ class IGUserProfileGetBioRequest: IGRequest {
 
 class IGUserReportRequest: IGRequest {
     class Generator: IGRequest.Generator {
-        class func generate(userId: Int64, reason: IGPUserReport.IGPReason, description: String) -> IGRequestWrapper {
+        class func generate(userId: Int64, reason: IGPUserReport.IGPReason, description: String = "") -> IGRequestWrapper {
             var userReport = IGPUserReport()
             userReport.igpUserID = userId
             userReport.igpReason = reason

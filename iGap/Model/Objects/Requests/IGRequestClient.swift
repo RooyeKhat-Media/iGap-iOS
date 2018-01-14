@@ -282,4 +282,67 @@ class IGClientCountRoomHistoryRequest: IGRequest {
     
 }
 
+class IGClientMuteRoomRequest: IGRequest {
+    class Generator: IGRequest.Generator {
+        class func generate(roomId: Int64, roomMute: IGPRoomMute) -> IGRequestWrapper {
+            var clientMuteRoom = IGPClientMuteRoom()
+            clientMuteRoom.igpRoomID = roomId
+            clientMuteRoom.igpRoomMute = roomMute
+            return IGRequestWrapper(message: clientMuteRoom, actionID: 614)
+        }
+    }
+    class Handler: IGRequest.Handler {
+        class func interpret(response responseProtoMessage: IGPClientMuteRoomResponse) {
+            
+        }
+        
+        override class func handlePush(responseProtoMessage: Message) {
+            
+        }
+    }
+    
+}
+
+class IGClientPinRoomRequest: IGRequest {
+    class Generator: IGRequest.Generator {
+        class func generate(roomID: Int64) -> IGRequestWrapper {
+            var clientPin = IGPClientPinRoom()
+            clientPin.igpRoomID = roomID
+            return IGRequestWrapper(message: clientPin, actionID: 615)
+            
+        }
+    }
+    class Handler: IGRequest.Handler {
+        class func interpret( response responseProtoMessage : IGPClientCountRoomHistoryResponse)  {
+            
+        }
+        override class func handlePush(responseProtoMessage: Message) {
+            
+        }
+    }
+    
+}
+
+class IGClientRoomReportRequest: IGRequest {
+    class Generator: IGRequest.Generator {
+        class func generate(roomId: Int64, messageId: Int64 = 0 ,reason: IGPClientRoomReport.IGPReason, description: String = "") -> IGRequestWrapper {
+            var clientRoomReportResponse = IGPClientRoomReport()
+            clientRoomReportResponse.igpRoomID = roomId
+            clientRoomReportResponse.igpMessageID = messageId
+            clientRoomReportResponse.igpReason = reason
+            if reason == IGPClientRoomReport.IGPReason.other {
+                clientRoomReportResponse.igpDescription = description
+            }
+            return IGRequestWrapper(message: clientRoomReportResponse, actionID: 616)
+        }
+    }
+    class Handler: IGRequest.Handler {
+        class func interpret( response responseProtoMessage : IGPClientRoomReportResponse) {
+        }
+        
+        override class func handlePush(responseProtoMessage: Message) {
+        }
+    }
+}
+
 

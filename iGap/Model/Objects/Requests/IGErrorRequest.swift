@@ -118,6 +118,14 @@ enum IGError: String {
     case userDeleteTokenInvalidCode             = "156.1"
     case userProfileUpdateLock                  = "175.2"
 
+    case clientRoomReportDescriptionIsInvalid = "657.4"
+    case clientRoomReportReportedBefore = "658"
+    case clientRoomReportForbidden = "659"
+    
+    case userReportDescriptionIsInvalid = "10165"
+    case userReportReportedBefore = "10167"
+    case userReportForbidden = "10168"
+    
     //in response to ... (User Two-Step Verification Get Password Deyails)
     case userTwoStepVerificationGetPasswordDetailsBadPayload = "185"
     case userTwoStepVerificationGetPasswordDetailsInternalServerError = "186"
