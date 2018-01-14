@@ -20,6 +20,8 @@ class IGAccountTableViewController: UITableViewController , UINavigationControll
     @IBOutlet weak var usernameEntryLabel: UILabel!
     @IBOutlet weak var emailEntryLabel: UILabel!
     @IBOutlet weak var selfDestructionLabel: UILabel!
+    @IBOutlet weak var bioEntryLabel: IGLabel!
+    @IBOutlet weak var bioIndicator: UIActivityIndicatorView!
     
     var currentUser: IGRegisteredUser!
     var notificationToken: NotificationToken?
@@ -46,6 +48,14 @@ class IGAccountTableViewController: UITableViewController , UINavigationControll
             self.emailIndicator.stopAnimating()
             self.emailIndicator.hidesWhenStopped = true
         }
+        
+        if currentUser.bio == nil {
+            getUserBio()
+        } else {
+            self.bioIndicator.stopAnimating()
+            self.bioIndicator.hidesWhenStopped = true
+        }
+        
         if currentUser.selfRemove == -1 {
             getSelfRemove()
         }
@@ -74,7 +84,7 @@ class IGAccountTableViewController: UITableViewController , UINavigationControll
         usernameEntryLabel.text = currentUser.username
         emailEntryLabel.text = currentUser.email
         phoneNumberEntryLabel.text = "\(currentUser.phone)"
-        
+        bioEntryLabel.text = currentUser.bio
         
         if currentUser.selfRemove == -1 {
             selfDestructionLabel.text = ""
@@ -98,7 +108,7 @@ class IGAccountTableViewController: UITableViewController , UINavigationControll
         case 0:
             return 1
         case 1:
-            return 3
+            return 4
         case 2 :
             return 2
         case 3 :
@@ -126,6 +136,12 @@ class IGAccountTableViewController: UITableViewController , UINavigationControll
             self.tableView.isUserInteractionEnabled = false
             performSegue(withIdentifier: "GoToEmailPage", sender: self)
         }
+        
+        if indexPath.section == 1 && indexPath.row == 3 {
+            self.tableView.isUserInteractionEnabled = false
+            performSegue(withIdentifier: "GoToBioPage", sender: self)
+        }
+        
         if indexPath.section == 2 && indexPath.row == 0 {
             self.tableView.isUserInteractionEnabled = false
             performSegue(withIdentifier: "GoToDeleteAccountPage", sender: self)
@@ -217,6 +233,48 @@ class IGAccountTableViewController: UITableViewController , UINavigationControll
                     alert.addAction(okAction)
                     self.emailIndicator.stopAnimating()
                     self.emailIndicator.hidesWhenStopped = true
+                    self.present(alert, animated: true, completion: nil)
+                }
+            default:
+                break
+            }
+            
+        }).send()
+    }
+    
+    func getUserBio() {
+        self.bioIndicator.startAnimating()
+        IGUserProfileGetBioRequest.Generator.generate().success({ (protoResponse) in
+            DispatchQueue.main.async {
+                switch protoResponse {
+                case let setBioResponse as IGPUserProfileGetBioResponse:
+                    let bio = IGUserProfileGetBioRequest.Handler.interpret(response: setBioResponse)
+                    
+                    // add in factory
+                    let realm = try! Realm()
+                    try! realm.write {
+                        let predicate = NSPredicate(format: "id = %lld", IGAppManager.sharedManager.userID()!)
+                        if let userRegister = realm.objects(IGRegisteredUser.self).filter(predicate).first {
+                            userRegister.bio = bio
+                        }
+                    }
+                    
+                    self.bioEntryLabel.text = bio
+                    self.bioIndicator.stopAnimating()
+                    self.bioIndicator.hidesWhenStopped = true
+                default:
+                    break
+                }
+            }
+        }).error ({ (errorCode, waitTime) in
+            switch errorCode {
+            case .timeout:
+                DispatchQueue.main.async {
+                    let alert = UIAlertController(title: "Timeout", message: "Could not fetch your bio address.\nPlease try again later", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    self.bioIndicator.stopAnimating()
+                    self.bioIndicator.hidesWhenStopped = true
                     self.present(alert, animated: true, completion: nil)
                 }
             default:

@@ -173,6 +173,7 @@ enum IGError: String {
     
     case userTwoStepVerificationSetPasswordMaxTryLock = "197"
 
+    case userProfileSetBioBadPayload = "10161"
     
     case canNotAddThisUserAsAdminToGroup        = "323.3"
     case canNotAddThisUserAsModeratorToGroup    = "320.3"

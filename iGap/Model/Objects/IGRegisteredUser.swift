@@ -37,6 +37,7 @@ class IGRegisteredUser: Object {
     @objc dynamic var lastName:           String                      = ""
     @objc dynamic var displayName:        String                      = ""
     @objc dynamic var email:              String?
+    @objc dynamic var bio:                String?
     @objc dynamic var initials:           String                      = ""
     @objc dynamic var color:              String                      = ""
     @objc dynamic var lastSeen:           Date?
