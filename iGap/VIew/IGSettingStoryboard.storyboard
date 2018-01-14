@@ -1019,8 +1019,8 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6hl-sS-aj8" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
-                                                    <rect key="frame" x="325" y="13" width="42" height="15"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6hl-sS-aj8" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
+                                                    <rect key="frame" x="70" y="13" width="297" height="15"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -1036,6 +1036,7 @@
                                                 <constraint firstAttribute="trailingMargin" secondItem="6hl-sS-aj8" secondAttribute="trailing" constant="1" id="HU3-2v-aH6"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="U8B-6Q-fdT" secondAttribute="bottom" constant="5" id="dBW-Pm-bnr"/>
                                                 <constraint firstItem="av4-xl-QjL" firstAttribute="top" secondItem="un2-jd-uW3" secondAttribute="topMargin" constant="2" id="ldU-p3-6p2"/>
+                                                <constraint firstItem="6hl-sS-aj8" firstAttribute="leading" secondItem="un2-jd-uW3" secondAttribute="leadingMargin" constant="50" id="rjs-94-ZMD"/>
                                                 <constraint firstItem="U8B-6Q-fdT" firstAttribute="top" secondItem="un2-jd-uW3" secondAttribute="topMargin" constant="2" id="vBy-8O-Jcu"/>
                                                 <constraint firstItem="6hl-sS-aj8" firstAttribute="top" secondItem="un2-jd-uW3" secondAttribute="topMargin" constant="2" id="vwq-aJ-i9l"/>
                                             </constraints>
@@ -5511,6 +5512,13 @@ kay*****@gm**.com</string>
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <label key="tableFooterView" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="e0g-fe-KkU">
+                            <rect key="frame" x="0.0" y="97" width="414" height="44"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                         <sections>
                             <tableViewSection id="qbw-Lf-Udj">
                                 <cells>
@@ -5547,6 +5555,7 @@ kay*****@gm**.com</string>
                     <navigationItem key="navigationItem" title="Username" id="o2L-dw-yXj" customClass="IGNavigationItem" customModule="iGap" customModuleProvider="target"/>
                     <connections>
                         <outlet property="bioTextField" destination="F4Y-Uf-GO9" id="O3V-iy-2OS"/>
+                        <outlet property="txtBioHint" destination="e0g-fe-KkU" id="5hR-kl-Zxf"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8B8-kE-KrD" userLabel="First Responder" sceneMemberID="firstResponder"/>

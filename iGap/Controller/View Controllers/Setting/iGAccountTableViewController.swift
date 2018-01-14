@@ -248,18 +248,8 @@ class IGAccountTableViewController: UITableViewController , UINavigationControll
             DispatchQueue.main.async {
                 switch protoResponse {
                 case let setBioResponse as IGPUserProfileGetBioResponse:
-                    let bio = IGUserProfileGetBioRequest.Handler.interpret(response: setBioResponse)
-                    
-                    // add in factory
-                    let realm = try! Realm()
-                    try! realm.write {
-                        let predicate = NSPredicate(format: "id = %lld", IGAppManager.sharedManager.userID()!)
-                        if let userRegister = realm.objects(IGRegisteredUser.self).filter(predicate).first {
-                            userRegister.bio = bio
-                        }
-                    }
-                    
-                    self.bioEntryLabel.text = bio
+                    IGUserProfileGetBioRequest.Handler.interpret(response: setBioResponse)
+                    self.bioEntryLabel.text = setBioResponse.igpBio
                     self.bioIndicator.stopAnimating()
                     self.bioIndicator.hidesWhenStopped = true
                 default:

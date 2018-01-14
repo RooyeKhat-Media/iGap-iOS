@@ -36,6 +36,7 @@ class IGRegistredUserInfoTableViewController: UITableViewController , UIGestureR
     @IBOutlet weak var displayNameLabel: UILabel!
     @IBOutlet weak var phoneNumberLabel: UILabel!
     @IBOutlet weak var usernameLabel: UILabel!
+    @IBOutlet weak var bioLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,6 +52,11 @@ class IGRegistredUserInfoTableViewController: UITableViewController , UIGestureR
                 }
             }
             self.usernameLabel.text = user!.username
+            if let bio = user!.bio {
+                self.bioLabel.text = bio
+            } else {
+                self.bioLabel.text = ""
+            }
         }
         if let selectedUser = user {
         let blockedUserPredicate = NSPredicate(format: "id = %lld", selectedUser.id)
@@ -100,7 +106,7 @@ class IGRegistredUserInfoTableViewController: UITableViewController , UIGestureR
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return 3
+            return 4
         case 1:
             if let room = self.room {
                 switch room.type {
@@ -136,7 +142,16 @@ class IGRegistredUserInfoTableViewController: UITableViewController , UIGestureR
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == 1 {
+        if indexPath.section == 0 && indexPath.row == 3{
+            if let bio = user?.bio {
+                DispatchQueue.main.async {
+                    let alert = UIAlertController(title: "Bio", message: bio, preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: nil)
+                }
+            }
+        } else if indexPath.section == 1 {
             switch indexPath.row {
             case 0:
                 createChat()
@@ -155,11 +170,9 @@ class IGRegistredUserInfoTableViewController: UITableViewController , UIGestureR
             default:
                 break
             }
-        }
-        if indexPath.section == 2 && indexPath.row == 0 {
+        } else if indexPath.section == 2 && indexPath.row == 0 {
             showDeleteActionSheet()
-        }
-        if indexPath.section == 3 && indexPath.row == 0 {
+        } else if indexPath.section == 3 && indexPath.row == 0 {
             showClearHistoryActionSheet()
         }
     }

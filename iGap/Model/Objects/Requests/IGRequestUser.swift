@@ -1186,8 +1186,14 @@ class IGUserProfileSetBioRequest: IGRequest {
     }
     
     class Handler: IGRequest.Handler {
-        class func interpret(response responseProtoMessage: IGPUserProfileSetBioResponse) -> (String) {
-            return responseProtoMessage.igpBio
+        class func interpret(response responseProtoMessage: IGPUserProfileSetBioResponse) {
+            IGFactory.shared.updateBio(bio: responseProtoMessage.igpBio)
+        }
+        
+        override class func handlePush(responseProtoMessage: Message) {
+            if let response = responseProtoMessage as? IGPUserProfileSetBioResponse {
+                self.interpret(response: response)
+            }
         }
     }
 }
@@ -1200,8 +1206,14 @@ class IGUserProfileGetBioRequest: IGRequest {
     }
     
     class Handler: IGRequest.Handler {
-        class func interpret(response responseProtoMessage: IGPUserProfileGetBioResponse) -> (String) {
-            return responseProtoMessage.igpBio
+        class func interpret(response responseProtoMessage: IGPUserProfileGetBioResponse) {
+            IGFactory.shared.updateBio(bio: responseProtoMessage.igpBio)
+        }
+        
+        override class func handlePush(responseProtoMessage: Message) {
+            if let response = responseProtoMessage as? IGPUserProfileGetBioResponse {
+                self.interpret(response: response)
+            }
         }
     }
 }

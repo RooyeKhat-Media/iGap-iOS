@@ -1515,6 +1515,32 @@ class IGFactory: NSObject {
         self.performNextFactoryTaskIfPossible()
     }
     
+    func updateBio(bio: String) {
+        let task = IGFactoryTask()
+        
+        task.task = {
+            IGDatabaseManager.shared.perfrmOnDatabaseThread {
+                
+                let predicate = NSPredicate(format: "id = %lld", IGAppManager.sharedManager.userID()!)
+                try! IGDatabaseManager.shared.realm.write {
+                    if let userRegister = IGDatabaseManager.shared.realm.objects(IGRegisteredUser.self).filter(predicate).first {
+                        userRegister.bio = bio
+                    }
+                }
+                
+                IGFactory.shared.performInFactoryQueue {
+                    task.success!()
+                }
+            }
+        }
+        task.success {
+            self.removeTaskFromQueueAndPerformNext(task)
+            }.error {
+                self.removeTaskFromQueueAndPerformNext(task)
+            }.addToQueue()
+        self.performNextFactoryTaskIfPossible()
+    }
+    
 
     
     //MARK: --------------------------------------------------------

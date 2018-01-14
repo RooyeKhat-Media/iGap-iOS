@@ -11,14 +11,20 @@ import RealmSwift
 import MBProgressHUD
 import IGProtoBuff
 
-class IGSettingAccountBioTableViewController: UITableViewController , UIGestureRecognizerDelegate{
+class IGSettingAccountBioTableViewController: UITableViewController , UIGestureRecognizerDelegate, UITextFieldDelegate{
     
     @IBOutlet weak var bioTextField: UITextField!
+    @IBOutlet weak var txtBioHint: UILabel!
+    
+    let MAX_LENGTH = 70
+    var canDoAction = true
     
     var hud = MBProgressHUD()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        bioTextField.delegate = self
         
         let predicate = NSPredicate(format: "id = %lld", IGAppManager.sharedManager.userID()!)
         if let userInDb = try! Realm().objects(IGRegisteredUser.self).filter(predicate).first {
@@ -33,7 +39,9 @@ class IGSettingAccountBioTableViewController: UITableViewController , UIGestureR
         navigationItem.addNavigationViewItems(rightItemText: "Done", title: "Bio")
         navigationItem.navigationController = self.navigationController as? IGNavigationController
         navigationItem.rightViewContainer?.addAction {
-            self.didTapOnDoneButton()
+            if self.canDoAction {
+                self.didTapOnDoneButton()
+            }
         }
         
         let navigationController = self.navigationController as! IGNavigationController
@@ -52,6 +60,22 @@ class IGSettingAccountBioTableViewController: UITableViewController , UIGestureR
         return 44.0
     }
     
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    if let text = bioTextField.text {
+            let newLength = text.characters.count + string.characters.count - range.length
+            if (newLength > MAX_LENGTH) {
+                canDoAction = false
+                txtBioHint.text = "Username cannot be more than \(MAX_LENGTH) characters!"
+                txtBioHint.textColor = UIColor.red
+            } else {
+                canDoAction = true
+                txtBioHint.text = ""
+            }
+        }
+        
+        return true
+    }
+    
     func didTapOnDoneButton() {
         self.hud = MBProgressHUD.showAdded(to: self.view, animated: true)
         self.hud.mode = .indeterminate
@@ -60,16 +84,7 @@ class IGSettingAccountBioTableViewController: UITableViewController , UIGestureR
                 DispatchQueue.main.async {
                     switch protoResponse {
                     case let userProfileSetBioResponse as IGPUserProfileSetBioResponse:
-                        let bio = IGUserProfileSetBioRequest.Handler.interpret(response: userProfileSetBioResponse)
-                        
-                        let realm = try! Realm()
-                        try! realm.write {
-                            let predicate = NSPredicate(format: "id = %lld", IGAppManager.sharedManager.userID()!)
-                            if let userRegister = realm.objects(IGRegisteredUser.self).filter(predicate).first {
-                                userRegister.bio = bio
-                            }
-                        }
-                        
+                        IGUserProfileSetBioRequest.Handler.interpret(response: userProfileSetBioResponse)
                         if self.navigationController is IGNavigationController {
                             _ = self.navigationController?.popViewController(animated: true)
                         }

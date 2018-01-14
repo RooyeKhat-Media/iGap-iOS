@@ -277,6 +277,12 @@ let protoClassesLookupTable: [Int: (proto: ResponseMessage.Type, reponseHandler:
             IGClientJoinByUsernameRequest.Handler.self      as IGRequest.Handler.Type),
     30613: (IGPClientCountRoomHistoryResponse.self          as ResponseMessage.Type,
             IGClientCountRoomHistoryRequest.Handler.self    as IGRequest.Handler.Type),
+    30614: (IGPClientMuteRoomResponse.self                  as ResponseMessage.Type,
+            IGClientMuteRoomRequest.Handler.self            as IGRequest.Handler.Type),
+    30615: (IGPClientPinRoomResponse.self                   as ResponseMessage.Type,
+            IGClientPinRoomRequest.Handler.self             as IGRequest.Handler.Type),
+    30616: (IGPClientRoomReportResponse.self                as ResponseMessage.Type,
+            IGClientRoomReportRequest.Handler.self          as IGRequest.Handler.Type),
 
     //File: 307xx
     30700: (IGPFileUploadOptionResponse.self                as ResponseMessage.Type,
