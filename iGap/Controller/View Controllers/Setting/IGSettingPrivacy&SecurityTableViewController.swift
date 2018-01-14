@@ -21,6 +21,7 @@ class IGSettingPrivacy_SecurityTableViewController: UITableViewController, UIGes
     @IBOutlet weak var numberOfBlockedContacts: UILabel!
     @IBOutlet weak var whoCanSeeLastSeenLabel: UILabel!
     @IBOutlet weak var whoCanAddingToGroupLabel: UILabel!
+    @IBOutlet weak var whoCanCallMe: UILabel!
     
     
     var selectedIndexPath : IndexPath!
@@ -34,6 +35,7 @@ class IGSettingPrivacy_SecurityTableViewController: UITableViewController, UIGes
     var lastSeenUserPrivacy: IGPrivacyLevel?
     var groupInviteUserPrivacy: IGPrivacyLevel?
     var channelInviteUserPrivacy: IGPrivacyLevel?
+    var callPrivacy: IGPrivacyLevel?
     var twoStepVerification: IGTwoStepVerification?
     
     override func viewDidLoad() {
@@ -150,70 +152,29 @@ class IGSettingPrivacy_SecurityTableViewController: UITableViewController, UIGes
                 
             }
         }
+        
+        if let callPrivacy = userPrivacy?.voiceCalling {
+            self.callPrivacy = callPrivacy
+            switch callPrivacy {
+            case .allowAll:
+                whoCanCallMe.text = "Everybody"
+                break
+            case .allowContacts:
+                whoCanCallMe.text = "My Contacts"
+                break
+            case .denyAll:
+                whoCanCallMe.text = "Nobody"
+                break
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         self.tableView.isUserInteractionEnabled = true
-        fetchBlockedContactsFromServer()
         numberOfBlockedContacts.text = "\(blockedUsers.count) Contact "
-        if let avatarPrivacy = userPrivacy?.avatar {
-            avatarUserPrivacy = avatarPrivacy
-            switch  avatarPrivacy{
-            case .allowAll:
-                whoCanSeeProfilePhotoLabel.text = "Everybody"
-                break
-            case .allowContacts:
-                whoCanSeeProfilePhotoLabel.text = "My Contacts"
-                break
-            case .denyAll:
-                whoCanSeeProfilePhotoLabel.text = "Nobody"
-                break
-            }
-        }
-        if let userStatePrivacy = userPrivacy?.userStatus {
-            lastSeenUserPrivacy = userStatePrivacy
-            switch userStatePrivacy {
-            case .allowAll:
-                whoCanSeeLastSeenLabel.text = "Everybody"
-                break
-            case .allowContacts:
-                whoCanSeeLastSeenLabel.text = "My Contacts"
-                break
-            case .denyAll:
-                whoCanSeeLastSeenLabel.text = "Nobody"
-                break
-            }
-        }
-        if let channelInvitePrivacy = userPrivacy?.channelInvite {
-            channelInviteUserPrivacy = channelInvitePrivacy
-            switch channelInvitePrivacy {
-                
-            case .allowAll:
-                whoCanAddingMeToChannelLabel.text = "Everybody"
-                break
-            case .allowContacts:
-                whoCanAddingMeToChannelLabel.text = "My Contacts"
-                break
-            case .denyAll:
-                whoCanAddingMeToChannelLabel.text = "Nobody"
-                break
-            }
-        }
-        if let groupInvitePrivacy = userPrivacy?.groupInvite {
-            groupInviteUserPrivacy = groupInvitePrivacy
-            switch groupInvitePrivacy {
-            case .allowAll:
-                whoCanAddingToGroupLabel.text = "Everybody"
-                break
-            case .allowContacts:
-                whoCanAddingToGroupLabel.text = "My Contacts"
-                break
-            case .denyAll:
-                whoCanAddingToGroupLabel.text = "Nobody"
-                break
-                
-            }
-        }
+        
+        fetchBlockedContactsFromServer()
+        showPrivacyInfo()
     }    
     
     func fetchBlockedContactsFromServer(){
@@ -250,7 +211,7 @@ class IGSettingPrivacy_SecurityTableViewController: UITableViewController, UIGes
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return 5
+            return 6
         case 1:
             return 2
         default:
@@ -329,6 +290,7 @@ class IGSettingPrivacy_SecurityTableViewController: UITableViewController, UIGes
                     whoCanSeeYourPrivacyAndSetting.mode = "Profile Photo"
                     whoCanSeeYourPrivacyAndSetting.privacyType = .avatar
                     whoCanSeeYourPrivacyAndSetting.privacyLevel = avatarUserPrivacy
+                    break
                     
                 case 2:
                     whoCanSeeYourPrivacyAndSetting.headerText = "Who can see my Last Seen"
@@ -336,18 +298,31 @@ class IGSettingPrivacy_SecurityTableViewController: UITableViewController, UIGes
                     whoCanSeeYourPrivacyAndSetting.mode = "Last Seen"
                     whoCanSeeYourPrivacyAndSetting.privacyType = .userStatus
                     whoCanSeeYourPrivacyAndSetting.privacyLevel = lastSeenUserPrivacy
+                    break
+                    
                 case 3:
                     whoCanSeeYourPrivacyAndSetting.headerText = "Who can adding me to Groups"
                     whoCanSeeYourPrivacyAndSetting.mode = "Adding me to Groups"
                     whoCanSeeYourPrivacyAndSetting.privacyType = .groupInvite
                     whoCanSeeYourPrivacyAndSetting.privacyLevel = groupInviteUserPrivacy
+                    break
+                    
                 case 4:
                     whoCanSeeYourPrivacyAndSetting.headerText = "Who can adding me to Channels"
                     whoCanSeeYourPrivacyAndSetting.mode = "Adding me to Channels"
                     whoCanSeeYourPrivacyAndSetting.privacyType = .channelInvite
                     whoCanSeeYourPrivacyAndSetting.privacyLevel = channelInviteUserPrivacy
+                    break
+                    
+                case 5:
+                    whoCanSeeYourPrivacyAndSetting.headerText = "Who can call me"
+                    whoCanSeeYourPrivacyAndSetting.mode = "Call me"
+                    whoCanSeeYourPrivacyAndSetting.privacyType = .voiceCalling
+                    whoCanSeeYourPrivacyAndSetting.privacyLevel = callPrivacy
+                    break
+                    
                 default:
-                break
+                    break
                 }
             }
         } else if let destinationVC = segue.destination as? IGSettingPrivacyAndSecurityTwoStepVerificationVerifyPasswordTableViewController {

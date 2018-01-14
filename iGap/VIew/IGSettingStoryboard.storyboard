@@ -2307,8 +2307,8 @@ To proceed, confirm that your new number can recieve SMS or calls and tap Next t
                                             <rect key="frame" x="0.0" y="0.0" width="376" height="43.666666666666664"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="iGap Home" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="knh-E9-ZXD" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="13" width="86" height="16"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="iGap Official Home" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="knh-E9-ZXD" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
+                                                    <rect key="frame" x="27" y="13" width="143.33333333333334" height="16"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -2328,17 +2328,17 @@ To proceed, confirm that your new number can recieve SMS or calls and tap Next t
                                             <rect key="frame" x="0.0" y="0.0" width="376" height="43.666666666666664"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="iGap Blog" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hl8-tc-JGI" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="13" width="74" height="16"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="iGap Official Blog" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hl8-tc-JGI" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
+                                                    <rect key="frame" x="27" y="13" width="132" height="20"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="hl8-tc-JGI" firstAttribute="leading" secondItem="USo-b0-HlV" secondAttribute="leadingMargin" constant="7" id="FWt-tK-bz6"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="hl8-tc-JGI" secondAttribute="bottom" constant="4" id="atk-Ck-bwR"/>
-                                                <constraint firstItem="hl8-tc-JGI" firstAttribute="top" secondItem="USo-b0-HlV" secondAttribute="topMargin" constant="2" id="tjM-Jw-SVr"/>
+                                                <constraint firstItem="hl8-tc-JGI" firstAttribute="bottom" secondItem="USo-b0-HlV" secondAttribute="bottomMargin" id="4bu-CV-f6a"/>
+                                                <constraint firstItem="hl8-tc-JGI" firstAttribute="top" secondItem="USo-b0-HlV" secondAttribute="topMargin" constant="2" id="O7d-R6-HJa"/>
+                                                <constraint firstItem="hl8-tc-JGI" firstAttribute="leading" secondItem="USo-b0-HlV" secondAttribute="leadingMargin" constant="7" id="dCn-5H-5BC"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -2349,17 +2349,19 @@ To proceed, confirm that your new number can recieve SMS or calls and tap Next t
                                             <rect key="frame" x="0.0" y="0.0" width="376" height="43.666666666666664"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Support " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cvf-x2-sNf" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="13" width="67" height="16"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Support Request" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cvf-x2-sNf" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
+                                                    <rect key="frame" x="27" y="13" width="129.33333333333334" height="20"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="20" id="3Aj-iV-b4P"/>
+                                                    </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="bottomMargin" secondItem="Cvf-x2-sNf" secondAttribute="bottom" constant="4" id="Dkr-IQ-tqf"/>
-                                                <constraint firstItem="Cvf-x2-sNf" firstAttribute="leading" secondItem="Bhy-AU-CeT" secondAttribute="leadingMargin" constant="7" id="Fx1-aQ-rCw"/>
-                                                <constraint firstItem="Cvf-x2-sNf" firstAttribute="top" secondItem="Bhy-AU-CeT" secondAttribute="topMargin" constant="2" id="bfU-b0-WgI"/>
+                                                <constraint firstItem="Cvf-x2-sNf" firstAttribute="leading" secondItem="Bhy-AU-CeT" secondAttribute="leadingMargin" constant="7" id="469-lE-e8s"/>
+                                                <constraint firstItem="Cvf-x2-sNf" firstAttribute="top" secondItem="Bhy-AU-CeT" secondAttribute="topMargin" constant="2" id="61A-Xk-rhL"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -2895,8 +2897,8 @@ Please wait 0:59</string>
                                             <rect key="frame" x="0.0" y="0.0" width="376" height="43.666666666666664"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Voice call" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IVx-Ob-UJs" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="13" width="73" height="15.333333333333336"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Call" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IVx-Ob-UJs" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
+                                                    <rect key="frame" x="27" y="13" width="28.666666666666671" height="15.333333333333336"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -3047,6 +3049,7 @@ Please wait 0:59</string>
                         <outlet property="numberOfBlockedContacts" destination="fhw-QB-h72" id="1gI-GH-brW"/>
                         <outlet property="whoCanAddingMeToChannelLabel" destination="jLc-TO-d0d" id="4Cb-Yz-gIY"/>
                         <outlet property="whoCanAddingToGroupLabel" destination="QQs-cY-Zgo" id="PR7-EJ-wce"/>
+                        <outlet property="whoCanCallMe" destination="JMX-Ih-EI8" id="Lfe-2B-IEQ"/>
                         <outlet property="whoCanSeeLastSeenLabel" destination="JIi-Ye-zob" id="oBs-Aa-KTm"/>
                         <outlet property="whoCanSeeProfilePhotoLabel" destination="f5t-hj-6yn" id="8yJ-v9-lrz"/>
                         <segue destination="dYd-F8-aEP" kind="show" identifier="GoToBlockListPageFromPrivacyAndSecurity" id="7wc-J4-g56"/>
@@ -5604,7 +5607,7 @@ Afg
     <inferredMetricsTieBreakers>
         <segue reference="Pqu-UA-ZWb"/>
         <segue reference="v4b-3a-R6D"/>
-        <segue reference="P15-0g-TjZ"/>
+        <segue reference="Qum-5d-uYe"/>
         <segue reference="Xzv-Yc-EAf"/>
         <segue reference="7wc-J4-g56"/>
     </inferredMetricsTieBreakers>
