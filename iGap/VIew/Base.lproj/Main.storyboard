@@ -1094,6 +1094,7 @@ Please wait 0:59</string>
                         <segue destination="FAw-oC-UEn" kind="show" identifier="showChannelinfo" id="rLo-Q7-ujr"/>
                         <segue destination="IMI-O0-WbA" kind="show" identifier="showGroupInfo" id="EiK-dt-3cR"/>
                         <segue destination="kXl-mH-2Sj" kind="presentation" identifier="showForwardMessageTable" id="Paj-YA-riE"/>
+                        <segue destination="u0S-Sh-Wik" kind="show" identifier="showReportPage" id="jRj-hY-oEr"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="43J-bV-cLm" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -5041,7 +5042,7 @@ Cg
         <image name="IG_Tabbar_Recent_On" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="l1W-zY-RFK"/>
+        <segue reference="jRj-hY-oEr"/>
         <segue reference="Z1Q-fW-ByF"/>
         <segue reference="k1z-sz-mLi"/>
         <segue reference="xjE-gJ-o8r"/>

@@ -17,6 +17,7 @@ class IGReport: UITableViewController , UIGestureRecognizerDelegate {
     
     @IBOutlet weak var txtReportDescription: UITextView!
     var room: IGRoom?
+    var messageId: Int64 = 0
     var hud = MBProgressHUD()
     var placeholderLabel : UILabel!
     var myRole : IGChannelMember.IGRole!
@@ -43,10 +44,15 @@ class IGReport: UITableViewController , UIGestureRecognizerDelegate {
         }
         
         placeholderLabel = UILabel()
-        if room?.type == .chat {
-            placeholderLabel.text = "Enter some text to report user ..."
+        
+        if messageId != 0 {
+            placeholderLabel.text = "Enter some text to report message ..."
         } else {
-            placeholderLabel.text = "Enter some text to report room ..."
+            if room?.type == .chat {
+                placeholderLabel.text = "Enter some text to report user ..."
+            } else {
+                placeholderLabel.text = "Enter some text to report room ..."
+            }
         }
         
         placeholderLabel.font = UIFont.italicSystemFont(ofSize: (txtReportDescription.font?.pointSize)!)
@@ -69,7 +75,7 @@ class IGReport: UITableViewController , UIGestureRecognizerDelegate {
     func reportRoom(roomId: Int64, reason: IGPClientRoomReport.IGPReason) {
         self.hud = MBProgressHUD.showAdded(to: self.view.superview!, animated: true)
         self.hud.mode = .indeterminate
-        IGClientRoomReportRequest.Generator.generate(roomId: roomId, reason: reason, description: self.txtReportDescription.text).success({ (protoResponse) in
+        IGClientRoomReportRequest.Generator.generate(roomId: roomId, messageId: self.messageId, reason: reason, description: self.txtReportDescription.text).success({ (protoResponse) in
             DispatchQueue.main.async {
                 switch protoResponse {
                 case _ as IGPClientRoomReportResponse:
@@ -188,7 +194,7 @@ class IGReport: UITableViewController , UIGestureRecognizerDelegate {
     func report(room: IGRoom){
         let roomType = room.type
         
-        if roomType == .chat {
+        if roomType == .chat && messageId == 0 {
             reportUser(userId: (room.chatRoom?.peer?.id)!, reason: IGPUserReport.IGPReason.other)
         } else {
             reportRoom(roomId: room.id, reason: IGPClientRoomReport.IGPReason.other)

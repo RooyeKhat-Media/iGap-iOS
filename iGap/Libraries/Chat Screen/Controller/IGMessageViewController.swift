@@ -95,6 +95,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
     var initialLongTapOnRecordButtonPosition: CGPoint?
     var collectionViewTopInsetOffset: CGFloat = 0.0
     var connectionStatus : IGAppManager.ConnectionStatus?
+    var reportMessageId: Int64?
     
     
     //var messages = [IGRoomMessage]()
@@ -1213,6 +1214,96 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
         self.setSendAndRecordButtonStates()
     }
     
+    func reportRoom(roomId: Int64, messageId: Int64, reason: IGPClientRoomReport.IGPReason) {
+        self.hud = MBProgressHUD.showAdded(to: self.view.superview!, animated: true)
+        self.hud.mode = .indeterminate
+        IGClientRoomReportRequest.Generator.generate(roomId: roomId, messageId: messageId, reason: reason).success({ (protoResponse) in
+            DispatchQueue.main.async {
+                switch protoResponse {
+                case _ as IGPClientRoomReportResponse:
+                    let alert = UIAlertController(title: "Success", message: "Your report has been successfully submitted", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: nil)
+                default:
+                    break
+                }
+                self.hud.hide(animated: true)
+            }
+        }).error({ (errorCode , waitTime) in
+            DispatchQueue.main.async {
+                switch errorCode {
+                case .timeout:
+                    let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: nil)
+                    break
+                    
+                case .clientRoomReportReportedBefore:
+                    let alert = UIAlertController(title: "Error", message: "This Room Reported Before", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: nil)
+                    break
+                    
+                case .clientRoomReportForbidden:
+                    let alert = UIAlertController(title: "Error", message: "Room Report Fobidden", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: nil)
+                    break
+                    
+                default:
+                    break
+                }
+                self.hud.hide(animated: true)
+            }
+        }).send()
+    }
+    
+    func report(room: IGRoom, message: IGRoomMessage){
+        let roomId = room.id
+        let messageId = message.id
+        
+        let alertC = UIAlertController(title: title, message: nil, preferredStyle: .actionSheet)
+        let abuse = UIAlertAction(title: "Abuse", style: .default, handler: { (action) in
+            self.reportRoom(roomId: roomId, messageId: messageId, reason: IGPClientRoomReport.IGPReason.abuse)
+        })
+        
+        let spam = UIAlertAction(title: "Spam", style: .default, handler: { (action) in
+            self.reportRoom(roomId: roomId, messageId: messageId, reason: IGPClientRoomReport.IGPReason.spam)
+        })
+        
+        let violence = UIAlertAction(title: "Violence", style: .default, handler: { (action) in
+            self.reportRoom(roomId: roomId, messageId: messageId, reason: IGPClientRoomReport.IGPReason.violence)
+        })
+        
+        let pornography = UIAlertAction(title: "Pornography", style: .default, handler: { (action) in
+            self.reportRoom(roomId: roomId, messageId: messageId, reason: IGPClientRoomReport.IGPReason.pornography)
+        })
+        
+        let other = UIAlertAction(title: "Other ", style: .default, handler: { (action) in
+            self.reportMessageId = messageId
+            self.performSegue(withIdentifier: "showReportPage", sender: self)
+        })
+        
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
+            
+        })
+        
+        alertC.addAction(abuse)
+        alertC.addAction(spam)
+        alertC.addAction(violence)
+        alertC.addAction(pornography)
+        alertC.addAction(other)
+        alertC.addAction(cancel)
+        
+        self.present(alertC, animated: true, completion: {
+            
+        })
+    }
+    
     
     fileprivate func deleteMessage(_ message: IGRoomMessage, both: Bool = false) {
         switch room!.type {
@@ -1279,21 +1370,22 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
             destinationVC.user = self.selectedUserToSeeTheirInfo
             destinationVC.previousRoomId = room?.id
             destinationVC.room = room
-        }
-        if segue.identifier == "showChannelinfo" {
+        } else if segue.identifier == "showChannelinfo" {
             let destinationVC = segue.destination as! IGChannelInfoTableViewController
             destinationVC.selectedChannel = selectedChannelToSeeTheirInfo
             destinationVC.room = room
-        }
-        if segue.identifier == "showGroupInfo" {
+        } else if segue.identifier == "showGroupInfo" {
             let destinationTv = segue.destination as! IGGroupInfoTableViewController
             destinationTv.selectedGroup = selectedGroupToSeeTheirInfo
             destinationTv.room = room
-        }
-        if segue.identifier == "showForwardMessageTable" {
+        } else if segue.identifier == "showForwardMessageTable" {
             let navigationController = segue.destination as! IGNavigationController
             let destinationTv = navigationController.topViewController as! IGForwardMessageTableViewController
             destinationTv.delegate = self
+        } else if segue.identifier == "showReportPage" {
+            let destinationTv = segue.destination as! IGReport
+            destinationTv.room = self.room
+            destinationTv.messageId = self.reportMessageId!
         }
     }
  
@@ -1691,6 +1783,11 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
             self.editMessage(cellMessage)
             }
         })
+        
+        let report = UIAlertAction(title: "Report", style: .default, handler: { (action) in
+            self.report(room: self.room!, message: cellMessage)
+        })
+        
         let more = UIAlertAction(title: "More", style: .default, handler: { (action) in
             for visibleCell in self.collectionView.visibleCells {
                 let aCell = visibleCell as! IGMessageGeneralCollectionViewCell
@@ -1729,6 +1826,7 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
             alertC.addAction(edit)
         }
         
+        alertC.addAction(report)
         //More (Temporary Disabled)
         //alertC.addAction(more)
         
