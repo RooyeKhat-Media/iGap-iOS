@@ -65,7 +65,7 @@ class IGSettingAccountBioTableViewController: UITableViewController , UIGestureR
             let newLength = text.characters.count + string.characters.count - range.length
             if (newLength > MAX_LENGTH) {
                 canDoAction = false
-                txtBioHint.text = "Username cannot be more than \(MAX_LENGTH) characters!"
+                txtBioHint.text = "Bio cannot be more than \(MAX_LENGTH) characters!"
                 txtBioHint.textColor = UIColor.red
             } else {
                 canDoAction = true
