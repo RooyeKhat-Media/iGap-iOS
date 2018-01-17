@@ -452,7 +452,8 @@ class IGChannelInfoTableViewController: UITableViewController , UIGestureRecogni
             (alert: UIAlertAction!) -> Void in
             print("Cancelled")
         })
-        if myRole == .owner || myRole == .admin {
+        
+        if self.avatars.count > 0  && (myRole == .owner || myRole == .admin) {
             optionMenu.addAction(deleteAction)
         }
         optionMenu.addAction(ChoosePhoto)

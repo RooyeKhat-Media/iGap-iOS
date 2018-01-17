@@ -125,7 +125,7 @@ class IGChatsTableViewController: UITableViewController {
         cell.setRoom(room: rooms![indexPath.row])
         
         cell.rightButtons =
-            [MGSwipeButton(title: "Delete", backgroundColor: UIColor(red: 252.0/255.0, green: 23.0/255.0, blue: 22.0/255.0, alpha: 1), callback: { (sender: MGSwipeTableCell!) -> Bool in
+            [MGSwipeButton(title: "Options...", backgroundColor: UIColor(red: 252.0/255.0, green: 23.0/255.0, blue: 22.0/255.0, alpha: 1), callback: { (sender: MGSwipeTableCell!) -> Bool in
                 let room = cell.room!
                 //let room = self.rooms![indexPath.row]
                 let title = room.title != nil ? room.title! : "Delete"

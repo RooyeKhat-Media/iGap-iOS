@@ -205,7 +205,7 @@ class IGGroupInfoTableViewController: UITableViewController , UIGestureRecognize
             print("Cancelled")
         })
         
-        if myRole == .owner || myRole == .admin {
+        if self.avatars.count > 0  && (myRole == .owner || myRole == .admin) {
             optionMenu.addAction(deleteAction)
         }
         optionMenu.addAction(ChoosePhoto)
