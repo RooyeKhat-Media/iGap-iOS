@@ -19,6 +19,10 @@ class IGRoom: Object {
         case channel
     }
     
+    enum IGRoomMute: Int {
+        case unmute = 100
+        case mute = 101
+    }
     
     //properties
     @objc dynamic var id:                 Int64                   = -1
@@ -27,8 +31,8 @@ class IGRoom: Object {
     @objc dynamic var initilas:           String?
     @objc dynamic var colorString:        String                  = "FFFFFF"
     @objc dynamic var unreadCount:        Int32                   = 0
-    @objc dynamic var isReadOnly:     	Bool                    = false
-    @objc dynamic var isParticipant:  	Bool                    = false
+    @objc dynamic var isReadOnly:     	  Bool                    = false
+    @objc dynamic var isParticipant:  	  Bool                    = false
     @objc dynamic var draft:              IGRoomDraft?
     @objc dynamic var chatRoom:           IGChatRoom?
     @objc dynamic var groupRoom:          IGGroupRoom?
@@ -36,6 +40,7 @@ class IGRoom: Object {
     @objc dynamic var lastMessage:        IGRoomMessage?
     @objc dynamic var sortimgTimestamp:   Double                  = 0.0
     @objc dynamic var clearIdString:      String?
+    @objc dynamic var muteRoom:           IGRoomMute.RawValue     = IGRoomMute.unmute.rawValue
     
     //ignored properties
     var currenctActionsByUsers = Dictionary<String, (IGRegisteredUser, IGClientAction)>() //actorId, action
@@ -51,6 +56,19 @@ class IGRoom: Object {
             typeRaw = newValue.rawValue
         }
     }
+    
+    var mute: IGRoomMute {
+        get {
+            if let muteState = IGRoomMute(rawValue: muteRoom) {
+                return muteState
+            }
+            return .unmute
+        }
+        set {
+            muteRoom = newValue.rawValue
+        }
+    }
+    
     var color: UIColor {
         get {
             return UIColor(hexString: colorString)
@@ -94,6 +112,16 @@ class IGRoom: Object {
         default:
             break
         }
+        
+        switch igpRoom.igpRoomMute {
+        case .mute:
+            self.mute = .mute
+        case .unmute:
+            self.mute = .unmute
+        default:
+            break
+        }
+        
         self.title = igpRoom.igpTitle
         self.initilas = igpRoom.igpInitials
         self.colorString = igpRoom.igpColor

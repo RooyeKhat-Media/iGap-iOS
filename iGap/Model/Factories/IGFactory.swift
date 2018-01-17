@@ -1632,6 +1632,29 @@ class IGFactory: NSObject {
         self.performNextFactoryTaskIfPossible()
     }
     
+    func muteRoom(roomId: Int64, roomMute: IGRoom.IGRoomMute) {
+        let task = IGFactoryTask()
+        task.task = {
+            IGDatabaseManager.shared.perfrmOnDatabaseThread {
+                let predicate = NSPredicate(format: "id = %lld", roomId)
+                if let roomInDb = IGDatabaseManager.shared.realm.objects(IGRoom.self).filter(predicate).first {
+                    try! IGDatabaseManager.shared.realm.write {
+                        roomInDb.mute = roomMute
+                    }
+                }
+                IGFactory.shared.performInFactoryQueue {
+                    task.success!()
+                }
+            }
+        }
+        task.success {
+            self.removeTaskFromQueueAndPerformNext(task)
+            }.error {
+                self.removeTaskFromQueueAndPerformNext(task)
+            }.addToQueue()
+        self.performNextFactoryTaskIfPossible()
+    }
+    
     func editChannelRooms(roomID : Int64 , roomName: String , roomDescription : String ) {
         let task = IGFactoryTask()
         task.task = {

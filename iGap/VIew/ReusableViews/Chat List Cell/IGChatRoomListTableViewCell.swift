@@ -38,6 +38,7 @@ class IGChatRoomListTableViewCell: MGSwipeTableCell {
     @IBOutlet weak var lastMessageStatusContainerViewWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var roomTypeIndicatorImageView: UIImageView!
     @IBOutlet weak var roomTitleLabelLeftConstraint: NSLayoutConstraint!
+    @IBOutlet weak var imgMute: UIImageView!
     
     let currentLoggedInUserID = IGAppManager.sharedManager.userID()
     
@@ -121,7 +122,7 @@ class IGChatRoomListTableViewCell: MGSwipeTableCell {
 
     
     func initialConfiguration() {
-        lastMessageStatusContainerView.backgroundColor = UIColor.red//organizationalColor()
+        lastMessageStatusContainerView.backgroundColor = UIColor.red
         avatarView.clean()
         nameLabel.text = ""
         lastMessageLabel.text = ""
@@ -151,6 +152,15 @@ class IGChatRoomListTableViewCell: MGSwipeTableCell {
             roomTypeIndicatorImageView.image = UIImage(named: "IG_Chat_List_Type_Channel")
             roomTitleLabelLeftConstraint.constant = 36
         }
+
+        if room.mute == IGRoom.IGRoomMute.mute {
+            lastMessageStatusContainerView.backgroundColor = UIColor.gray
+            imgMute.image = UIImage(named: "IG_Chat_List_Mute")
+            imgMute.isHidden = false
+        } else {
+            lastMessageStatusContainerView.backgroundColor = UIColor.red
+            imgMute.isHidden = true
+        }
         
         if room.unreadCount > 0 {
             nameLabel.font = UIFont.igFont(ofSize: 15.0, weight: .bold)
@@ -161,6 +171,7 @@ class IGChatRoomListTableViewCell: MGSwipeTableCell {
             
             timeLabel.font = UIFont.igFont(ofSize: 12.0, weight: .regular)
             timeLabel.textColor = UIColor.black
+            
         } else {
             nameLabel.font = UIFont.igFont(ofSize: 15.0, weight: .regular)
             nameLabel.textColor = UIColor(red: 38.0/255.0, green: 38.0/255.0, blue: 38.0/255.0, alpha: 1.0)

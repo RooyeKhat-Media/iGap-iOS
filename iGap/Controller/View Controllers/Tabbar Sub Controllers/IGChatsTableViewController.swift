@@ -157,6 +157,22 @@ class IGChatsTableViewController: UITableViewController {
                     
                 })
                 
+                var muteTitle = "Mute"
+                if room.mute == IGRoom.IGRoomMute.mute {
+                    muteTitle = "UnMute"
+                }
+                let mute = UIAlertAction(title: muteTitle, style: .default, handler: { (action) in
+                    if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
+                        let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                        
+                    } else {
+                        self.muteRoom(room: room)
+                    }
+                })
+                
                 let report = UIAlertAction(title: "Report", style: .default, handler: { (action) in
                     if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
                         let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
@@ -236,7 +252,8 @@ class IGChatsTableViewController: UITableViewController {
                     alertC.addAction(clear)
                 }
                 
-                 alertC.addAction(report)
+                alertC.addAction(mute)
+                alertC.addAction(report)
                 
                 if room.chatRoom != nil {
                     alertC.addAction(remove)
@@ -359,6 +376,42 @@ extension IGChatsTableViewController {
                 switch protoResponse {
                 case let deleteGroupMessageHistory as IGPGroupClearMessageResponse:
                     IGGroupClearMessageRequest.Handler.interpret(response: deleteGroupMessageHistory)
+                default:
+                    break
+                }
+                self.hud.hide(animated: true)
+            }
+        }).error({ (errorCode , waitTime) in
+            DispatchQueue.main.async {
+                switch errorCode {
+                case .timeout:
+                    let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: nil)
+                default:
+                    break
+                }
+                self.hud.hide(animated: true)
+            }
+        }).send()
+    }
+    
+    func muteRoom(room: IGRoom) {
+        
+        let roomId = room.id
+        var roomMute = IGRoom.IGRoomMute.mute
+        if room.mute == IGRoom.IGRoomMute.mute {
+            roomMute = .unmute
+        }
+        
+        self.hud = MBProgressHUD.showAdded(to: self.view.superview!, animated: true)
+        self.hud.mode = .indeterminate
+        IGClientMuteRoomRequest.Generator.generate(roomId: roomId, roomMute: roomMute).success({ (protoResponse) in
+            DispatchQueue.main.async {
+                switch protoResponse {
+                case let muteRoomResponse as IGPClientMuteRoomResponse:
+                    IGClientMuteRoomRequest.Handler.interpret(response: muteRoomResponse)
                 default:
                     break
                 }

@@ -198,9 +198,9 @@ class IGNavigationItem: UINavigationItem {
     }
     
     private func addComopseButton() {
-        let composeButtonFrame = CGRect(x: 20, y: 5, width: 31, height:31)
+        let composeButtonFrame = CGRect(x: 20, y: 5, width: 25, height: 25)
         let composeButtonImageView = UIImageView(frame: composeButtonFrame)
-        composeButtonImageView.image = UIImage(named:"IG_Nav_Bar_Compose")
+        composeButtonImageView.image = UIImage(named:"IG_Nav_Bar_Plus")
         composeButtonImageView.tintColor = UIColor.organizationalColor()
         rightViewContainer!.addSubview(composeButtonImageView)
     }

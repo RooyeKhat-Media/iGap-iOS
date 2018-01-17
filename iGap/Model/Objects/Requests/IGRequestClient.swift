@@ -284,20 +284,31 @@ class IGClientCountRoomHistoryRequest: IGRequest {
 
 class IGClientMuteRoomRequest: IGRequest {
     class Generator: IGRequest.Generator {
-        class func generate(roomId: Int64, roomMute: IGPRoomMute) -> IGRequestWrapper {
+        class func generate(roomId: Int64, roomMute: IGRoom.IGRoomMute) -> IGRequestWrapper {
+            var mute: IGPRoomMute = IGPRoomMute.unmute
+            if roomMute == IGRoom.IGRoomMute.mute {
+                mute = IGPRoomMute.mute
+            }
+
             var clientMuteRoom = IGPClientMuteRoom()
             clientMuteRoom.igpRoomID = roomId
-            clientMuteRoom.igpRoomMute = roomMute
+            clientMuteRoom.igpRoomMute = mute
             return IGRequestWrapper(message: clientMuteRoom, actionID: 614)
         }
     }
     class Handler: IGRequest.Handler {
         class func interpret(response responseProtoMessage: IGPClientMuteRoomResponse) {
-            
+            var muteState: IGRoom.IGRoomMute = IGRoom.IGRoomMute.unmute
+            if responseProtoMessage.igpRoomMute == IGPRoomMute.mute {
+                muteState = .mute
+            }
+            IGFactory.shared.muteRoom(roomId: responseProtoMessage.igpRoomID, roomMute: muteState)
         }
         
         override class func handlePush(responseProtoMessage: Message) {
-            
+            if let message = responseProtoMessage as? IGPClientMuteRoomResponse {
+                self.interpret(response: message)
+            }
         }
     }
     
