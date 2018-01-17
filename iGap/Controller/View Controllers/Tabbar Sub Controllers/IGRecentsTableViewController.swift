@@ -121,7 +121,8 @@ class IGRecentsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.rooms = try! Realm().objects(IGRoom.self).filter("isParticipant = 1").sorted(byKeyPath: "sortimgTimestamp", ascending: false)
+        let sortProperties = [SortDescriptor(keyPath: "pinId", ascending: false), SortDescriptor(keyPath: "sortimgTimestamp", ascending: false)]
+        self.rooms = try! Realm().objects(IGRoom.self).filter("isParticipant = 1").sorted(by: sortProperties)
         
         self.tableView.register(IGChatRoomListTableViewCell.nib(), forCellReuseIdentifier: IGChatRoomListTableViewCell.cellReuseIdentifier())
         
@@ -407,6 +408,22 @@ class IGRecentsTableViewController: UITableViewController {
                     }
                 })
                 
+                var pinTitle = "Pin"
+                if room.pinId > 0 {
+                    pinTitle = "UnPin"
+                }
+                let pin = UIAlertAction(title: pinTitle, style: .default, handler: { (action) in
+                    if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
+                        let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                        
+                    } else {
+                        self.pinRoom(room: room)
+                    }
+                })
+                
                 let report = UIAlertAction(title: "Report", style: .default, handler: { (action) in
                     if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
                         let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
@@ -497,6 +514,7 @@ class IGRecentsTableViewController: UITableViewController {
                     alertC.addAction(clear)
                 }
                 
+                alertC.addAction(pin)
                 alertC.addAction(mute)
                 alertC.addAction(report)
                 
@@ -737,6 +755,43 @@ extension IGRecentsTableViewController {
                 switch protoResponse {
                 case let muteRoomResponse as IGPClientMuteRoomResponse:
                     IGClientMuteRoomRequest.Handler.interpret(response: muteRoomResponse)
+                default:
+                    break
+                }
+                self.hud.hide(animated: true)
+            }
+        }).error({ (errorCode , waitTime) in
+            DispatchQueue.main.async {
+                switch errorCode {
+                case .timeout:
+                    let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: nil)
+                default:
+                    break
+                }
+                self.hud.hide(animated: true)
+            }
+        }).send()
+    }
+    
+    func pinRoom(room: IGRoom) {
+        let roomId = room.id
+        var pin = true
+        if room.pinId > 0 {
+            pin = false
+        }
+        
+        self.hud = MBProgressHUD.showAdded(to: self.view.superview!, animated: true)
+        self.hud.mode = .indeterminate
+        IGClientPinRoomRequest.Generator.generate(roomId: roomId, pin: pin).success({ (protoResponse) in
+            DispatchQueue.main.async {
+                switch protoResponse {
+                case let pinRoomResponse as IGPClientPinRoomResponse:
+                    IGClientPinRoomRequest.Handler.interpret(response: pinRoomResponse)
+                    break
+                    
                 default:
                     break
                 }

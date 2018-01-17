@@ -316,19 +316,22 @@ class IGClientMuteRoomRequest: IGRequest {
 
 class IGClientPinRoomRequest: IGRequest {
     class Generator: IGRequest.Generator {
-        class func generate(roomID: Int64) -> IGRequestWrapper {
+        class func generate(roomId: Int64, pin: Bool) -> IGRequestWrapper {
             var clientPin = IGPClientPinRoom()
-            clientPin.igpRoomID = roomID
+            clientPin.igpRoomID = roomId
+            clientPin.igpPin = pin
             return IGRequestWrapper(message: clientPin, actionID: 615)
             
         }
     }
     class Handler: IGRequest.Handler {
-        class func interpret( response responseProtoMessage : IGPClientCountRoomHistoryResponse)  {
-            
+        class func interpret( response responseProtoMessage : IGPClientPinRoomResponse)  {
+            IGFactory.shared.pinRoom(roomId: responseProtoMessage.igpRoomID, pinId: responseProtoMessage.igpPinID)
         }
         override class func handlePush(responseProtoMessage: Message) {
-            
+            if let messsage = responseProtoMessage as? IGPClientPinRoomResponse {
+                self.interpret(response: messsage)
+            }
         }
     }
     

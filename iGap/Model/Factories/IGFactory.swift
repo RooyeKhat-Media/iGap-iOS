@@ -1655,6 +1655,29 @@ class IGFactory: NSObject {
         self.performNextFactoryTaskIfPossible()
     }
     
+    func pinRoom(roomId: Int64, pinId: Int64) {
+        let task = IGFactoryTask()
+        task.task = {
+            IGDatabaseManager.shared.perfrmOnDatabaseThread {
+                let predicate = NSPredicate(format: "id = %lld", roomId)
+                if let roomInDb = IGDatabaseManager.shared.realm.objects(IGRoom.self).filter(predicate).first {
+                    try! IGDatabaseManager.shared.realm.write {
+                        roomInDb.pinId = pinId
+                    }
+                }
+                IGFactory.shared.performInFactoryQueue {
+                    task.success!()
+                }
+            }
+        }
+        task.success {
+            self.removeTaskFromQueueAndPerformNext(task)
+            }.error {
+                self.removeTaskFromQueueAndPerformNext(task)
+            }.addToQueue()
+        self.performNextFactoryTaskIfPossible()
+    }
+    
     func editChannelRooms(roomID : Int64 , roomName: String , roomDescription : String ) {
         let task = IGFactoryTask()
         task.task = {

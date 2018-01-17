@@ -41,6 +41,7 @@ class IGRoom: Object {
     @objc dynamic var sortimgTimestamp:   Double                  = 0.0
     @objc dynamic var clearIdString:      String?
     @objc dynamic var muteRoom:           IGRoomMute.RawValue     = IGRoomMute.unmute.rawValue
+    @objc dynamic var pinId:              Int64                   = 0
     
     //ignored properties
     var currenctActionsByUsers = Dictionary<String, (IGRegisteredUser, IGClientAction)>() //actorId, action
@@ -136,6 +137,8 @@ class IGRoom: Object {
                 
             }
         }
+        
+        self.pinId = igpRoom.igpPinID
         self.isReadOnly = igpRoom.igpReadOnly
         self.isParticipant = igpRoom.igpIsParticipant
         if igpRoom.hasIgpDraft{

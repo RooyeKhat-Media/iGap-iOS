@@ -32,8 +32,10 @@ class IGGroupsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let sortProperties = [SortDescriptor(keyPath: "pinId", ascending: false), SortDescriptor(keyPath: "sortimgTimestamp", ascending: false)]
         let predicate = NSPredicate(format: "typeRaw = %d AND isParticipant = 1", IGRoom.IGType.group.rawValue)
-        rooms = try! Realm().objects(IGRoom.self).filter(predicate).sorted(byKeyPath: "sortimgTimestamp", ascending: false)
+        rooms = try! Realm().objects(IGRoom.self).filter(predicate).sorted(by: sortProperties)
+        
         self.tableView.register(IGChatRoomListTableViewCell.nib(), forCellReuseIdentifier: IGChatRoomListTableViewCell.cellReuseIdentifier())
         
         self.tableView.backgroundColor = UIColor(red: 247.0/255.0, green: 247.0/255.0, blue: 247.0/255.0, alpha: 1.0)
@@ -171,6 +173,22 @@ class IGGroupsTableViewController: UITableViewController {
                     }
                 })
                 
+                var pinTitle = "Pin"
+                if room.pinId > 0 {
+                    pinTitle = "UnPin"
+                }
+                let pin = UIAlertAction(title: pinTitle, style: .default, handler: { (action) in
+                    if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
+                        let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                        
+                    } else {
+                        self.pinRoom(room: room)
+                    }
+                })
+                
                 let report = UIAlertAction(title: "Report", style: .default, handler: { (action) in
                     if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
                         let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
@@ -250,6 +268,7 @@ class IGGroupsTableViewController: UITableViewController {
                     alertC.addAction(clear)
                 }
                 
+                alertC.addAction(pin)
                 alertC.addAction(mute)
                 alertC.addAction(report)
                 
@@ -432,6 +451,44 @@ extension IGGroupsTableViewController {
             }
         }).send()
     }
+    
+    func pinRoom(room: IGRoom) {
+        let roomId = room.id
+        var pin = true
+        if room.pinId > 0 {
+            pin = false
+        }
+        
+        self.hud = MBProgressHUD.showAdded(to: self.view.superview!, animated: true)
+        self.hud.mode = .indeterminate
+        IGClientPinRoomRequest.Generator.generate(roomId: roomId, pin: pin).success({ (protoResponse) in
+            DispatchQueue.main.async {
+                switch protoResponse {
+                case let pinRoomResponse as IGPClientPinRoomResponse:
+                    IGClientPinRoomRequest.Handler.interpret(response: pinRoomResponse)
+                    break
+                    
+                default:
+                    break
+                }
+                self.hud.hide(animated: true)
+            }
+        }).error({ (errorCode , waitTime) in
+            DispatchQueue.main.async {
+                switch errorCode {
+                case .timeout:
+                    let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: nil)
+                default:
+                    break
+                }
+                self.hud.hide(animated: true)
+            }
+        }).send()
+    }
+    
     
     func reportRoom(roomId: Int64, reason: IGPClientRoomReport.IGPReason) {
         self.hud = MBProgressHUD.showAdded(to: self.view.superview!, animated: true)
