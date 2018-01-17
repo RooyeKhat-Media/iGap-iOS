@@ -323,6 +323,21 @@ class IGNavigationItem: UINavigationItem {
             make.centerX.equalTo(self.centerViewContainer!.snp.centerX)
         }
         
+        if room.mute == .mute {
+            let muteFrame = CGRect(x: 20, y: 5, width: 25, height: 25)
+            let imgMute = UIImageView(frame: muteFrame)
+            imgMute.image = UIImage(named:"IG_Chat_List_Mute")
+            
+            imgMute.image = imgMute.image!.withRenderingMode(.alwaysTemplate)
+            imgMute.tintColor = UIColor.white
+            
+            self.centerViewContainer!.addSubview(imgMute)
+            imgMute.snp.makeConstraints { (make) in
+                make.top.equalTo(self.centerViewMainLabel!.snp.top).offset(3)
+                make.right.equalTo(self.centerViewMainLabel!.snp.left).offset(-8)
+            }
+        }
+        
         if let peer = room.chatRoom?.peer {
             if room.currenctActionsByUsers.first?.value.1 != .typing {
                 setLastSeenLabelForUser(peer , room: room)
