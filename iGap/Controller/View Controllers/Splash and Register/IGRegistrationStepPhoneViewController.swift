@@ -339,7 +339,11 @@ class IGRegistrationStepPhoneViewController: UIViewController {
         if country.codePattern != nil && country.codePattern != "" {
             phoneNumberField.setMask((selectedCountry?.codePatternMask)!, withMaskTemplate: selectedCountry?.codePatternTemplate)
         } else {
-            phoneNumberField.refreshMask()
+            //phoneNumberField.refreshMask()
+            
+            let codePatternMask = "{ddddddddddddddddddddddddd}"
+            let codePatternTemplate = "_________________________"
+            phoneNumberField.setMask(codePatternMask, withMaskTemplate: codePatternTemplate)
         }
     }
     
