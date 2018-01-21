@@ -103,12 +103,50 @@ class IGNewChannelChoosePublicOrPrivateTableViewController: UITableViewControlle
                         let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
                         let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
                         alert.addAction(okAction)
-                        self.hud.hide(animated: true)
                         self.present(alert, animated: true, completion: nil)
+                        
+                    case .channelUpdateUsernameIsInvalid:
+                        let alert = UIAlertController(title: "Error", message: "Username is invalid", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                        break
+                        
+                    case .channelUpdateUsernameHasAlreadyBeenTakenByAnotherUser:
+                        let alert = UIAlertController(title: "Error", message: "Username has already been taken by another user", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                        break
+                        
+                    case .channelUpdateUsernameMoreThanTheAllowedUsernmaeHaveBeenSelectedByYou:
+                        let alert = UIAlertController(title: "Error", message: "More than the allowed usernmae have been selected by you", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                        break
+                        
+                    case .channelUpdateUsernameForbidden:
+                        let alert = UIAlertController(title: "Error", message: "Update username forbidden!", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                        break
+                        
+                    case .channelUpdateUsernameLock:
+                        let time = waitTime
+                        let remainingMiuntes = time!/60
+                        let alert = UIAlertController(title: "Error", message: "You can not change your username because you've recently changed it. waiting for \(remainingMiuntes) minutes", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true,completion: nil)
+                        break
+                        
                     default:
-                        self.hud.hide(animated: true)
                         break
                     }
+                    
+                    self.hud.hide(animated: true)
                 }
                 
             }).send()

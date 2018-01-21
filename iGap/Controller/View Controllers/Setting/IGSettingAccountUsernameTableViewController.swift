@@ -138,30 +138,44 @@ class IGSettingAccountUsernameTableViewController: UITableViewController , UIGes
                     }
 
                 }).error ({ (errorCode, waitTime) in
-                    switch errorCode {
-                    case .timeout:
-                        break
-                    case .userProfileUpdateLock:
-                         DispatchQueue.main.async {
+                    DispatchQueue.main.async {
+                        switch errorCode {
+                        case .timeout:
+                            let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                            alert.addAction(okAction)
+                            self.present(alert, animated: true, completion: nil)
+                            break
+                            
+                        case .userProfileUpdateUsernameIsInvaild:
+                            let alert = UIAlertController(title: "Timeout", message: "Username is invalid", preferredStyle: .alert)
+                            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                            alert.addAction(okAction)
+                            self.present(alert, animated: true, completion: nil)
+                            break
+                            
+                        case .userProfileUpdateUsernameHasAlreadyBeenTaken:
+                            let alert = UIAlertController(title: "Timeout", message: "Username has already been taken by another user", preferredStyle: .alert)
+                            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                            alert.addAction(okAction)
+                            self.present(alert, animated: true, completion: nil)
+                            break
+                            
+                        case .userProfileUpdateLock:
                             let time = waitTime
                             let remainingMiuntes = time!/60
-                        let alert = UIAlertController(title: "Error", message: "You can not change your username because you've recently changed it. waiting for \(remainingMiuntes) minutes", preferredStyle: .alert)
-                                                let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                                                alert.addAction(okAction)
-                                                self.hud.hide(animated: true)
-                                            self.present(alert, animated: true,completion: nil)
+                            let alert = UIAlertController(title: "Error", message: "You can not change your username because you've recently changed it. waiting for \(remainingMiuntes) minutes", preferredStyle: .alert)
+                            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                            alert.addAction(okAction)
+                            self.present(alert, animated: true,completion: nil)
+                            break
+                            
+                        default:
+                            break
                         }
-                    default:
-                        break
+                        
+                        self.hud.hide(animated: true)
                     }
-                    
-//                    DispatchQueue.main.async {
-//                        let alert = UIAlertController(title: "Error", message: "There was an error setting the selected username", preferredStyle: .alert)
-//                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-//                        alert.addAction(okAction)
-//                        self.hud.hide(animated: true)
-//                        self.present(alert, animated: true,completion: nil)
-//                    }
                 }).send()
             }
         }

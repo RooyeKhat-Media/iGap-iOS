@@ -252,6 +252,7 @@ class IGGroupInfoEditTypeTableViewController: UITableViewController , UITextFiel
                     }
                 }
             }).error ({ (errorCode, waitTime) in
+                
                 DispatchQueue.main.async {
                     switch errorCode {
                     case .timeout:
@@ -259,11 +260,51 @@ class IGGroupInfoEditTypeTableViewController: UITableViewController , UITextFiel
                         let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
                         alert.addAction(okAction)
                         self.present(alert, animated: true, completion: nil)
+                        
+                    case .groupUpdateUsernameIsInvalid:
+                        let alert = UIAlertController(title: "Error", message: "Username is invalid", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                        break
+                        
+                    case .groupUpdateUsernameHasAlreadyBeenTakenByAnotherUser:
+                        let alert = UIAlertController(title: "Error", message: "Username has already been taken by another user", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                        break
+                        
+                    case .groupUpdateUsernameMoreThanTheAllowedUsernmaeHaveBeenSelectedByYou:
+                        let alert = UIAlertController(title: "Error", message: "More than the allowed usernmae have been selected by you", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                        break
+                        
+                    case .groupUpdateUsernameForbidden:
+                        let alert = UIAlertController(title: "Error", message: "Update username forbidden!", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                        break
+                        
+                    case .groupUpdateUsernameLock:
+                        let time = waitTime
+                        let remainingMiuntes = time!/60
+                        let alert = UIAlertController(title: "Error", message: "You can not change your username because you've recently changed it. waiting for \(remainingMiuntes) minutes", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true,completion: nil)
+                        break
+                        
                     default:
                         break
                     }
+                    
                     self.hud.hide(animated: true)
                 }
+                
             }).send()
         }
     }
