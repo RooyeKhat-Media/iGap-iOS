@@ -109,6 +109,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
     var notificationToken: NotificationToken?
     
     var messageCellIdentifer = IGMessageCollectionViewCell.cellReuseIdentifier()
+    var textCellIdentifier = TextCell.cellReuseIdentifier()
     var logMessageCellIdentifer = IGMessageLogCollectionViewCell.cellReuseIdentifier()
     var room : IGRoom?
     //let currentLoggedInUserID = IGAppManager.sharedManager.userID()
@@ -1424,6 +1425,43 @@ extension IGMessageViewController: IGMessageCollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let message = messages![indexPath.section]
+        var isIncommingMessage = true
+        var shouldShowAvatar = false
+        var isPreviousMessageFromSameSender = false
+        var isNextMessageFromSameSender = false
+        
+        if message.type != .log {
+            if messages!.indices.contains(indexPath.section + 1){
+                let previousMessage = messages![(indexPath.section + 1)]
+                if previousMessage.type != .log && message.authorHash == previousMessage.authorHash {
+                    isPreviousMessageFromSameSender = true
+                }
+            }
+            
+            if messages!.indices.contains(indexPath.section - 1){
+                let nextMessage = messages![(indexPath.section - 1)]
+                if message.authorHash == nextMessage.authorHash {
+                    isNextMessageFromSameSender = true
+                }
+            }
+        }
+        
+        if message.type == .text {
+
+            if let senderHash = message.authorHash {
+                if senderHash == IGAppManager.sharedManager.authorHash() {
+                    isIncommingMessage = false
+                }
+            }
+            
+            if room?.groupRoom != nil {
+                shouldShowAvatar = true
+            }
+            if !isIncommingMessage {
+                shouldShowAvatar = false
+            }
+        }
+        
         
         if message.type == .log {
             let cell: IGMessageLogCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: logMessageCellIdentifer, for: indexPath) as! IGMessageLogCollectionViewCell
@@ -1435,9 +1473,15 @@ extension IGMessageViewController: IGMessageCollectionViewDataSource {
                             isPreviousMessageFromSameSender: false,
                             isNextMessageFromSameSender: false)
             return cell
-        } else{
             
-        
+        } else if message.type == .text {
+            let cell: TextCell = collectionView.dequeueReusableCell(withReuseIdentifier: textCellIdentifier, for: indexPath) as! TextCell
+            let bubbleSize = CellSizeCalculator.sharedCalculator.mainBubbleCountainerSize(for: message)
+            cell.setMessage(message,isIncommingMessage: isIncommingMessage,shouldShowAvatar: shouldShowAvatar,messageSizes: bubbleSize,isPreviousMessageFromSameSender: isPreviousMessageFromSameSender,isNextMessageFromSameSender: isNextMessageFromSameSender)
+            cell.delegate = self
+            return cell
+            
+        } else {
         
             let cell: IGMessageCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: messageCellIdentifer, for: indexPath) as! IGMessageCollectionViewCell
             
@@ -1550,6 +1594,9 @@ extension IGMessageViewController: UICollectionViewDelegateFlowLayout {
         
         let message = messages![indexPath.section]
         var frame = self.collectionView.layout.size(for: message).bubbleSize
+        if message.type == .text {
+            frame = self.collectionView.layout.sizeCell(for: message).bubbleSize
+        }
         
         var isPreviousMessageFromSameSender = false
         
@@ -1560,11 +1607,12 @@ extension IGMessageViewController: UICollectionViewDelegateFlowLayout {
             }
         }
 
-        if isPreviousMessageFromSameSender || message.type == .log {
-            frame.height -= 7.5
-        }
+        // don't used yet
+        //if isPreviousMessageFromSameSender || message.type == .log {
+        //    frame.height -= 7.5
+        //}
         
-        return CGSize(width: self.collectionView.frame.width, height: frame.height)
+        return CGSize(width: self.collectionView.frame.width, height: frame.height+5)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {

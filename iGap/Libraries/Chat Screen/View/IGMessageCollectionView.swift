@@ -49,6 +49,7 @@ class IGMessageCollectionView: UICollectionView {
 //        self.backgroundView = bgImage
         
         self.setCollectionViewLayout(layout, animated: true)
+        self.register(TextCell.nib(), forCellWithReuseIdentifier: TextCell.cellReuseIdentifier())
         self.register(IGMessageCollectionViewCell.nib(), forCellWithReuseIdentifier: IGMessageCollectionViewCell.cellReuseIdentifier())
         self.register(IGMessageLogCollectionViewCell.nib(), forCellWithReuseIdentifier: IGMessageLogCollectionViewCell.cellReuseIdentifier())
         self.register(IGMessageLogCollectionViewCell.nib(), forSupplementaryViewOfKind: UICollectionElementKindSectionFooter, withReuseIdentifier: IGMessageLogCollectionViewCell.cellReuseIdentifier())
