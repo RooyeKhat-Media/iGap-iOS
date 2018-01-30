@@ -14,7 +14,7 @@ import SnapKit
 class AbstractCell: IGMessageGeneralCollectionViewCell {
     
     var mainBubbleViewAbs: UIView!
-    var forwardViewAbs: UIView?
+    var forwardViewAbs: UIView!
     var replyViewAbs: UIView?
     var mediaContainerViewAbs: UIView?
     var avatarBackViewAbs: UIView?
@@ -33,7 +33,6 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
     
     var txtMessageHeightConstraintAbs: NSLayoutConstraint!
     var mainBubbleViewWidthAbs: NSLayoutConstraint!
-    var forwardHeightAbs: NSLayoutConstraint!
     
     var avatarViewAbs: IGAvatarView?
     var txtMessageAbs: ActiveLabel!
@@ -368,9 +367,6 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
                 txtReplyMessageAbs.text = ""
             }
             
-            if forwardHeightAbs != nil {
-                forwardHeightAbs.constant = 0
-            }
             replyViewAbs?.snp.makeConstraints{ (make) in
                 make.top.equalTo(mainBubbleViewAbs.snp.top).priority(100)
             }
@@ -398,9 +394,8 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
     func manageForward(){
         
         if let originalMessage = realmRoomMessage.forwardedFrom {
-            forwardViewAbs?.isHidden  = false
-            forwardViewAbs?.backgroundColor           = UIColor.chatForwardedFromViewBackgroundColor(isIncommingMessage: isIncommingMessage)
-            txtForwardAbs.textColor                   = UIColor.chatForwardedFromUsernameLabelColor(isIncommingMessage: isIncommingMessage)
+            
+            makeForward()
             
             if let user = originalMessage.authorUser {
                 txtForwardAbs.text = "Forwarded from: \(user.displayName)"
@@ -409,20 +404,12 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
             } else {
                 txtForwardAbs.text = "Forwarded from: "
             }
-            forwardHeightAbs.constant = 30
-            
+
             let text = originalMessage.message
             if text != nil && text != "" {
                 txtMessageAbs.text = text
             }
-            
-            /*
-             * set priority bigger than replyViewAbs priority
-             */
-            forwardViewAbs?.snp.makeConstraints{ (make) in
-                make.top.equalTo(mainBubbleViewAbs.snp.top).priority(200)
-            }
-            
+
             txtMessageAbs.snp.remakeConstraints{ (make) in
                 make.top.equalTo((forwardViewAbs?.snp.bottom)!).offset(3)
             }
@@ -573,7 +560,7 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
             //            }
             //        }
         } else {
-             forwardViewAbs?.isHidden  = true
+            removeForward()
             //    self.forwardedFromViewHeightConstraint.constant = 0
             //    self.forwardedMessageAudioAndVoiceViewHeightConstraint.constant = 0
             //    self.forwardedMessageBodyContainerViewHeightConstraint.constant = 0
@@ -608,6 +595,52 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
         if txtSenderNameAbs != nil {
             txtSenderNameAbs.removeFromSuperview()
             txtSenderNameAbs = nil
+        }
+    }
+    
+    
+    
+    
+    private func makeForward(){
+        if forwardViewAbs == nil {
+            forwardViewAbs = UIView()
+            mainBubbleViewAbs.addSubview(forwardViewAbs!)
+        }
+        
+        if txtForwardAbs == nil {
+            txtForwardAbs = UILabel()
+            forwardViewAbs?.addSubview(txtForwardAbs)
+        }
+        
+        /* set color always for avoid from reuse item color. for example: show incomming forward color for received forward color */
+        forwardViewAbs?.backgroundColor = UIColor.chatForwardedFromViewBackgroundColor(isIncommingMessage: isIncommingMessage)
+        txtForwardAbs.textColor = UIColor.chatForwardedFromUsernameLabelColor(isIncommingMessage: isIncommingMessage)
+        txtForwardAbs.font = UIFont.igFont(ofSize: 9.0)
+        
+        forwardViewAbs?.snp.makeConstraints { (make) in
+            make.top.equalTo(mainBubbleViewAbs.snp.top).priority(.required)
+            make.leading.equalTo(mainBubbleViewAbs.snp.leading)
+            make.trailing.equalTo(mainBubbleViewAbs.snp.trailing)
+            make.height.equalTo(30)
+        }
+        
+        txtForwardAbs.snp.makeConstraints { (make) in
+            make.top.equalTo(forwardViewAbs.snp.top)
+            make.leading.equalTo(forwardViewAbs.snp.leading).offset(8)
+            make.trailing.equalTo(forwardViewAbs.snp.trailing).offset(8)
+            make.centerY.equalTo(forwardViewAbs.snp.centerY).priority(.required)
+        }
+    }
+    
+    private func removeForward(){
+        if forwardViewAbs != nil {
+            forwardViewAbs?.removeFromSuperview()
+            forwardViewAbs = nil
+        }
+        
+        if txtForwardAbs != nil {
+            txtForwardAbs?.removeFromSuperview()
+            txtForwardAbs = nil
         }
     }
 }

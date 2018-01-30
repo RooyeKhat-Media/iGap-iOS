@@ -14,7 +14,6 @@ import SnapKit
 class TextCell: AbstractCell {
     
     @IBOutlet var mainBubbleView: UIView!
-    @IBOutlet weak var forwardView: UIView!
     @IBOutlet weak var replyView: UIView!
     @IBOutlet weak var avatarBackView: UIView!
     @IBOutlet weak var messageView: UIView!
@@ -24,13 +23,11 @@ class TextCell: AbstractCell {
     @IBOutlet weak var txtTime: UILabel!
     @IBOutlet weak var txtReplyDisplayName: UILabel!
     @IBOutlet weak var txtReplyMessage: UILabel!
-    @IBOutlet weak var txtForward: UILabel!
     
     @IBOutlet weak var imgStatus: UIImageView!
     
     @IBOutlet weak var txtMessageHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var mainBubbleViewWidth: NSLayoutConstraint!
-    @IBOutlet weak var forwardHeight: NSLayoutConstraint!
     
     @IBOutlet weak var avatarView: IGAvatarView!
     @IBOutlet weak var txtMessage: ActiveLabel!
@@ -54,7 +51,6 @@ class TextCell: AbstractCell {
         /********** view **********/
         mainBubbleViewAbs = mainBubbleView
         mainBubbleViewWidthAbs = mainBubbleViewWidth
-        forwardViewAbs = forwardView
         replyLineViewAbs = replyLineView
         avatarViewAbs = avatarView
         avatarBackViewAbs = avatarBackView
@@ -67,14 +63,12 @@ class TextCell: AbstractCell {
         txtEditedAbs = txtEdited
         txtReplyDisplayNameAbs = txtReplyDisplayName
         txtReplyMessageAbs = txtReplyMessage
-        txtForwardAbs = txtForward
         
         /********** image **********/
         imgStatusAbs = imgStatus
         
         /******** constraint ********/
         txtMessageHeightConstraintAbs = txtMessageHeightConstraint
-        forwardHeightAbs = forwardHeight
     }
 }
 

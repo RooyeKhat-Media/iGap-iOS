@@ -39,25 +39,6 @@
                     <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yaV-fL-gff">
                         <rect key="frame" x="46" y="10" width="400" height="261"/>
                         <subviews>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DXp-IJ-Opo">
-                                <rect key="frame" x="0.0" y="0.0" width="400" height="30"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="forwarded form @..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LvS-w8-Igu" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
-                                        <rect key="frame" x="8" y="0.0" width="384" height="30"/>
-                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="9"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" red="0.0" green="0.69019607839999997" blue="0.74901960779999999" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="LvS-w8-Igu" secondAttribute="trailing" constant="8" id="LzM-RW-Os2"/>
-                                    <constraint firstItem="LvS-w8-Igu" firstAttribute="leading" secondItem="DXp-IJ-Opo" secondAttribute="leading" constant="8" id="TLt-39-Mav"/>
-                                    <constraint firstAttribute="bottom" secondItem="LvS-w8-Igu" secondAttribute="bottom" id="dKj-c7-sn1"/>
-                                    <constraint firstAttribute="height" constant="30" id="od3-lZ-oDf"/>
-                                    <constraint firstItem="LvS-w8-Igu" firstAttribute="top" secondItem="DXp-IJ-Opo" secondAttribute="top" id="xWK-Pn-uxx"/>
-                                </constraints>
-                            </view>
                             <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aIZ-9Z-7qB">
                                 <rect key="frame" x="0.0" y="30" width="400" height="54"/>
                                 <subviews>
@@ -148,18 +129,14 @@
                             <constraint firstItem="u46-Gz-HUg" firstAttribute="leading" secondItem="yaV-fL-gff" secondAttribute="leading" id="1No-pF-Mf4"/>
                             <constraint firstItem="hQH-45-nsy" firstAttribute="top" secondItem="TNt-Md-FRe" secondAttribute="top" id="8LU-PF-TE3"/>
                             <constraint firstAttribute="trailing" secondItem="yA3-H8-wsX" secondAttribute="trailing" constant="5" id="BvR-vD-eTw"/>
-                            <constraint firstAttribute="trailing" secondItem="DXp-IJ-Opo" secondAttribute="trailing" id="DYj-6Y-LeQ"/>
                             <constraint firstItem="TNt-Md-FRe" firstAttribute="leading" secondItem="hQH-45-nsy" secondAttribute="trailing" constant="3" id="IQ8-iz-WXr"/>
                             <constraint firstAttribute="trailing" secondItem="u46-Gz-HUg" secondAttribute="trailing" id="Mwd-MM-pV1"/>
                             <constraint firstAttribute="trailing" secondItem="TNt-Md-FRe" secondAttribute="trailing" constant="20" id="NBO-lA-vsF"/>
                             <constraint firstAttribute="bottom" secondItem="u46-Gz-HUg" secondAttribute="bottom" id="Q32-45-gp2"/>
-                            <constraint firstItem="aIZ-9Z-7qB" firstAttribute="top" secondItem="DXp-IJ-Opo" secondAttribute="bottom" id="UO1-68-2T6"/>
                             <constraint firstAttribute="trailing" secondItem="aIZ-9Z-7qB" secondAttribute="trailing" id="V73-Dj-esg"/>
                             <constraint firstAttribute="width" constant="400" id="esP-h2-edj"/>
                             <constraint firstItem="aIZ-9Z-7qB" firstAttribute="leading" secondItem="yaV-fL-gff" secondAttribute="leading" id="ghQ-Vi-y2g"/>
                             <constraint firstItem="TNt-Md-FRe" firstAttribute="centerY" secondItem="yA3-H8-wsX" secondAttribute="centerY" id="hTP-gA-PS9"/>
-                            <constraint firstItem="DXp-IJ-Opo" firstAttribute="leading" secondItem="yaV-fL-gff" secondAttribute="leading" id="hr4-7m-Fqq"/>
-                            <constraint firstItem="DXp-IJ-Opo" firstAttribute="top" secondItem="yaV-fL-gff" secondAttribute="top" id="qq8-G1-mHH"/>
                             <constraint firstAttribute="bottom" secondItem="TNt-Md-FRe" secondAttribute="bottom" constant="8" id="udF-pk-bxS"/>
                             <constraint firstItem="hQH-45-nsy" firstAttribute="bottom" secondItem="TNt-Md-FRe" secondAttribute="bottom" id="y5q-5i-SdX"/>
                         </constraints>
@@ -176,8 +153,6 @@
             <connections>
                 <outlet property="avatarBackView" destination="VDw-xB-NIS" id="Iv8-5K-vJ6"/>
                 <outlet property="avatarView" destination="b3n-4j-LGy" id="3u7-uc-lVI"/>
-                <outlet property="forwardHeight" destination="od3-lZ-oDf" id="315-Sn-eks"/>
-                <outlet property="forwardView" destination="DXp-IJ-Opo" id="qaG-k9-zOx"/>
                 <outlet property="imgStatus" destination="yA3-H8-wsX" id="VYv-W9-rp0"/>
                 <outlet property="mainBubbleView" destination="yaV-fL-gff" id="KxT-Hj-bIR"/>
                 <outlet property="mainBubbleViewWidth" destination="esP-h2-edj" id="q5C-i8-Bot"/>
@@ -185,7 +160,6 @@
                 <outlet property="replyLineView" destination="I8P-IO-6EH" id="LmR-0g-qfZ"/>
                 <outlet property="replyView" destination="aIZ-9Z-7qB" id="Mj8-5a-3iR"/>
                 <outlet property="txtEdited" destination="hQH-45-nsy" id="4eU-Ki-MGL"/>
-                <outlet property="txtForward" destination="LvS-w8-Igu" id="3os-3X-ZTV"/>
                 <outlet property="txtMessage" destination="ufp-bo-0h5" id="7Im-hs-0Tn"/>
                 <outlet property="txtMessageHeightConstraint" destination="3bp-aB-7DZ" id="TWM-k8-iC6"/>
                 <outlet property="txtReplyDisplayName" destination="UBw-tP-aFC" id="FdD-qA-Yyw"/>
