@@ -73,7 +73,6 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
         manageForward()
         manageTime()
         manageEdit()
-        manageViewForAvatarAndSenderName()
     }
     
     /*
@@ -152,7 +151,7 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
     
     private func setAvatar(){
         
-        if shouldShowAvatar {
+        if shouldShowAvatar && !isPreviousMessageFromSameSender {
             avatarViewAbs?.isHidden = false
             avatarBackViewAbs?.isHidden = false // avatar back view is redundant. why we should use this ?!!!
             
@@ -175,24 +174,32 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
     private func manageReceivedOrIncommingMessage(){
         if isIncommingMessage {
             mainBubbleViewAbs?.layer.borderWidth = 0.0
-            if let sender = realmRoomMessage.authorUser {
-                txtSenderNameAbs.text = sender.displayName
-            } else if let sender = realmRoomMessage.authorRoom {
-                txtSenderNameAbs.text = sender.title
+
+            if isPreviousMessageFromSameSender {
+                removeSenderName()
             } else {
-                txtSenderNameAbs.text = ""
+                makeSenderName()
+
+                if let sender = realmRoomMessage.authorUser {
+                    txtSenderNameAbs.text = sender.displayName
+                } else if let sender = realmRoomMessage.authorRoom {
+                    txtSenderNameAbs.text = sender.title
+                } else {
+                    txtSenderNameAbs.text = ""
+                }
             }
+
             imgStatusAbs.isHidden = true
-            
+
             setAvatar()
-            
+
         } else {
             mainBubbleViewAbs?.layer.borderWidth = 1.0
-            txtSenderNameAbs.text = ""
             imgStatusAbs?.isHidden = false
             avatarViewAbs?.isHidden = true
             avatarBackViewAbs?.isHidden = true
-            txtSenderNameAbs.isHidden = true
+
+            removeSenderName()
         }
     }
     
@@ -210,13 +217,8 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
         /********* Bubble Direction *********/
         mainBubbleViewAbs.snp.makeConstraints { (make) in
             if isIncommingMessage {
-                if leadingAbs != nil {
-                    leadingAbs?.deactivate()
-                }
-                
-                if trailingAbs != nil {
-                    trailingAbs?.deactivate()
-                }
+                if leadingAbs != nil { leadingAbs?.deactivate() }
+                if trailingAbs != nil { trailingAbs?.deactivate() }
                 
                 if shouldShowAvatar {
                     leadingAbs = make.leading.equalTo(self.contentView.snp.leading).offset(46).priority(999).constraint
@@ -225,43 +227,19 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
                 }
                 trailingAbs = make.trailing.equalTo(self.contentView.snp.trailing).offset(-16).priority(250).constraint
                 
-                if leadingAbs != nil {
-                    leadingAbs?.activate()
-                }
+                if leadingAbs != nil { leadingAbs?.activate() }
+                if trailingAbs != nil { trailingAbs?.activate() }
                 
-                if trailingAbs != nil {
-                    trailingAbs?.activate()
-                }
             } else {
-                if leadingAbs != nil {
-                    leadingAbs?.deactivate()
-                }
-                
-                if trailingAbs != nil {
-                    trailingAbs?.deactivate()
-                }
+                if leadingAbs != nil { leadingAbs?.deactivate() }
+                if trailingAbs != nil { trailingAbs?.deactivate() }
                 
                 trailingAbs = make.trailing.equalTo(self.contentView.snp.trailing).offset(-16).priority(999).constraint
                 leadingAbs = make.leading.equalTo(self.contentView.snp.leading).offset(46).priority(250).constraint
                 
-                if leadingAbs != nil {
-                    leadingAbs?.activate()
-                }
-                
-                if trailingAbs != nil {
-                    trailingAbs?.activate()
-                }
+                if leadingAbs != nil { leadingAbs?.activate() }
+                if trailingAbs != nil { trailingAbs?.activate() }
             }
-        }
-    }
-    
-    private func manageViewForAvatarAndSenderName(){
-        if isPreviousMessageFromSameSender {
-            avatarViewAbs?.isHidden = true
-            avatarBackViewAbs?.isHidden = true
-            txtSenderNameAbs?.isHidden = true
-        } else {
-            txtSenderNameAbs?.isHidden = false
         }
     }
     
@@ -600,6 +578,36 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
             //    self.forwardedMessageAudioAndVoiceViewHeightConstraint.constant = 0
             //    self.forwardedMessageBodyContainerViewHeightConstraint.constant = 0
             //    self.forwardedMessageBodyContainerView.isHidden = false
+        }
+    }
+    
+    /*
+     ************************************************************************************************************************************
+     ******************************* View Maker (all methods for programmatically create cell view is here) *****************************
+     ************************************************************************************************************************************
+     */
+    
+    private func makeSenderName(){
+        
+        if txtSenderNameAbs == nil {
+            txtSenderNameAbs = UILabel()
+            txtSenderNameAbs.textColor = UIColor.senderNameColor()
+            txtSenderNameAbs.font = UIFont.igFont(ofSize: 8.0)
+            self.contentView.addSubview(txtSenderNameAbs)
+        }
+        
+        txtSenderNameAbs.snp.makeConstraints { (make) in
+            make.leading.equalTo(mainBubbleViewAbs.snp.leading).offset(8)
+            make.trailing.equalTo(mainBubbleViewAbs.snp.trailing)
+            make.bottom.equalTo(mainBubbleViewAbs.snp.top)
+            make.height.equalTo(10)
+        }
+    }
+    
+    private func removeSenderName(){
+        if txtSenderNameAbs != nil {
+            txtSenderNameAbs.removeFromSuperview()
+            txtSenderNameAbs = nil
         }
     }
 }

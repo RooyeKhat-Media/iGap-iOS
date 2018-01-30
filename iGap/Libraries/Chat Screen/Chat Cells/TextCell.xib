@@ -164,24 +164,12 @@
                             <constraint firstItem="hQH-45-nsy" firstAttribute="bottom" secondItem="TNt-Md-FRe" secondAttribute="bottom" id="y5q-5i-SdX"/>
                         </constraints>
                     </view>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="from" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZNI-sa-W9g" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
-                        <rect key="frame" x="54" y="0.0" width="392" height="10"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="10" id="pli-dS-7YP"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="8"/>
-                        <color key="textColor" red="0.0" green="0.69019607839999997" blue="0.74901960779999999" alpha="1" colorSpace="calibratedRGB"/>
-                        <nil key="highlightedColor"/>
-                    </label>
                 </subviews>
             </view>
             <constraints>
                 <constraint firstItem="VDw-xB-NIS" firstAttribute="top" secondItem="yaV-fL-gff" secondAttribute="top" id="NSW-Cw-f0k"/>
                 <constraint firstAttribute="bottom" secondItem="yaV-fL-gff" secondAttribute="bottom" constant="8" id="bo5-Ii-bR0"/>
-                <constraint firstItem="ZNI-sa-W9g" firstAttribute="trailing" secondItem="yaV-fL-gff" secondAttribute="trailing" id="cdP-qm-99T"/>
-                <constraint firstItem="yaV-fL-gff" firstAttribute="top" secondItem="ZNI-sa-W9g" secondAttribute="bottom" id="eB7-bd-U64"/>
                 <constraint firstItem="yaV-fL-gff" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="10" id="rMs-4o-hGa"/>
-                <constraint firstItem="ZNI-sa-W9g" firstAttribute="leading" secondItem="yaV-fL-gff" secondAttribute="leading" constant="8" id="waO-HO-VUR"/>
                 <constraint firstItem="VDw-xB-NIS" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="8" id="zDW-tt-oFs"/>
             </constraints>
             <size key="customSize" width="466" height="279"/>
@@ -202,7 +190,6 @@
                 <outlet property="txtMessageHeightConstraint" destination="3bp-aB-7DZ" id="TWM-k8-iC6"/>
                 <outlet property="txtReplyDisplayName" destination="UBw-tP-aFC" id="FdD-qA-Yyw"/>
                 <outlet property="txtReplyMessage" destination="udh-gh-wH2" id="bZV-jT-MLi"/>
-                <outlet property="txtSenderName" destination="ZNI-sa-W9g" id="EGz-44-e1g"/>
                 <outlet property="txtTime" destination="TNt-Md-FRe" id="mjS-ze-Htx"/>
             </connections>
             <point key="canvasLocation" x="-122" y="250.5"/>

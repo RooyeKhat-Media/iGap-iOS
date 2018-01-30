@@ -20,7 +20,6 @@ class TextCell: AbstractCell {
     @IBOutlet weak var messageView: UIView!
     @IBOutlet weak var replyLineView: UIView!
     
-    @IBOutlet weak var txtSenderName: UILabel!
     @IBOutlet weak var txtEdited: UILabel!
     @IBOutlet weak var txtTime: UILabel!
     @IBOutlet weak var txtReplyDisplayName: UILabel!
@@ -64,7 +63,6 @@ class TextCell: AbstractCell {
         
         /********** lable **********/
         txtMessageAbs = txtMessage
-        txtSenderNameAbs = txtSenderName
         txtTimeAbs = txtTime
         txtEditedAbs = txtEdited
         txtReplyDisplayNameAbs = txtReplyDisplayName
