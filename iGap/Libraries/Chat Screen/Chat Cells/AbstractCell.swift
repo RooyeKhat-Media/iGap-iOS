@@ -33,18 +33,20 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
     
     var txtMessageHeightConstraintAbs: NSLayoutConstraint!
     var mainBubbleViewWidthAbs: NSLayoutConstraint!
-    var mainBubbleViewLeadingAbs: NSLayoutConstraint!
-    var mainBubbleViewTrailingAbs: NSLayoutConstraint!
     var forwardHeightAbs: NSLayoutConstraint!
     
-    var realmRoomMessage: IGRoomMessage!
-
     var avatarViewAbs: IGAvatarView?
     var txtMessageAbs: ActiveLabel!
     var txtForwardedMessageAbs: ActiveLabel!
-    
+
+    var realmRoomMessage: IGRoomMessage!
+    var messageSizes: RoomMessageCalculatedSize!
     var isIncommingMessage: Bool!
     var shouldShowAvatar: Bool!
+    var isPreviousMessageFromSameSender: Bool!
+    
+    var leadingAbs: Constraint?
+    var trailingAbs: Constraint?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -54,59 +56,66 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
         self.backgroundColor = UIColor.clear
     }
     
-    private func addForward(){
-        
-    }
-    
     override func setMessage(_ message: IGRoomMessage, isIncommingMessage: Bool, shouldShowAvatar: Bool, messageSizes: RoomMessageCalculatedSize, isPreviousMessageFromSameSender: Bool, isNextMessageFromSameSender: Bool) {
-        txtMessageAbs.text = ""
         self.realmRoomMessage = message
         self.isIncommingMessage = isIncommingMessage
         self.shouldShowAvatar = shouldShowAvatar
+        self.messageSizes = messageSizes
+        self.isPreviousMessageFromSameSender = isPreviousMessageFromSameSender
         
-        /* main bubble view */
-        mainBubbleViewAbs.layer.cornerRadius = 18
-        mainBubbleViewAbs.layer.masksToBounds = true
-        mainBubbleViewAbs.layer.borderColor = UIColor(red: 179.0/255.0, green: 179.0/255.0, blue: 179.0/255.0, alpha: 1.0).cgColor
-        mainBubbleViewAbs.backgroundColor = UIColor.chatBubbleBackground(isIncommingMessage: isIncommingMessage)
-        
-        txtMessageAbs.font = IGMessageCollectionViewCell.messageBodyTextViewFont()
-        
-        detectLink()
-        addGustureRecognizers()
-        manageRecivedOrIncommingMessage()
-        setMessageStatus()
+        manageCellBubble()
+        manageReceivedOrIncommingMessage()
+        manageTextMessage()
+        manageLink()
+        manageGustureRecognizers()
+        manageMessageStatus()
         manageReply()
         manageForward()
-        
-        // seems to not worked !!!
-        //mainBubbleViewWidthAbs.constant = messageSizes.bubbleSize.width
-        //mainBubbleViewWidthAbs.priority = 1000
-        
-        
-        if isPreviousMessageFromSameSender {
-            avatarViewAbs?.isHidden = true
-            avatarBackViewAbs?.isHidden = true
-            txtSenderNameAbs?.isHidden = true
-        } else {
-            txtSenderNameAbs?.isHidden = false
-        }
-
-        if  message.message != nil && message.message != "" {
-            txtMessageAbs?.text = message.message
+        manageTime()
+        manageEdit()
+        manageViewForAvatarAndSenderName()
+    }
+    
+    /*
+     ******************************************************************
+     ************************** Message Text **************************
+     ******************************************************************
+     */
+    
+    private func manageTextMessage(){
+        if realmRoomMessage.message != nil && realmRoomMessage.message != "" {
+            txtMessageAbs.font = IGMessageCollectionViewCell.messageBodyTextViewFont()
             messageViewAbs?.isHidden = false
             txtMessageAbs?.isHidden = false
             messageViewAbs?.backgroundColor = UIColor.clear
             txtMessageAbs?.textColor = UIColor.chatBubbleTextColor(isIncommingMessage: isIncommingMessage)
             txtMessageHeightConstraintAbs?.constant = messageSizes.messageBodyHeight
+            
+            txtMessageAbs?.text = realmRoomMessage.message
         }
-
-        if let time = message.creationTime {
+    }
+    
+    /*
+     ******************************************************************
+     ****************************** Time ******************************
+     ******************************************************************
+     */
+    
+    private func manageTime(){
+        if let time = realmRoomMessage.creationTime {
             txtTimeAbs?.text = time.convertToHumanReadable()
             txtTimeAbs?.textColor = UIColor.chatTimeTextColor(isIncommingMessage: isIncommingMessage)
         }
-
-        if message.isEdited {
+    }
+    
+    /*
+     ******************************************************************
+     ****************************** Edit ******************************
+     ******************************************************************
+     */
+    
+    private func manageEdit() {
+        if realmRoomMessage.isEdited {
             txtEditedAbs?.isHidden = false
             txtEditedAbs?.textColor = UIColor.chatTimeTextColor(isIncommingMessage: isIncommingMessage)
         } else {
@@ -116,66 +125,11 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
     
     /*
      ******************************************************************
-     ****************************** Reply *****************************
-     ******************************************************************
-     */
-    
-    private func manageReply(){
-        if let repliedMessage = realmRoomMessage.repliedTo {
-
-            replyViewAbs?.isHidden                = false
-            replyLineViewAbs.isHidden             = false
-            txtReplyDisplayNameAbs.isHidden       = false
-            txtReplyMessageAbs.isHidden           = false
-            
-            replyViewAbs?.backgroundColor         = UIColor.chatReplyToBackgroundColor(isIncommingMessage: isIncommingMessage)
-            replyLineViewAbs.backgroundColor      = UIColor.chatReplyToIndicatorViewColor(isIncommingMessage: isIncommingMessage)
-            txtReplyDisplayNameAbs.textColor      = UIColor.chatReplyToUsernameLabelTextColor(isIncommingMessage: isIncommingMessage)
-            txtReplyMessageAbs.textColor          = UIColor.chatReplyToMessageBodyLabelTextColor(isIncommingMessage: isIncommingMessage)
-            
-            
-            if let user = repliedMessage.authorUser {
-                txtReplyDisplayNameAbs.text = user.displayName
-            }
-            
-            if repliedMessage.type == .contact {
-                txtReplyMessageAbs.text = "Contact"
-            }else if let body = repliedMessage.message {
-                txtReplyMessageAbs.text = body
-            } else if let media = repliedMessage.attachment {
-                txtReplyMessageAbs.text = media.name
-            } else {
-                txtReplyMessageAbs.text = ""
-            }
-            
-            if forwardHeightAbs != nil {
-                forwardHeightAbs.constant = 0
-            }
-            replyViewAbs?.snp.makeConstraints{ (make) in
-                make.top.equalTo(mainBubbleViewAbs.snp.top).priority(100)
-            }
-
-            txtMessageAbs.snp.remakeConstraints{ (make) in
-                make.top.equalTo((replyViewAbs?.snp.bottom)!).offset(3)
-                make.height.greaterThanOrEqualTo(10).priority(.high)
-            }
-            
-            
-        } else {
-            txtMessageAbs.snp.remakeConstraints{ (make) in
-                make.centerY.equalTo(mainBubbleViewAbs.snp.centerY)
-            }
-            replyViewAbs?.isHidden = true
-        }
-    }
-    
-    /*
-     ******************************************************************
      ************************* Status Manager *************************
      ******************************************************************
      */
     
-    private func setMessageStatus(){
+    private func manageMessageStatus(){
         switch realmRoomMessage.status {
         case .sending:
             imgStatusAbs.image = UIImage(named: "IG_Message_Cell_State_Sending")
@@ -205,14 +159,10 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
             if let user = realmRoomMessage.authorUser {
                 avatarViewAbs?.setUser(user)
             }
-            
-            mainBubbleViewLeadingAbs.constant = 46
         } else {
             
             avatarViewAbs?.isHidden = true
             avatarBackViewAbs?.isHidden = true
-            
-            mainBubbleViewLeadingAbs.constant = 16
         }
     }
     
@@ -222,7 +172,7 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
      ******************************************************************
      */
     
-    private func manageRecivedOrIncommingMessage(){
+    private func manageReceivedOrIncommingMessage(){
         if isIncommingMessage {
             mainBubbleViewAbs?.layer.borderWidth = 0.0
             if let sender = realmRoomMessage.authorUser {
@@ -246,12 +196,81 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
         }
     }
     
+    private func manageCellBubble(){
+        
+        /************ Bubble View ************/
+        mainBubbleViewAbs.layer.cornerRadius = 18
+        mainBubbleViewAbs.layer.masksToBounds = true
+        mainBubbleViewAbs.layer.borderColor = UIColor(red: 179.0/255.0, green: 179.0/255.0, blue: 179.0/255.0, alpha: 1.0).cgColor
+        mainBubbleViewAbs.backgroundColor = UIColor.chatBubbleBackground(isIncommingMessage: isIncommingMessage)
+        
+        /************ Bubble Size ************/
+        mainBubbleViewWidthAbs.constant = messageSizes.bubbleSize.width //mainBubbleViewWidthAbs.priority = 1000
+        
+        /********* Bubble Direction *********/
+        mainBubbleViewAbs.snp.makeConstraints { (make) in
+            if isIncommingMessage {
+                if leadingAbs != nil {
+                    leadingAbs?.deactivate()
+                }
+                
+                if trailingAbs != nil {
+                    trailingAbs?.deactivate()
+                }
+                
+                if shouldShowAvatar {
+                    leadingAbs = make.leading.equalTo(self.contentView.snp.leading).offset(46).priority(999).constraint
+                } else {
+                    leadingAbs = make.leading.equalTo(self.contentView.snp.leading).offset(16).priority(999).constraint
+                }
+                trailingAbs = make.trailing.equalTo(self.contentView.snp.trailing).offset(-16).priority(250).constraint
+                
+                if leadingAbs != nil {
+                    leadingAbs?.activate()
+                }
+                
+                if trailingAbs != nil {
+                    trailingAbs?.activate()
+                }
+            } else {
+                if leadingAbs != nil {
+                    leadingAbs?.deactivate()
+                }
+                
+                if trailingAbs != nil {
+                    trailingAbs?.deactivate()
+                }
+                
+                trailingAbs = make.trailing.equalTo(self.contentView.snp.trailing).offset(-16).priority(999).constraint
+                leadingAbs = make.leading.equalTo(self.contentView.snp.leading).offset(46).priority(250).constraint
+                
+                if leadingAbs != nil {
+                    leadingAbs?.activate()
+                }
+                
+                if trailingAbs != nil {
+                    trailingAbs?.activate()
+                }
+            }
+        }
+    }
+    
+    private func manageViewForAvatarAndSenderName(){
+        if isPreviousMessageFromSameSender {
+            avatarViewAbs?.isHidden = true
+            avatarBackViewAbs?.isHidden = true
+            txtSenderNameAbs?.isHidden = true
+        } else {
+            txtSenderNameAbs?.isHidden = false
+        }
+    }
+    
     /*
      ******************************************************************
      ************************** Link Manager **************************
      ******************************************************************
      */
-    private func detectLink(){
+    private func manageLink(){
         linkManager(txtMessage: txtMessageAbs)
         
         // don't used
@@ -289,7 +308,7 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
      ******************************************************************
      */
     
-    func addGustureRecognizers() {
+    func manageGustureRecognizers() {
         let tapAndHold = UILongPressGestureRecognizer(target: self, action: #selector(didTapAndHoldOnCell(_:)))
         tapAndHold.minimumPressDuration = 0.2
         mainBubbleViewAbs.addGestureRecognizer(tapAndHold)
@@ -337,6 +356,60 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
         self.delegate?.didTapOnSenderAvatar(cellMessage: realmRoomMessage!, cell: self)
     }
     
+    /*
+     ******************************************************************
+     ****************************** Reply *****************************
+     ******************************************************************
+     */
+    
+    private func manageReply(){
+        if let repliedMessage = realmRoomMessage.repliedTo {
+            
+            replyViewAbs?.isHidden                = false
+            replyLineViewAbs.isHidden             = false
+            txtReplyDisplayNameAbs.isHidden       = false
+            txtReplyMessageAbs.isHidden           = false
+            
+            replyViewAbs?.backgroundColor         = UIColor.chatReplyToBackgroundColor(isIncommingMessage: isIncommingMessage)
+            replyLineViewAbs.backgroundColor      = UIColor.chatReplyToIndicatorViewColor(isIncommingMessage: isIncommingMessage)
+            txtReplyDisplayNameAbs.textColor      = UIColor.chatReplyToUsernameLabelTextColor(isIncommingMessage: isIncommingMessage)
+            txtReplyMessageAbs.textColor          = UIColor.chatReplyToMessageBodyLabelTextColor(isIncommingMessage: isIncommingMessage)
+            
+            
+            if let user = repliedMessage.authorUser {
+                txtReplyDisplayNameAbs.text = user.displayName
+            }
+            
+            if repliedMessage.type == .contact {
+                txtReplyMessageAbs.text = "Contact"
+            }else if let body = repliedMessage.message {
+                txtReplyMessageAbs.text = body
+            } else if let media = repliedMessage.attachment {
+                txtReplyMessageAbs.text = media.name
+            } else {
+                txtReplyMessageAbs.text = ""
+            }
+            
+            if forwardHeightAbs != nil {
+                forwardHeightAbs.constant = 0
+            }
+            replyViewAbs?.snp.makeConstraints{ (make) in
+                make.top.equalTo(mainBubbleViewAbs.snp.top).priority(100)
+            }
+            
+            txtMessageAbs.snp.remakeConstraints{ (make) in
+                make.top.equalTo((replyViewAbs?.snp.bottom)!).offset(3)
+                make.height.greaterThanOrEqualTo(10).priority(.high)
+            }
+            
+            
+        } else {
+            txtMessageAbs.snp.remakeConstraints{ (make) in
+                make.centerY.equalTo(mainBubbleViewAbs.snp.centerY)
+            }
+            replyViewAbs?.isHidden = true
+        }
+    }
     
     /*
      ******************************************************************

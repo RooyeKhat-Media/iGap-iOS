@@ -31,13 +31,10 @@ class TextCell: AbstractCell {
     
     @IBOutlet weak var txtMessageHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var mainBubbleViewWidth: NSLayoutConstraint!
-    @IBOutlet weak var mainBubbleViewLeading: NSLayoutConstraint!
-    @IBOutlet weak var mainBubbleViewTrailing: NSLayoutConstraint!
     @IBOutlet weak var forwardHeight: NSLayoutConstraint!
     
     @IBOutlet weak var avatarView: IGAvatarView!
     @IBOutlet weak var txtMessage: ActiveLabel!
-    
     
     class func nib() -> UINib {
         return UINib(nibName: "TextCell", bundle: Bundle(for: self))
@@ -49,17 +46,7 @@ class TextCell: AbstractCell {
     
     
     override func setMessage(_ message: IGRoomMessage, isIncommingMessage: Bool, shouldShowAvatar: Bool, messageSizes: RoomMessageCalculatedSize, isPreviousMessageFromSameSender: Bool, isNextMessageFromSameSender: Bool) {
-
-        mainBubbleView.snp.makeConstraints { (make) in
-            if isIncommingMessage {
-                make.leading.equalTo(self.contentView.snp.leading).priority(750)
-            } else {
-                make.trailing.equalTo(self.contentView.snp.trailing).priority(750)
-            }
-        }
-        
         initializeView()
-        
         super.setMessage(message, isIncommingMessage: isIncommingMessage, shouldShowAvatar: shouldShowAvatar, messageSizes: messageSizes, isPreviousMessageFromSameSender: isPreviousMessageFromSameSender, isNextMessageFromSameSender: isNextMessageFromSameSender)
     }
     
@@ -89,8 +76,6 @@ class TextCell: AbstractCell {
         
         /******** constraint ********/
         txtMessageHeightConstraintAbs = txtMessageHeightConstraint
-        mainBubbleViewLeadingAbs = mainBubbleViewLeading
-        mainBubbleViewTrailingAbs = mainBubbleViewTrailing
         forwardHeightAbs = forwardHeight
     }
 }

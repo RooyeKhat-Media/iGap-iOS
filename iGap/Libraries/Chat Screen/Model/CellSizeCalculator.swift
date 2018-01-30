@@ -211,10 +211,9 @@ class CellSizeCalculator: NSObject {
                 finalSize.width = 250
             } else {
                 finalSize.height -= 15
+                finalSize.width += 80
             }
         }
-        
-        finalSize.width = 50
         
         let result = (finalSize,
                       forwardedMessageBodyHeight,
