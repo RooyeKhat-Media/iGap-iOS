@@ -15,7 +15,7 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
     
     var mainBubbleViewAbs: UIView!
     var forwardViewAbs: UIView!
-    var replyViewAbs: UIView?
+    var replyViewAbs: UIView!
     var mediaContainerViewAbs: UIView?
     var avatarBackViewAbs: UIView?
     var messageViewAbs: UIView?
@@ -342,16 +342,7 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
     private func manageReply(){
         if let repliedMessage = realmRoomMessage.repliedTo {
             
-            replyViewAbs?.isHidden                = false
-            replyLineViewAbs.isHidden             = false
-            txtReplyDisplayNameAbs.isHidden       = false
-            txtReplyMessageAbs.isHidden           = false
-            
-            replyViewAbs?.backgroundColor         = UIColor.chatReplyToBackgroundColor(isIncommingMessage: isIncommingMessage)
-            replyLineViewAbs.backgroundColor      = UIColor.chatReplyToIndicatorViewColor(isIncommingMessage: isIncommingMessage)
-            txtReplyDisplayNameAbs.textColor      = UIColor.chatReplyToUsernameLabelTextColor(isIncommingMessage: isIncommingMessage)
-            txtReplyMessageAbs.textColor          = UIColor.chatReplyToMessageBodyLabelTextColor(isIncommingMessage: isIncommingMessage)
-            
+            makeReply()
             
             if let user = repliedMessage.authorUser {
                 txtReplyDisplayNameAbs.text = user.displayName
@@ -367,21 +358,17 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
                 txtReplyMessageAbs.text = ""
             }
             
-            replyViewAbs?.snp.makeConstraints{ (make) in
-                make.top.equalTo(mainBubbleViewAbs.snp.top).priority(100)
-            }
-            
             txtMessageAbs.snp.remakeConstraints{ (make) in
                 make.top.equalTo((replyViewAbs?.snp.bottom)!).offset(3)
                 make.height.greaterThanOrEqualTo(10).priority(.high)
             }
             
-            
         } else {
+            removeReply()
+            
             txtMessageAbs.snp.remakeConstraints{ (make) in
                 make.centerY.equalTo(mainBubbleViewAbs.snp.centerY)
             }
-            replyViewAbs?.isHidden = true
         }
     }
     
@@ -641,6 +628,90 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
         if txtForwardAbs != nil {
             txtForwardAbs?.removeFromSuperview()
             txtForwardAbs = nil
+        }
+    }
+    
+    
+    
+    
+    private func makeReply(){
+        
+        if replyViewAbs == nil {
+            replyViewAbs = UIView()
+            mainBubbleViewAbs.addSubview(replyViewAbs)
+        }
+        
+        if replyLineViewAbs == nil {
+            replyLineViewAbs = UIView()
+            replyViewAbs.addSubview(replyLineViewAbs)
+        }
+        
+        if txtReplyDisplayNameAbs == nil {
+            txtReplyDisplayNameAbs = UILabel()
+            replyViewAbs.addSubview(txtReplyDisplayNameAbs)
+        }
+        
+        if txtReplyMessageAbs == nil {
+            txtReplyMessageAbs = UILabel()
+            replyViewAbs.addSubview(txtReplyMessageAbs)
+        }
+        
+        replyViewAbs.snp.makeConstraints { (make) in
+            make.trailing.equalTo(mainBubbleViewAbs.snp.trailing)
+            make.leading.equalTo(mainBubbleViewAbs.snp.leading)
+            make.top.equalTo(mainBubbleViewAbs.snp.top)
+            make.height.equalTo(54)
+        }
+        
+        replyLineViewAbs.snp.makeConstraints { (make) in
+            make.leading.equalTo(replyViewAbs.snp.leading).offset(16)
+            make.top.equalTo(replyViewAbs.snp.top).offset(10)
+            make.bottom.equalTo(replyViewAbs.snp.bottom).offset(-10)
+            make.width.equalTo(3)
+        }
+        
+        txtReplyDisplayNameAbs.snp.makeConstraints { (make) in
+            make.trailing.equalTo(replyViewAbs.snp.trailing)
+            make.leading.equalTo(replyLineViewAbs.snp.trailing).offset(8)
+            make.top.equalTo(replyLineViewAbs.snp.top)
+            make.height.equalTo(10)
+        }
+        
+        txtReplyMessageAbs.snp.makeConstraints { (make) in
+            make.trailing.equalTo(replyViewAbs.snp.trailing)
+            make.leading.equalTo(replyLineViewAbs.snp.trailing).offset(8)
+            make.bottom.equalTo(replyLineViewAbs.snp.bottom)
+            make.height.equalTo(13)
+        }
+        
+        replyViewAbs?.backgroundColor         = UIColor.chatReplyToBackgroundColor(isIncommingMessage: isIncommingMessage)
+        replyLineViewAbs.backgroundColor      = UIColor.chatReplyToIndicatorViewColor(isIncommingMessage: isIncommingMessage)
+        txtReplyDisplayNameAbs.textColor      = UIColor.chatReplyToUsernameLabelTextColor(isIncommingMessage: isIncommingMessage)
+        txtReplyMessageAbs.textColor          = UIColor.chatReplyToMessageBodyLabelTextColor(isIncommingMessage: isIncommingMessage)
+        
+        txtReplyDisplayNameAbs.font = UIFont.igFont(ofSize: 10.0)
+        txtReplyMessageAbs.font = UIFont.igFont(ofSize: 13.0)
+    }
+    
+    private func removeReply(){
+        if replyViewAbs != nil {
+            replyViewAbs?.removeFromSuperview()
+            replyViewAbs = nil
+        }
+        
+        if replyLineViewAbs != nil {
+            replyLineViewAbs?.removeFromSuperview()
+            replyLineViewAbs = nil
+        }
+        
+        if txtReplyDisplayNameAbs != nil {
+            txtReplyDisplayNameAbs?.removeFromSuperview()
+            txtReplyDisplayNameAbs = nil
+        }
+        
+        if txtReplyMessageAbs != nil {
+            txtReplyMessageAbs?.removeFromSuperview()
+            txtReplyMessageAbs = nil
         }
     }
 }

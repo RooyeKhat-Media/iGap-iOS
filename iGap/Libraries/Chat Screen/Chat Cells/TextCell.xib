@@ -39,46 +39,6 @@
                     <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yaV-fL-gff">
                         <rect key="frame" x="46" y="10" width="400" height="261"/>
                         <subviews>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aIZ-9Z-7qB">
-                                <rect key="frame" x="0.0" y="30" width="400" height="54"/>
-                                <subviews>
-                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="I8P-IO-6EH">
-                                        <rect key="frame" x="16" y="8" width="3" height="36"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="3" id="XdF-Eo-nGG"/>
-                                        </constraints>
-                                    </view>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Labelq" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UBw-tP-aFC" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
-                                        <rect key="frame" x="27" y="8" width="365" height="13"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="13" id="7ed-j5-kEd"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="udh-gh-wH2" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
-                                        <rect key="frame" x="27" y="28" width="365" height="16"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" red="1" green="0.39344308039999998" blue="0.40355236239999998" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstItem="udh-gh-wH2" firstAttribute="leading" secondItem="I8P-IO-6EH" secondAttribute="trailing" constant="8" id="2iO-sy-Np9"/>
-                                    <constraint firstAttribute="height" constant="54" id="Iop-4Z-5MM"/>
-                                    <constraint firstItem="I8P-IO-6EH" firstAttribute="leading" secondItem="aIZ-9Z-7qB" secondAttribute="leading" constant="16" id="Lec-8U-jW0"/>
-                                    <constraint firstItem="I8P-IO-6EH" firstAttribute="bottom" secondItem="udh-gh-wH2" secondAttribute="bottom" id="MUQ-B0-pjq"/>
-                                    <constraint firstAttribute="trailing" secondItem="udh-gh-wH2" secondAttribute="trailing" constant="8" id="PmX-n4-9ZX"/>
-                                    <constraint firstItem="I8P-IO-6EH" firstAttribute="top" secondItem="UBw-tP-aFC" secondAttribute="top" id="Rh2-om-eeC"/>
-                                    <constraint firstItem="udh-gh-wH2" firstAttribute="centerY" secondItem="aIZ-9Z-7qB" secondAttribute="centerY" constant="8.5" id="ZZn-Un-3D7"/>
-                                    <constraint firstItem="UBw-tP-aFC" firstAttribute="centerY" secondItem="aIZ-9Z-7qB" secondAttribute="centerY" constant="-12.5" id="aXP-tg-4WT"/>
-                                    <constraint firstAttribute="trailing" secondItem="UBw-tP-aFC" secondAttribute="trailing" constant="8" id="c2g-mW-dIV"/>
-                                    <constraint firstItem="UBw-tP-aFC" firstAttribute="leading" secondItem="I8P-IO-6EH" secondAttribute="trailing" constant="8" id="h7p-rR-bsQ"/>
-                                </constraints>
-                            </view>
                             <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="u46-Gz-HUg">
                                 <rect key="frame" x="0.0" y="134" width="400" height="127"/>
                                 <subviews>
@@ -133,9 +93,7 @@
                             <constraint firstAttribute="trailing" secondItem="u46-Gz-HUg" secondAttribute="trailing" id="Mwd-MM-pV1"/>
                             <constraint firstAttribute="trailing" secondItem="TNt-Md-FRe" secondAttribute="trailing" constant="20" id="NBO-lA-vsF"/>
                             <constraint firstAttribute="bottom" secondItem="u46-Gz-HUg" secondAttribute="bottom" id="Q32-45-gp2"/>
-                            <constraint firstAttribute="trailing" secondItem="aIZ-9Z-7qB" secondAttribute="trailing" id="V73-Dj-esg"/>
                             <constraint firstAttribute="width" constant="400" id="esP-h2-edj"/>
-                            <constraint firstItem="aIZ-9Z-7qB" firstAttribute="leading" secondItem="yaV-fL-gff" secondAttribute="leading" id="ghQ-Vi-y2g"/>
                             <constraint firstItem="TNt-Md-FRe" firstAttribute="centerY" secondItem="yA3-H8-wsX" secondAttribute="centerY" id="hTP-gA-PS9"/>
                             <constraint firstAttribute="bottom" secondItem="TNt-Md-FRe" secondAttribute="bottom" constant="8" id="udF-pk-bxS"/>
                             <constraint firstItem="hQH-45-nsy" firstAttribute="bottom" secondItem="TNt-Md-FRe" secondAttribute="bottom" id="y5q-5i-SdX"/>
@@ -157,13 +115,9 @@
                 <outlet property="mainBubbleView" destination="yaV-fL-gff" id="KxT-Hj-bIR"/>
                 <outlet property="mainBubbleViewWidth" destination="esP-h2-edj" id="q5C-i8-Bot"/>
                 <outlet property="messageView" destination="u46-Gz-HUg" id="JwD-MJ-wZM"/>
-                <outlet property="replyLineView" destination="I8P-IO-6EH" id="LmR-0g-qfZ"/>
-                <outlet property="replyView" destination="aIZ-9Z-7qB" id="Mj8-5a-3iR"/>
                 <outlet property="txtEdited" destination="hQH-45-nsy" id="4eU-Ki-MGL"/>
                 <outlet property="txtMessage" destination="ufp-bo-0h5" id="7Im-hs-0Tn"/>
                 <outlet property="txtMessageHeightConstraint" destination="3bp-aB-7DZ" id="TWM-k8-iC6"/>
-                <outlet property="txtReplyDisplayName" destination="UBw-tP-aFC" id="FdD-qA-Yyw"/>
-                <outlet property="txtReplyMessage" destination="udh-gh-wH2" id="bZV-jT-MLi"/>
                 <outlet property="txtTime" destination="TNt-Md-FRe" id="mjS-ze-Htx"/>
             </connections>
             <point key="canvasLocation" x="-122" y="250.5"/>

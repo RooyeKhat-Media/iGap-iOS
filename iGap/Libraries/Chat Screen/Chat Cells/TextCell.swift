@@ -14,15 +14,11 @@ import SnapKit
 class TextCell: AbstractCell {
     
     @IBOutlet var mainBubbleView: UIView!
-    @IBOutlet weak var replyView: UIView!
     @IBOutlet weak var avatarBackView: UIView!
     @IBOutlet weak var messageView: UIView!
-    @IBOutlet weak var replyLineView: UIView!
     
     @IBOutlet weak var txtEdited: UILabel!
     @IBOutlet weak var txtTime: UILabel!
-    @IBOutlet weak var txtReplyDisplayName: UILabel!
-    @IBOutlet weak var txtReplyMessage: UILabel!
     
     @IBOutlet weak var imgStatus: UIImageView!
     
@@ -51,18 +47,14 @@ class TextCell: AbstractCell {
         /********** view **********/
         mainBubbleViewAbs = mainBubbleView
         mainBubbleViewWidthAbs = mainBubbleViewWidth
-        replyLineViewAbs = replyLineView
         avatarViewAbs = avatarView
         avatarBackViewAbs = avatarBackView
         messageViewAbs = messageView
-        replyViewAbs = replyView
         
         /********** lable **********/
         txtMessageAbs = txtMessage
         txtTimeAbs = txtTime
         txtEditedAbs = txtEdited
-        txtReplyDisplayNameAbs = txtReplyDisplayName
-        txtReplyMessageAbs = txtReplyMessage
         
         /********** image **********/
         imgStatusAbs = imgStatus
