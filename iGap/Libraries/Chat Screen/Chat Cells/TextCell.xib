@@ -18,24 +18,6 @@
                 <rect key="frame" x="0.0" y="0.0" width="466" height="279"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VDw-xB-NIS">
-                        <rect key="frame" x="8" y="10" width="30" height="30"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b3n-4j-LGy" customClass="IGAvatarView" customModule="iGap" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            </view>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstAttribute="trailing" secondItem="b3n-4j-LGy" secondAttribute="trailing" id="GOk-Tj-Y4f"/>
-                            <constraint firstAttribute="bottom" secondItem="b3n-4j-LGy" secondAttribute="bottom" id="MkO-BG-f2M"/>
-                            <constraint firstItem="b3n-4j-LGy" firstAttribute="top" secondItem="VDw-xB-NIS" secondAttribute="top" id="Qww-8y-RMQ"/>
-                            <constraint firstItem="b3n-4j-LGy" firstAttribute="leading" secondItem="VDw-xB-NIS" secondAttribute="leading" id="cDh-r3-Bvv"/>
-                            <constraint firstAttribute="height" constant="30" id="oeZ-Py-GOe"/>
-                            <constraint firstAttribute="width" constant="30" id="qFn-JU-zuX"/>
-                        </constraints>
-                    </view>
                     <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yaV-fL-gff">
                         <rect key="frame" x="46" y="10" width="400" height="261"/>
                         <subviews>
@@ -102,15 +84,11 @@
                 </subviews>
             </view>
             <constraints>
-                <constraint firstItem="VDw-xB-NIS" firstAttribute="top" secondItem="yaV-fL-gff" secondAttribute="top" id="NSW-Cw-f0k"/>
                 <constraint firstAttribute="bottom" secondItem="yaV-fL-gff" secondAttribute="bottom" constant="8" id="bo5-Ii-bR0"/>
                 <constraint firstItem="yaV-fL-gff" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="10" id="rMs-4o-hGa"/>
-                <constraint firstItem="VDw-xB-NIS" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="8" id="zDW-tt-oFs"/>
             </constraints>
             <size key="customSize" width="466" height="279"/>
             <connections>
-                <outlet property="avatarBackView" destination="VDw-xB-NIS" id="Iv8-5K-vJ6"/>
-                <outlet property="avatarView" destination="b3n-4j-LGy" id="3u7-uc-lVI"/>
                 <outlet property="imgStatus" destination="yA3-H8-wsX" id="VYv-W9-rp0"/>
                 <outlet property="mainBubbleView" destination="yaV-fL-gff" id="KxT-Hj-bIR"/>
                 <outlet property="mainBubbleViewWidth" destination="esP-h2-edj" id="q5C-i8-Bot"/>

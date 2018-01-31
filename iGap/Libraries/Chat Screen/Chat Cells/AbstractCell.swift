@@ -17,7 +17,6 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
     var forwardViewAbs: UIView!
     var replyViewAbs: UIView!
     var mediaContainerViewAbs: UIView?
-    var avatarBackViewAbs: UIView?
     var messageViewAbs: UIView?
     var replyLineViewAbs: UIView!
     
@@ -34,7 +33,7 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
     var txtMessageHeightConstraintAbs: NSLayoutConstraint!
     var mainBubbleViewWidthAbs: NSLayoutConstraint!
     
-    var avatarViewAbs: IGAvatarView?
+    var avatarViewAbs: IGAvatarView!
     var txtMessageAbs: ActiveLabel!
     var txtForwardedMessageAbs: ActiveLabel!
 
@@ -151,16 +150,14 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
     private func setAvatar(){
         
         if shouldShowAvatar && !isPreviousMessageFromSameSender {
-            avatarViewAbs?.isHidden = false
-            avatarBackViewAbs?.isHidden = false // avatar back view is redundant. why we should use this ?!!!
             
+            makeAvatar()
             if let user = realmRoomMessage.authorUser {
-                avatarViewAbs?.setUser(user)
+                avatarViewAbs.setUser(user)
             }
-        } else {
             
-            avatarViewAbs?.isHidden = true
-            avatarBackViewAbs?.isHidden = true
+        } else {
+            removeAvatar()
         }
     }
     
@@ -189,15 +186,13 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
             }
 
             imgStatusAbs.isHidden = true
-
             setAvatar()
 
         } else {
             mainBubbleViewAbs?.layer.borderWidth = 1.0
             imgStatusAbs?.isHidden = false
-            avatarViewAbs?.isHidden = true
-            avatarBackViewAbs?.isHidden = true
-
+            
+            removeAvatar()
             removeSenderName()
         }
     }
@@ -712,6 +707,32 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
         if txtReplyMessageAbs != nil {
             txtReplyMessageAbs?.removeFromSuperview()
             txtReplyMessageAbs = nil
+        }
+    }
+    
+    
+    
+    
+    private func makeAvatar(){
+        if avatarViewAbs == nil {
+            let frame = CGRect(x:0 ,y:0 ,width:30 ,height:30)
+            avatarViewAbs = IGAvatarView(frame: frame)
+            self.contentView.addSubview(avatarViewAbs)
+        }
+        avatarViewAbs.backgroundColor = UIColor.orange
+
+        avatarViewAbs.snp.makeConstraints { (make) in
+            make.leading.equalTo(self.contentView.snp.leading).offset(8)
+            make.top.equalTo(mainBubbleViewAbs.snp.top)
+            make.width.equalTo(30)
+            make.height.equalTo(30)
+        }
+    }
+    
+    private func removeAvatar(){
+        if avatarViewAbs != nil {
+            avatarViewAbs.removeFromSuperview()
+            avatarViewAbs = nil
         }
     }
 }

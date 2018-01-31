@@ -14,7 +14,6 @@ import SnapKit
 class TextCell: AbstractCell {
     
     @IBOutlet var mainBubbleView: UIView!
-    @IBOutlet weak var avatarBackView: UIView!
     @IBOutlet weak var messageView: UIView!
     
     @IBOutlet weak var txtEdited: UILabel!
@@ -25,7 +24,6 @@ class TextCell: AbstractCell {
     @IBOutlet weak var txtMessageHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var mainBubbleViewWidth: NSLayoutConstraint!
     
-    @IBOutlet weak var avatarView: IGAvatarView!
     @IBOutlet weak var txtMessage: ActiveLabel!
     
     class func nib() -> UINib {
@@ -47,8 +45,6 @@ class TextCell: AbstractCell {
         /********** view **********/
         mainBubbleViewAbs = mainBubbleView
         mainBubbleViewWidthAbs = mainBubbleViewWidth
-        avatarViewAbs = avatarView
-        avatarBackViewAbs = avatarBackView
         messageViewAbs = messageView
         
         /********** lable **********/
