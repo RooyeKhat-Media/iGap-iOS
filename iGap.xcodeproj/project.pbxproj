@@ -185,6 +185,8 @@
 		FA6B602E201E0483008460CF /* CellSizeCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6B602D201E0483008460CF /* CellSizeCalculator.swift */; };
 		FA77C2A71E2B85E4001B2152 /* IGRegistredUserInfoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA77C2A61E2B85E4001B2152 /* IGRegistredUserInfoTableViewController.swift */; };
 		FA7A2ED31DF5830F00164435 /* IGRegisteredUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA7A2ED21DF5830F00164435 /* IGRegisteredUser.swift */; };
+		FA8204382025C97300A795D5 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8204362025C97300A795D5 /* ImageCell.swift */; };
+		FA82043B2025D90800A795D5 /* ImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA82043A2025C99300A795D5 /* ImageCell.xib */; };
 		FA8560AA1FFBA6FC00A25DC3 /* IGSettingPrivacyAndSecurityTwoStepVerificationVerifyUnconfirmedEmail.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8560A91FFBA6FC00A25DC3 /* IGSettingPrivacyAndSecurityTwoStepVerificationVerifyUnconfirmedEmail.swift */; };
 		FA8F224C1DD89910005A90D1 /* IGRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8F224B1DD89910005A90D1 /* IGRoom.swift */; };
 		FA8F224E1DD89AC5005A90D1 /* IGRoomMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8F224D1DD89AC5005A90D1 /* IGRoomMessage.swift */; };
@@ -457,6 +459,9 @@
 		FA752C321E1EC571008694C6 /* iGap.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = iGap.entitlements; path = ../iGap.entitlements; sourceTree = "<group>"; };
 		FA77C2A61E2B85E4001B2152 /* IGRegistredUserInfoTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGRegistredUserInfoTableViewController.swift; sourceTree = "<group>"; };
 		FA7A2ED21DF5830F00164435 /* IGRegisteredUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGRegisteredUser.swift; sourceTree = "<group>"; };
+		FA8204362025C97300A795D5 /* ImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
+		FA82043A2025C99300A795D5 /* ImageCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ImageCell.xib; sourceTree = "<group>"; };
+		FA82043C2025D96900A795D5 /* ImageCell copy.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "ImageCell copy.xib"; sourceTree = "<group>"; };
 		FA8560A91FFBA6FC00A25DC3 /* IGSettingPrivacyAndSecurityTwoStepVerificationVerifyUnconfirmedEmail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGSettingPrivacyAndSecurityTwoStepVerificationVerifyUnconfirmedEmail.swift; sourceTree = "<group>"; };
 		FA8F224B1DD89910005A90D1 /* IGRoom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGRoom.swift; sourceTree = "<group>"; };
 		FA8F224D1DD89AC5005A90D1 /* IGRoomMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGRoomMessage.swift; sourceTree = "<group>"; };
@@ -1032,6 +1037,9 @@
 				FA97D44720174C2C0087BBD0 /* AbstractCell.swift */,
 				FAA3604B201614B600736F95 /* TextCell.swift */,
 				FA97D443201708310087BBD0 /* TextCell.xib */,
+				FA8204362025C97300A795D5 /* ImageCell.swift */,
+				FA82043A2025C99300A795D5 /* ImageCell.xib */,
+				FA82043C2025D96900A795D5 /* ImageCell copy.xib */,
 			);
 			path = "Chat Cells";
 			sourceTree = "<group>";
@@ -1345,6 +1353,7 @@
 				FAD57EE21E191DB000FC17D9 /* IGMessageLogCollectionViewCell.xib in Resources */,
 				FA0953071E1B87E40043ED3F /* IGSettingStoryboard.storyboard in Resources */,
 				FA5EC5DB1E06728C006E2850 /* IGChatRoomListTableViewCell.xib in Resources */,
+				FA82043B2025D90800A795D5 /* ImageCell.xib in Resources */,
 				FAF796071DAA392F0030509B /* Main.storyboard in Resources */,
 				FA33063B1F445AE80096031A /* IRANSans_Bold.ttf in Resources */,
 				FA3306361F445A570096031A /* IRANSans.ttf in Resources */,
@@ -1575,6 +1584,7 @@
 				FAA932F51DF45748002CC631 /* IGEnums.swift in Sources */,
 				FAA9DFB61F4B1CB50076A22F /* IGSettingPrivacyAndSecurityTwoStepVerificationChangePasswordTableViewController.swift in Sources */,
 				FAD580941DDC5C4E00A242DE /* IGMessageCollectionViewCell.swift in Sources */,
+				FA8204382025C97300A795D5 /* ImageCell.swift in Sources */,
 				FA0953561E1B97700043ED3F /* IGSettingChatTableViewController.swift in Sources */,
 				FAD5808F1DDC5C1900A242DE /* IGMessageGeneralCollectionViewCell.swift in Sources */,
 				FA5E159F1E0FFFD800EC19A1 /* IGTappableView.swift in Sources */,

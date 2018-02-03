@@ -10,6 +10,8 @@
 
 import UIKit
 import SnapKit
+import RealmSwift
+import RxSwift
 
 class AbstractCell: IGMessageGeneralCollectionViewCell {
     
@@ -19,6 +21,7 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
     var mediaContainerViewAbs: UIView?
     var messageViewAbs: UIView?
     var replyLineViewAbs: UIView!
+    var mediaViewAbs: UIView!
     
     var txtSenderNameAbs: UILabel!
     var txtEditedAbs: UILabel!
@@ -28,14 +31,16 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
     var txtForwardAbs: UILabel!
     
     var imgStatusAbs: UIImageView!
-    var imgMediaAbs: UIImageView?
     
     var txtMessageHeightConstraintAbs: NSLayoutConstraint!
     var mainBubbleViewWidthAbs: NSLayoutConstraint!
+    var mediaHeightConstraintAbs: NSLayoutConstraint!
     
     var avatarViewAbs: IGAvatarView!
     var txtMessageAbs: ActiveLabel!
     var txtForwardedMessageAbs: ActiveLabel!
+    var imgMediaAbs: IGImageView!
+    var indicatorViewAbs: IGDownloadUploadIndicatorView!
 
     var realmRoomMessage: IGRoomMessage!
     var messageSizes: RoomMessageCalculatedSize!
@@ -45,6 +50,8 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
     
     var leadingAbs: Constraint?
     var trailingAbs: Constraint?
+    
+    let disposeBag = DisposeBag()
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -69,6 +76,7 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
         manageReply()
         manageForward()
         manageEdit()
+        manageAttachment()
     }
     
     /*
@@ -363,8 +371,10 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
         } else {
             removeReply()
             
-            txtMessageAbs.snp.remakeConstraints{ (make) in
-                make.centerY.equalTo(mainBubbleViewAbs.snp.centerY)
+            if txtMessageAbs != nil {
+                txtMessageAbs.snp.remakeConstraints{ (make) in
+                    make.centerY.equalTo(mainBubbleViewAbs.snp.centerY)
+                }
             }
         }
     }
@@ -551,6 +561,245 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
             //    self.forwardedMessageBodyContainerView.isHidden = false
         }
     }
+    
+    /*
+     ******************************************************************
+     ************************ Manage Attachment ***********************
+     ******************************************************************
+     */
+    
+    private func manageAttachment(){
+        
+        if var attachment = realmRoomMessage.attachment {
+            
+            mediaViewAbs.layer.cornerRadius = 18
+            mediaViewAbs.layer.masksToBounds = true
+            mediaViewAbs.backgroundColor = UIColor.clear
+            
+            indicatorViewAbs.shouldShowSize = true
+            
+            if let attachmentVariableInCache = IGAttachmentManager.sharedManager.getRxVariable(attachmentPrimaryKeyId: attachment.primaryKeyId!) {
+                self.attachment = attachmentVariableInCache.value
+            } else {
+                self.attachment = attachment.detach()
+                let attachmentRef = ThreadSafeReference(to: attachment)
+                IGAttachmentManager.sharedManager.add(attachmentRef: attachmentRef)
+                self.attachment = IGAttachmentManager.sharedManager.getRxVariable(attachmentPrimaryKeyId: attachment.primaryKeyId!)!.value
+            }
+            
+            //MARK: ▶︎ Rx Start
+            if let variableInCache = IGAttachmentManager.sharedManager.getRxVariable(attachmentPrimaryKeyId: attachment.primaryKeyId!) {
+                attachment = variableInCache.value
+                variableInCache.asObservable().subscribe({ (event) in
+                    DispatchQueue.main.async {
+                        self.updateAttachmentDownloadUploadIndicatorView()
+                    }
+                }).addDisposableTo(disposeBag)
+            } else {
+                
+            }
+            //MARK: ▶︎ Rx End
+            
+            switch (realmRoomMessage.type) {
+            case .image, .imageAndText, .video, .videoAndText, .gif, .gifAndText:
+                mediaViewAbs.isHidden = false
+                imgMediaAbs.isHidden = false
+                imgMediaAbs.backgroundColor = UIColor.clear
+                imgMediaAbs.setThumbnail(for: attachment)
+                mediaHeightConstraintAbs.constant = messageSizes.MessageAttachmentHeight //height
+                if attachment.status != .ready {
+                    indicatorViewAbs.size = attachment.sizeToString()
+                    indicatorViewAbs.delegate = self
+                } else {
+                    
+                }
+                
+                //                if message.type == .gif || message.type == .gifAndText {
+                //                    attachment.loadData()
+                //                    if let data = attachment.data {
+                //                        self.mediaImageView.prepareForAnimation(withGIFData: data)
+                //                        self.mediaImageView.startAnimatingGIF()
+                //                    } else {
+                //                        self.downloadUploadIndicatorDidTapOnStart(self.mediaDownloadUploadIndicatorView)
+                //                    }
+                //                }
+                //
+                //                //self.attachmentContainreView.isHidden = true
+                //                self.attachmentViewHeightConstraint.constant = 0.0
+                
+                break
+            case .voice:
+                //                self.mediaContainerView.isHidden = true
+                //                self.mediaContainerViewHeightConstraint.constant = 0
+                //                self.attachmentProgressSliderLeadingConstraint.constant = 30.0
+                //                self.attachmentViewHeightConstraint.constant = 68.0
+                //                self.attachmentThumbnailImageView.isHidden = false
+                //                self.attachmentContainreView.isHidden = false
+                //                self.attachmentPlayVoiceButton.isHidden = false
+                //                self.attachmentFileNameLabel.isHidden = false
+                //                self.attachmentProgressSlider.isHidden = false
+                //                self.attachmentTimeOrSizeLabel.isHidden = false
+                //                if message.authorUser != nil {
+                //                    self.attachmentFileNameLabel.text = "Recorded by \(message.authorUser!.displayName)"
+                //                } else if message.authorRoom != nil {
+                //                    self.attachmentFileNameLabel.text = "Recorded voice"
+                //                }
+                //
+                //                if isIncommingMessage {
+                //                    self.attachmentProgressSlider.setThumbImage(UIImage(named: "IG_Message_Cell_Player_Slider_Thumb"), for: .normal)
+                //                    self.attachmentProgressSlider.setThumbImage(UIImage(named: "IG_Message_Cell_Player_Slider_Thumb"), for: .focused)
+                //                    self.attachmentProgressSlider.setThumbImage(UIImage(named: "IG_Message_Cell_Player_Slider_Thumb"), for: .selected)
+                //                    self.attachmentProgressSlider.setThumbImage(UIImage(named: "IG_Message_Cell_Player_Slider_Thumb"), for: .highlighted)
+                //                    self.attachmentProgressSlider.minimumTrackTintColor = UIColor.organizationalColor()
+                //                    self.attachmentProgressSlider.maximumTrackTintColor = UIColor(red: 204.0/255.0, green: 204.0/255.0, blue: 204.0/255.0, alpha: 1.0)
+                //                    self.attachmentPlayVoiceButton.setImage(UIImage(named:"IG_Message_Cell_Player_Voice_Play"), for: .normal)
+                //                } else {
+                //                    self.attachmentProgressSlider.setThumbImage(UIImage(named: "IG_Message_Cell_Player_Slider_Thumb_Outgoing"), for: .normal)
+                //                    self.attachmentProgressSlider.setThumbImage(UIImage(named: "IG_Message_Cell_Player_Slider_Thumb_Outgoing"), for: .focused)
+                //                    self.attachmentProgressSlider.setThumbImage(UIImage(named: "IG_Message_Cell_Player_Slider_Thumb_Outgoing"), for: .selected)
+                //                    self.attachmentProgressSlider.setThumbImage(UIImage(named: "IG_Message_Cell_Player_Slider_Thumb_Outgoing"), for: .highlighted)
+                //                    self.attachmentProgressSlider.minimumTrackTintColor = UIColor(red: 235.0/255.0, green: 235.0/255.0, blue: 235.0/255.0, alpha: 1.0)
+                //                    self.attachmentProgressSlider.maximumTrackTintColor = UIColor(red: 22.0/255.0, green: 91.0/255.0, blue: 88.0/255.0, alpha: 1.0)
+                //                    self.attachmentPlayVoiceButton.setImage(UIImage(named:"IG_Message_Cell_Player_Voice_Play_Outgoing"), for: .normal)
+                //                }
+                //                self.attachmentProgressSlider.setValue(0.0, animated: false)
+                //                self.attachmentThumbnailImageView.setThumbnail(for: attachment)
+                //                self.attachmentProgressSliderLeadingConstraint.constant = 28.0
+                //                self.attachmentThumbnailImageView.layer.cornerRadius = 16.0
+                //                self.attachmentThumbnailImageView.layer.masksToBounds = true
+                //                if self.attachment?.status != .ready {
+                //                    self.attachmentDownloadUploadIndicatorView.layer.cornerRadius = 16.0
+                //                    self.attachmentDownloadUploadIndicatorView.layer.masksToBounds = true
+                //                    self.attachmentDownloadUploadIndicatorView.size = attachment.sizeToString()
+                //                    self.attachmentDownloadUploadIndicatorView.delegate = self
+                //                }
+                //                let timeM = Int(attachment.duration / 60)
+                //                let timeS = Int(attachment.duration.truncatingRemainder(dividingBy: 60.0))
+                //                self.attachmentTimeOrSizeLabel.text = "0:00 / \(timeM):\(timeS)"
+                break
+            case .audio, .audioAndText:
+                //                self.mediaContainerView.isHidden = true
+                //                self.mediaContainerViewHeightConstraint.constant = 0
+                //                self.attachmentViewHeightConstraint.constant = 91.0
+                //                self.attachmentContainreView.isHidden = false
+                //                self.attachmentThumbnailImageView.isHidden = false
+                //                self.attachmentFileNameLabel.isHidden = false
+                //                self.attachmentFileArtistLabel.isHidden = false
+                //                self.attachmentProgressSlider.isHidden = false
+                //                self.attachmentTimeOrSizeLabel.isHidden = false
+                //                self.attachmentFileNameLabel.text = attachment.name
+                //                if isIncommingMessage {
+                //                    self.attachmentProgressSlider.setThumbImage(UIImage(named: "IG_Message_Cell_Player_Slider_Thumb"), for: .normal)
+                //                    self.attachmentProgressSlider.setThumbImage(UIImage(named: "IG_Message_Cell_Player_Slider_Thumb"), for: .focused)
+                //                    self.attachmentProgressSlider.setThumbImage(UIImage(named: "IG_Message_Cell_Player_Slider_Thumb"), for: .selected)
+                //                    self.attachmentProgressSlider.setThumbImage(UIImage(named: "IG_Message_Cell_Player_Slider_Thumb"), for: .highlighted)
+                //                } else {
+                //                    self.attachmentProgressSlider.setThumbImage(UIImage(named: "IG_Message_Cell_Player_Slider_Thumb_Outgoing"), for: .normal)
+                //                    self.attachmentProgressSlider.setThumbImage(UIImage(named: "IG_Message_Cell_Player_Slider_Thumb_Outgoing"), for: .focused)
+                //                    self.attachmentProgressSlider.setThumbImage(UIImage(named: "IG_Message_Cell_Player_Slider_Thumb_Outgoing"), for: .selected)
+                //                    self.attachmentProgressSlider.setThumbImage(UIImage(named: "IG_Message_Cell_Player_Slider_Thumb_Outgoing"), for: .highlighted)
+                //                }
+                //
+                //                self.attachmentProgressSlider.setValue(0.0, animated: false)
+                //                self.attachmentThumbnailImageView.setThumbnail(for: attachment)
+                //                self.attachmentProgressSliderLeadingConstraint.constant = 8.0
+                //                self.attachmentThumbnailImageView.layer.cornerRadius = 16.0
+                //                self.attachmentThumbnailImageView.layer.masksToBounds = true
+                //                if self.attachment?.status != .ready {
+                //                    self.attachmentDownloadUploadIndicatorView.layer.cornerRadius = 16.0
+                //                    self.attachmentDownloadUploadIndicatorView.layer.masksToBounds = true
+                //                    self.attachmentDownloadUploadIndicatorView.size = attachment.sizeToString()
+                //                    self.attachmentDownloadUploadIndicatorView.delegate = self
+                //                }
+                //                let timeM = Int(attachment.duration / 60)
+                //                let timeS = Int(attachment.duration.truncatingRemainder(dividingBy: 60.0))
+                //                self.attachmentTimeOrSizeLabel.text = "0:00 / \(timeM):\(timeS)"
+                //
+                break
+            case .file, .fileAndText:
+                
+                //                self.attachmentThumbnailImageView.isHidden = false
+                //                self.attachmentFileNameLabel.isHidden = false
+                //                self.attachmentTimeOrSizeLabel.isHidden = false
+                //                self.attachmentContainreView.isHidden = false
+                //                self.mediaContainerViewHeightConstraint.constant = 0
+                //                self.attachmentViewHeightConstraint.constant = 55.0
+                //                self.attachmentFileNameLabel.text = attachment.name
+                //                self.attachmentThumbnailImageView.setThumbnail(for: attachment)
+                //                self.attachmentTimeOrSizeLabel.text = attachment.sizeToString()
+                //                if self.attachment?.status != .ready {
+                //                    self.attachmentDownloadUploadIndicatorView.layer.cornerRadius = 16.0
+                //                    self.attachmentDownloadUploadIndicatorView.layer.masksToBounds = true
+                //                    self.attachmentDownloadUploadIndicatorView.delegate = self
+                //                }
+                break
+            default:
+                break
+            }
+        } else {
+            
+            //            if let forwardMessage = message.forwardedFrom {
+            //                if forwardMessage.type == .audio  || forwardMessage.type == .audioAndText {
+            //                    // do nothing
+            //                } else if forwardMessage.type == .file  || forwardMessage.type == .fileAndText {
+            //                    mediaContainerView.isHidden = true
+            //                    mediaContainerViewHeightConstraint.constant = 0
+            //                } else {
+            //                    mediaContainerView.isHidden = true
+            //                    mediaContainerViewHeightConstraint.constant = 0
+            //                    attachmentContainreView.isHidden = true
+            //                    attachmentViewHeightConstraint.constant = 0.0
+            //                }
+            //            } else {
+            //                mediaContainerView.isHidden = true
+            //                mediaContainerViewHeightConstraint.constant = 0
+            //                attachmentContainreView.isHidden = true
+            //                attachmentViewHeightConstraint.constant = 0.0
+            //            }
+        }
+    }
+    
+    func updateAttachmentDownloadUploadIndicatorView() {
+        if let attachment = self.attachment {
+            
+            if attachment.status == .ready {
+                indicatorViewAbs.setState(attachment.status)
+                if attachment.type == .gif {
+                    attachment.loadData()
+                    if let data = attachment.data {
+                        imgMediaAbs.prepareForAnimation(withGIFData: data)
+                        imgMediaAbs.startAnimatingGIF()
+                    }
+                } else if attachment.type == .image {
+                    imgMediaAbs.setThumbnail(for: attachment)
+                }
+                return
+            }
+            
+            
+            switch attachment.type {
+            case .video, .image, .gif:
+                indicatorViewAbs.setFileType(.media)
+                indicatorViewAbs.setState(attachment.status)
+                if attachment.status == .downloading ||  attachment.status == .uploading {
+                    indicatorViewAbs.setPercentage(attachment.downloadUploadPercent)
+                }
+                break
+            case .audio, .voice, .file:
+                //                if self.isIncommingMessage {
+                //                    self.attachmentDownloadUploadIndicatorView.setFileType(.incommingFile)
+                //                } else {
+                //                    self.attachmentDownloadUploadIndicatorView.setFileType(.outgoingFile)
+                //                }
+                //                self.attachmentDownloadUploadIndicatorView.setState(attachment.status)
+                //                if attachment.status == .downloading ||  attachment.status == .uploading {
+                //                    self.attachmentDownloadUploadIndicatorView.setPercentage(self.attachment!.downloadUploadPercent)
+                //                }
+                break
+            }
+        }
+    }
+
     
     /*
      ************************************************************************************************************************************
@@ -812,6 +1061,40 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
             txtEditedAbs.removeFromSuperview()
             txtEditedAbs = nil
         }
+    }
+}
+
+/*
+ ******************************************************************
+ **************************** extensions **************************
+ ******************************************************************
+ */
+
+extension AbstractCell: IGDownloadUploadIndicatorViewDelegate {
+    func downloadUploadIndicatorDidTapOnStart(_ indicator: IGDownloadUploadIndicatorView) {
+        if self.attachment?.status == .downloading {
+            return
+        }
+        
+        if let attachment = self.attachment {
+            IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: {
+                
+            }, failure: {
+                
+            })
+        }
+        if let forwardAttachment = self.forwardedAttachment {
+            IGDownloadManager.sharedManager.download(file: forwardAttachment, previewType: .originalFile, completion: {
+                
+            }, failure: {
+                
+            })
+            
+        }
+    }
+    
+    func downloadUploadIndicatorDidTapOnCancel(_ indicator: IGDownloadUploadIndicatorView) {
+        
     }
 }
 

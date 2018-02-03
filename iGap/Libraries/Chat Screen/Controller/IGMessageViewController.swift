@@ -109,7 +109,6 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
     var notificationToken: NotificationToken?
     
     var messageCellIdentifer = IGMessageCollectionViewCell.cellReuseIdentifier()
-    var textCellIdentifier = TextCell.cellReuseIdentifier()
     var logMessageCellIdentifer = IGMessageLogCollectionViewCell.cellReuseIdentifier()
     var room : IGRoom?
     //let currentLoggedInUserID = IGAppManager.sharedManager.userID()
@@ -1446,7 +1445,8 @@ extension IGMessageViewController: IGMessageCollectionViewDataSource {
             }
         }
         
-        if (message.type == .text && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .text) {
+        if (message.type == .text && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .text) ||
+           (message.type == .image && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .image) {
 
             if let senderHash = message.authorHash {
                 if senderHash == IGAppManager.sharedManager.authorHash() {
@@ -1475,7 +1475,16 @@ extension IGMessageViewController: IGMessageCollectionViewDataSource {
             return cell
             
         } else if (message.type == .text && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .text) {
-            let cell: TextCell = collectionView.dequeueReusableCell(withReuseIdentifier: textCellIdentifier, for: indexPath) as! TextCell
+            
+            let cell: TextCell = collectionView.dequeueReusableCell(withReuseIdentifier: TextCell.cellReuseIdentifier(), for: indexPath) as! TextCell
+            let bubbleSize = CellSizeCalculator.sharedCalculator.mainBubbleCountainerSize(for: message)
+            cell.setMessage(message,isIncommingMessage: isIncommingMessage,shouldShowAvatar: shouldShowAvatar,messageSizes: bubbleSize,isPreviousMessageFromSameSender: isPreviousMessageFromSameSender,isNextMessageFromSameSender: isNextMessageFromSameSender)
+            cell.delegate = self
+            return cell
+            
+        } else if (message.type == .image && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .image) {
+            
+            let cell: ImageCell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCell.cellReuseIdentifier(), for: indexPath) as! ImageCell
             let bubbleSize = CellSizeCalculator.sharedCalculator.mainBubbleCountainerSize(for: message)
             cell.setMessage(message,isIncommingMessage: isIncommingMessage,shouldShowAvatar: shouldShowAvatar,messageSizes: bubbleSize,isPreviousMessageFromSameSender: isPreviousMessageFromSameSender,isNextMessageFromSameSender: isNextMessageFromSameSender)
             cell.delegate = self
