@@ -671,14 +671,14 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
             make.trailing.equalTo(replyViewAbs.snp.trailing)
             make.leading.equalTo(replyLineViewAbs.snp.trailing).offset(8)
             make.top.equalTo(replyLineViewAbs.snp.top)
-            make.height.equalTo(10)
+            make.height.equalTo(14)
         }
         
         txtReplyMessageAbs.snp.makeConstraints { (make) in
             make.trailing.equalTo(replyViewAbs.snp.trailing)
             make.leading.equalTo(replyLineViewAbs.snp.trailing).offset(8)
             make.bottom.equalTo(replyLineViewAbs.snp.bottom)
-            make.height.equalTo(13)
+            make.height.equalTo(17)
         }
         
         replyViewAbs?.backgroundColor         = UIColor.chatReplyToBackgroundColor(isIncommingMessage: isIncommingMessage)

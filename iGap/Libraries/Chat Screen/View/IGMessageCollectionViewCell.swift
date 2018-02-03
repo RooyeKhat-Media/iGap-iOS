@@ -150,7 +150,7 @@ class IGMessageCollectionViewCell: IGMessageGeneralCollectionViewCell {
             if isEdited {
                 textWithTime = text.appending("xxxxxxxxxxxxx")
             } else {
-                textWithTime = text.appending("xxxxxxx")
+                textWithTime = text.appending("xxxxxxxx")
             }
         } else {
             textWithTime = text.appending("")

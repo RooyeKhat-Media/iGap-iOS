@@ -115,9 +115,9 @@ class CellSizeCalculator: NSObject {
             
             //body
             if let text = originalMessage.message as NSString? {
-                let stringRect = IGMessageCollectionViewCell.bodyRect(text: text, isEdited: false, addArbitraryTexts: false)
+                let stringRect = IGMessageCollectionViewCell.bodyRect(text: text, isEdited: false, addArbitraryTexts: true)
                 finalSize.height += stringRect.height
-                finalSize.width = max(finalSize.width, stringRect.width)
+                finalSize.width = max(finalSize.width, stringRect.width + 20)
                 finalSize.width = min(finalSize.width, maximumWidth)
                 forwardedMessageBodyHeight = stringRect.height
             }
@@ -178,7 +178,7 @@ class CellSizeCalculator: NSObject {
             let stringRect = IGMessageCollectionViewCell.bodyRect(text: text, isEdited: message.isEdited, addArbitraryTexts: true)
             finalSize.height += stringRect.height
             //finalSize.width = min(finalSize.width, stringRect.width + 25)
-            finalSize.width = max(finalSize.width, stringRect.width + 25)
+            finalSize.width = max(finalSize.width, stringRect.width + 20)
             finalSize.width = min(finalSize.width, maximumWidth)
             messageBodyHeight = stringRect.height
             //messageBodyHeight = stringRect.height
@@ -211,7 +211,6 @@ class CellSizeCalculator: NSObject {
                 finalSize.width = 250
             } else {
                 finalSize.height -= 15
-                finalSize.width += 80
             }
         }
         
