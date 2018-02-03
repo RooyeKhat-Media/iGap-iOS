@@ -16,11 +16,6 @@ class TextCell: AbstractCell {
     @IBOutlet var mainBubbleView: UIView!
     @IBOutlet weak var messageView: UIView!
     
-    @IBOutlet weak var txtEdited: UILabel!
-    @IBOutlet weak var txtTime: UILabel!
-    
-    @IBOutlet weak var imgStatus: UIImageView!
-    
     @IBOutlet weak var txtMessageHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var mainBubbleViewWidth: NSLayoutConstraint!
     
@@ -49,11 +44,6 @@ class TextCell: AbstractCell {
         
         /********** lable **********/
         txtMessageAbs = txtMessage
-        txtTimeAbs = txtTime
-        txtEditedAbs = txtEdited
-        
-        /********** image **********/
-        imgStatusAbs = imgStatus
         
         /******** constraint ********/
         txtMessageHeightConstraintAbs = txtMessageHeightConstraint

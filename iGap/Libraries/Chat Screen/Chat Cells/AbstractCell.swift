@@ -66,10 +66,8 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
         manageTextMessage()
         manageLink()
         manageGustureRecognizers()
-        manageMessageStatus()
         manageReply()
         manageForward()
-        manageTime()
         manageEdit()
     }
     
@@ -98,8 +96,9 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
      ******************************************************************
      */
     
-    private func manageTime(){
+    private func manageTime(statusExist: Bool){
         if let time = realmRoomMessage.creationTime {
+            makeTime(statusExist: statusExist)
             txtTimeAbs?.text = time.convertToHumanReadable()
             txtTimeAbs?.textColor = UIColor.chatTimeTextColor(isIncommingMessage: isIncommingMessage)
         }
@@ -113,10 +112,9 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
     
     private func manageEdit() {
         if realmRoomMessage.isEdited {
-            txtEditedAbs?.isHidden = false
-            txtEditedAbs?.textColor = UIColor.chatTimeTextColor(isIncommingMessage: isIncommingMessage)
+            makeEdit()
         } else {
-            txtEditedAbs?.isHidden = true
+            removeEdit()
         }
     }
     
@@ -127,6 +125,8 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
      */
     
     private func manageMessageStatus(){
+        makeStatus()
+        
         switch realmRoomMessage.status {
         case .sending:
             imgStatusAbs.image = UIImage(named: "IG_Message_Cell_State_Sending")
@@ -185,15 +185,17 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
                 }
             }
 
-            imgStatusAbs.isHidden = true
+            removeStatus()
+            manageTime(statusExist: false)
             setAvatar()
-
-        } else {
-            mainBubbleViewAbs?.layer.borderWidth = 1.0
-            imgStatusAbs?.isHidden = false
             
+        } else {
+            
+            mainBubbleViewAbs?.layer.borderWidth = 1.0
             removeAvatar()
             removeSenderName()
+            manageTime(statusExist: true)
+            manageMessageStatus()
         }
     }
     
@@ -733,6 +735,82 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
         if avatarViewAbs != nil {
             avatarViewAbs.removeFromSuperview()
             avatarViewAbs = nil
+        }
+    }
+    
+    
+    
+    
+    private func makeStatus(){
+        if imgStatusAbs == nil {
+            imgStatusAbs = UIImageView()
+            mainBubbleViewAbs.addSubview(imgStatusAbs)
+        }
+        
+        imgStatusAbs.snp.makeConstraints { (make) in
+            make.trailing.equalTo(mainBubbleViewAbs.snp.trailing).offset(-10)
+            make.centerY.equalTo(txtTimeAbs.snp.centerY)
+            make.height.equalTo(10)
+            make.width.equalTo(10)
+        }
+    }
+    
+    private func removeStatus(){
+        if imgStatusAbs != nil {
+            imgStatusAbs.removeFromSuperview()
+            imgStatusAbs = nil
+        }
+    }
+    
+    
+    
+    
+    private func makeTime(statusExist: Bool){
+        if txtTimeAbs == nil {
+            txtTimeAbs = UILabel()
+            txtTimeAbs.font = UIFont.igFont(ofSize: 9.0)
+            mainBubbleViewAbs.addSubview(txtTimeAbs)
+        }
+        
+        txtTimeAbs.snp.makeConstraints{ (make) in
+            make.trailing.equalTo(mainBubbleViewAbs.snp.trailing).offset(-15)
+            make.bottom.equalTo(mainBubbleViewAbs.snp.bottom).offset(-11)
+            make.width.equalTo(30)
+            make.height.equalTo(11)
+        }
+    }
+    
+    private func removeTime(){
+        if txtTimeAbs != nil {
+            txtTimeAbs.removeFromSuperview()
+            txtTimeAbs = nil
+        }
+    }
+    
+    
+    
+    
+    private func makeEdit(){
+        if txtEditedAbs == nil {
+            txtEditedAbs = UILabel()
+            txtEditedAbs.text = "edited"
+            txtEditedAbs.font = UIFont.igFont(ofSize: 9.0)
+            txtEditedAbs.textColor = UIColor.chatTimeTextColor(isIncommingMessage: isIncommingMessage)
+            mainBubbleViewAbs.addSubview(txtEditedAbs)
+        }
+        
+        txtEditedAbs.snp.makeConstraints { (make) in
+            make.trailing.equalTo(txtTimeAbs.snp.leading).offset(-3)
+            make.centerY.equalTo(txtTimeAbs.snp.centerY)
+            make.width.equalTo(30)
+            make.height.equalTo(11)
+        }
+    }
+    
+    private func removeEdit(){
+        if txtEditedAbs != nil {
+            txtEditedAbs.removeFromSuperview()
+            txtEditedAbs = nil
         }
     }
 }
