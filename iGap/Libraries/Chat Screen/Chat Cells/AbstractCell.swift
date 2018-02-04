@@ -43,6 +43,7 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
     var indicatorViewAbs: IGDownloadUploadIndicatorView!
 
     var realmRoomMessage: IGRoomMessage!
+    var finalRoomMessage: IGRoomMessage!
     var messageSizes: RoomMessageCalculatedSize!
     var isIncommingMessage: Bool!
     var shouldShowAvatar: Bool!
@@ -52,6 +53,9 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
     var trailingAbs: Constraint?
     
     let disposeBag = DisposeBag()
+    
+    var isForward = false
+    var isReply = false
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -68,15 +72,39 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
         self.messageSizes = messageSizes
         self.isPreviousMessageFromSameSender = isPreviousMessageFromSameSender
         
+        detectFinalMessage()
         manageCellBubble()
         manageReceivedOrIncommingMessage()
-        manageTextMessage()
-        manageLink()
-        manageGustureRecognizers()
         manageReply()
         manageForward()
         manageEdit()
+        manageTextMessage()
+        manageViewPosition()
+        manageLink()
+        manageGustureRecognizers()
         manageAttachment()
+    }
+    /*
+     ******************************************************************
+     ********************** Detect Final Message **********************
+     ******************************************************************
+     */
+    
+    /* check that exist forward/reply and fill finalMessage with correct value */
+    private func detectFinalMessage(){
+        if let message = realmRoomMessage.forwardedFrom {
+            isForward = true
+            isReply = false
+            finalRoomMessage = message
+        } else if realmRoomMessage.repliedTo != nil {
+            isForward = false
+            isReply = true
+            finalRoomMessage = realmRoomMessage
+        } else {
+            isForward = false
+            isReply = false
+            finalRoomMessage = realmRoomMessage
+        }
     }
     
     /*
@@ -86,15 +114,96 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
      */
     
     private func manageTextMessage(){
-        if realmRoomMessage.message != nil && realmRoomMessage.message != "" {
+        
+        if finalRoomMessage.message != nil && finalRoomMessage.message != "" {
             txtMessageAbs.font = IGMessageCollectionViewCell.messageBodyTextViewFont()
             messageViewAbs?.isHidden = false
             txtMessageAbs?.isHidden = false
             messageViewAbs?.backgroundColor = UIColor.clear
             txtMessageAbs?.textColor = UIColor.chatBubbleTextColor(isIncommingMessage: isIncommingMessage)
             txtMessageHeightConstraintAbs?.constant = messageSizes.messageBodyHeight
+            txtMessageAbs?.text = finalRoomMessage.message
+        } else {
+            txtMessageHeightConstraintAbs?.constant = 0
+            messageViewAbs?.isHidden = true
+            txtMessageAbs?.isHidden = true
+        }
+    }
+    
+    /*
+     ******************************************************************
+     ********************** Manage View Positions *********************
+     ******************************************************************
+     */
+    
+    private func manageViewPosition(){
+        
+        if txtMessageAbs == nil {
+            return
+        }
+        
+        if finalRoomMessage.attachment == nil {
+            if isForward {
+                txtMessageAbs.snp.remakeConstraints{ (make) in
+                    make.top.equalTo((forwardViewAbs?.snp.bottom)!).offset(3)
+                }
+            } else if isReply {
+                txtMessageAbs.snp.remakeConstraints{ (make) in
+                    make.top.equalTo((replyViewAbs?.snp.bottom)!).offset(3)
+                }
+            } else {
+                txtMessageAbs.snp.remakeConstraints{ (make) in
+                    make.centerY.equalTo(mainBubbleViewAbs.snp.centerY)
+                }
+            }
+        } else {
+            switch (finalRoomMessage.type) {
+            case .image, .video, .gif:
+
+                if isReply {
+                    imgMediaAbs.snp.makeConstraints { (make) in
+                        make.top.equalTo(replyViewAbs.snp.bottom)
+                    }
+                } else if isForward {
+                    imgMediaAbs.snp.makeConstraints { (make) in
+                        make.top.equalTo(forwardViewAbs.snp.bottom)
+                    }
+                    
+                    imgMediaAbs.backgroundColor = UIColor.brown
+                }
+                
+                txtMessageAbs.snp.remakeConstraints{ (make) in
+                    make.centerY.equalTo(mainBubbleViewAbs.snp.centerY)
+                }
+                
+                break
+            case .imageAndText, .videoAndText, .gifAndText:
+                
+                txtMessageAbs.snp.remakeConstraints{ (make) in
+                    make.top.equalTo(imgMediaAbs.snp.bottom).offset(-8)
+                }
+                break
+                
+                
+            case .voice:
+                break
             
-            txtMessageAbs?.text = realmRoomMessage.message
+                
+            case .audio:
+                break
+            case .audioAndText:
+                break
+                
+                
+            case .file:
+                break
+            case .fileAndText:
+                break
+                
+                
+            default:
+                break
+            }
         }
     }
     
@@ -363,19 +472,8 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
                 txtReplyMessageAbs.text = ""
             }
             
-            txtMessageAbs.snp.remakeConstraints{ (make) in
-                make.top.equalTo((replyViewAbs?.snp.bottom)!).offset(3)
-                make.height.greaterThanOrEqualTo(10).priority(.high)
-            }
-            
         } else {
             removeReply()
-            
-            if txtMessageAbs != nil {
-                txtMessageAbs.snp.remakeConstraints{ (make) in
-                    make.centerY.equalTo(mainBubbleViewAbs.snp.centerY)
-                }
-            }
         }
     }
     
@@ -404,10 +502,6 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
                 txtMessageAbs.text = text
             }
 
-            txtMessageAbs.snp.remakeConstraints{ (make) in
-                make.top.equalTo((forwardViewAbs?.snp.bottom)!).offset(3)
-            }
-            
             //MARK: ▶︎ Forward Attachment
             //        if var attachment = originalMessage.attachment {
             //            if let attachmentVariableInCache = IGAttachmentManager.sharedManager.getRxVariable(attachmentPrimaryKeyId: attachment.primaryKeyId!) {
@@ -570,7 +664,7 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
     
     private func manageAttachment(){
         
-        if var attachment = realmRoomMessage.attachment {
+        if var attachment = finalRoomMessage.attachment {
             
             mediaViewAbs.layer.cornerRadius = 18
             mediaViewAbs.layer.masksToBounds = true
@@ -600,13 +694,17 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
             }
             //MARK: ▶︎ Rx End
             
-            switch (realmRoomMessage.type) {
+            switch (finalRoomMessage.type) {
             case .image, .imageAndText, .video, .videoAndText, .gif, .gifAndText:
                 mediaViewAbs.isHidden = false
                 imgMediaAbs.isHidden = false
                 imgMediaAbs.backgroundColor = UIColor.clear
                 imgMediaAbs.setThumbnail(for: attachment)
-                mediaHeightConstraintAbs.constant = messageSizes.MessageAttachmentHeight //height
+                if isForward {
+                    mediaHeightConstraintAbs.constant = messageSizes.forwardedMessageAttachmentHeight + 20
+                } else {
+                    mediaHeightConstraintAbs.constant = messageSizes.MessageAttachmentHeight
+                }
                 if attachment.status != .ready {
                     indicatorViewAbs.size = attachment.sizeToString()
                     indicatorViewAbs.delegate = self
