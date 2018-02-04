@@ -1917,23 +1917,20 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
     }
     
     func didTapOnAttachment(cellMessage: IGRoomMessage, cell: IGMessageGeneralCollectionViewCell) {
-        //TODO: check forwarded attachment
-        let message = cellMessage
-        if message.attachment == nil {
-            
-            if message.forwardedFrom?.attachment != nil {
-                didTapOnForwardedAttachment(cellMessage: cellMessage, cell: cell)
-            }
-            
-            return
+        
+        var finalMessage = cellMessage
+        var roomMessageLists = self.messagesWithMedia
+        
+        if cellMessage.forwardedFrom != nil {
+            roomMessageLists = self.messagesWithForwardedMedia
+            finalMessage = cellMessage.forwardedFrom!
         }
         
-        var attachmetVariableInCache = IGAttachmentManager.sharedManager.getRxVariable(attachmentPrimaryKeyId: message.attachment!.primaryKeyId!)
-        
+        var attachmetVariableInCache = IGAttachmentManager.sharedManager.getRxVariable(attachmentPrimaryKeyId: finalMessage.attachment!.primaryKeyId!)
         if attachmetVariableInCache == nil {
-            let attachmentRef = ThreadSafeReference(to: message.attachment!)
+            let attachmentRef = ThreadSafeReference(to: finalMessage.attachment!)
             IGAttachmentManager.sharedManager.add(attachmentRef: attachmentRef)
-            attachmetVariableInCache = IGAttachmentManager.sharedManager.getRxVariable(attachmentPrimaryKeyId: message.attachment!.primaryKeyId!)
+            attachmetVariableInCache = IGAttachmentManager.sharedManager.getRxVariable(attachmentPrimaryKeyId: finalMessage.attachment!.primaryKeyId!)
         }
         
         let attachment = attachmetVariableInCache!.value
@@ -1941,12 +1938,10 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
             return
         }
         
-        switch message.type {
+        switch finalMessage.type {
         case .image, .imageAndText:
             break
         case .video, .videoAndText:
-            print(attachment.status)
-            print(message.type)
             if let path = attachment.path() {
                 let player = AVPlayer(url: path)
                 let avController = AVPlayerViewController()
@@ -1956,7 +1951,7 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
             }
         case .voice , .audio :
             let musicPlayer = IGMusicViewController()
-            musicPlayer.attachment = message.attachment
+            musicPlayer.attachment = finalMessage.attachment
             self.present(musicPlayer, animated: true, completion: {
             })
             return
@@ -1964,37 +1959,18 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
             return
         }
         
-        //        let messagesWithMediaCount = self.messagesWithMedia.count
-        //        let messagesWithForwardedMediaCount = self.messagesWithForwardedMedia.count
-        
-        
-        let thisMessageInSharedMediaResult = self.messagesWithMedia.filter("id == \(message.id)")
-        for messsss in thisMessageInSharedMediaResult {
-            print ("iddd: \(messsss.id)")
-        }
+        let thisMessageInSharedMediaResult = roomMessageLists.filter("id == \(finalMessage.id)")
         var indexOfThis = 0
         if let this = thisMessageInSharedMediaResult.first {
-            indexOfThis = self.messagesWithMedia.index(of: this)!
-            print ("found it: \(indexOfThis)")
-        } else {
-            print ("not found it")
+            indexOfThis = roomMessageLists.index(of: this)!
         }
         
-        var photos: [INSPhotoViewable] = Array(self.messagesWithMedia.map { (message) -> IGMedia in
+        var photos: [INSPhotoViewable] = Array(roomMessageLists.map { (message) -> IGMedia in
             return IGMedia(message: message, forwardedMedia: false)
         })
         
         let currentPhoto = photos[indexOfThis]
-        
         let galleryPreview = INSPhotosViewController(photos: photos, initialPhoto: currentPhoto, referenceView: nil)
-        
-        //        galleryPreview.referenceViewForPhotoWhenDismissingHandler = { [weak self] photo in
-        //            if let index = photos.index(where: {$0 === photo}) {
-        //                let indexPath = NSIndexPath(forItem: index, inSection: 0)
-        //                return collectionView.cellForItemAtIndexPath(indexPath) as? ExampleCollectionViewCell
-        //            }
-        //            return nil
-        //        }
         present(galleryPreview, animated: true, completion: nil)
     }
     

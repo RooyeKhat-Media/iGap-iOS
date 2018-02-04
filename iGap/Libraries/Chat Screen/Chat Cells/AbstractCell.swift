@@ -121,7 +121,11 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
             txtMessageAbs?.isHidden = false
             messageViewAbs?.backgroundColor = UIColor.clear
             txtMessageAbs?.textColor = UIColor.chatBubbleTextColor(isIncommingMessage: isIncommingMessage)
-            txtMessageHeightConstraintAbs?.constant = messageSizes.messageBodyHeight
+            if isForward {
+                txtMessageHeightConstraintAbs?.constant = messageSizes.forwardedMessageBodyHeight
+            } else {
+                txtMessageHeightConstraintAbs?.constant = messageSizes.messageBodyHeight
+            }
             txtMessageAbs?.text = finalRoomMessage.message
         } else {
             txtMessageHeightConstraintAbs?.constant = 0
@@ -168,8 +172,6 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
                     imgMediaAbs.snp.makeConstraints { (make) in
                         make.top.equalTo(forwardViewAbs.snp.bottom)
                     }
-                    
-                    imgMediaAbs.backgroundColor = UIColor.brown
                 }
                 
                 txtMessageAbs.snp.remakeConstraints{ (make) in
@@ -179,8 +181,18 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
                 break
             case .imageAndText, .videoAndText, .gifAndText:
                 
+                if isReply {
+                    imgMediaAbs.snp.makeConstraints { (make) in
+                        make.top.equalTo(replyViewAbs.snp.bottom)
+                    }
+                } else if isForward {
+                    imgMediaAbs.snp.makeConstraints { (make) in
+                        make.top.equalTo(forwardViewAbs.snp.bottom)
+                    }
+                }
+                
                 txtMessageAbs.snp.remakeConstraints{ (make) in
-                    make.top.equalTo(imgMediaAbs.snp.bottom).offset(-8)
+                    make.top.equalTo(imgMediaAbs.snp.bottom)
                 }
                 break
                 
@@ -666,9 +678,11 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
         
         if var attachment = finalRoomMessage.attachment {
             
-            mediaViewAbs.layer.cornerRadius = 18
-            mediaViewAbs.layer.masksToBounds = true
-            mediaViewAbs.backgroundColor = UIColor.clear
+            if mediaViewAbs != nil {
+                mediaViewAbs.layer.cornerRadius = 18
+                mediaViewAbs.layer.masksToBounds = true
+                mediaViewAbs.backgroundColor = UIColor.clear
+            }
             
             indicatorViewAbs.shouldShowSize = true
             
@@ -681,7 +695,7 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
                 self.attachment = IGAttachmentManager.sharedManager.getRxVariable(attachmentPrimaryKeyId: attachment.primaryKeyId!)!.value
             }
             
-            //MARK: ▶︎ Rx Start
+            /* Rx Start */
             if let variableInCache = IGAttachmentManager.sharedManager.getRxVariable(attachmentPrimaryKeyId: attachment.primaryKeyId!) {
                 attachment = variableInCache.value
                 variableInCache.asObservable().subscribe({ (event) in
@@ -689,10 +703,8 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
                         self.updateAttachmentDownloadUploadIndicatorView()
                     }
                 }).addDisposableTo(disposeBag)
-            } else {
-                
             }
-            //MARK: ▶︎ Rx End
+            /* Rx End */
             
             switch (finalRoomMessage.type) {
             case .image, .imageAndText, .video, .videoAndText, .gif, .gifAndText:
@@ -708,8 +720,6 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
                 if attachment.status != .ready {
                     indicatorViewAbs.size = attachment.sizeToString()
                     indicatorViewAbs.delegate = self
-                } else {
-                    
                 }
                 
                 //                if message.type == .gif || message.type == .gifAndText {

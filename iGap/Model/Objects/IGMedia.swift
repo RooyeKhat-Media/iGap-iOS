@@ -25,14 +25,15 @@ class IGMedia: INSPhotoViewable, Equatable {
     
     
     init(message: IGRoomMessage, forwardedMedia: Bool) {
-        if let attachment = forwardedMedia ? message.forwardedFrom?.attachment : message.attachment {
+        
+        let roomMessage = message.forwardedFrom != nil ? message.forwardedFrom : message
+        if let attachment = roomMessage?.attachment {
             file = attachment
             image = UIImage.originalImage(for: attachment)
             thumbnailImage = UIImage.thumbnail(for: attachment)
-            if let text = message.message {
+            if let text = roomMessage?.message {
                 attributedTitle = NSAttributedString(string: text)
             }
-            
         }
     }
     

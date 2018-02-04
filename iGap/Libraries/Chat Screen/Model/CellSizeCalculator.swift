@@ -209,6 +209,8 @@ class CellSizeCalculator: NSObject {
                 finalSize.width = 220
             } else if message.forwardedFrom?.type == .voice {
                 finalSize.width = 250
+            } else if message.forwardedFrom?.type == .image || message.forwardedFrom?.type == .imageAndText {
+                finalSize.height -= 25
             } else {
                 finalSize.height -= 15
             }
