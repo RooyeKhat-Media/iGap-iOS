@@ -37,7 +37,6 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
     
     var avatarViewAbs: IGAvatarView!
     var txtMessageAbs: ActiveLabel!
-    var txtForwardedMessageAbs: ActiveLabel!
     var imgMediaAbs: IGImageView!
     var indicatorViewAbs: IGDownloadUploadIndicatorView!
 
@@ -363,7 +362,6 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
      */
     private func manageLink(){
         linkManager(txtMessage: txtMessageAbs)
-        linkManager(txtMessage: txtForwardedMessageAbs)
     }
     
     private func linkManager(txtMessage: ActiveLabel?){
@@ -692,18 +690,17 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
                     indicatorViewAbs.delegate = self
                 }
                 
-                //                if message.type == .gif || message.type == .gifAndText {
-                //                    attachment.loadData()
-                //                    if let data = attachment.data {
-                //                        self.mediaImageView.prepareForAnimation(withGIFData: data)
-                //                        self.mediaImageView.startAnimatingGIF()
-                //                    } else {
-                //                        self.downloadUploadIndicatorDidTapOnStart(self.mediaDownloadUploadIndicatorView)
-                //                    }
-                //                }
-                //
-                //                //self.attachmentContainreView.isHidden = true
-                //                self.attachmentViewHeightConstraint.constant = 0.0
+                /**** seems to not need ****
+                if finalRoomMessage.type == .gif || finalRoomMessage.type == .gifAndText {
+                    attachment.loadData()
+                    if let data = attachment.data {
+                        imgMediaAbs.prepareForAnimation(withGIFData: data)
+                        imgMediaAbs.startAnimatingGIF()
+                    } else {
+                        self.downloadUploadIndicatorDidTapOnStart(indicatorViewAbs)
+                    }
+                }
+                */
                 
                 break
             case .voice:

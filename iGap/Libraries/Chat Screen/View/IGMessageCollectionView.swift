@@ -52,6 +52,7 @@ class IGMessageCollectionView: UICollectionView {
         self.register(TextCell.nib(), forCellWithReuseIdentifier: TextCell.cellReuseIdentifier())
         self.register(ImageCell.nib(), forCellWithReuseIdentifier: ImageCell.cellReuseIdentifier())
         self.register(VideoCell.nib(), forCellWithReuseIdentifier: VideoCell.cellReuseIdentifier())
+        self.register(GifCell.nib(), forCellWithReuseIdentifier: GifCell.cellReuseIdentifier())
         self.register(IGMessageCollectionViewCell.nib(), forCellWithReuseIdentifier: IGMessageCollectionViewCell.cellReuseIdentifier())
         self.register(IGMessageLogCollectionViewCell.nib(), forCellWithReuseIdentifier: IGMessageLogCollectionViewCell.cellReuseIdentifier())
         self.register(IGMessageLogCollectionViewCell.nib(), forSupplementaryViewOfKind: UICollectionElementKindSectionFooter, withReuseIdentifier: IGMessageLogCollectionViewCell.cellReuseIdentifier())

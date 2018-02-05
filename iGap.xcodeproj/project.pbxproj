@@ -197,6 +197,8 @@
 		FA8F22581DD89F7C005A90D1 /* IGAvatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8F22571DD89F7C005A90D1 /* IGAvatar.swift */; };
 		FA927E002028416300DF7145 /* VideoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA927DFF2028416300DF7145 /* VideoCell.swift */; };
 		FA927E02202841C900DF7145 /* VideoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA927E012028418600DF7145 /* VideoCell.xib */; };
+		FA927E0420284D7800DF7145 /* GifCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA927E0320284D7800DF7145 /* GifCell.swift */; };
+		FA927E0620284DC100DF7145 /* GifCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA927E0520284D7E00DF7145 /* GifCell.xib */; };
 		FA930D9A1E5B178F00069EE1 /* SSLSecurity.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA930D981E5B178F00069EE1 /* SSLSecurity.swift */; };
 		FA930D9B1E5B178F00069EE1 /* WebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA930D991E5B178F00069EE1 /* WebSocket.swift */; };
 		FA96EF4E1DEB0431009BE640 /* IGMessageSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA96EF4D1DEB0431009BE640 /* IGMessageSender.swift */; };
@@ -473,6 +475,8 @@
 		FA8F22571DD89F7C005A90D1 /* IGAvatar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGAvatar.swift; sourceTree = "<group>"; };
 		FA927DFF2028416300DF7145 /* VideoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCell.swift; sourceTree = "<group>"; };
 		FA927E012028418600DF7145 /* VideoCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VideoCell.xib; sourceTree = "<group>"; };
+		FA927E0320284D7800DF7145 /* GifCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GifCell.swift; sourceTree = "<group>"; };
+		FA927E0520284D7E00DF7145 /* GifCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GifCell.xib; sourceTree = "<group>"; };
 		FA930D981E5B178F00069EE1 /* SSLSecurity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSLSecurity.swift; sourceTree = "<group>"; };
 		FA930D991E5B178F00069EE1 /* WebSocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebSocket.swift; sourceTree = "<group>"; };
 		FA96EF4D1DEB0431009BE640 /* IGMessageSender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGMessageSender.swift; sourceTree = "<group>"; };
@@ -1044,6 +1048,8 @@
 				FA82043A2025C99300A795D5 /* ImageCell.xib */,
 				FA927DFF2028416300DF7145 /* VideoCell.swift */,
 				FA927E012028418600DF7145 /* VideoCell.xib */,
+				FA927E0320284D7800DF7145 /* GifCell.swift */,
+				FA927E0520284D7E00DF7145 /* GifCell.xib */,
 			);
 			path = "Chat Cells";
 			sourceTree = "<group>";
@@ -1354,6 +1360,7 @@
 				937455F91E63021E007694CE /* IGForwardMessageAudioAndVoiceAttachment.xib in Resources */,
 				FA6A22761F41D0210063DF07 /* iGap-Fontico.ttf in Resources */,
 				FA33063E1F445AE90096031A /* IRANSans_UltraLight.ttf in Resources */,
+				FA927E0620284DC100DF7145 /* GifCell.xib in Resources */,
 				FAD57EE21E191DB000FC17D9 /* IGMessageLogCollectionViewCell.xib in Resources */,
 				FA0953071E1B87E40043ED3F /* IGSettingStoryboard.storyboard in Resources */,
 				FA5EC5DB1E06728C006E2850 /* IGChatRoomListTableViewCell.xib in Resources */,
@@ -1629,6 +1636,7 @@
 				FABB9B061DB25E5E00D794A4 /* IGSecurityManager.swift in Sources */,
 				FA0953551E1B97700043ED3F /* IGSettingChatStickersTableViewController.swift in Sources */,
 				FA358D1E1E0A6F49001D0935 /* IGChatsTableViewController.swift in Sources */,
+				FA927E0420284D7800DF7145 /* GifCell.swift in Sources */,
 				FA0CC8081E5D7D4400556283 /* ActiveLabel.swift in Sources */,
 				FA930D9B1E5B178F00069EE1 /* WebSocket.swift in Sources */,
 				FA0953691E1B97700043ED3F /* IGSettingPrivacyAndScurityAutoLockAfterTableViewController.swift in Sources */,
