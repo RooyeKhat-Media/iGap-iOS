@@ -328,9 +328,11 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
         
         /********* Bubble Direction *********/
         mainBubbleViewAbs.snp.makeConstraints { (make) in
+            
+            if leadingAbs != nil { leadingAbs?.deactivate() }
+            if trailingAbs != nil { trailingAbs?.deactivate() }
+            
             if isIncommingMessage {
-                if leadingAbs != nil { leadingAbs?.deactivate() }
-                if trailingAbs != nil { trailingAbs?.deactivate() }
                 
                 if shouldShowAvatar {
                     leadingAbs = make.leading.equalTo(self.contentView.snp.leading).offset(46).priority(999).constraint
@@ -339,19 +341,13 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
                 }
                 trailingAbs = make.trailing.equalTo(self.contentView.snp.trailing).offset(-16).priority(250).constraint
                 
-                if leadingAbs != nil { leadingAbs?.activate() }
-                if trailingAbs != nil { trailingAbs?.activate() }
-                
             } else {
-                if leadingAbs != nil { leadingAbs?.deactivate() }
-                if trailingAbs != nil { trailingAbs?.deactivate() }
-                
                 trailingAbs = make.trailing.equalTo(self.contentView.snp.trailing).offset(-16).priority(999).constraint
                 leadingAbs = make.leading.equalTo(self.contentView.snp.leading).offset(46).priority(250).constraint
-                
-                if leadingAbs != nil { leadingAbs?.activate() }
-                if trailingAbs != nil { trailingAbs?.activate() }
             }
+            
+            if leadingAbs != nil { leadingAbs?.activate() }
+            if trailingAbs != nil { trailingAbs?.activate() }
         }
     }
     

@@ -203,6 +203,7 @@ class CellSizeCalculator: NSObject {
         if message.forwardedFrom != nil {
             if message.forwardedFrom?.type == .contact {
                 finalSize.width = 200
+                finalSize.height += 30
             } else if message.forwardedFrom?.type == .audio || message.forwardedFrom?.type == .audioAndText {
                 finalSize.width = 220
             } else if message.forwardedFrom?.type == .file || message.forwardedFrom?.type == .fileAndText {
