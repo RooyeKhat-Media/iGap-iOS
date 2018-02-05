@@ -21,7 +21,6 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
     var mediaContainerViewAbs: UIView?
     var messageViewAbs: UIView?
     var replyLineViewAbs: UIView!
-    var mediaViewAbs: UIView!
     
     var txtSenderNameAbs: UILabel!
     var txtEditedAbs: UILabel!
@@ -51,6 +50,8 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
     
     var leadingAbs: Constraint?
     var trailingAbs: Constraint?
+    var imgMediaTopAbs: Constraint!
+    var imgMediaHeightAbs: Constraint!
     
     let disposeBag = DisposeBag()
     
@@ -160,19 +161,14 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
                     make.centerY.equalTo(mainBubbleViewAbs.snp.centerY)
                 }
             }
+            
+            removeImage()
+            
         } else {
             switch (finalRoomMessage.type) {
             case .image, .video, .gif:
 
-                if isReply {
-                    imgMediaAbs.snp.makeConstraints { (make) in
-                        make.top.equalTo(replyViewAbs.snp.bottom)
-                    }
-                } else if isForward {
-                    imgMediaAbs.snp.makeConstraints { (make) in
-                        make.top.equalTo(forwardViewAbs.snp.bottom)
-                    }
-                }
+                makeImage()
                 
                 txtMessageAbs.snp.remakeConstraints{ (make) in
                     make.centerY.equalTo(mainBubbleViewAbs.snp.centerY)
@@ -180,16 +176,8 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
                 
                 break
             case .imageAndText, .videoAndText, .gifAndText:
-                
-                if isReply {
-                    imgMediaAbs.snp.makeConstraints { (make) in
-                        make.top.equalTo(replyViewAbs.snp.bottom)
-                    }
-                } else if isForward {
-                    imgMediaAbs.snp.makeConstraints { (make) in
-                        make.top.equalTo(forwardViewAbs.snp.bottom)
-                    }
-                }
+
+                makeImage()
                 
                 txtMessageAbs.snp.remakeConstraints{ (make) in
                     make.top.equalTo(imgMediaAbs.snp.bottom)
@@ -678,14 +666,6 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
         
         if var attachment = finalRoomMessage.attachment {
             
-            if mediaViewAbs != nil {
-                mediaViewAbs.layer.cornerRadius = 18
-                mediaViewAbs.layer.masksToBounds = true
-                mediaViewAbs.backgroundColor = UIColor.clear
-            }
-            
-            indicatorViewAbs.shouldShowSize = true
-            
             if let attachmentVariableInCache = IGAttachmentManager.sharedManager.getRxVariable(attachmentPrimaryKeyId: attachment.primaryKeyId!) {
                 self.attachment = attachmentVariableInCache.value
             } else {
@@ -708,15 +688,8 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
             
             switch (finalRoomMessage.type) {
             case .image, .imageAndText, .video, .videoAndText, .gif, .gifAndText:
-                mediaViewAbs.isHidden = false
-                imgMediaAbs.isHidden = false
-                imgMediaAbs.backgroundColor = UIColor.clear
+                
                 imgMediaAbs.setThumbnail(for: attachment)
-                if isForward {
-                    mediaHeightConstraintAbs.constant = messageSizes.forwardedMessageAttachmentHeight + 20
-                } else {
-                    mediaHeightConstraintAbs.constant = messageSizes.MessageAttachmentHeight
-                }
                 if attachment.status != .ready {
                     indicatorViewAbs.size = attachment.sizeToString()
                     indicatorViewAbs.delegate = self
@@ -844,6 +817,9 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
             default:
                 break
             }
+            
+            indicatorViewAbs.shouldShowSize = true
+            
         } else {
             
             //            if let forwardMessage = message.forwardedFrom {
@@ -1168,6 +1144,63 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
         if txtEditedAbs != nil {
             txtEditedAbs.removeFromSuperview()
             txtEditedAbs = nil
+        }
+    }
+    
+    
+    
+    
+    private func makeImage(){
+        if imgMediaAbs == nil {
+            imgMediaAbs = IGImageView()
+            mainBubbleViewAbs.addSubview(imgMediaAbs)
+        }
+        
+        if indicatorViewAbs == nil {
+            indicatorViewAbs = IGDownloadUploadIndicatorView()
+            mainBubbleViewAbs.addSubview(indicatorViewAbs)
+        }
+        
+        imgMediaAbs.snp.makeConstraints { (make) in
+
+            make.trailing.equalTo(mainBubbleViewAbs.snp.trailing)
+            make.leading.equalTo(mainBubbleViewAbs.snp.leading)
+            
+            if imgMediaTopAbs != nil { imgMediaTopAbs.deactivate() }
+            if imgMediaHeightAbs != nil { imgMediaHeightAbs.deactivate() }
+            
+            if isForward {
+                imgMediaTopAbs = make.top.equalTo(forwardViewAbs.snp.bottom).constraint
+                imgMediaHeightAbs = make.height.equalTo(messageSizes.forwardedMessageAttachmentHeight).constraint
+            } else if isReply {
+                imgMediaTopAbs = make.top.equalTo(replyViewAbs.snp.bottom).constraint
+                imgMediaHeightAbs = make.height.equalTo(messageSizes.MessageAttachmentHeight).constraint
+            } else {
+                imgMediaTopAbs = make.top.equalTo(mainBubbleViewAbs.snp.top).constraint
+                imgMediaHeightAbs = make.height.equalTo(messageSizes.MessageAttachmentHeight).constraint
+            }
+            
+            if imgMediaTopAbs != nil { imgMediaTopAbs.activate() }
+            if imgMediaHeightAbs != nil { imgMediaHeightAbs.activate() }
+        }
+        
+        indicatorViewAbs.snp.makeConstraints { (make) in
+            make.top.equalTo(imgMediaAbs.snp.top)
+            make.bottom.equalTo(imgMediaAbs.snp.bottom)
+            make.trailing.equalTo(imgMediaAbs.snp.trailing)
+            make.leading.equalTo(imgMediaAbs.snp.leading)
+        }
+    }
+    
+    private func removeImage(){
+        if imgMediaAbs != nil {
+            imgMediaAbs.removeFromSuperview()
+            imgMediaAbs = nil
+        }
+        
+        if indicatorViewAbs != nil {
+            indicatorViewAbs.removeFromSuperview()
+            indicatorViewAbs = nil
         }
     }
 }

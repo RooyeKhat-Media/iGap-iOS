@@ -15,15 +15,11 @@ class ImageCell: AbstractCell {
     
     @IBOutlet var mainBubbleView: UIView!
     @IBOutlet weak var messageView: UIView!
-    @IBOutlet weak var mediaView: UIView!
     
     @IBOutlet weak var txtMessageHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var mainBubbleViewWidth: NSLayoutConstraint!
-    @IBOutlet weak var mediaHeightConstraint: NSLayoutConstraint!
     
     @IBOutlet weak var txtMessage: ActiveLabel!
-    @IBOutlet weak var imgMedia: IGImageView!
-    @IBOutlet weak var indicatorView: IGDownloadUploadIndicatorView!
 
     
     class func nib() -> UINib {
@@ -46,19 +42,11 @@ class ImageCell: AbstractCell {
         mainBubbleViewAbs = mainBubbleView
         mainBubbleViewWidthAbs = mainBubbleViewWidth
         messageViewAbs = messageView
-        mediaViewAbs = mediaView
         
         /********** lable **********/
         txtMessageAbs = txtMessage
         
-        /********** image **********/
-        imgMediaAbs = imgMedia
-
-        /******** indicator ********/
-        indicatorViewAbs = indicatorView
-        
         /******** constraint ********/
         txtMessageHeightConstraintAbs = txtMessageHeightConstraint
-        mediaHeightConstraintAbs = mediaHeightConstraint
     }
 }

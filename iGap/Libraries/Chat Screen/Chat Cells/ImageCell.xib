@@ -21,30 +21,6 @@
                     <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yaV-fL-gff">
                         <rect key="frame" x="46" y="10" width="400" height="306"/>
                         <subviews>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iyn-ed-QWf">
-                                <rect key="frame" x="0.0" y="0.0" width="400" height="160"/>
-                                <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3Xi-jk-wmY" customClass="IGImageView" customModule="iGap" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="400" height="160"/>
-                                    </imageView>
-                                    <view alpha="0.59999999999999998" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yVy-K0-0yI" customClass="IGDownloadUploadIndicatorView" customModule="iGap" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="400" height="160"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    </view>
-                                </subviews>
-                                <color key="backgroundColor" red="0.75968191964285714" green="0.88097098214285718" blue="0.5375279017857143" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="yVy-K0-0yI" secondAttribute="bottom" id="BV0-hY-NrR"/>
-                                    <constraint firstAttribute="trailing" secondItem="3Xi-jk-wmY" secondAttribute="trailing" id="Tet-Cy-qeW"/>
-                                    <constraint firstAttribute="height" constant="160" id="V9p-Yt-Qt7"/>
-                                    <constraint firstAttribute="trailing" secondItem="yVy-K0-0yI" secondAttribute="trailing" id="egX-0B-O2A"/>
-                                    <constraint firstItem="3Xi-jk-wmY" firstAttribute="leading" secondItem="iyn-ed-QWf" secondAttribute="leading" id="egs-CQ-onI"/>
-                                    <constraint firstItem="3Xi-jk-wmY" firstAttribute="top" secondItem="iyn-ed-QWf" secondAttribute="top" id="hLY-ai-6Mc"/>
-                                    <constraint firstItem="yVy-K0-0yI" firstAttribute="leading" secondItem="iyn-ed-QWf" secondAttribute="leading" id="sdc-pc-new"/>
-                                    <constraint firstAttribute="bottom" secondItem="3Xi-jk-wmY" secondAttribute="bottom" id="xPV-4G-nEv"/>
-                                    <constraint firstItem="yVy-K0-0yI" firstAttribute="top" secondItem="iyn-ed-QWf" secondAttribute="top" id="xUG-wG-O5k"/>
-                                </constraints>
-                            </view>
                             <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="u46-Gz-HUg">
                                 <rect key="frame" x="0.0" y="179" width="400" height="127"/>
                                 <subviews>
@@ -70,9 +46,6 @@
                             <constraint firstItem="u46-Gz-HUg" firstAttribute="leading" secondItem="yaV-fL-gff" secondAttribute="leading" id="1No-pF-Mf4"/>
                             <constraint firstAttribute="trailing" secondItem="u46-Gz-HUg" secondAttribute="trailing" id="Mwd-MM-pV1"/>
                             <constraint firstAttribute="bottom" secondItem="u46-Gz-HUg" secondAttribute="bottom" id="Q32-45-gp2"/>
-                            <constraint firstAttribute="trailing" secondItem="iyn-ed-QWf" secondAttribute="trailing" id="VBc-un-Ype"/>
-                            <constraint firstItem="iyn-ed-QWf" firstAttribute="top" secondItem="yaV-fL-gff" secondAttribute="top" id="e2S-mX-qgG"/>
-                            <constraint firstItem="iyn-ed-QWf" firstAttribute="leading" secondItem="yaV-fL-gff" secondAttribute="leading" id="ibB-x6-Ybs"/>
                             <constraint firstAttribute="width" constant="400" id="nxC-9R-LHJ"/>
                         </constraints>
                     </view>
@@ -84,12 +57,8 @@
             </constraints>
             <size key="customSize" width="494" height="324"/>
             <connections>
-                <outlet property="imgMedia" destination="3Xi-jk-wmY" id="qHf-6c-Cg1"/>
-                <outlet property="indicatorView" destination="yVy-K0-0yI" id="Ai9-Ke-TH4"/>
                 <outlet property="mainBubbleView" destination="yaV-fL-gff" id="7cF-La-Z1j"/>
                 <outlet property="mainBubbleViewWidth" destination="nxC-9R-LHJ" id="ImQ-ki-xeF"/>
-                <outlet property="mediaHeightConstraint" destination="V9p-Yt-Qt7" id="JI0-6F-i9B"/>
-                <outlet property="mediaView" destination="iyn-ed-QWf" id="3XG-Do-thu"/>
                 <outlet property="messageView" destination="u46-Gz-HUg" id="mLu-Bu-Xp8"/>
                 <outlet property="txtMessage" destination="ufp-bo-0h5" id="FBu-3q-HFD"/>
                 <outlet property="txtMessageHeightConstraint" destination="3bp-aB-7DZ" id="UuL-fP-div"/>
