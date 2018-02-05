@@ -195,6 +195,8 @@
 		FA8F22541DD89C76005A90D1 /* IGGroupRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8F22531DD89C76005A90D1 /* IGGroupRoom.swift */; };
 		FA8F22561DD89C88005A90D1 /* IGChannelRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8F22551DD89C88005A90D1 /* IGChannelRoom.swift */; };
 		FA8F22581DD89F7C005A90D1 /* IGAvatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8F22571DD89F7C005A90D1 /* IGAvatar.swift */; };
+		FA927E002028416300DF7145 /* VideoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA927DFF2028416300DF7145 /* VideoCell.swift */; };
+		FA927E02202841C900DF7145 /* VideoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA927E012028418600DF7145 /* VideoCell.xib */; };
 		FA930D9A1E5B178F00069EE1 /* SSLSecurity.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA930D981E5B178F00069EE1 /* SSLSecurity.swift */; };
 		FA930D9B1E5B178F00069EE1 /* WebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA930D991E5B178F00069EE1 /* WebSocket.swift */; };
 		FA96EF4E1DEB0431009BE640 /* IGMessageSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA96EF4D1DEB0431009BE640 /* IGMessageSender.swift */; };
@@ -469,6 +471,8 @@
 		FA8F22531DD89C76005A90D1 /* IGGroupRoom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGGroupRoom.swift; sourceTree = "<group>"; };
 		FA8F22551DD89C88005A90D1 /* IGChannelRoom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGChannelRoom.swift; sourceTree = "<group>"; };
 		FA8F22571DD89F7C005A90D1 /* IGAvatar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGAvatar.swift; sourceTree = "<group>"; };
+		FA927DFF2028416300DF7145 /* VideoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCell.swift; sourceTree = "<group>"; };
+		FA927E012028418600DF7145 /* VideoCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VideoCell.xib; sourceTree = "<group>"; };
 		FA930D981E5B178F00069EE1 /* SSLSecurity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSLSecurity.swift; sourceTree = "<group>"; };
 		FA930D991E5B178F00069EE1 /* WebSocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebSocket.swift; sourceTree = "<group>"; };
 		FA96EF4D1DEB0431009BE640 /* IGMessageSender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGMessageSender.swift; sourceTree = "<group>"; };
@@ -1038,6 +1042,8 @@
 				FA97D443201708310087BBD0 /* TextCell.xib */,
 				FA8204362025C97300A795D5 /* ImageCell.swift */,
 				FA82043A2025C99300A795D5 /* ImageCell.xib */,
+				FA927DFF2028416300DF7145 /* VideoCell.swift */,
+				FA927E012028418600DF7145 /* VideoCell.xib */,
 			);
 			path = "Chat Cells";
 			sourceTree = "<group>";
@@ -1355,6 +1361,7 @@
 				FAF796071DAA392F0030509B /* Main.storyboard in Resources */,
 				FA33063B1F445AE80096031A /* IRANSans_Bold.ttf in Resources */,
 				FA3306361F445A570096031A /* IRANSans.ttf in Resources */,
+				FA927E02202841C900DF7145 /* VideoCell.xib in Resources */,
 				FAF7960A1DAA39460030509B /* Info.plist in Resources */,
 				FA4BD8A41DF2A53400CCB239 /* IGMusicViewController.xib in Resources */,
 				FA0CC80A1E5D7D4400556283 /* Info.plist in Resources */,
@@ -1583,6 +1590,7 @@
 				FAA9DFB61F4B1CB50076A22F /* IGSettingPrivacyAndSecurityTwoStepVerificationChangePasswordTableViewController.swift in Sources */,
 				FAD580941DDC5C4E00A242DE /* IGMessageCollectionViewCell.swift in Sources */,
 				FA8204382025C97300A795D5 /* ImageCell.swift in Sources */,
+				FA927E002028416300DF7145 /* VideoCell.swift in Sources */,
 				FA0953561E1B97700043ED3F /* IGSettingChatTableViewController.swift in Sources */,
 				FAD5808F1DDC5C1900A242DE /* IGMessageGeneralCollectionViewCell.swift in Sources */,
 				FA5E159F1E0FFFD800EC19A1 /* IGTappableView.swift in Sources */,

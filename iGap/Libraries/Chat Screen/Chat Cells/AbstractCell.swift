@@ -363,9 +363,6 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
      */
     private func manageLink(){
         linkManager(txtMessage: txtMessageAbs)
-        
-        // don't used
-        //txtForwardedMessageAbs.text = nil
         linkManager(txtMessage: txtForwardedMessageAbs)
     }
     
@@ -1054,7 +1051,6 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
             avatarViewAbs = IGAvatarView(frame: frame)
             self.contentView.addSubview(avatarViewAbs)
         }
-        avatarViewAbs.backgroundColor = UIColor.orange
 
         avatarViewAbs.snp.makeConstraints { (make) in
             make.leading.equalTo(self.contentView.snp.leading).offset(8)

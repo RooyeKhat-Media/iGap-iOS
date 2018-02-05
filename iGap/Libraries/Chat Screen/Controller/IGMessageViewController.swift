@@ -1447,7 +1447,9 @@ extension IGMessageViewController: IGMessageCollectionViewDataSource {
         
         if (message.type == .text && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .text) ||
            (message.type == .image && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .image) ||
-           (message.type == .imageAndText && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .imageAndText) {
+           (message.type == .imageAndText && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .imageAndText) ||
+           (message.type == .video && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .video) ||
+           (message.type == .videoAndText && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .videoAndText) {
 
             if let senderHash = message.authorHash {
                 if senderHash == IGAppManager.sharedManager.authorHash() {
@@ -1487,6 +1489,15 @@ extension IGMessageViewController: IGMessageCollectionViewDataSource {
                   (message.type == .imageAndText && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .imageAndText){
             
             let cell: ImageCell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCell.cellReuseIdentifier(), for: indexPath) as! ImageCell
+            let bubbleSize = CellSizeCalculator.sharedCalculator.mainBubbleCountainerSize(for: message)
+            cell.setMessage(message,isIncommingMessage: isIncommingMessage,shouldShowAvatar: shouldShowAvatar,messageSizes: bubbleSize,isPreviousMessageFromSameSender: isPreviousMessageFromSameSender,isNextMessageFromSameSender: isNextMessageFromSameSender)
+            cell.delegate = self
+            return cell
+            
+        } else if (message.type == .video && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .video) ||
+                  (message.type == .videoAndText && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .videoAndText){
+            
+            let cell: VideoCell = collectionView.dequeueReusableCell(withReuseIdentifier: VideoCell.cellReuseIdentifier(), for: indexPath) as! VideoCell
             let bubbleSize = CellSizeCalculator.sharedCalculator.mainBubbleCountainerSize(for: message)
             cell.setMessage(message,isIncommingMessage: isIncommingMessage,shouldShowAvatar: shouldShowAvatar,messageSizes: bubbleSize,isPreviousMessageFromSameSender: isPreviousMessageFromSameSender,isNextMessageFromSameSender: isNextMessageFromSameSender)
             cell.delegate = self
@@ -1607,7 +1618,9 @@ extension IGMessageViewController: UICollectionViewDelegateFlowLayout {
         var frame = self.collectionView.layout.size(for: message).bubbleSize
         if (message.type == .text && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .text) ||
             (message.type == .image && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .image) ||
-            (message.type == .imageAndText && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .imageAndText) {
+            (message.type == .imageAndText && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .imageAndText) ||
+            (message.type == .video && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .video) ||
+            (message.type == .videoAndText && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .videoAndText) {
             frame = self.collectionView.layout.sizeCell(for: message).bubbleSize
         }
         
@@ -1949,6 +1962,7 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
                 player.play()
                 present(avController, animated: true, completion: nil)
             }
+            return
         case .voice , .audio :
             let musicPlayer = IGMusicViewController()
             musicPlayer.attachment = finalMessage.attachment
