@@ -95,7 +95,7 @@ class CellSizeCalculator: NSObject {
                     forwardedMessageAttachmentHeight = 68
                     finalSize.width = max(finalSize.width, attachmentFrame.width)
                     finalSize.width = min(finalSize.width, maximumWidth)
-                    finalSize.height += 68.0 + 4.0
+                    finalSize.height += 30.0
                 case .file:
                     forwardedMessageAttachmentHeight = 55.0
                     finalSize.width = max(finalSize.width, attachmentFrame.width)
@@ -153,7 +153,7 @@ class CellSizeCalculator: NSObject {
             case .voice:
                 finalSize.width = max(finalSize.width, attachmentFrame.width)
                 finalSize.width = min(finalSize.width, maximumWidth)
-                finalSize.height += 68.0 + 4.0
+                finalSize.height += 40.0
             case .file:
                 finalSize.width = max(finalSize.width, attachmentFrame.width)
                 finalSize.width = min(finalSize.width, maximumWidth)
@@ -220,7 +220,7 @@ class CellSizeCalculator: NSObject {
             } else if message.forwardedFrom?.type == .file || message.forwardedFrom?.type == .fileAndText {
                 finalSize.width = 220
             } else if message.forwardedFrom?.type == .voice {
-                finalSize.width = 250
+                finalSize.width = 220
             } else if message.forwardedFrom?.type == .image || message.forwardedFrom?.type == .imageAndText {
                 finalSize.height -= 7.5
             } else {

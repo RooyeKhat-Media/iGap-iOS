@@ -37,7 +37,7 @@ class FileCell: AbstractCell {
     
     override func setMessage(_ message: IGRoomMessage, isIncommingMessage: Bool, shouldShowAvatar: Bool, messageSizes: RoomMessageCalculatedSize, isPreviousMessageFromSameSender: Bool, isNextMessageFromSameSender: Bool) {
         initializeView()
-        makeFile()
+        makeFileView()
         super.setMessage(message, isIncommingMessage: isIncommingMessage, shouldShowAvatar: shouldShowAvatar, messageSizes: messageSizes, isPreviousMessageFromSameSender: isPreviousMessageFromSameSender, isNextMessageFromSameSender: isNextMessageFromSameSender)
         manageFileViewPosition()
         setFile()
@@ -64,7 +64,7 @@ class FileCell: AbstractCell {
      * position of views after setMessage we call manageFileViewPosition because first we need evaluate
      * forwardViewAbs/replyViewAbs in AbstractCell
      */
-    private func makeFile(){
+    private func makeFileView(){
         if imgFileAbs == nil {
             imgFileAbs = UIImageView()
             mainBubbleViewAbs.addSubview(imgFileAbs)
