@@ -96,11 +96,17 @@ class CellSizeCalculator: NSObject {
                     finalSize.width = max(finalSize.width, attachmentFrame.width)
                     finalSize.width = min(finalSize.width, maximumWidth)
                     finalSize.height += 68.0 + 4.0
-                case .file, .fileAndText:
+                case .file:
                     forwardedMessageAttachmentHeight = 55.0
                     finalSize.width = max(finalSize.width, attachmentFrame.width)
                     finalSize.width = min(finalSize.width, maximumWidth)
-                    finalSize.height += 55.0 + 4.0
+                    finalSize.height += 10.0
+                    break
+                case .fileAndText:
+                    forwardedMessageAttachmentHeight = 55.0
+                    finalSize.width = max(finalSize.width, attachmentFrame.width)
+                    finalSize.width = min(finalSize.width, maximumWidth)
+                    finalSize.height += 40.0
                 case .location:
                     fallthrough
                 case .log:
@@ -148,10 +154,15 @@ class CellSizeCalculator: NSObject {
                 finalSize.width = max(finalSize.width, attachmentFrame.width)
                 finalSize.width = min(finalSize.width, maximumWidth)
                 finalSize.height += 68.0 + 4.0
-            case .file, .fileAndText:
+            case .file:
                 finalSize.width = max(finalSize.width, attachmentFrame.width)
                 finalSize.width = min(finalSize.width, maximumWidth)
-                finalSize.height += 55.0 + 4.0
+                finalSize.height += 20.0
+                break
+            case .fileAndText:
+                finalSize.width = max(finalSize.width, attachmentFrame.width)
+                finalSize.width = min(finalSize.width, maximumWidth)
+                finalSize.height += 40.0
                 break
             case .location:
                 break

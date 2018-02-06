@@ -30,6 +30,7 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
     var txtForwardAbs: UILabel!
     
     var imgStatusAbs: UIImageView!
+    var imgFileAbs: UIImageView!
     
     var txtMessageHeightConstraintAbs: NSLayoutConstraint!
     var mainBubbleViewWidthAbs: NSLayoutConstraint!
@@ -195,8 +196,14 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
                 
                 
             case .file:
+                txtMessageAbs.snp.remakeConstraints{ (make) in
+                    make.centerY.equalTo(mainBubbleViewAbs.snp.centerY)
+                }
                 break
             case .fileAndText:
+                txtMessageAbs.snp.remakeConstraints{ (make) in
+                    make.top.equalTo(imgFileAbs.snp.bottom)
+                }
                 break
                 
                 
@@ -396,13 +403,23 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
         mainBubbleViewAbs.addGestureRecognizer(tapAndHold)
         mainBubbleViewAbs.isUserInteractionEnabled = true
         
-        let tap1 = UITapGestureRecognizer(target: self, action: #selector(didTapOnAttachment(_:)))
-        mediaContainerViewAbs?.addGestureRecognizer(tap1)
-        mediaContainerViewAbs?.isUserInteractionEnabled = true
+        if imgFileAbs != nil {
+            let onFileClick = UITapGestureRecognizer(target: self, action: #selector(didTapOnAttachment(_:)))
+            imgFileAbs.addGestureRecognizer(onFileClick)
+            imgFileAbs.isUserInteractionEnabled = true
+        }
+        
+        if mediaContainerViewAbs != nil {
+            let tap1 = UITapGestureRecognizer(target: self, action: #selector(didTapOnAttachment(_:)))
+            mediaContainerViewAbs?.addGestureRecognizer(tap1)
+            mediaContainerViewAbs?.isUserInteractionEnabled = true
+        }
 
-        let tap2 = UITapGestureRecognizer(target: self, action: #selector(didTapOnAttachment(_:)))
-        imgMediaAbs?.addGestureRecognizer(tap2)
-        imgMediaAbs?.isUserInteractionEnabled = true
+        if imgMediaAbs != nil {
+            let tap2 = UITapGestureRecognizer(target: self, action: #selector(didTapOnAttachment(_:)))
+            imgMediaAbs?.addGestureRecognizer(tap2)
+            imgMediaAbs?.isUserInteractionEnabled = true
+        }
         
         // don't used yet
         //let tap3 = UITapGestureRecognizer(target: self, action: #selector(didTapOnAttachment(_:)))
@@ -697,7 +714,7 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
                     }
                 }
                 */
-                
+                indicatorViewAbs.shouldShowSize = true
                 break
             case .voice:
                 //                self.mediaContainerView.isHidden = true
@@ -808,7 +825,7 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
                 break
             }
             
-            indicatorViewAbs.shouldShowSize = true
+            
             
         } else {
             
@@ -860,15 +877,15 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
                 }
                 break
             case .audio, .voice, .file:
-                //                if self.isIncommingMessage {
-                //                    self.attachmentDownloadUploadIndicatorView.setFileType(.incommingFile)
-                //                } else {
-                //                    self.attachmentDownloadUploadIndicatorView.setFileType(.outgoingFile)
-                //                }
-                //                self.attachmentDownloadUploadIndicatorView.setState(attachment.status)
-                //                if attachment.status == .downloading ||  attachment.status == .uploading {
-                //                    self.attachmentDownloadUploadIndicatorView.setPercentage(self.attachment!.downloadUploadPercent)
-                //                }
+                if self.isIncommingMessage {
+                    indicatorViewAbs.setFileType(.incommingFile)
+                } else {
+                    indicatorViewAbs.setFileType(.outgoingFile)
+                }
+                indicatorViewAbs.setState(attachment.status)
+                if attachment.status == .downloading ||  attachment.status == .uploading {
+                    indicatorViewAbs.setPercentage(self.attachment!.downloadUploadPercent)
+                }
                 break
             }
         }
@@ -934,7 +951,7 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
         txtForwardAbs.snp.makeConstraints { (make) in
             make.top.equalTo(forwardViewAbs.snp.top)
             make.leading.equalTo(forwardViewAbs.snp.leading).offset(8)
-            make.trailing.equalTo(forwardViewAbs.snp.trailing).offset(8)
+            make.trailing.equalTo(forwardViewAbs.snp.trailing).offset(-8)
             make.centerY.equalTo(forwardViewAbs.snp.centerY).priority(.required)
         }
     }

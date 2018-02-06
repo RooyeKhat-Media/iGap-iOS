@@ -201,6 +201,8 @@
 		FA927E0620284DC100DF7145 /* GifCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA927E0520284D7E00DF7145 /* GifCell.xib */; };
 		FA927E0820286FAD00DF7145 /* ContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA927E0720286FAD00DF7145 /* ContactCell.swift */; };
 		FA927E0A20286FE800DF7145 /* ContactCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA927E0920286FBC00DF7145 /* ContactCell.xib */; };
+		FA927E0C20288A7E00DF7145 /* FileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA927E0B20288A7E00DF7145 /* FileCell.swift */; };
+		FA927E0E20288AEE00DF7145 /* FileCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA927E0D20288AA200DF7145 /* FileCell.xib */; };
 		FA930D9A1E5B178F00069EE1 /* SSLSecurity.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA930D981E5B178F00069EE1 /* SSLSecurity.swift */; };
 		FA930D9B1E5B178F00069EE1 /* WebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA930D991E5B178F00069EE1 /* WebSocket.swift */; };
 		FA96EF4E1DEB0431009BE640 /* IGMessageSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA96EF4D1DEB0431009BE640 /* IGMessageSender.swift */; };
@@ -481,6 +483,8 @@
 		FA927E0520284D7E00DF7145 /* GifCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GifCell.xib; sourceTree = "<group>"; };
 		FA927E0720286FAD00DF7145 /* ContactCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCell.swift; sourceTree = "<group>"; };
 		FA927E0920286FBC00DF7145 /* ContactCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ContactCell.xib; sourceTree = "<group>"; };
+		FA927E0B20288A7E00DF7145 /* FileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileCell.swift; sourceTree = "<group>"; };
+		FA927E0D20288AA200DF7145 /* FileCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FileCell.xib; sourceTree = "<group>"; };
 		FA930D981E5B178F00069EE1 /* SSLSecurity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSLSecurity.swift; sourceTree = "<group>"; };
 		FA930D991E5B178F00069EE1 /* WebSocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebSocket.swift; sourceTree = "<group>"; };
 		FA96EF4D1DEB0431009BE640 /* IGMessageSender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGMessageSender.swift; sourceTree = "<group>"; };
@@ -1056,6 +1060,8 @@
 				FA927E0520284D7E00DF7145 /* GifCell.xib */,
 				FA927E0720286FAD00DF7145 /* ContactCell.swift */,
 				FA927E0920286FBC00DF7145 /* ContactCell.xib */,
+				FA927E0B20288A7E00DF7145 /* FileCell.swift */,
+				FA927E0D20288AA200DF7145 /* FileCell.xib */,
 			);
 			path = "Chat Cells";
 			sourceTree = "<group>";
@@ -1378,6 +1384,7 @@
 				FA927E02202841C900DF7145 /* VideoCell.xib in Resources */,
 				FAF7960A1DAA39460030509B /* Info.plist in Resources */,
 				FA4BD8A41DF2A53400CCB239 /* IGMusicViewController.xib in Resources */,
+				FA927E0E20288AEE00DF7145 /* FileCell.xib in Resources */,
 				FA0CC80A1E5D7D4400556283 /* Info.plist in Resources */,
 				FAF8BFEA1E34AF00002AF525 /* GoogleService-Info.plist in Resources */,
 				FAF796061DAA392F0030509B /* LaunchScreen.storyboard in Resources */,
@@ -1674,6 +1681,7 @@
 				FA11E28D1DE99BF400A2F87C /* IGFactory.swift in Sources */,
 				FA68A2111DD9B0E9003A6651 /* IGRecentsTableViewController.swift in Sources */,
 				FA09536D1E1B97700043ED3F /* IGSettingPrivacyAndSecurityActiveSessionsTableViewController.swift in Sources */,
+				FA927E0C20288A7E00DF7145 /* FileCell.swift in Sources */,
 				93321E7C1E5C12A3004D4454 /* IGForwardContactsTableViewCell.swift in Sources */,
 				FA0CC8121E5DD99400556283 /* Thread.swift in Sources */,
 				FA50A8CD1DD35EFD00C6D2EA /* IGRegistrationStepPhoneViewController.swift in Sources */,

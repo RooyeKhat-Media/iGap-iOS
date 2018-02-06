@@ -1452,7 +1452,9 @@ extension IGMessageViewController: IGMessageCollectionViewDataSource {
            (message.type == .videoAndText && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .videoAndText) ||
            (message.type == .gif && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .gif) ||
            (message.type == .gifAndText && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .gifAndText) ||
-           (message.type == .contact && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .contact) {
+           (message.type == .contact && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .contact) ||
+           (message.type == .file && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .file) ||
+           (message.type == .fileAndText && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .fileAndText) {
 
             if let senderHash = message.authorHash {
                 if senderHash == IGAppManager.sharedManager.authorHash() {
@@ -1518,6 +1520,15 @@ extension IGMessageViewController: IGMessageCollectionViewDataSource {
         } else if (message.type == .contact && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .contact) {
             
             let cell: ContactCell = collectionView.dequeueReusableCell(withReuseIdentifier: ContactCell.cellReuseIdentifier(), for: indexPath) as! ContactCell
+            let bubbleSize = CellSizeCalculator.sharedCalculator.mainBubbleCountainerSize(for: message)
+            cell.setMessage(message,isIncommingMessage: isIncommingMessage,shouldShowAvatar: shouldShowAvatar,messageSizes: bubbleSize,isPreviousMessageFromSameSender: isPreviousMessageFromSameSender,isNextMessageFromSameSender: isNextMessageFromSameSender)
+            cell.delegate = self
+            return cell
+            
+        } else if (message.type == .file && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .file) ||
+                  (message.type == .fileAndText && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .fileAndText) {
+            
+            let cell: FileCell = collectionView.dequeueReusableCell(withReuseIdentifier: FileCell.cellReuseIdentifier(), for: indexPath) as! FileCell
             let bubbleSize = CellSizeCalculator.sharedCalculator.mainBubbleCountainerSize(for: message)
             cell.setMessage(message,isIncommingMessage: isIncommingMessage,shouldShowAvatar: shouldShowAvatar,messageSizes: bubbleSize,isPreviousMessageFromSameSender: isPreviousMessageFromSameSender,isNextMessageFromSameSender: isNextMessageFromSameSender)
             cell.delegate = self
@@ -1643,7 +1654,9 @@ extension IGMessageViewController: UICollectionViewDelegateFlowLayout {
             (message.type == .videoAndText && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .videoAndText) ||
             (message.type == .gif && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .gif) ||
             (message.type == .gifAndText && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .gifAndText) ||
-            (message.type == .contact && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .contact) {
+            (message.type == .contact && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .contact) ||
+            (message.type == .file && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .file) ||
+            (message.type == .fileAndText && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .fileAndText) {
             frame = self.collectionView.layout.sizeCell(for: message).bubbleSize
         }
         
