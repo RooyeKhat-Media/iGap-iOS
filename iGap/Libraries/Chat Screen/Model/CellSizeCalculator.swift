@@ -86,34 +86,55 @@ class CellSizeCalculator: NSObject {
                     finalSize.height += attachmentFrame.height
                     finalSize.width = max(finalSize.width, attachmentFrame.width)
                     finalSize.width = min(finalSize.width, maximumWidth)
-                case .audio, .audioAndText:
+                    break
+                    
+                case .audio:
                     forwardedMessageAttachmentHeight = 91.0
                     finalSize.width = max(finalSize.width, attachmentFrame.width)
                     finalSize.width = min(finalSize.width, maximumWidth)
-                    finalSize.height = 91.0 + 4.0
+                    finalSize.height += 50
+                    break
+                    
+                case .audioAndText:
+                    forwardedMessageAttachmentHeight = 91.0
+                    finalSize.width = max(finalSize.width, attachmentFrame.width)
+                    finalSize.width = min(finalSize.width, maximumWidth)
+                    finalSize.height += 70
+                    break
+                    
                 case .voice:
                     forwardedMessageAttachmentHeight = 68
                     finalSize.width = max(finalSize.width, attachmentFrame.width)
                     finalSize.width = min(finalSize.width, maximumWidth)
                     finalSize.height += 30.0
+                    break
+                    
                 case .file:
                     forwardedMessageAttachmentHeight = 55.0
                     finalSize.width = max(finalSize.width, attachmentFrame.width)
                     finalSize.width = min(finalSize.width, maximumWidth)
                     finalSize.height += 10.0
                     break
+                    
                 case .fileAndText:
                     forwardedMessageAttachmentHeight = 55.0
                     finalSize.width = max(finalSize.width, attachmentFrame.width)
                     finalSize.width = min(finalSize.width, maximumWidth)
                     finalSize.height += 40.0
+                    break
+                    
                 case .location:
                     fallthrough
+                    break
+                    
                 case .log:
                     finalSize.height = 450.0
-                //return finalSize
+                    break
+                
                 case .contact:
                     finalSize.height += 50
+                    break
+                    
                 case .unknown:
                     break
                 }
@@ -146,31 +167,49 @@ class CellSizeCalculator: NSObject {
                 //finalSize.width = attachmentFrame.width
                 finalSize.width = max(finalSize.width, attachmentFrame.width)
                 finalSize.width = min(finalSize.width, maximumWidth)
-            case .audio, .audioAndText:
+                break
+                
+            case .audio:
                 finalSize.width = max(finalSize.width, attachmentFrame.width)
                 finalSize.width = min(finalSize.width, maximumWidth)
-                finalSize.height += 91.0 + 4.0
+                finalSize.height += 50
+                break
+                
+            case .audioAndText:
+                finalSize.width = max(finalSize.width, attachmentFrame.width)
+                finalSize.width = min(finalSize.width, maximumWidth)
+                finalSize.height += 70
+                break
+                
             case .voice:
                 finalSize.width = max(finalSize.width, attachmentFrame.width)
                 finalSize.width = min(finalSize.width, maximumWidth)
                 finalSize.height += 40.0
+                break
+                
             case .file:
                 finalSize.width = max(finalSize.width, attachmentFrame.width)
                 finalSize.width = min(finalSize.width, maximumWidth)
                 finalSize.height += 20.0
                 break
+                
             case .fileAndText:
                 finalSize.width = max(finalSize.width, attachmentFrame.width)
                 finalSize.width = min(finalSize.width, maximumWidth)
                 finalSize.height += 40.0
                 break
+                
             case .location:
                 break
+                
             case .log:
                 finalSize.height = 600.0
                 break
+                
             case .contact:
                 finalSize.height += 50
+                break
+                
             case .unknown :
                 break
             }

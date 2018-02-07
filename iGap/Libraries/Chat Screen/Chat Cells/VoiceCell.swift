@@ -19,7 +19,7 @@ class VoiceCell: AbstractCell {
     var txtVoiceRecorderName: UILabel!
     var txtVoiceTime: UILabel!
     var imgPlay: UIButton!
-    var slider: UISlider!
+    var sliderVoice: UISlider!
     
     var imgFilePosition: Constraint!
     
@@ -75,9 +75,9 @@ class VoiceCell: AbstractCell {
             mainBubbleViewAbs.addSubview(imgPlay)
         }
         
-        if slider == nil {
-            slider = UISlider()
-            mainBubbleViewAbs.addSubview(slider)
+        if sliderVoice == nil {
+            sliderVoice = UISlider()
+            mainBubbleViewAbs.addSubview(sliderVoice)
         }
     }
     
@@ -127,7 +127,7 @@ class VoiceCell: AbstractCell {
             make.width.equalTo(15.0)
         }
         
-        slider.snp.makeConstraints { (make) in
+        sliderVoice.snp.makeConstraints { (make) in
             make.leading.equalTo(imgPlay.snp.trailing).offset(4.0)
             make.trailing.equalTo(mainBubbleViewAbs.snp.trailing).offset(-8.0)
             make.centerY.equalTo(imgPlay.snp.centerY)
@@ -144,20 +144,20 @@ class VoiceCell: AbstractCell {
         }
         
         if isIncommingMessage {
-            slider.setThumbImage(UIImage(named: "IG_Message_Cell_Player_Slider_Thumb"), for: .normal)
-            slider.setThumbImage(UIImage(named: "IG_Message_Cell_Player_Slider_Thumb"), for: .focused)
-            slider.setThumbImage(UIImage(named: "IG_Message_Cell_Player_Slider_Thumb"), for: .selected)
-            slider.setThumbImage(UIImage(named: "IG_Message_Cell_Player_Slider_Thumb"), for: .highlighted)
-            slider.minimumTrackTintColor = UIColor.organizationalColor()
-            slider.maximumTrackTintColor = UIColor(red: 204.0/255.0, green: 204.0/255.0, blue: 204.0/255.0, alpha: 1.0)
+            sliderVoice.setThumbImage(UIImage(named: "IG_Message_Cell_Player_Slider_Thumb"), for: .normal)
+            sliderVoice.setThumbImage(UIImage(named: "IG_Message_Cell_Player_Slider_Thumb"), for: .focused)
+            sliderVoice.setThumbImage(UIImage(named: "IG_Message_Cell_Player_Slider_Thumb"), for: .selected)
+            sliderVoice.setThumbImage(UIImage(named: "IG_Message_Cell_Player_Slider_Thumb"), for: .highlighted)
+            sliderVoice.minimumTrackTintColor = UIColor.organizationalColor()
+            sliderVoice.maximumTrackTintColor = UIColor(red: 204.0/255.0, green: 204.0/255.0, blue: 204.0/255.0, alpha: 1.0)
             imgPlay.setImage(UIImage(named:"IG_Message_Cell_Player_Voice_Play"), for: .normal)
         } else {
-            slider.setThumbImage(UIImage(named: "IG_Message_Cell_Player_Slider_Thumb_Outgoing"), for: .normal)
-            slider.setThumbImage(UIImage(named: "IG_Message_Cell_Player_Slider_Thumb_Outgoing"), for: .focused)
-            slider.setThumbImage(UIImage(named: "IG_Message_Cell_Player_Slider_Thumb_Outgoing"), for: .selected)
-            slider.setThumbImage(UIImage(named: "IG_Message_Cell_Player_Slider_Thumb_Outgoing"), for: .highlighted)
-            slider.minimumTrackTintColor = UIColor(red: 235.0/255.0, green: 235.0/255.0, blue: 235.0/255.0, alpha: 1.0)
-            slider.maximumTrackTintColor = UIColor(red: 22.0/255.0, green: 91.0/255.0, blue: 88.0/255.0, alpha: 1.0)
+            sliderVoice.setThumbImage(UIImage(named: "IG_Message_Cell_Player_Slider_Thumb_Outgoing"), for: .normal)
+            sliderVoice.setThumbImage(UIImage(named: "IG_Message_Cell_Player_Slider_Thumb_Outgoing"), for: .focused)
+            sliderVoice.setThumbImage(UIImage(named: "IG_Message_Cell_Player_Slider_Thumb_Outgoing"), for: .selected)
+            sliderVoice.setThumbImage(UIImage(named: "IG_Message_Cell_Player_Slider_Thumb_Outgoing"), for: .highlighted)
+            sliderVoice.minimumTrackTintColor = UIColor(red: 235.0/255.0, green: 235.0/255.0, blue: 235.0/255.0, alpha: 1.0)
+            sliderVoice.maximumTrackTintColor = UIColor(red: 22.0/255.0, green: 91.0/255.0, blue: 88.0/255.0, alpha: 1.0)
             imgPlay.setImage(UIImage(named:"IG_Message_Cell_Player_Voice_Play"), for: .normal)
         }
         
@@ -169,7 +169,7 @@ class VoiceCell: AbstractCell {
         }
         
         imgFileAbs.setThumbnail(for: attachment)
-        slider.setValue(0.0, animated: false)
+        sliderVoice.setValue(0.0, animated: false)
         let timeM = Int(attachment.duration / 60)
         let timeS = Int(attachment.duration.truncatingRemainder(dividingBy: 60.0))
         txtVoiceTime.text = "0:00 / \(timeM):\(timeS)"

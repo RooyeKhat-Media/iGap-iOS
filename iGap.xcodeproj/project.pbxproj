@@ -207,6 +207,8 @@
 		FA930D9B1E5B178F00069EE1 /* WebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA930D991E5B178F00069EE1 /* WebSocket.swift */; };
 		FA93EE282029A39000DD1521 /* VoiceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA93EE272029A39000DD1521 /* VoiceCell.swift */; };
 		FA93EE2A2029A41200DD1521 /* VoiceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA93EE292029A3FF00DD1521 /* VoiceCell.xib */; };
+		FA93EE2C2029DB1300DD1521 /* AudioCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA93EE2B2029DB1300DD1521 /* AudioCell.swift */; };
+		FA93EE2E2029DBE300DD1521 /* AudioCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA93EE2D2029DBC300DD1521 /* AudioCell.xib */; };
 		FA96EF4E1DEB0431009BE640 /* IGMessageSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA96EF4D1DEB0431009BE640 /* IGMessageSender.swift */; };
 		FA96EF541DEB09A6009BE640 /* IGRequestChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA96EF531DEB09A6009BE640 /* IGRequestChat.swift */; };
 		FA97D444201716270087BBD0 /* TextCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA97D443201708310087BBD0 /* TextCell.xib */; };
@@ -491,6 +493,8 @@
 		FA930D991E5B178F00069EE1 /* WebSocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebSocket.swift; sourceTree = "<group>"; };
 		FA93EE272029A39000DD1521 /* VoiceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceCell.swift; sourceTree = "<group>"; };
 		FA93EE292029A3FF00DD1521 /* VoiceCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VoiceCell.xib; sourceTree = "<group>"; };
+		FA93EE2B2029DB1300DD1521 /* AudioCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioCell.swift; sourceTree = "<group>"; };
+		FA93EE2D2029DBC300DD1521 /* AudioCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AudioCell.xib; sourceTree = "<group>"; };
 		FA96EF4D1DEB0431009BE640 /* IGMessageSender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGMessageSender.swift; sourceTree = "<group>"; };
 		FA96EF531DEB09A6009BE640 /* IGRequestChat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGRequestChat.swift; sourceTree = "<group>"; };
 		FA97D443201708310087BBD0 /* TextCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextCell.xib; sourceTree = "<group>"; };
@@ -1068,6 +1072,8 @@
 				FA927E0D20288AA200DF7145 /* FileCell.xib */,
 				FA93EE272029A39000DD1521 /* VoiceCell.swift */,
 				FA93EE292029A3FF00DD1521 /* VoiceCell.xib */,
+				FA93EE2B2029DB1300DD1521 /* AudioCell.swift */,
+				FA93EE2D2029DBC300DD1521 /* AudioCell.xib */,
 			);
 			path = "Chat Cells";
 			sourceTree = "<group>";
@@ -1394,6 +1400,7 @@
 				FA927E0E20288AEE00DF7145 /* FileCell.xib in Resources */,
 				FA0CC80A1E5D7D4400556283 /* Info.plist in Resources */,
 				FAF8BFEA1E34AF00002AF525 /* GoogleService-Info.plist in Resources */,
+				FA93EE2E2029DBE300DD1521 /* AudioCell.xib in Resources */,
 				FAF796061DAA392F0030509B /* LaunchScreen.storyboard in Resources */,
 				FA97D444201716270087BBD0 /* TextCell.xib in Resources */,
 				FAB0F9461FE956D1008F23EB /* Splash.gif in Resources */,
@@ -1615,6 +1622,7 @@
 				932D1ABE1E7426AD000F0D97 /* IGChannelAndGroupInfoSharedMediaImagesAndVideosCollectionViewCell.swift in Sources */,
 				FAEA75DB1DDB012800C387F1 /* IGRoomMessageLog.swift in Sources */,
 				FAA30F671DAA6F790061B8C9 /* IGWebSocketManager.swift in Sources */,
+				FA93EE2C2029DB1300DD1521 /* AudioCell.swift in Sources */,
 				FAA932F51DF45748002CC631 /* IGEnums.swift in Sources */,
 				FAA9DFB61F4B1CB50076A22F /* IGSettingPrivacyAndSecurityTwoStepVerificationChangePasswordTableViewController.swift in Sources */,
 				FAD580941DDC5C4E00A242DE /* IGMessageCollectionViewCell.swift in Sources */,

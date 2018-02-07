@@ -190,8 +190,14 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
             
                 
             case .audio:
+                txtMessageAbs.snp.remakeConstraints{ (make) in
+                    make.centerY.equalTo(mainBubbleViewAbs.snp.centerY)
+                }
                 break
             case .audioAndText:
+                txtMessageAbs.snp.remakeConstraints{ (make) in
+                    make.top.equalTo(imgFileAbs.snp.bottom)
+                }
                 break
                 
                 

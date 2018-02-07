@@ -1455,7 +1455,9 @@ extension IGMessageViewController: IGMessageCollectionViewDataSource {
            (message.type == .contact && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .contact) ||
            (message.type == .file && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .file) ||
            (message.type == .fileAndText && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .fileAndText) ||
-           (message.type == .voice && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .voice) {
+           (message.type == .voice && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .voice) ||
+           (message.type == .audio && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .audio) ||
+           (message.type == .audioAndText && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .audioAndText) {
 
             if let senderHash = message.authorHash {
                 if senderHash == IGAppManager.sharedManager.authorHash() {
@@ -1538,6 +1540,15 @@ extension IGMessageViewController: IGMessageCollectionViewDataSource {
         } else if (message.type == .voice && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .voice) {
             
             let cell: VoiceCell = collectionView.dequeueReusableCell(withReuseIdentifier: VoiceCell.cellReuseIdentifier(), for: indexPath) as! VoiceCell
+            let bubbleSize = CellSizeCalculator.sharedCalculator.mainBubbleCountainerSize(for: message)
+            cell.setMessage(message,isIncommingMessage: isIncommingMessage,shouldShowAvatar: shouldShowAvatar,messageSizes: bubbleSize,isPreviousMessageFromSameSender: isPreviousMessageFromSameSender,isNextMessageFromSameSender: isNextMessageFromSameSender)
+            cell.delegate = self
+            return cell
+            
+        } else if (message.type == .audio && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .audio) ||
+                  (message.type == .audioAndText && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .audioAndText) {
+            
+            let cell: AudioCell = collectionView.dequeueReusableCell(withReuseIdentifier: AudioCell.cellReuseIdentifier(), for: indexPath) as! AudioCell
             let bubbleSize = CellSizeCalculator.sharedCalculator.mainBubbleCountainerSize(for: message)
             cell.setMessage(message,isIncommingMessage: isIncommingMessage,shouldShowAvatar: shouldShowAvatar,messageSizes: bubbleSize,isPreviousMessageFromSameSender: isPreviousMessageFromSameSender,isNextMessageFromSameSender: isNextMessageFromSameSender)
             cell.delegate = self
@@ -1666,7 +1677,9 @@ extension IGMessageViewController: UICollectionViewDelegateFlowLayout {
             (message.type == .contact && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .contact) ||
             (message.type == .file && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .file) ||
             (message.type == .fileAndText && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .fileAndText) ||
-            (message.type == .voice && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .voice) {
+            (message.type == .voice && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .voice) ||
+            (message.type == .audio && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .audio) ||
+            (message.type == .audioAndText && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .audioAndText) {
             frame = self.collectionView.layout.sizeCell(for: message).bubbleSize
         }
         
