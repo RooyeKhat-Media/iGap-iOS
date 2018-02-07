@@ -1445,32 +1445,18 @@ extension IGMessageViewController: IGMessageCollectionViewDataSource {
             }
         }
         
-        if (message.type == .text && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .text) ||
-           (message.type == .image && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .image) ||
-           (message.type == .imageAndText && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .imageAndText) ||
-           (message.type == .video && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .video) ||
-           (message.type == .videoAndText && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .videoAndText) ||
-           (message.type == .gif && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .gif) ||
-           (message.type == .gifAndText && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .gifAndText) ||
-           (message.type == .contact && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .contact) ||
-           (message.type == .file && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .file) ||
-           (message.type == .fileAndText && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .fileAndText) ||
-           (message.type == .voice && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .voice) ||
-           (message.type == .audio && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .audio) ||
-           (message.type == .audioAndText && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .audioAndText) {
 
-            if let senderHash = message.authorHash {
-                if senderHash == IGAppManager.sharedManager.authorHash() {
-                    isIncommingMessage = false
-                }
+        if let senderHash = message.authorHash {
+            if senderHash == IGAppManager.sharedManager.authorHash() {
+                isIncommingMessage = false
             }
-            
-            if room?.groupRoom != nil {
-                shouldShowAvatar = true
-            }
-            if !isIncommingMessage {
-                shouldShowAvatar = false
-            }
+        }
+        
+        if room?.groupRoom != nil {
+            shouldShowAvatar = true
+        }
+        if !isIncommingMessage {
+            shouldShowAvatar = false
         }
         
         
@@ -1666,36 +1652,7 @@ extension IGMessageViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         let message = messages![indexPath.section]
-        var frame = self.collectionView.layout.size(for: message).bubbleSize
-        if (message.type == .text && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .text) ||
-            (message.type == .image && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .image) ||
-            (message.type == .imageAndText && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .imageAndText) ||
-            (message.type == .video && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .video) ||
-            (message.type == .videoAndText && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .videoAndText) ||
-            (message.type == .gif && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .gif) ||
-            (message.type == .gifAndText && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .gifAndText) ||
-            (message.type == .contact && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .contact) ||
-            (message.type == .file && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .file) ||
-            (message.type == .fileAndText && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .fileAndText) ||
-            (message.type == .voice && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .voice) ||
-            (message.type == .audio && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .audio) ||
-            (message.type == .audioAndText && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .audioAndText) {
-            frame = self.collectionView.layout.sizeCell(for: message).bubbleSize
-        }
-        
-        var isPreviousMessageFromSameSender = false
-        
-        if messages!.indices.contains(indexPath.section + 1){
-            let previousMessage = messages![(indexPath.section + 1)]
-            if previousMessage.type != .log && message.authorHash == previousMessage.authorHash {
-                isPreviousMessageFromSameSender = true
-            }
-        }
-
-        // don't used yet
-        //if isPreviousMessageFromSameSender || message.type == .log {
-        //    frame.height -= 7.5
-        //}
+        let frame = self.collectionView.layout.sizeCell(for: message).bubbleSize
         
         return CGSize(width: self.collectionView.frame.width, height: frame.height+5)
     }
