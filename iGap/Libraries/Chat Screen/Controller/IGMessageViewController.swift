@@ -82,7 +82,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
     @IBOutlet weak var scrollToBottomContainerView: UIView!
     @IBOutlet weak var scrollToBottomContainerViewConstraint: NSLayoutConstraint!
     private let disposeBag = DisposeBag()
-    var isFetchingRoomHistory: Bool = false
+    var allowForGetHistory: Bool = true
     var isInMessageViewController : Bool = true
     var recorder: AVAudioRecorder?
     var isRecordingVoice = false
@@ -103,7 +103,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
                           SortDescriptor(keyPath: "id", ascending: false)]
     let sortPropertiesForMedia = [SortDescriptor(keyPath: "creationTime", ascending: true),
                                   SortDescriptor(keyPath: "id", ascending: true)]
-    var messages: Results<IGRoomMessage>? //try! Realm().objects(IGRoomMessage.self)
+    var messages: Results<IGRoomMessage>! //try! Realm().objects(IGRoomMessage.self)
     var messagesWithMedia = try! Realm().objects(IGRoomMessage.self)
     var messagesWithForwardedMedia = try! Realm().objects(IGRoomMessage.self)
     var notificationToken: NotificationToken?
@@ -123,6 +123,19 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
     var selectedChannelToSeeTheirInfo: IGChannelRoom?
     var selectedGroupToSeeTheirInfo: IGGroupRoom?
     var hud = MBProgressHUD()
+    
+    /* variables for fetch message */
+    var allMessages:Results<IGRoomMessage>!
+    let GET_MESSAGE_LIMIT = 100
+    var messageSize = 0
+    var page = 0
+    var firstId:Int64 = 0
+    var lastId:Int64 = 0
+    
+    var lowerAllow = true
+    var allowForGetHistoryLocal = true
+    var isFirstHistory = true
+    var hasLocal = true
 
     fileprivate var typingStatusExpiryTimer = Timer() //use this to send cancel for typing status
     
@@ -286,71 +299,115 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
         tapAndHoldOnRecord.minimumPressDuration = 0.5
         inputBarRecordButton.addGestureRecognizer(tapAndHoldOnRecord)
         
-        let predicate = NSPredicate(format: "roomId = %lld AND isDeleted == false", self.room!.id)
-        messages = try! Realm().objects(IGRoomMessage.self).filter(predicate).sorted(by: sortProperties)
+        messages = findAllMessages()
+        updateObserver()
+    }
+    
+    func updateObserver(){
         self.notificationToken = messages?.addNotificationBlock { (changes: RealmCollectionChange) in
             switch changes {
             case .initial:
-                self.collectionView.alpha = 0.0
-                self.collectionView.reloadData()
-                
-                UIView.animate(withDuration: 0.2, animations: {
-                    self.collectionView.alpha = 1.0
-                })
-                
                 break
             case .update(_, let deletions, let insertions, let modifications):
-                insertions.forEach{
-                    if let message = self.messages?[$0] {
-                        self.sendSeenForMessage(message)
-                        print(message.status)
-                    }
-                }
                 
-                if self.messages!.count == self.collectionView.numberOfSections + insertions.count - deletions.count {
-                    if AppDelegate.showPrint {
-                        print("insersation   => \(insertions.count)")
-                        print("deletions     => \(deletions.count)")
-                        print("modifications => \(modifications.count)")
-                        print("all messages  => \(self.messages!.count)")
+                if insertions.count > 0 || modifications.count > 0 || deletions.count > 0 {
+                    DispatchQueue.main.async {
+                        self.collectionView.reloadData()
                     }
-                    
-                    self.collectionView.performBatchUpdates({
-                        self.collectionView.insertSections(IndexSet(insertions))
-                        self.collectionView.deleteSections(IndexSet(deletions))
-                        UIView.performWithoutAnimation {
-                            self.collectionView.reloadSections(IndexSet(modifications))
-                        }
-                        //self.collectionView.reloadSections(IndexSet(modifications))
-                        
-                        
-                        
-//                        self.collectionView.insertItems(at: insertions.map    { IndexPath(row: 0, section: $0) })
-//                        self.collectionView.deleteItems(at: deletions.map     { IndexPath(row: 0, section: $0) })
-//                        self.collectionView.reloadItems(at: modifications.map { IndexPath(row: 0, section: $0) })
-                        
-//                        self.collectionView.insertItems(at: insertions.map    { IndexPath(row: $0, section: 0) })
-//                        self.collectionView.deleteItems(at: deletions.map     { IndexPath(row: $0, section: 0) })
-//                        self.collectionView.reloadItems(at: modifications.map { IndexPath(row: $0, section: 0) })
-                    }, completion: { (completed) in
-                        if insertions.count != 0 {
-                            
-                        }
-                    })
-                } else {
-                    self.collectionView.reloadData()
                 }
                 
                 break
             case .error(let err):
-                // An error occurred while opening the Realm file on the background worker thread
                 fatalError("\(err)")
                 break
             }
         }
-        
-       
     }
+    
+    func findAllMessages(isHistory: Bool = false) -> Results<IGRoomMessage>!{
+        
+        if lastId == 0 {
+            let predicate = NSPredicate(format: "roomId = %lld AND isDeleted == false", self.room!.id)
+            allMessages = try! Realm().objects(IGRoomMessage.self).filter(predicate).sorted(by: sortProperties)
+            
+            let messageCount = allMessages.count
+            if messageCount == 0 {
+                return allMessages
+            }
+            
+            firstId = allMessages.toArray()[0].id
+            
+            if messageCount <= GET_MESSAGE_LIMIT {
+                hasLocal = false
+                lastId = allMessages.toArray()[allMessages.count-1].id
+            } else {
+                lastId = allMessages.toArray()[GET_MESSAGE_LIMIT].id
+            }
+            
+            self.collectionView.alpha = 0.0
+            UIView.animate(withDuration: 0.2, animations: {
+                self.collectionView.alpha = 1.0
+            })
+        } else {
+            page += 1
+            //firstId = lastId
+            
+            let messageLimit = page * GET_MESSAGE_LIMIT
+            let messageCount = allMessages.count
+            
+            if messageCount <= messageLimit {
+                hasLocal = false
+                lastId = allMessages.toArray()[allMessages.count-1].id
+            } else {
+                lastId = allMessages.toArray()[messageLimit].id
+            }
+        }
+        
+        //let predicate = NSPredicate(format: "roomId = %lld AND id <= %lld AND id >= %lld", self.room!.id, firstId, lastId)
+        let predicate = NSPredicate(format: "roomId = %lld AND id >= %lld", self.room!.id, lastId)
+        let messages = try! Realm().objects(IGRoomMessage.self).filter(predicate).sorted(by: sortProperties)
+        
+        self.collectionView.reloadData()
+        
+        return messages
+    }
+    
+    
+    /* delete all local messages before first message that have shouldFetchBefore==true */
+    func deleteUnusedLocalMessage(){
+        let predicate = NSPredicate(format: "roomId = %lld AND shouldFetchBefore == true", self.room!.id)
+        let message = try! Realm().objects(IGRoomMessage.self).filter(predicate).sorted(by: sortProperties).last
+        
+        var deleteId:Int64 = 0
+        if let id = message?.id {
+            deleteId = id
+        }
+        
+        let predicateDelete = NSPredicate(format: "roomId = %lld AND id <= %lld", self.room!.id , deleteId)
+        let messageDelete = try! Realm().objects(IGRoomMessage.self).filter(predicateDelete).sorted(by: sortProperties)
+        
+        let realm = try! Realm()
+        try! realm.write {
+            realm.delete(messageDelete)
+        }
+    }
+    
+    func deleteForTest(){
+        let predicate = NSPredicate(format: "roomId = %lld AND isDeleted == false", self.room!.id)
+        let message = try! Realm().objects(IGRoomMessage.self).filter(predicate).sorted(by: sortProperties)
+
+        if message.count > 100 {
+            
+            let predicateDelete = NSPredicate(format: "roomId = %lld AND id <= %lld ", self.room!.id , message.toArray()[100].id)
+            let messageDelete = try! Realm().objects(IGRoomMessage.self).filter(predicateDelete).sorted(by: sortProperties)
+            
+            let realm = try! Realm()
+            try! realm.write {
+                realm.delete(messageDelete)
+            }
+        }
+    }
+    
     
     override func viewWillAppear(_ animated: Bool) {
         if let forwardMsg = selectedMessageToForwardToThisRoom {
@@ -434,7 +491,9 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
     }
     
     deinit {
-        notificationToken = nil
+        if notificationToken != nil {
+            notificationToken?.stop()
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -1677,23 +1736,51 @@ extension IGMessageViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         let message = messages![indexPath.section]
-        if message.shouldFetchBefore {
+        if (messages!.count < 20 && lowerAllow) || (messages!.indices.contains(indexPath.section + 1) && message.shouldFetchBefore) {
+            lowerAllow = false
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 self.fetchRoomHistoryIfPossibleBefore(message: message)
             }
         }
     }
     
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        if self.collectionView.numberOfSections == 0 {
+            return
+        }
+        
         let spaceToTop = scrollView.contentSize.height - scrollView.contentOffset.y - scrollView.frame.height
-        //500 is an arbitrary number. can be anything
-        if spaceToTop < 500 {
-            //near top of the screen (real bottom of scrollview)
-            let predicate = NSPredicate(format: "roomId = %lld", self.room!.id)
-            if let message = try! Realm().objects(IGRoomMessage.self).filter(predicate).sorted(by: sortProperties).last {
-                self.fetchRoomHistoryIfPossibleBefore(message: message)
+        if spaceToTop < 200 {
+            
+            if hasLocal {
+                if allowForGetHistoryLocal {
+                    print("WWW fetch Local")
+                    allowForGetHistoryLocal = false
+                    messages = findAllMessages()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        self.allowForGetHistoryLocal = true
+                    }
+                }
+            } else {
+                let predicate = NSPredicate(format: "roomId = %lld", self.room!.id)
+                if let message = try! Realm().objects(IGRoomMessage.self).filter(predicate).sorted(by: sortProperties).last {
+                    print("WWW fetch Scroll \(spaceToTop)")
+                    if isFirstHistory {
+                        let predicate = NSPredicate(format: "roomId = %lld AND isDeleted == false", self.room!.id)
+                        messages = try! Realm().objects(IGRoomMessage.self).filter(predicate).sorted(by: sortProperties)
+                        updateObserver()
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                            self.fetchRoomHistoryIfPossibleBefore(message: message)
+                        }
+                    } else {
+                        self.fetchRoomHistoryIfPossibleBefore(message: message)
+                    }
+                }
             }
         }
+        
         //100 is an arbitrary number. can be anything
         if scrollView.contentOffset.y > 100 {
             self.scrollToBottomContainerView.isHidden = false
@@ -1707,12 +1794,15 @@ extension IGMessageViewController: UICollectionViewDelegateFlowLayout {
     
     private func fetchRoomHistoryIfPossibleBefore(message: IGRoomMessage) {
         if !message.isLastMessage {
-            if !isFetchingRoomHistory {
-                isFetchingRoomHistory = true
-                
+            
+            if allowForGetHistory {
+                allowForGetHistory = false
+            
                 IGClientGetRoomHistoryRequest.Generator.generate(roomID: self.room!.id, firstMessageID: message.id).success({ (responseProto) in
-                    //TODO: no longer needs to fetch -> message.shouldFetchBefore = false
-                    self.isFetchingRoomHistory = false
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                        self.allowForGetHistory = true
+                    }
+                    
                     DispatchQueue.main.async {
                         IGFactory.shared.setMessageNeedsToFetchBefore(false, messageId: message.id, roomId: message.roomId)
                         switch responseProto {
@@ -1726,18 +1816,20 @@ extension IGMessageViewController: UICollectionViewDelegateFlowLayout {
                     DispatchQueue.main.async {
                         switch errorCode {
                         case .clinetGetRoomHistoryNoMoreMessage:
+                            self.allowForGetHistory = false
                             IGFactory.shared.setMessageIsLastMesssageInRoom(messageId: message.id, roomId: message.roomId)
                             break
                         case .timeout:
+                            self.allowForGetHistory = true
                             break
                         default:
+                            self.allowForGetHistory = true
                             break
                         }
                     }
-                    self.isFetchingRoomHistory = false
                 }).send()
             }
-        }   
+        }
     }
 }
 
