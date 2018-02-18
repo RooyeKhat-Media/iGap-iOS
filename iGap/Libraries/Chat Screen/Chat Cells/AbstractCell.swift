@@ -886,6 +886,16 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
     
     
     private func makeImage(){
+        if imgMediaAbs != nil {
+            imgMediaAbs.removeFromSuperview()
+            imgMediaAbs = nil
+        }
+        
+        if indicatorViewAbs != nil {
+            indicatorViewAbs.removeFromSuperview()
+            indicatorViewAbs = nil
+        }
+        
         if imgMediaAbs == nil {
             imgMediaAbs = IGImageView()
             mainBubbleViewAbs.addSubview(imgMediaAbs)
@@ -953,14 +963,14 @@ extension AbstractCell: IGDownloadUploadIndicatorViewDelegate {
         }
         
         if let attachment = self.attachment {
-            IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: {
+            IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: { (attachment) -> Void in
                 
             }, failure: {
                 
             })
         }
         if let forwardAttachment = self.forwardedAttachment {
-            IGDownloadManager.sharedManager.download(file: forwardAttachment, previewType: .originalFile, completion: {
+            IGDownloadManager.sharedManager.download(file: forwardAttachment, previewType: .originalFile, completion: { (attachment) -> Void in
                 
             }, failure: {
                 

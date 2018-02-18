@@ -312,7 +312,15 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
                 break
             case .update(_, let deletions, let insertions, let modifications):
                 
-                if insertions.count > 0 || modifications.count > 0 || deletions.count > 0 {
+                for cellsPosition in modifications {
+                    if self.collectionView.indexPathsForVisibleItems.contains(IndexPath(row: 0, section: cellsPosition)) {
+                        DispatchQueue.main.async {
+                            self.collectionView.reloadData()
+                        }
+                    }
+                }
+                
+                if insertions.count > 0 || deletions.count > 0 {
                     
                     if self.isEndOfScroll && self.collectionView.numberOfSections > 100 {
                         self.resetGetHistoryValues()

@@ -145,7 +145,7 @@ extension IGChannelAndGroupInfoSharedMediaImagesAndVideosCollectionViewCell: IGD
         }
         
         if let attachment = self.attachment {
-            IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: {
+            IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: { (attachment) -> Void in
                 
             }, failure: {
                 

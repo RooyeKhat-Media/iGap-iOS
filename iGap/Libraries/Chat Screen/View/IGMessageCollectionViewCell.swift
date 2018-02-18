@@ -1151,14 +1151,14 @@ extension IGMessageCollectionViewCell: IGDownloadUploadIndicatorViewDelegate {
         }
         
         if let attachment = self.attachment {
-            IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: {
+            IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: { (attachment) -> Void in
                 
             }, failure: {
                 
             })
         }
         if let forwardAttachment = self.forwardedAttachment {
-            IGDownloadManager.sharedManager.download(file: forwardAttachment, previewType: .originalFile, completion: {
+            IGDownloadManager.sharedManager.download(file: forwardAttachment, previewType: .originalFile, completion: { (attachment) -> Void in
                 
             }, failure: {
                 

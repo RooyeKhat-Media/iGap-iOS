@@ -12,7 +12,7 @@ import UIKit
 import SwiftProtobuf
 import IGProtoBuff
 
-typealias DownloadCompleteHandler = (()->())?
+typealias DownloadCompleteHandler = ((_ attachment:IGFile)->())?
 typealias DownloadFailedHander    = (()->())?
 
 class IGDownloadManager {
@@ -119,7 +119,7 @@ class IGDownloadManager {
                         IGFactory.shared.addNameOnDiskToFile(downloadTask.file, name: fileNameOnDisk)
                         downloadTask.state = .finished
                         if let success = downloadTask.completionHandler {
-                            success()
+                            success(downloadTask.file)
                         }
                         switch downloadTask.type {
                         case .originalFile:

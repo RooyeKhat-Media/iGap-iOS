@@ -195,7 +195,7 @@ class IGSettingTableViewController: UITableViewController , NVActivityIndicatorV
             }
             
             if let attachment = currentAvatarFile {
-                IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: {
+                IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: { (attachment) -> Void in
                     galleryPreview.hiddenDownloadView()
                     self.stopAnimating()
                 }, failure: {
@@ -226,7 +226,7 @@ class IGSettingTableViewController: UITableViewController , NVActivityIndicatorV
                 }
                 
                 if let attachment = currentAvatarFile {
-                    IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: {
+                    IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: { (attachment) -> Void in
                         self.galleryPhotos?.hiddenDownloadView()
                         self.stopAnimating()
                     }, failure: {
@@ -498,7 +498,7 @@ extension IGSettingTableViewController: IGDownloadUploadIndicatorViewDelegate {
         }
         
         if let attachment = self.userAvatar?.file {
-            IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: {
+            IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: { (attachment) -> Void in
                 
             }, failure: {
                 
