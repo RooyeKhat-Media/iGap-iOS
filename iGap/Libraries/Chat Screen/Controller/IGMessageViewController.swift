@@ -126,12 +126,14 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
     
     /* variables for fetch message */
     var allMessages:Results<IGRoomMessage>!
-    let GET_MESSAGE_LIMIT = 100
+    var getMessageLimit = 10
+    var scrollToTopLimit:CGFloat = 20
     var messageSize = 0
     var page = 0
     var firstId:Int64 = 0
     var lastId:Int64 = 0
     
+    var isEndOfScroll = false
     var lowerAllow = true
     var allowForGetHistoryLocal = true
     var isFirstHistory = true
@@ -311,8 +313,14 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
             case .update(_, let deletions, let insertions, let modifications):
                 
                 if insertions.count > 0 || modifications.count > 0 || deletions.count > 0 {
-                    DispatchQueue.main.async {
-                        self.collectionView.reloadData()
+                    
+                    if self.isEndOfScroll && self.collectionView.numberOfSections > 100 {
+                        self.resetGetHistoryValues()
+                        self.messages = self.findAllMessages()
+                    } else {
+                        DispatchQueue.main.async {
+                            self.collectionView.reloadData()
+                        }
                     }
                 }
                 
@@ -337,39 +345,50 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
             
             firstId = allMessages.toArray()[0].id
             
-            if messageCount <= GET_MESSAGE_LIMIT {
+            if messageCount <= getMessageLimit {
                 hasLocal = false
+                scrollToTopLimit = 500
                 lastId = allMessages.toArray()[allMessages.count-1].id
             } else {
-                lastId = allMessages.toArray()[GET_MESSAGE_LIMIT].id
+                lastId = allMessages.toArray()[getMessageLimit].id
             }
             
-            self.collectionView.alpha = 0.0
-            UIView.animate(withDuration: 0.2, animations: {
-                self.collectionView.alpha = 1.0
-            })
         } else {
             page += 1
-            //firstId = lastId
             
-            let messageLimit = page * GET_MESSAGE_LIMIT
+            if page > 1 {
+                getMessageLimit = 100
+            }
+            
+            let messageLimit = page * getMessageLimit
             let messageCount = allMessages.count
             
             if messageCount <= messageLimit {
                 hasLocal = false
+                scrollToTopLimit = 500
                 lastId = allMessages.toArray()[allMessages.count-1].id
             } else {
                 lastId = allMessages.toArray()[messageLimit].id
             }
         }
         
-        //let predicate = NSPredicate(format: "roomId = %lld AND id <= %lld AND id >= %lld", self.room!.id, firstId, lastId)
-        let predicate = NSPredicate(format: "roomId = %lld AND id >= %lld", self.room!.id, lastId)
+        let predicate = NSPredicate(format: "roomId = %lld AND id >= %lld AND isDeleted == false", self.room!.id, lastId)
         let messages = try! Realm().objects(IGRoomMessage.self).filter(predicate).sorted(by: sortProperties)
         
-        self.collectionView.reloadData()
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
         
         return messages
+    }
+    
+    /* reset values for get history from first */
+    func resetGetHistoryValues(){
+        lastId = 0
+        page = 0
+        getMessageLimit = 50
+        scrollToTopLimit = 20
+        hasLocal = true
     }
     
     
@@ -1752,11 +1771,10 @@ extension IGMessageViewController: UICollectionViewDelegateFlowLayout {
         }
         
         let spaceToTop = scrollView.contentSize.height - scrollView.contentOffset.y - scrollView.frame.height
-        if spaceToTop < 200 {
+        if spaceToTop < self.scrollToTopLimit {
             
             if hasLocal {
                 if allowForGetHistoryLocal {
-                    print("WWW fetch Local")
                     allowForGetHistoryLocal = false
                     messages = findAllMessages()
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
@@ -1766,7 +1784,6 @@ extension IGMessageViewController: UICollectionViewDelegateFlowLayout {
             } else {
                 let predicate = NSPredicate(format: "roomId = %lld", self.room!.id)
                 if let message = try! Realm().objects(IGRoomMessage.self).filter(predicate).sorted(by: sortProperties).last {
-                    print("WWW fetch Scroll \(spaceToTop)")
                     if isFirstHistory {
                         let predicate = NSPredicate(format: "roomId = %lld AND isDeleted == false", self.room!.id)
                         messages = try! Realm().objects(IGRoomMessage.self).filter(predicate).sorted(by: sortProperties)
@@ -1789,6 +1806,13 @@ extension IGMessageViewController: UICollectionViewDelegateFlowLayout {
                 scrollToBottomContainerViewConstraint.constant = -40
             }
             self.scrollToBottomContainerView.isHidden = true
+        }
+        
+        let scrollOffset = scrollView.contentOffset.y;
+        if (scrollOffset <= 300){ // reach end of scroll
+            isEndOfScroll = true
+        } else {
+            isEndOfScroll = false
         }
     }
     
