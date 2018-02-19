@@ -182,8 +182,11 @@
 		FA68A2111DD9B0E9003A6651 /* IGRecentsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA68A2101DD9B0E9003A6651 /* IGRecentsTableViewController.swift */; };
 		FA6A22761F41D0210063DF07 /* iGap-Fontico.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FA6A22751F41CB0B0063DF07 /* iGap-Fontico.ttf */; };
 		FA6A22781F41D73E0063DF07 /* IGRequestQrCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6A22771F41D73E0063DF07 /* IGRequestQrCode.swift */; };
+		FA6B602E201E0483008460CF /* CellSizeCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6B602D201E0483008460CF /* CellSizeCalculator.swift */; };
 		FA77C2A71E2B85E4001B2152 /* IGRegistredUserInfoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA77C2A61E2B85E4001B2152 /* IGRegistredUserInfoTableViewController.swift */; };
 		FA7A2ED31DF5830F00164435 /* IGRegisteredUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA7A2ED21DF5830F00164435 /* IGRegisteredUser.swift */; };
+		FA8204382025C97300A795D5 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8204362025C97300A795D5 /* ImageCell.swift */; };
+		FA82043B2025D90800A795D5 /* ImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA82043A2025C99300A795D5 /* ImageCell.xib */; };
 		FA8560AA1FFBA6FC00A25DC3 /* IGSettingPrivacyAndSecurityTwoStepVerificationVerifyUnconfirmedEmail.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8560A91FFBA6FC00A25DC3 /* IGSettingPrivacyAndSecurityTwoStepVerificationVerifyUnconfirmedEmail.swift */; };
 		FA8F224C1DD89910005A90D1 /* IGRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8F224B1DD89910005A90D1 /* IGRoom.swift */; };
 		FA8F224E1DD89AC5005A90D1 /* IGRoomMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8F224D1DD89AC5005A90D1 /* IGRoomMessage.swift */; };
@@ -192,12 +195,27 @@
 		FA8F22541DD89C76005A90D1 /* IGGroupRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8F22531DD89C76005A90D1 /* IGGroupRoom.swift */; };
 		FA8F22561DD89C88005A90D1 /* IGChannelRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8F22551DD89C88005A90D1 /* IGChannelRoom.swift */; };
 		FA8F22581DD89F7C005A90D1 /* IGAvatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8F22571DD89F7C005A90D1 /* IGAvatar.swift */; };
+		FA927E002028416300DF7145 /* VideoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA927DFF2028416300DF7145 /* VideoCell.swift */; };
+		FA927E02202841C900DF7145 /* VideoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA927E012028418600DF7145 /* VideoCell.xib */; };
+		FA927E0420284D7800DF7145 /* GifCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA927E0320284D7800DF7145 /* GifCell.swift */; };
+		FA927E0620284DC100DF7145 /* GifCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA927E0520284D7E00DF7145 /* GifCell.xib */; };
+		FA927E0820286FAD00DF7145 /* ContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA927E0720286FAD00DF7145 /* ContactCell.swift */; };
+		FA927E0A20286FE800DF7145 /* ContactCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA927E0920286FBC00DF7145 /* ContactCell.xib */; };
+		FA927E0C20288A7E00DF7145 /* FileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA927E0B20288A7E00DF7145 /* FileCell.swift */; };
+		FA927E0E20288AEE00DF7145 /* FileCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA927E0D20288AA200DF7145 /* FileCell.xib */; };
 		FA930D9A1E5B178F00069EE1 /* SSLSecurity.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA930D981E5B178F00069EE1 /* SSLSecurity.swift */; };
 		FA930D9B1E5B178F00069EE1 /* WebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA930D991E5B178F00069EE1 /* WebSocket.swift */; };
+		FA93EE282029A39000DD1521 /* VoiceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA93EE272029A39000DD1521 /* VoiceCell.swift */; };
+		FA93EE2A2029A41200DD1521 /* VoiceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA93EE292029A3FF00DD1521 /* VoiceCell.xib */; };
+		FA93EE2C2029DB1300DD1521 /* AudioCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA93EE2B2029DB1300DD1521 /* AudioCell.swift */; };
+		FA93EE2E2029DBE300DD1521 /* AudioCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA93EE2D2029DBC300DD1521 /* AudioCell.xib */; };
 		FA96EF4E1DEB0431009BE640 /* IGMessageSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA96EF4D1DEB0431009BE640 /* IGMessageSender.swift */; };
 		FA96EF541DEB09A6009BE640 /* IGRequestChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA96EF531DEB09A6009BE640 /* IGRequestChat.swift */; };
+		FA97D444201716270087BBD0 /* TextCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA97D443201708310087BBD0 /* TextCell.xib */; };
+		FA97D44820174C2C0087BBD0 /* AbstractCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA97D44720174C2C0087BBD0 /* AbstractCell.swift */; };
 		FAA2A85A200A31CB00CAA7C7 /* IGSettingAccountBioTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA2A859200A31CB00CAA7C7 /* IGSettingAccountBioTableViewController.swift */; };
 		FAA30F671DAA6F790061B8C9 /* IGWebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA30F661DAA6F790061B8C9 /* IGWebSocketManager.swift */; };
+		FAA3604D201614B600736F95 /* TextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA3604B201614B600736F95 /* TextCell.swift */; };
 		FAA932F51DF45748002CC631 /* IGEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA932F41DF45748002CC631 /* IGEnums.swift */; };
 		FAA9DFB01F4B1B330076A22F /* IGSettingPrivacyAndSecurityTwoStepVerificationSetTwoStepVerificationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA9DFAF1F4B1B330076A22F /* IGSettingPrivacyAndSecurityTwoStepVerificationSetTwoStepVerificationTableViewController.swift */; };
 		FAA9DFB21F4B1B600076A22F /* IGSettingPrivacyAndSecurityTwoStepVerificationVerifyPasswordTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA9DFB11F4B1B600076A22F /* IGSettingPrivacyAndSecurityTwoStepVerificationVerifyPasswordTableViewController.swift */; };
@@ -449,9 +467,12 @@
 		FA68A2101DD9B0E9003A6651 /* IGRecentsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGRecentsTableViewController.swift; sourceTree = "<group>"; };
 		FA6A22751F41CB0B0063DF07 /* iGap-Fontico.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iGap-Fontico.ttf"; sourceTree = "<group>"; };
 		FA6A22771F41D73E0063DF07 /* IGRequestQrCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGRequestQrCode.swift; sourceTree = "<group>"; };
+		FA6B602D201E0483008460CF /* CellSizeCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellSizeCalculator.swift; sourceTree = "<group>"; };
 		FA752C321E1EC571008694C6 /* iGap.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = iGap.entitlements; path = ../iGap.entitlements; sourceTree = "<group>"; };
 		FA77C2A61E2B85E4001B2152 /* IGRegistredUserInfoTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGRegistredUserInfoTableViewController.swift; sourceTree = "<group>"; };
 		FA7A2ED21DF5830F00164435 /* IGRegisteredUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGRegisteredUser.swift; sourceTree = "<group>"; };
+		FA8204362025C97300A795D5 /* ImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
+		FA82043A2025C99300A795D5 /* ImageCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ImageCell.xib; sourceTree = "<group>"; };
 		FA8560A91FFBA6FC00A25DC3 /* IGSettingPrivacyAndSecurityTwoStepVerificationVerifyUnconfirmedEmail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGSettingPrivacyAndSecurityTwoStepVerificationVerifyUnconfirmedEmail.swift; sourceTree = "<group>"; };
 		FA8F224B1DD89910005A90D1 /* IGRoom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGRoom.swift; sourceTree = "<group>"; };
 		FA8F224D1DD89AC5005A90D1 /* IGRoomMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGRoomMessage.swift; sourceTree = "<group>"; };
@@ -460,12 +481,27 @@
 		FA8F22531DD89C76005A90D1 /* IGGroupRoom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGGroupRoom.swift; sourceTree = "<group>"; };
 		FA8F22551DD89C88005A90D1 /* IGChannelRoom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGChannelRoom.swift; sourceTree = "<group>"; };
 		FA8F22571DD89F7C005A90D1 /* IGAvatar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGAvatar.swift; sourceTree = "<group>"; };
+		FA927DFF2028416300DF7145 /* VideoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCell.swift; sourceTree = "<group>"; };
+		FA927E012028418600DF7145 /* VideoCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VideoCell.xib; sourceTree = "<group>"; };
+		FA927E0320284D7800DF7145 /* GifCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GifCell.swift; sourceTree = "<group>"; };
+		FA927E0520284D7E00DF7145 /* GifCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GifCell.xib; sourceTree = "<group>"; };
+		FA927E0720286FAD00DF7145 /* ContactCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCell.swift; sourceTree = "<group>"; };
+		FA927E0920286FBC00DF7145 /* ContactCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ContactCell.xib; sourceTree = "<group>"; };
+		FA927E0B20288A7E00DF7145 /* FileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileCell.swift; sourceTree = "<group>"; };
+		FA927E0D20288AA200DF7145 /* FileCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FileCell.xib; sourceTree = "<group>"; };
 		FA930D981E5B178F00069EE1 /* SSLSecurity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSLSecurity.swift; sourceTree = "<group>"; };
 		FA930D991E5B178F00069EE1 /* WebSocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebSocket.swift; sourceTree = "<group>"; };
+		FA93EE272029A39000DD1521 /* VoiceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceCell.swift; sourceTree = "<group>"; };
+		FA93EE292029A3FF00DD1521 /* VoiceCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VoiceCell.xib; sourceTree = "<group>"; };
+		FA93EE2B2029DB1300DD1521 /* AudioCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioCell.swift; sourceTree = "<group>"; };
+		FA93EE2D2029DBC300DD1521 /* AudioCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AudioCell.xib; sourceTree = "<group>"; };
 		FA96EF4D1DEB0431009BE640 /* IGMessageSender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGMessageSender.swift; sourceTree = "<group>"; };
 		FA96EF531DEB09A6009BE640 /* IGRequestChat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGRequestChat.swift; sourceTree = "<group>"; };
+		FA97D443201708310087BBD0 /* TextCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextCell.xib; sourceTree = "<group>"; };
+		FA97D44720174C2C0087BBD0 /* AbstractCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbstractCell.swift; sourceTree = "<group>"; };
 		FAA2A859200A31CB00CAA7C7 /* IGSettingAccountBioTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGSettingAccountBioTableViewController.swift; sourceTree = "<group>"; };
 		FAA30F661DAA6F790061B8C9 /* IGWebSocketManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IGWebSocketManager.swift; path = "WebSocket Manager/IGWebSocketManager.swift"; sourceTree = "<group>"; };
+		FAA3604B201614B600736F95 /* TextCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextCell.swift; sourceTree = "<group>"; };
 		FAA932F41DF45748002CC631 /* IGEnums.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IGEnums.swift; path = ../Model/Objects/IGEnums.swift; sourceTree = "<group>"; };
 		FAA9DFAF1F4B1B330076A22F /* IGSettingPrivacyAndSecurityTwoStepVerificationSetTwoStepVerificationTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGSettingPrivacyAndSecurityTwoStepVerificationSetTwoStepVerificationTableViewController.swift; sourceTree = "<group>"; };
 		FAA9DFB11F4B1B600076A22F /* IGSettingPrivacyAndSecurityTwoStepVerificationVerifyPasswordTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGSettingPrivacyAndSecurityTwoStepVerificationVerifyPasswordTableViewController.swift; sourceTree = "<group>"; };
@@ -1018,6 +1054,30 @@
 			path = Managers;
 			sourceTree = "<group>";
 		};
+		FAA36046201611D100736F95 /* Chat Cells */ = {
+			isa = PBXGroup;
+			children = (
+				FA97D44720174C2C0087BBD0 /* AbstractCell.swift */,
+				FAA3604B201614B600736F95 /* TextCell.swift */,
+				FA97D443201708310087BBD0 /* TextCell.xib */,
+				FA8204362025C97300A795D5 /* ImageCell.swift */,
+				FA82043A2025C99300A795D5 /* ImageCell.xib */,
+				FA927DFF2028416300DF7145 /* VideoCell.swift */,
+				FA927E012028418600DF7145 /* VideoCell.xib */,
+				FA927E0320284D7800DF7145 /* GifCell.swift */,
+				FA927E0520284D7E00DF7145 /* GifCell.xib */,
+				FA927E0720286FAD00DF7145 /* ContactCell.swift */,
+				FA927E0920286FBC00DF7145 /* ContactCell.xib */,
+				FA927E0B20288A7E00DF7145 /* FileCell.swift */,
+				FA927E0D20288AA200DF7145 /* FileCell.xib */,
+				FA93EE272029A39000DD1521 /* VoiceCell.swift */,
+				FA93EE292029A3FF00DD1521 /* VoiceCell.xib */,
+				FA93EE2B2029DB1300DD1521 /* AudioCell.swift */,
+				FA93EE2D2029DBC300DD1521 /* AudioCell.xib */,
+			);
+			path = "Chat Cells";
+			sourceTree = "<group>";
+		};
 		FAA9DFAE1F4B1B330076A22F /* TwoStep Verification */ = {
 			isa = PBXGroup;
 			children = (
@@ -1073,6 +1133,7 @@
 		FAD5807F1DDC403200A242DE /* Chat Screen */ = {
 			isa = PBXGroup;
 			children = (
+				FAA36046201611D100736F95 /* Chat Cells */,
 				FAD580801DDC48F500A242DE /* Controller */,
 				FAD580821DDC48F500A242DE /* Layout */,
 				FAD580831DDC48F500A242DE /* Model */,
@@ -1100,6 +1161,7 @@
 		FAD580831DDC48F500A242DE /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				FA6B602D201E0483008460CF /* CellSizeCalculator.swift */,
 				FAD580981DDC67EB00A242DE /* IGMessageCollectionViewCellSizeCalculator.swift */,
 			);
 			path = Model;
@@ -1322,17 +1384,25 @@
 				937455F91E63021E007694CE /* IGForwardMessageAudioAndVoiceAttachment.xib in Resources */,
 				FA6A22761F41D0210063DF07 /* iGap-Fontico.ttf in Resources */,
 				FA33063E1F445AE90096031A /* IRANSans_UltraLight.ttf in Resources */,
+				FA927E0620284DC100DF7145 /* GifCell.xib in Resources */,
 				FAD57EE21E191DB000FC17D9 /* IGMessageLogCollectionViewCell.xib in Resources */,
 				FA0953071E1B87E40043ED3F /* IGSettingStoryboard.storyboard in Resources */,
 				FA5EC5DB1E06728C006E2850 /* IGChatRoomListTableViewCell.xib in Resources */,
+				FA82043B2025D90800A795D5 /* ImageCell.xib in Resources */,
 				FAF796071DAA392F0030509B /* Main.storyboard in Resources */,
+				FA927E0A20286FE800DF7145 /* ContactCell.xib in Resources */,
 				FA33063B1F445AE80096031A /* IRANSans_Bold.ttf in Resources */,
 				FA3306361F445A570096031A /* IRANSans.ttf in Resources */,
+				FA927E02202841C900DF7145 /* VideoCell.xib in Resources */,
 				FAF7960A1DAA39460030509B /* Info.plist in Resources */,
 				FA4BD8A41DF2A53400CCB239 /* IGMusicViewController.xib in Resources */,
+				FA93EE2A2029A41200DD1521 /* VoiceCell.xib in Resources */,
+				FA927E0E20288AEE00DF7145 /* FileCell.xib in Resources */,
 				FA0CC80A1E5D7D4400556283 /* Info.plist in Resources */,
 				FAF8BFEA1E34AF00002AF525 /* GoogleService-Info.plist in Resources */,
+				FA93EE2E2029DBE300DD1521 /* AudioCell.xib in Resources */,
 				FAF796061DAA392F0030509B /* LaunchScreen.storyboard in Resources */,
+				FA97D444201716270087BBD0 /* TextCell.xib in Resources */,
 				FAB0F9461FE956D1008F23EB /* Splash.gif in Resources */,
 				FAF796051DAA392F0030509B /* Assets.xcassets in Resources */,
 			);
@@ -1472,11 +1542,13 @@
 				93193F301E5812CA0039AC0C /* IGGroupInfoMemberListTableViewController.swift in Sources */,
 				FA0953681E1B97700043ED3F /* IGSettingPrivacy&SecurityTableViewController.swift in Sources */,
 				FA8F22561DD89C88005A90D1 /* IGChannelRoom.swift in Sources */,
+				FAA3604D201614B600736F95 /* TextCell.swift in Sources */,
 				FA0953821E1B97E20043ED3F /* IGChooseContactToAddNewGroupTableViewCell.swift in Sources */,
 				932D1ABA1E741C18000F0D97 /* IGChannelAndGroupSharedMediaAudioAndLinkTableViewController.swift in Sources */,
 				FA09534D1E1B97700043ED3F /* IGSettingAddContactTableViewController.swift in Sources */,
 				FAF7960F1DAA39660030509B /* AppDelegate.swift in Sources */,
 				FA0953851E1B97E20043ED3F /* IGChooseMemberToCreateGroupBottomViewCollectionViewCell.swift in Sources */,
+				FA93EE282029A39000DD1521 /* VoiceCell.swift in Sources */,
 				93AA67C01E4F35CF0053380C /* IGChannelInfoEditTypeTableViewController.swift in Sources */,
 				FA63BAA71DD70E1A000B60AD /* IGRequestUser.swift in Sources */,
 				FA0953661E1B97700043ED3F /* IGSettingPrivacy&SecurityEnterPasscodeLockViewController.swift in Sources */,
@@ -1550,9 +1622,12 @@
 				932D1ABE1E7426AD000F0D97 /* IGChannelAndGroupInfoSharedMediaImagesAndVideosCollectionViewCell.swift in Sources */,
 				FAEA75DB1DDB012800C387F1 /* IGRoomMessageLog.swift in Sources */,
 				FAA30F671DAA6F790061B8C9 /* IGWebSocketManager.swift in Sources */,
+				FA93EE2C2029DB1300DD1521 /* AudioCell.swift in Sources */,
 				FAA932F51DF45748002CC631 /* IGEnums.swift in Sources */,
 				FAA9DFB61F4B1CB50076A22F /* IGSettingPrivacyAndSecurityTwoStepVerificationChangePasswordTableViewController.swift in Sources */,
 				FAD580941DDC5C4E00A242DE /* IGMessageCollectionViewCell.swift in Sources */,
+				FA8204382025C97300A795D5 /* ImageCell.swift in Sources */,
+				FA927E002028416300DF7145 /* VideoCell.swift in Sources */,
 				FA0953561E1B97700043ED3F /* IGSettingChatTableViewController.swift in Sources */,
 				FAD5808F1DDC5C1900A242DE /* IGMessageGeneralCollectionViewCell.swift in Sources */,
 				FA5E159F1E0FFFD800EC19A1 /* IGTappableView.swift in Sources */,
@@ -1561,7 +1636,9 @@
 				FA63BAA91DD70E77000B60AD /* IGRequestInfo.swift in Sources */,
 				FA09534E1E1B97700043ED3F /* IGSettingChatCatchContactAndGroupsTableViewCell.swift in Sources */,
 				93A3D3CC1E40831E00D2686F /* IGChooseMemberToCreateChannelTableViewCell.swift in Sources */,
+				FA927E0820286FAD00DF7145 /* ContactCell.swift in Sources */,
 				FA0953861E1B97E20043ED3F /* IGContactTableViewCell.swift in Sources */,
+				FA6B602E201E0483008460CF /* CellSizeCalculator.swift in Sources */,
 				FA0953651E1B97700043ED3F /* IGSettingNotificationTableViewController.swift in Sources */,
 				FA0953631E1B97700043ED3F /* IGSettingHaveCheckmarkOntheLeftTableViewCell.swift in Sources */,
 				FA42EF151E5C593500CF8A32 /* TTTAttributedLabel.m in Sources */,
@@ -1590,6 +1667,7 @@
 				FABB9B061DB25E5E00D794A4 /* IGSecurityManager.swift in Sources */,
 				FA0953551E1B97700043ED3F /* IGSettingChatStickersTableViewController.swift in Sources */,
 				FA358D1E1E0A6F49001D0935 /* IGChatsTableViewController.swift in Sources */,
+				FA927E0420284D7800DF7145 /* GifCell.swift in Sources */,
 				FA0CC8081E5D7D4400556283 /* ActiveLabel.swift in Sources */,
 				FA930D9B1E5B178F00069EE1 /* WebSocket.swift in Sources */,
 				FA0953691E1B97700043ED3F /* IGSettingPrivacyAndScurityAutoLockAfterTableViewController.swift in Sources */,
@@ -1604,6 +1682,7 @@
 				93AA67BE1E4F35770053380C /* IGChannelInfoEditDescriptionTableViewController.swift in Sources */,
 				93193F381E5814980039AC0C /* IGGroupInfoAdminListTableViewController.swift in Sources */,
 				FA63BAAD1DD70F09000B60AD /* IGRequestGroup.swift in Sources */,
+				FA97D44820174C2C0087BBD0 /* AbstractCell.swift in Sources */,
 				FAA9DFBE1F4B23390076A22F /* IGTwoStepVerification.swift in Sources */,
 				FA09534B1E1B97700043ED3F /* IGSettingAccountPhoneNumberTableViewController.swift in Sources */,
 				FAD580861DDC49A200A242DE /* IGMessageViewController.swift in Sources */,
@@ -1618,6 +1697,7 @@
 				FA11E28D1DE99BF400A2F87C /* IGFactory.swift in Sources */,
 				FA68A2111DD9B0E9003A6651 /* IGRecentsTableViewController.swift in Sources */,
 				FA09536D1E1B97700043ED3F /* IGSettingPrivacyAndSecurityActiveSessionsTableViewController.swift in Sources */,
+				FA927E0C20288A7E00DF7145 /* FileCell.swift in Sources */,
 				93321E7C1E5C12A3004D4454 /* IGForwardContactsTableViewCell.swift in Sources */,
 				FA0CC8121E5DD99400556283 /* Thread.swift in Sources */,
 				FA50A8CD1DD35EFD00C6D2EA /* IGRegistrationStepPhoneViewController.swift in Sources */,

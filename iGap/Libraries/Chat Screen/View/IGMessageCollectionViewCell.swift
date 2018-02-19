@@ -150,7 +150,7 @@ class IGMessageCollectionViewCell: IGMessageGeneralCollectionViewCell {
             if isEdited {
                 textWithTime = text.appending("xxxxxxxxxxxxx")
             } else {
-                textWithTime = text.appending("xxxxxxx")
+                textWithTime = text.appending("xxxxxxxx")
             }
         } else {
             textWithTime = text.appending("")
@@ -1151,14 +1151,14 @@ extension IGMessageCollectionViewCell: IGDownloadUploadIndicatorViewDelegate {
         }
         
         if let attachment = self.attachment {
-            IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: {
+            IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: { (attachment) -> Void in
                 
             }, failure: {
                 
             })
         }
         if let forwardAttachment = self.forwardedAttachment {
-            IGDownloadManager.sharedManager.download(file: forwardAttachment, previewType: .originalFile, completion: {
+            IGDownloadManager.sharedManager.download(file: forwardAttachment, previewType: .originalFile, completion: { (attachment) -> Void in
                 
             }, failure: {
                 

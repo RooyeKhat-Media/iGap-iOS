@@ -82,7 +82,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
     @IBOutlet weak var scrollToBottomContainerView: UIView!
     @IBOutlet weak var scrollToBottomContainerViewConstraint: NSLayoutConstraint!
     private let disposeBag = DisposeBag()
-    var isFetchingRoomHistory: Bool = false
+    var allowForGetHistory: Bool = true
     var isInMessageViewController : Bool = true
     var recorder: AVAudioRecorder?
     var isRecordingVoice = false
@@ -103,7 +103,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
                           SortDescriptor(keyPath: "id", ascending: false)]
     let sortPropertiesForMedia = [SortDescriptor(keyPath: "creationTime", ascending: true),
                                   SortDescriptor(keyPath: "id", ascending: true)]
-    var messages: Results<IGRoomMessage>? //try! Realm().objects(IGRoomMessage.self)
+    var messages: Results<IGRoomMessage>! //try! Realm().objects(IGRoomMessage.self)
     var messagesWithMedia = try! Realm().objects(IGRoomMessage.self)
     var messagesWithForwardedMedia = try! Realm().objects(IGRoomMessage.self)
     var notificationToken: NotificationToken?
@@ -123,6 +123,21 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
     var selectedChannelToSeeTheirInfo: IGChannelRoom?
     var selectedGroupToSeeTheirInfo: IGGroupRoom?
     var hud = MBProgressHUD()
+    
+    /* variables for fetch message */
+    var allMessages:Results<IGRoomMessage>!
+    var getMessageLimit = 25
+    var scrollToTopLimit:CGFloat = 20
+    var messageSize = 0
+    var page = 0
+    var firstId:Int64 = 0
+    var lastId:Int64 = 0
+    
+    var isEndOfScroll = false
+    var lowerAllow = true
+    var allowForGetHistoryLocal = true
+    var isFirstHistory = true
+    var hasLocal = true
 
     fileprivate var typingStatusExpiryTimer = Timer() //use this to send cancel for typing status
     
@@ -286,71 +301,141 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
         tapAndHoldOnRecord.minimumPressDuration = 0.5
         inputBarRecordButton.addGestureRecognizer(tapAndHoldOnRecord)
         
-        let predicate = NSPredicate(format: "roomId = %lld AND isDeleted == false", self.room!.id)
-        messages = try! Realm().objects(IGRoomMessage.self).filter(predicate).sorted(by: sortProperties)
+        messages = findAllMessages()
+        updateObserver()
+    }
+    
+    func updateObserver(){
         self.notificationToken = messages?.addNotificationBlock { (changes: RealmCollectionChange) in
             switch changes {
             case .initial:
-                self.collectionView.alpha = 0.0
-                self.collectionView.reloadData()
-                
-                UIView.animate(withDuration: 0.2, animations: {
-                    self.collectionView.alpha = 1.0
-                })
-                
                 break
             case .update(_, let deletions, let insertions, let modifications):
-                insertions.forEach{
-                    if let message = self.messages?[$0] {
-                        self.sendSeenForMessage(message)
-                        print(message.status)
+                
+                for cellsPosition in modifications {
+                    if self.collectionView.indexPathsForVisibleItems.contains(IndexPath(row: 0, section: cellsPosition)) {
+                        DispatchQueue.main.async {
+                            self.collectionView.reloadData()
+                        }
+                        break
                     }
                 }
                 
-                if self.messages!.count == self.collectionView.numberOfSections + insertions.count - deletions.count {
-                    if AppDelegate.showPrint {
-                        print("insersation   => \(insertions.count)")
-                        print("deletions     => \(deletions.count)")
-                        print("modifications => \(modifications.count)")
-                        print("all messages  => \(self.messages!.count)")
-                    }
+                if insertions.count > 0 || deletions.count > 0 {
                     
-                    self.collectionView.performBatchUpdates({
-                        self.collectionView.insertSections(IndexSet(insertions))
-                        self.collectionView.deleteSections(IndexSet(deletions))
-                        UIView.performWithoutAnimation {
-                            self.collectionView.reloadSections(IndexSet(modifications))
+                    if self.isEndOfScroll && self.collectionView.numberOfSections > 100 {
+                        self.resetGetHistoryValues()
+                        self.messages = self.findAllMessages()
+                    } else {
+                        DispatchQueue.main.async {
+                            self.collectionView.reloadData()
                         }
-                        //self.collectionView.reloadSections(IndexSet(modifications))
-                        
-                        
-                        
-//                        self.collectionView.insertItems(at: insertions.map    { IndexPath(row: 0, section: $0) })
-//                        self.collectionView.deleteItems(at: deletions.map     { IndexPath(row: 0, section: $0) })
-//                        self.collectionView.reloadItems(at: modifications.map { IndexPath(row: 0, section: $0) })
-                        
-//                        self.collectionView.insertItems(at: insertions.map    { IndexPath(row: $0, section: 0) })
-//                        self.collectionView.deleteItems(at: deletions.map     { IndexPath(row: $0, section: 0) })
-//                        self.collectionView.reloadItems(at: modifications.map { IndexPath(row: $0, section: 0) })
-                    }, completion: { (completed) in
-                        if insertions.count != 0 {
-                            
-                        }
-                    })
-                } else {
-                    self.collectionView.reloadData()
+                    }
                 }
                 
                 break
             case .error(let err):
-                // An error occurred while opening the Realm file on the background worker thread
                 fatalError("\(err)")
                 break
             }
         }
-        
-       
     }
+    
+    func findAllMessages(isHistory: Bool = false) -> Results<IGRoomMessage>!{
+        
+        if lastId == 0 {
+            let predicate = NSPredicate(format: "roomId = %lld AND isDeleted == false", self.room!.id)
+            allMessages = try! Realm().objects(IGRoomMessage.self).filter(predicate).sorted(by: sortProperties)
+            
+            let messageCount = allMessages.count
+            if messageCount == 0 {
+                return allMessages
+            }
+            
+            firstId = allMessages.toArray()[0].id
+            
+            if messageCount <= getMessageLimit {
+                hasLocal = false
+                scrollToTopLimit = 500
+                lastId = allMessages.toArray()[allMessages.count-1].id
+            } else {
+                lastId = allMessages.toArray()[getMessageLimit].id
+            }
+            
+        } else {
+            page += 1
+            
+            if page > 1 {
+                getMessageLimit = 100
+            }
+            
+            let messageLimit = page * getMessageLimit
+            let messageCount = allMessages.count
+            
+            if messageCount <= messageLimit {
+                hasLocal = false
+                scrollToTopLimit = 500
+                lastId = allMessages.toArray()[allMessages.count-1].id
+            } else {
+                lastId = allMessages.toArray()[messageLimit].id
+            }
+        }
+        
+        let predicate = NSPredicate(format: "roomId = %lld AND id >= %lld AND isDeleted == false", self.room!.id, lastId)
+        let messages = try! Realm().objects(IGRoomMessage.self).filter(predicate).sorted(by: sortProperties)
+        
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
+        
+        return messages
+    }
+    
+    /* reset values for get history from first */
+    func resetGetHistoryValues(){
+        lastId = 0
+        page = 0
+        getMessageLimit = 50
+        scrollToTopLimit = 20
+        hasLocal = true
+    }
+    
+    
+    /* delete all local messages before first message that have shouldFetchBefore==true */
+    func deleteUnusedLocalMessage(){
+        let predicate = NSPredicate(format: "roomId = %lld AND shouldFetchBefore == true", self.room!.id)
+        let message = try! Realm().objects(IGRoomMessage.self).filter(predicate).sorted(by: sortProperties).last
+        
+        var deleteId:Int64 = 0
+        if let id = message?.id {
+            deleteId = id
+        }
+        
+        let predicateDelete = NSPredicate(format: "roomId = %lld AND id <= %lld", self.room!.id , deleteId)
+        let messageDelete = try! Realm().objects(IGRoomMessage.self).filter(predicateDelete).sorted(by: sortProperties)
+        
+        let realm = try! Realm()
+        try! realm.write {
+            realm.delete(messageDelete)
+        }
+    }
+    
+    func deleteForTest(){
+        let predicate = NSPredicate(format: "roomId = %lld AND isDeleted == false", self.room!.id)
+        let message = try! Realm().objects(IGRoomMessage.self).filter(predicate).sorted(by: sortProperties)
+
+        if message.count > 100 {
+            
+            let predicateDelete = NSPredicate(format: "roomId = %lld AND id <= %lld ", self.room!.id , message.toArray()[100].id)
+            let messageDelete = try! Realm().objects(IGRoomMessage.self).filter(predicateDelete).sorted(by: sortProperties)
+            
+            let realm = try! Realm()
+            try! realm.write {
+                realm.delete(messageDelete)
+            }
+        }
+    }
+    
     
     override func viewWillAppear(_ animated: Bool) {
         if let forwardMsg = selectedMessageToForwardToThisRoom {
@@ -434,7 +519,9 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
     }
     
     deinit {
-        notificationToken = nil
+        if notificationToken != nil {
+            notificationToken?.stop()
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -1424,6 +1511,41 @@ extension IGMessageViewController: IGMessageCollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let message = messages![indexPath.section]
+        var isIncommingMessage = true
+        var shouldShowAvatar = false
+        var isPreviousMessageFromSameSender = false
+        var isNextMessageFromSameSender = false
+        
+        if message.type != .log {
+            if messages!.indices.contains(indexPath.section + 1){
+                let previousMessage = messages![(indexPath.section + 1)]
+                if previousMessage.type != .log && message.authorHash == previousMessage.authorHash {
+                    isPreviousMessageFromSameSender = true
+                }
+            }
+            
+            if messages!.indices.contains(indexPath.section - 1){
+                let nextMessage = messages![(indexPath.section - 1)]
+                if message.authorHash == nextMessage.authorHash {
+                    isNextMessageFromSameSender = true
+                }
+            }
+        }
+        
+
+        if let senderHash = message.authorHash {
+            if senderHash == IGAppManager.sharedManager.authorHash() {
+                isIncommingMessage = false
+            }
+        }
+        
+        if room?.groupRoom != nil {
+            shouldShowAvatar = true
+        }
+        if !isIncommingMessage {
+            shouldShowAvatar = false
+        }
+        
         
         if message.type == .log {
             let cell: IGMessageLogCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: logMessageCellIdentifer, for: indexPath) as! IGMessageLogCollectionViewCell
@@ -1435,9 +1557,77 @@ extension IGMessageViewController: IGMessageCollectionViewDataSource {
                             isPreviousMessageFromSameSender: false,
                             isNextMessageFromSameSender: false)
             return cell
-        } else{
             
-        
+        } else if (message.type == .text && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .text) {
+            
+            let cell: TextCell = collectionView.dequeueReusableCell(withReuseIdentifier: TextCell.cellReuseIdentifier(), for: indexPath) as! TextCell
+            let bubbleSize = CellSizeCalculator.sharedCalculator.mainBubbleCountainerSize(for: message)
+            cell.setMessage(message,isIncommingMessage: isIncommingMessage,shouldShowAvatar: shouldShowAvatar,messageSizes: bubbleSize,isPreviousMessageFromSameSender: isPreviousMessageFromSameSender,isNextMessageFromSameSender: isNextMessageFromSameSender)
+            cell.delegate = self
+            return cell
+            
+        } else if (message.type == .image && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .image) ||
+                  (message.type == .imageAndText && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .imageAndText){
+            
+            let cell: ImageCell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCell.cellReuseIdentifier(), for: indexPath) as! ImageCell
+            let bubbleSize = CellSizeCalculator.sharedCalculator.mainBubbleCountainerSize(for: message)
+            cell.setMessage(message,isIncommingMessage: isIncommingMessage,shouldShowAvatar: shouldShowAvatar,messageSizes: bubbleSize,isPreviousMessageFromSameSender: isPreviousMessageFromSameSender,isNextMessageFromSameSender: isNextMessageFromSameSender)
+            cell.delegate = self
+            return cell
+            
+        } else if (message.type == .video && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .video) ||
+                  (message.type == .videoAndText && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .videoAndText){
+            
+            let cell: VideoCell = collectionView.dequeueReusableCell(withReuseIdentifier: VideoCell.cellReuseIdentifier(), for: indexPath) as! VideoCell
+            let bubbleSize = CellSizeCalculator.sharedCalculator.mainBubbleCountainerSize(for: message)
+            cell.setMessage(message,isIncommingMessage: isIncommingMessage,shouldShowAvatar: shouldShowAvatar,messageSizes: bubbleSize,isPreviousMessageFromSameSender: isPreviousMessageFromSameSender,isNextMessageFromSameSender: isNextMessageFromSameSender)
+            cell.delegate = self
+            return cell
+            
+        } else if (message.type == .gif && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .gif) ||
+                  (message.type == .gifAndText && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .gifAndText){
+            
+            let cell: GifCell = collectionView.dequeueReusableCell(withReuseIdentifier: GifCell.cellReuseIdentifier(), for: indexPath) as! GifCell
+            let bubbleSize = CellSizeCalculator.sharedCalculator.mainBubbleCountainerSize(for: message)
+            cell.setMessage(message,isIncommingMessage: isIncommingMessage,shouldShowAvatar: shouldShowAvatar,messageSizes: bubbleSize,isPreviousMessageFromSameSender: isPreviousMessageFromSameSender,isNextMessageFromSameSender: isNextMessageFromSameSender)
+            cell.delegate = self
+            return cell
+            
+        } else if (message.type == .contact && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .contact) {
+            
+            let cell: ContactCell = collectionView.dequeueReusableCell(withReuseIdentifier: ContactCell.cellReuseIdentifier(), for: indexPath) as! ContactCell
+            let bubbleSize = CellSizeCalculator.sharedCalculator.mainBubbleCountainerSize(for: message)
+            cell.setMessage(message,isIncommingMessage: isIncommingMessage,shouldShowAvatar: shouldShowAvatar,messageSizes: bubbleSize,isPreviousMessageFromSameSender: isPreviousMessageFromSameSender,isNextMessageFromSameSender: isNextMessageFromSameSender)
+            cell.delegate = self
+            return cell
+            
+        } else if (message.type == .file && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .file) ||
+                  (message.type == .fileAndText && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .fileAndText) {
+            
+            let cell: FileCell = collectionView.dequeueReusableCell(withReuseIdentifier: FileCell.cellReuseIdentifier(), for: indexPath) as! FileCell
+            let bubbleSize = CellSizeCalculator.sharedCalculator.mainBubbleCountainerSize(for: message)
+            cell.setMessage(message,isIncommingMessage: isIncommingMessage,shouldShowAvatar: shouldShowAvatar,messageSizes: bubbleSize,isPreviousMessageFromSameSender: isPreviousMessageFromSameSender,isNextMessageFromSameSender: isNextMessageFromSameSender)
+            cell.delegate = self
+            return cell
+            
+        } else if (message.type == .voice && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .voice) {
+            
+            let cell: VoiceCell = collectionView.dequeueReusableCell(withReuseIdentifier: VoiceCell.cellReuseIdentifier(), for: indexPath) as! VoiceCell
+            let bubbleSize = CellSizeCalculator.sharedCalculator.mainBubbleCountainerSize(for: message)
+            cell.setMessage(message,isIncommingMessage: isIncommingMessage,shouldShowAvatar: shouldShowAvatar,messageSizes: bubbleSize,isPreviousMessageFromSameSender: isPreviousMessageFromSameSender,isNextMessageFromSameSender: isNextMessageFromSameSender)
+            cell.delegate = self
+            return cell
+            
+        } else if (message.type == .audio && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .audio) ||
+                  (message.type == .audioAndText && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .audioAndText) {
+            
+            let cell: AudioCell = collectionView.dequeueReusableCell(withReuseIdentifier: AudioCell.cellReuseIdentifier(), for: indexPath) as! AudioCell
+            let bubbleSize = CellSizeCalculator.sharedCalculator.mainBubbleCountainerSize(for: message)
+            cell.setMessage(message,isIncommingMessage: isIncommingMessage,shouldShowAvatar: shouldShowAvatar,messageSizes: bubbleSize,isPreviousMessageFromSameSender: isPreviousMessageFromSameSender,isNextMessageFromSameSender: isNextMessageFromSameSender)
+            cell.delegate = self
+            return cell
+            
+        } else {
         
             let cell: IGMessageCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: messageCellIdentifer, for: indexPath) as! IGMessageCollectionViewCell
             
@@ -1549,22 +1739,9 @@ extension IGMessageViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         let message = messages![indexPath.section]
-        var frame = self.collectionView.layout.size(for: message).bubbleSize
+        let frame = self.collectionView.layout.sizeCell(for: message).bubbleSize
         
-        var isPreviousMessageFromSameSender = false
-        
-        if messages!.indices.contains(indexPath.section + 1){
-            let previousMessage = messages![(indexPath.section + 1)]
-            if previousMessage.type != .log && message.authorHash == previousMessage.authorHash {
-                isPreviousMessageFromSameSender = true
-            }
-        }
-
-        if isPreviousMessageFromSameSender || message.type == .log {
-            frame.height -= 7.5
-        }
-        
-        return CGSize(width: self.collectionView.frame.width, height: frame.height)
+        return CGSize(width: self.collectionView.frame.width, height: frame.height+5)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
@@ -1587,23 +1764,59 @@ extension IGMessageViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         let message = messages![indexPath.section]
-        if message.shouldFetchBefore {
+        if (messages!.count < 20 && lowerAllow) { // HINT: this number(20) should set lower than getMessageLimit(25) for work correct
+            lowerAllow = false
+            
+            let predicate = NSPredicate(format: "roomId = %lld AND isDeleted == false", self.room!.id)
+            messages = try! Realm().objects(IGRoomMessage.self).filter(predicate).sorted(by: sortProperties)
+            updateObserver()
+            
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 self.fetchRoomHistoryIfPossibleBefore(message: message)
+            }
+        } else if (messages!.count < 20 || messages!.indices.contains(indexPath.section + 1)) && message.shouldFetchBefore {
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                self.fetchRoomHistoryIfPossibleBefore(message: message, forceGetHistory: true)
             }
         }
     }
     
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        if self.collectionView.numberOfSections == 0 {
+            return
+        }
+        
         let spaceToTop = scrollView.contentSize.height - scrollView.contentOffset.y - scrollView.frame.height
-        //500 is an arbitrary number. can be anything
-        if spaceToTop < 500 {
-            //near top of the screen (real bottom of scrollview)
-            let predicate = NSPredicate(format: "roomId = %lld", self.room!.id)
-            if let message = try! Realm().objects(IGRoomMessage.self).filter(predicate).sorted(by: sortProperties).last {
-                self.fetchRoomHistoryIfPossibleBefore(message: message)
+        if spaceToTop < self.scrollToTopLimit {
+            
+            if hasLocal {
+                if allowForGetHistoryLocal {
+                    allowForGetHistoryLocal = false
+                    messages = findAllMessages()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        self.allowForGetHistoryLocal = true
+                    }
+                }
+            } else {
+                let predicate = NSPredicate(format: "roomId = %lld", self.room!.id)
+                if let message = try! Realm().objects(IGRoomMessage.self).filter(predicate).sorted(by: sortProperties).last {
+                    if isFirstHistory {
+                        let predicate = NSPredicate(format: "roomId = %lld AND isDeleted == false", self.room!.id)
+                        messages = try! Realm().objects(IGRoomMessage.self).filter(predicate).sorted(by: sortProperties)
+                        updateObserver()
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                            self.fetchRoomHistoryIfPossibleBefore(message: message)
+                        }
+                    } else {
+                        self.fetchRoomHistoryIfPossibleBefore(message: message)
+                    }
+                }
             }
         }
+        
         //100 is an arbitrary number. can be anything
         if scrollView.contentOffset.y > 100 {
             self.scrollToBottomContainerView.isHidden = false
@@ -1613,16 +1826,26 @@ extension IGMessageViewController: UICollectionViewDelegateFlowLayout {
             }
             self.scrollToBottomContainerView.isHidden = true
         }
+        
+        let scrollOffset = scrollView.contentOffset.y;
+        if (scrollOffset <= 300){ // reach end of scroll
+            isEndOfScroll = true
+        } else {
+            isEndOfScroll = false
+        }
     }
     
-    private func fetchRoomHistoryIfPossibleBefore(message: IGRoomMessage) {
+    private func fetchRoomHistoryIfPossibleBefore(message: IGRoomMessage, forceGetHistory: Bool = false) {
         if !message.isLastMessage {
-            if !isFetchingRoomHistory {
-                isFetchingRoomHistory = true
-                
+            
+            if allowForGetHistory || forceGetHistory {
+                allowForGetHistory = false
+            
                 IGClientGetRoomHistoryRequest.Generator.generate(roomID: self.room!.id, firstMessageID: message.id).success({ (responseProto) in
-                    //TODO: no longer needs to fetch -> message.shouldFetchBefore = false
-                    self.isFetchingRoomHistory = false
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                        self.allowForGetHistory = true
+                    }
+                    
                     DispatchQueue.main.async {
                         IGFactory.shared.setMessageNeedsToFetchBefore(false, messageId: message.id, roomId: message.roomId)
                         switch responseProto {
@@ -1636,18 +1859,20 @@ extension IGMessageViewController: UICollectionViewDelegateFlowLayout {
                     DispatchQueue.main.async {
                         switch errorCode {
                         case .clinetGetRoomHistoryNoMoreMessage:
+                            self.allowForGetHistory = false
                             IGFactory.shared.setMessageIsLastMesssageInRoom(messageId: message.id, roomId: message.roomId)
                             break
                         case .timeout:
+                            self.allowForGetHistory = true
                             break
                         default:
+                            self.allowForGetHistory = true
                             break
                         }
                     }
-                    self.isFetchingRoomHistory = false
                 }).send()
             }
-        }   
+        }
     }
 }
 
@@ -1856,23 +2081,20 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
     }
     
     func didTapOnAttachment(cellMessage: IGRoomMessage, cell: IGMessageGeneralCollectionViewCell) {
-        //TODO: check forwarded attachment
-        let message = cellMessage
-        if message.attachment == nil {
-            
-            if message.forwardedFrom?.attachment != nil {
-                didTapOnForwardedAttachment(cellMessage: cellMessage, cell: cell)
-            }
-            
-            return
+        
+        var finalMessage = cellMessage
+        var roomMessageLists = self.messagesWithMedia
+        
+        if cellMessage.forwardedFrom != nil {
+            roomMessageLists = self.messagesWithForwardedMedia
+            finalMessage = cellMessage.forwardedFrom!
         }
         
-        var attachmetVariableInCache = IGAttachmentManager.sharedManager.getRxVariable(attachmentPrimaryKeyId: message.attachment!.primaryKeyId!)
-        
+        var attachmetVariableInCache = IGAttachmentManager.sharedManager.getRxVariable(attachmentPrimaryKeyId: finalMessage.attachment!.primaryKeyId!)
         if attachmetVariableInCache == nil {
-            let attachmentRef = ThreadSafeReference(to: message.attachment!)
+            let attachmentRef = ThreadSafeReference(to: finalMessage.attachment!)
             IGAttachmentManager.sharedManager.add(attachmentRef: attachmentRef)
-            attachmetVariableInCache = IGAttachmentManager.sharedManager.getRxVariable(attachmentPrimaryKeyId: message.attachment!.primaryKeyId!)
+            attachmetVariableInCache = IGAttachmentManager.sharedManager.getRxVariable(attachmentPrimaryKeyId: finalMessage.attachment!.primaryKeyId!)
         }
         
         let attachment = attachmetVariableInCache!.value
@@ -1880,12 +2102,10 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
             return
         }
         
-        switch message.type {
+        switch finalMessage.type {
         case .image, .imageAndText:
             break
         case .video, .videoAndText:
-            print(attachment.status)
-            print(message.type)
             if let path = attachment.path() {
                 let player = AVPlayer(url: path)
                 let avController = AVPlayerViewController()
@@ -1893,9 +2113,10 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
                 player.play()
                 present(avController, animated: true, completion: nil)
             }
+            return
         case .voice , .audio :
             let musicPlayer = IGMusicViewController()
-            musicPlayer.attachment = message.attachment
+            musicPlayer.attachment = finalMessage.attachment
             self.present(musicPlayer, animated: true, completion: {
             })
             return
@@ -1903,37 +2124,18 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
             return
         }
         
-        //        let messagesWithMediaCount = self.messagesWithMedia.count
-        //        let messagesWithForwardedMediaCount = self.messagesWithForwardedMedia.count
-        
-        
-        let thisMessageInSharedMediaResult = self.messagesWithMedia.filter("id == \(message.id)")
-        for messsss in thisMessageInSharedMediaResult {
-            print ("iddd: \(messsss.id)")
-        }
+        let thisMessageInSharedMediaResult = roomMessageLists.filter("id == \(finalMessage.id)")
         var indexOfThis = 0
         if let this = thisMessageInSharedMediaResult.first {
-            indexOfThis = self.messagesWithMedia.index(of: this)!
-            print ("found it: \(indexOfThis)")
-        } else {
-            print ("not found it")
+            indexOfThis = roomMessageLists.index(of: this)!
         }
         
-        var photos: [INSPhotoViewable] = Array(self.messagesWithMedia.map { (message) -> IGMedia in
+        var photos: [INSPhotoViewable] = Array(roomMessageLists.map { (message) -> IGMedia in
             return IGMedia(message: message, forwardedMedia: false)
         })
         
         let currentPhoto = photos[indexOfThis]
-        
         let galleryPreview = INSPhotosViewController(photos: photos, initialPhoto: currentPhoto, referenceView: nil)
-        
-        //        galleryPreview.referenceViewForPhotoWhenDismissingHandler = { [weak self] photo in
-        //            if let index = photos.index(where: {$0 === photo}) {
-        //                let indexPath = NSIndexPath(forItem: index, inSection: 0)
-        //                return collectionView.cellForItemAtIndexPath(indexPath) as? ExampleCollectionViewCell
-        //            }
-        //            return nil
-        //        }
         present(galleryPreview, animated: true, completion: nil)
     }
     

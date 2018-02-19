@@ -132,7 +132,8 @@ class IGDownloadUploadIndicatorView: UIView {
         case .readyToDownload:
             self.addDownloadButtonIfNeeded()
             self.addSizeLabelIfNeeded()
-            self.downloadUploadView?.isHidden = true
+            self.downloadUploadView?.removeFromSuperview()
+            self.downloadUploadView = nil
             self.isHidden = false
             self.downloadUploadText = "Processing"
             break
@@ -174,8 +175,10 @@ class IGDownloadUploadIndicatorView: UIView {
             
         case .ready:
             self.downloadUploadText = ""
+            self.downloadUploadView?.removeFromSuperview()
             self.downloadButton?.removeFromSuperview()
             self.sizeLabel?.removeFromSuperview()
+            self.downloadUploadView = nil
             self.downloadButton = nil
             self.sizeLabel = nil
             self.downloadUploadView = nil

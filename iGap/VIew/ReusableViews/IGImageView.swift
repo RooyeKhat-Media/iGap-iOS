@@ -56,7 +56,7 @@ class IGImageView: GIFImageView {
                     }
                 }
             } catch {
-                IGDownloadManager.sharedManager.download(file: thumbnail, previewType:.smallThumbnail, completion: {
+                IGDownloadManager.sharedManager.download(file: thumbnail, previewType:.smallThumbnail, completion: { (attachment) -> Void in
                     DispatchQueue.main.async {
                         self.setOrFetchThumbnail(for: attachment)
                     }
@@ -113,7 +113,7 @@ class IGImageView: GIFImageView {
                     }
                 }
             } catch {
-                IGDownloadManager.sharedManager.download(file: smallThumbnail, previewType:.smallThumbnail, completion: {
+                IGDownloadManager.sharedManager.download(file: smallThumbnail, previewType:.smallThumbnail, completion: { (attachment) -> Void in
                     DispatchQueue.main.async {
                         let path = smallThumbnail.path()
                         if let data = try? Data(contentsOf: path!) {

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="AudioCell" customModule="iGap">
+            <rect key="frame" x="0.0" y="0.0" width="494" height="324"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="494" height="324"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yaV-fL-gff">
+                        <rect key="frame" x="46" y="10" width="400" height="306"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="u46-Gz-HUg">
+                                <rect key="frame" x="0.0" y="179" width="400" height="127"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ufp-bo-0h5" customClass="ActiveLabel" customModule="iGap" customModuleProvider="target">
+                                        <rect key="frame" x="8" y="8" width="384" height="111"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="0.0" green="0.69019607839999997" blue="0.74901960779999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="127" id="3bp-aB-7DZ"/>
+                                    <constraint firstItem="ufp-bo-0h5" firstAttribute="leading" secondItem="u46-Gz-HUg" secondAttribute="leading" constant="8" id="4TE-vc-3qa"/>
+                                    <constraint firstItem="ufp-bo-0h5" firstAttribute="top" secondItem="u46-Gz-HUg" secondAttribute="top" constant="8" id="AQx-NL-0Ag"/>
+                                    <constraint firstAttribute="bottom" secondItem="ufp-bo-0h5" secondAttribute="bottom" constant="8" id="Bqy-QG-3m4"/>
+                                    <constraint firstAttribute="trailing" secondItem="ufp-bo-0h5" secondAttribute="trailing" constant="8" id="ORG-xA-Jlm"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="0.19215686269999999" green="0.46313517595714293" blue="0.71372549019999998" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="u46-Gz-HUg" firstAttribute="leading" secondItem="yaV-fL-gff" secondAttribute="leading" id="1No-pF-Mf4"/>
+                            <constraint firstAttribute="trailing" secondItem="u46-Gz-HUg" secondAttribute="trailing" id="Mwd-MM-pV1"/>
+                            <constraint firstAttribute="bottom" secondItem="u46-Gz-HUg" secondAttribute="bottom" id="Q32-45-gp2"/>
+                            <constraint firstAttribute="width" constant="400" id="nxC-9R-LHJ"/>
+                        </constraints>
+                    </view>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="yaV-fL-gff" secondAttribute="bottom" constant="8" id="bo5-Ii-bR0"/>
+                <constraint firstItem="yaV-fL-gff" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="10" id="rMs-4o-hGa"/>
+            </constraints>
+            <size key="customSize" width="494" height="324"/>
+            <connections>
+                <outlet property="mainBubbleView" destination="yaV-fL-gff" id="EDB-9Y-2Km"/>
+                <outlet property="mainBubbleViewWidth" destination="nxC-9R-LHJ" id="Q1a-6p-X81"/>
+                <outlet property="messageView" destination="u46-Gz-HUg" id="Ztk-7f-IfU"/>
+                <outlet property="txtMessage" destination="ufp-bo-0h5" id="DXE-j0-JcK"/>
+                <outlet property="txtMessageHeightConstraint" destination="3bp-aB-7DZ" id="ceH-Ge-Czn"/>
+            </connections>
+            <point key="canvasLocation" x="-108" y="922"/>
+        </collectionViewCell>
+    </objects>
+</document>

@@ -282,7 +282,7 @@ class IGRegistredUserInfoTableViewController: UITableViewController , UIGestureR
                 }
                 
                 if let attachment = currentAvatarFile {
-                    IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: {
+                    IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: { (attachment) -> Void in
                         DispatchQueue.main.async {
                             galleryPreview.hiddenDownloadView()
                             self.stopAnimating()
@@ -328,7 +328,7 @@ class IGRegistredUserInfoTableViewController: UITableViewController , UIGestureR
 
                 
                 if let attachment = currentAvatarFile {
-                    IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: {
+                    IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: { (attachment) -> Void in
                         DispatchQueue.main.async {
                             self.galleryPhotos?.hiddenDownloadView()
                             self.stopAnimating()

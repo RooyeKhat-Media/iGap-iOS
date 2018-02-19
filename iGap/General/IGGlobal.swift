@@ -83,6 +83,10 @@ extension UIColor {
         return UIColor.white
     }
     
+    class func senderNameColor() -> UIColor {
+        return UIColor(red: 0.0/255.0, green: 188.0/255.0, blue: 202.0/255.0, alpha: 1.0)
+    }
+    
     class func chatBubbleBackground(isIncommingMessage: Bool) -> UIColor {
         if isIncommingMessage {
             return UIColor.incommingChatBuubleBackgroundColor()
@@ -292,6 +296,8 @@ extension NSCache {
     }
 }
 
+var imagesMap = [String : UIImageView]()
+
 //MARK: -
 extension UIImageView {
     func setThumbnail(for attachment:IGFile) {
@@ -355,9 +361,12 @@ extension UIImageView {
                         }
                     }
                 } catch {
-                    IGDownloadManager.sharedManager.download(file: thumbnail, previewType:.smallThumbnail, completion: {
+                    imagesMap[attachment.cacheID!] = self
+                    IGDownloadManager.sharedManager.download(file: thumbnail, previewType:.smallThumbnail, completion: { (attachment) -> Void in
                         DispatchQueue.main.async {
-                            self.setThumbnail(for: attachment)
+                            if let image = imagesMap[attachment.cacheID!]{
+                                image.setThumbnail(for: attachment)
+                            }
                         }
                     }, failure: {
                         
@@ -414,7 +423,7 @@ extension UIImageView {
                     }
                 }
             } catch {
-                IGDownloadManager.sharedManager.download(file: smallThumbnail, previewType:.smallThumbnail, completion: {
+                IGDownloadManager.sharedManager.download(file: smallThumbnail, previewType:.smallThumbnail, completion: { (attachment) -> Void in
                     DispatchQueue.main.async {
                         let path = smallThumbnail.path()
                         if let data = try? Data(contentsOf: path!) {
