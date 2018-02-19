@@ -190,7 +190,7 @@ class IGNavigationItem: UINavigationItem {
         leftViewContainer!.backgroundColor = UIColor.clear
         let leftBarButton = UIBarButtonItem(customView: leftViewContainer!)
         self.leftBarButtonItem = leftBarButton
-        let settingViewFrame = CGRect(x: -10, y: 5, width: 31, height:31)
+        let settingViewFrame = CGRect(x: 3, y: 4.5, width: 31, height:31)
         let settingButtonImageView = UIImageView(frame: settingViewFrame)
         settingButtonImageView.image = UIImage(named:"IG_Nav_Bar_Menu")
         settingButtonImageView.tintColor = UIColor.organizationalColor()
@@ -198,7 +198,7 @@ class IGNavigationItem: UINavigationItem {
     }
     
     private func addComopseButton() {
-        let composeButtonFrame = CGRect(x: 20, y: 5, width: 25, height: 25)
+        let composeButtonFrame = CGRect(x: 10, y: 7.5, width: 25, height: 25)
         let composeButtonImageView = UIImageView(frame: composeButtonFrame)
         composeButtonImageView.image = UIImage(named:"IG_Nav_Bar_Plus")
         composeButtonImageView.tintColor = UIColor.organizationalColor()
