@@ -1627,7 +1627,7 @@ Cg
                                 <segment title="Chat"/>
                                 <segment title="Contact"/>
                             </segments>
-                            <color key="tintColor" red="0.0" green="0.69019607839999997" blue="0.74901960779999999" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="tintColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <connections>
                                 <action selector="didChangedSegmentValue:" destination="yQZ-92-FlH" eventType="valueChanged" id="FeP-jy-Pn7"/>
                             </connections>
@@ -5042,13 +5042,14 @@ Cg
         <image name="IG_Tabbar_Recent_On" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="Paj-YA-riE"/>
         <segue reference="jRj-hY-oEr"/>
         <segue reference="Z1Q-fW-ByF"/>
         <segue reference="k1z-sz-mLi"/>
         <segue reference="xjE-gJ-o8r"/>
         <segue reference="Whi-Zq-oPV"/>
         <segue reference="liy-Td-nok"/>
-        <segue reference="I27-tX-EAz"/>
+        <segue reference="ebc-Vg-0Gq"/>
         <segue reference="OlC-Gu-0Zm"/>
     </inferredMetricsTieBreakers>
 </document>

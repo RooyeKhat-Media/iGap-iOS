@@ -80,7 +80,8 @@ class IGForwardMessageTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.rooms = try! Realm().objects(IGRoom.self).filter("isParticipant = 1").sorted(byKeyPath: "sortimgTimestamp", ascending: false)
+        let sortProperties = [SortDescriptor(keyPath: "pinId", ascending: false), SortDescriptor(keyPath: "sortimgTimestamp", ascending: false)]
+        self.rooms = try! Realm().objects(IGRoom.self).filter("isParticipant = 1 AND isReadOnly = false").sorted(by: sortProperties)
         self.tableView.tableFooterView = UIView()
         let navigationItem = self.navigationItem as! IGNavigationItem
         navigationItem.addModalViewItems(leftItemText: nil, rightItemText: "Cancel", title: nil)
@@ -90,7 +91,7 @@ class IGForwardMessageTableViewController: UITableViewController {
 
         
         self.tableView.register(IGChatRoomListTableViewCell.nib(), forCellReuseIdentifier: IGChatRoomListTableViewCell.cellReuseIdentifier())
-        
+        self.tableView.tableFooterView = UIView()
         self.tableView.backgroundColor = UIColor(red: 247.0/255.0, green: 247.0/255.0, blue: 247.0/255.0, alpha: 1.0)
         self.view.backgroundColor = UIColor(red: 247.0/255.0, green: 247.0/255.0, blue: 247.0/255.0, alpha: 1.0)
         self.tableView.tableHeaderView?.backgroundColor = UIColor(red: 247.0/255.0, green: 247.0/255.0, blue: 247.0/255.0, alpha: 1.0)
