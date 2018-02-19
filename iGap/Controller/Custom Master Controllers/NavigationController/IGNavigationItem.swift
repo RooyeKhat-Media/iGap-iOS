@@ -164,13 +164,13 @@ class IGNavigationItem: UINavigationItem {
     }
     
     private func addModalViewLeftItem(title: String) {
-        let leftViewFrame = CGRect(x:0, y:0, width: 50, height:80)
+        let leftViewFrame = CGRect(x:0, y:0, width: 50, height:40)
         leftViewContainer = IGTappableView(frame: leftViewFrame)
         leftViewContainer!.backgroundColor = UIColor.clear
         let leftBarButton = UIBarButtonItem(customView: leftViewContainer!)
         self.leftBarButtonItem = leftBarButton
         
-        let labelFrame = CGRect(x: -10, y: 20, width: 100, height:31)
+        let labelFrame = CGRect(x: -10, y: 4.5, width: 100, height:31)
         let label = UILabel(frame: labelFrame)
         label.text = title
         label.textColor = UIColor.white
