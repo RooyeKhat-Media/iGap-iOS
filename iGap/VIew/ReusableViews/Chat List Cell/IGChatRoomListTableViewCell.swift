@@ -122,6 +122,7 @@ class IGChatRoomListTableViewCell: MGSwipeTableCell {
 
     
     func initialConfiguration() {
+        self.selectionStyle = .none
         lastMessageStatusContainerView.backgroundColor = UIColor.red
         avatarView.clean()
         nameLabel.text = ""
