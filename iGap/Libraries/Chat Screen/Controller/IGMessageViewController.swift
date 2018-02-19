@@ -126,7 +126,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
     
     /* variables for fetch message */
     var allMessages:Results<IGRoomMessage>!
-    var getMessageLimit = 10
+    var getMessageLimit = 25
     var scrollToTopLimit:CGFloat = 20
     var messageSize = 0
     var page = 0
@@ -317,6 +317,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
                         DispatchQueue.main.async {
                             self.collectionView.reloadData()
                         }
+                        break
                     }
                 }
                 
@@ -1763,10 +1764,20 @@ extension IGMessageViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         let message = messages![indexPath.section]
-        if (messages!.count < 20 && lowerAllow) || (messages!.indices.contains(indexPath.section + 1) && message.shouldFetchBefore) {
+        if (messages!.count < 20 && lowerAllow) { // HINT: this number(20) should set lower than getMessageLimit(25) for work correct
             lowerAllow = false
+            
+            let predicate = NSPredicate(format: "roomId = %lld AND isDeleted == false", self.room!.id)
+            messages = try! Realm().objects(IGRoomMessage.self).filter(predicate).sorted(by: sortProperties)
+            updateObserver()
+            
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 self.fetchRoomHistoryIfPossibleBefore(message: message)
+            }
+        } else if (messages!.count < 20 || messages!.indices.contains(indexPath.section + 1)) && message.shouldFetchBefore {
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                self.fetchRoomHistoryIfPossibleBefore(message: message, forceGetHistory: true)
             }
         }
     }
@@ -1824,10 +1835,10 @@ extension IGMessageViewController: UICollectionViewDelegateFlowLayout {
         }
     }
     
-    private func fetchRoomHistoryIfPossibleBefore(message: IGRoomMessage) {
+    private func fetchRoomHistoryIfPossibleBefore(message: IGRoomMessage, forceGetHistory: Bool = false) {
         if !message.isLastMessage {
             
-            if allowForGetHistory {
+            if allowForGetHistory || forceGetHistory {
                 allowForGetHistory = false
             
                 IGClientGetRoomHistoryRequest.Generator.generate(roomID: self.room!.id, firstMessageID: message.id).success({ (responseProto) in
