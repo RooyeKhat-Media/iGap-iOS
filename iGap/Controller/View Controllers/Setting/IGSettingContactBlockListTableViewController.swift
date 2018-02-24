@@ -42,7 +42,7 @@ class IGSettingContactBlockListTableViewController: UITableViewController , UIGe
         fetchBlockedContactsFromServer()
         let predicate = NSPredicate(format: "isBlocked == 1")
         blockedUsers = try! Realm().objects(IGRegisteredUser.self).filter(predicate)
-        self.notificationToken = blockedUsers.addNotificationBlock { (changes: RealmCollectionChange) in
+        self.notificationToken = blockedUsers.observe { (changes: RealmCollectionChange) in
             switch changes {
             case .initial:
                 self.tableView.reloadData()

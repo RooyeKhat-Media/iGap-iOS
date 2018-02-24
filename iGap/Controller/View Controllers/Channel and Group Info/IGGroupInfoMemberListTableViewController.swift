@@ -29,7 +29,7 @@ class IGGroupInfoMemberListTableViewController: UITableViewController , UIGestur
         //fetchGroupMemberFromServer()
         let predicate = NSPredicate(format: "roomID = %lld", (room?.id)!)
          members =  try! Realm().objects(IGGroupMember.self).filter(predicate)
-        self.notificationToken = members.addNotificationBlock { (changes: RealmCollectionChange) in
+        self.notificationToken = members.observe { (changes: RealmCollectionChange) in
             switch changes {
             case .initial:
                 self.tableView.reloadData()

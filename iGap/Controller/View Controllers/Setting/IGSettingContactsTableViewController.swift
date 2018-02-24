@@ -52,7 +52,7 @@ class IGSettingContactsTableViewController: UITableViewController,UISearchResult
         let navigationController = self.navigationController as! IGNavigationController
         navigationController.interactivePopGestureRecognizer?.delegate = self
         
-        self.notificationToken = blockedUsers.addNotificationBlock { (changes: RealmCollectionChange) in
+        self.notificationToken = blockedUsers.observe { (changes: RealmCollectionChange) in
             switch changes {
             case .initial:
                 self.tableView.reloadData()
@@ -65,7 +65,7 @@ class IGSettingContactsTableViewController: UITableViewController,UISearchResult
         }
         
         
-        self.notificationToken = contacts.addNotificationBlock { (changes: RealmCollectionChange) in
+        self.notificationToken = contacts.observe { (changes: RealmCollectionChange) in
             switch changes {
             case .initial:
                 self.tableView.reloadData()

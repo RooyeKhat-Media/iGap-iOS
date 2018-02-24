@@ -68,7 +68,7 @@ class IGAccountTableViewController: UITableViewController , UINavigationControll
         let predicate = NSPredicate(format: "id = %lld", currentUserId!)
         currentUser = realm.objects(IGRegisteredUser.self).filter(predicate).first!
         self.updateUI()
-        notificationToken = currentUser.addNotificationBlock({ (changes: ObjectChange) in
+        notificationToken = currentUser.observe({ (changes: ObjectChange) in
             switch changes {
             case .change(_):
                 self.updateUI()

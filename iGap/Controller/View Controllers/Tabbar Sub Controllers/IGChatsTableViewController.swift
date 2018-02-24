@@ -42,7 +42,7 @@ class IGChatsTableViewController: UITableViewController {
         self.view.backgroundColor = UIColor(red: 247.0/255.0, green: 247.0/255.0, blue: 247.0/255.0, alpha: 1.0)
         self.tableView.tableHeaderView?.backgroundColor = UIColor(red: 247.0/255.0, green: 247.0/255.0, blue: 247.0/255.0, alpha: 1.0)
         
-        self.notificationToken = rooms!.addNotificationBlock { (changes: RealmCollectionChange) in
+        self.notificationToken = rooms!.observe { (changes: RealmCollectionChange) in
             switch changes {
             case .initial:
                 self.tableView.reloadData()

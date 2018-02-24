@@ -123,7 +123,7 @@ class IGGroupInfoTableViewController: UITableViewController , UIGestureRecognize
         
         let predicate = NSPredicate(format: "id = %lld", (room?.id)!)
         groupRoom =  try! Realm().objects(IGRoom.self).filter(predicate)
-        self.notificationToken = groupRoom.addNotificationBlock { (changes: RealmCollectionChange) in
+        self.notificationToken = groupRoom.observe { (changes: RealmCollectionChange) in
             
             let predicatea = NSPredicate(format: "id = %lld", (self.room?.id)!)
             self.room =  try! Realm().objects(IGRoom.self).filter(predicatea).first!
@@ -142,7 +142,7 @@ class IGGroupInfoTableViewController: UITableViewController , UIGestureRecognize
             
         }, onDisposed: {
             
-        }).addDisposableTo(disposeBag)
+        }).disposed(by: disposeBag)
 
         
     }
@@ -748,7 +748,7 @@ class IGGroupInfoTableViewController: UITableViewController , UIGestureRecognize
                 DispatchQueue.main.async {
                     switch protoResponse {
                     case let clientGetRoomResponse as IGPClientGetRoomResponse:
-                        let igpRoom = IGClientGetRoomRequest.Handler.interpret(response: clientGetRoomResponse)
+                        _ = IGClientGetRoomRequest.Handler.interpret(response: clientGetRoomResponse)
                         
                         
                     default:
@@ -894,7 +894,7 @@ extension IGGroupInfoTableViewController: UIImagePickerControllerDelegate {
                         DispatchQueue.main.async {
                             switch protoResponse {
                             case let avatarAddResponse as IGPGroupAvatarAddResponse:
-                                let userAvatar = IGGroupAvatarAddRequest.Handler.interpret(response: avatarAddResponse)
+                                _ = IGGroupAvatarAddRequest.Handler.interpret(response: avatarAddResponse)
                             default:
                                 break
                             }

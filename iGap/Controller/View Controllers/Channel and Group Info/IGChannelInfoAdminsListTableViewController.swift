@@ -43,12 +43,12 @@ class IGChannelInfoAdminsListTableViewController: UITableViewController , UIGest
             predicate = NSPredicate(format: "roleRaw = %d AND roomID = %lld", moderatorRole , (room?.id)!)
             members =  try! Realm().objects(IGChannelMember.self).filter(predicate!)
         }
-        self.notificationToken = members.addNotificationBlock { (changes: RealmCollectionChange) in
+        self.notificationToken = members.observe { (changes: RealmCollectionChange) in
             switch changes {
             case .initial:
                 self.tableView.reloadData()
                 break
-            case .update(_, let deletions, let insertions, let modifications):
+            case .update(_, let _, let _, let _):
                 print("updating admins tableV")
                 // Query messages have changed, so apply them to the TableView
                 self.tableView.reloadData()

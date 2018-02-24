@@ -1,21 +1,21 @@
-github "TakeScoop/SwiftyRSA" ~> 0.5.0
+github "TakeScoop/SwiftyRSA" "0.5.0"
 github "realm/realm-cocoa"
-github "ReactiveX/RxSwift" ~> 3.0
-github "jdg/MBProgressHUD" ~> 1.0.0
-github "KennethTsang/GrowingTextView"
+github "ReactiveX/RxSwift" ~> 4.0
+github "jdg/MBProgressHUD" ~> 1.1.0
+github "KennethTsang/GrowingTextView" ~> 0.5.5
 github "facebook/pop"
-github "SnapKit/SnapKit" ~> 3.0.2
+github "SnapKit/SnapKit" ~> 4.0.0
 github "RxSwiftCommunity/RxRealm"
 github "MortimerGoro/MGSwipeTableCell"
-github "ashleymills/Reachability.swift" ~> 3.0
-github "artemkrachulov/AKMaskField.git"
-github "krzyzanowskim/CryptoSwift"
+github "ashleymills/Reachability.swift"
+github "artemkrachulov/AKMaskField"
+github "krzyzanowskim/CryptoSwift" "0.7.2"
 github "ninjaprox/NVActivityIndicatorView"
 
-github "RooyeKhat-Media/Gifu" "v2.0.0-b"
-github "RooyeKhat-Media/ALCameraViewController" "1.2.7"
-github "RooyeKhat-Media/INSPhotoGallery"  "1.1.01"
-github "RooyeKhat-Media/Starscream" "2.0.4-a"
+github "RooyeKhat-Media/Gifu" "v3.0.0-a"
+github "RooyeKhat-Media/ALCameraViewController" "3.0.3"
+github "RooyeKhat-Media/INSPhotoGallery"  "1.2.5-a"
+github "RooyeKhat-Media/Starscream" "3.0.4-a"
 github "RooyeKhat-Media/DBAttachmentPickerController"  "1.1.4-a"
-github "RooyeKhat-Media/swift-protobuf" "3dea030"
-github "RooyeKhat-Media/IGProtoBuffLibrary" "74"
+github "RooyeKhat-Media/swift-protobuf" "1.0.2-a"
+github "RooyeKhat-Media/IGProtoBuffLibrary" "74-a"

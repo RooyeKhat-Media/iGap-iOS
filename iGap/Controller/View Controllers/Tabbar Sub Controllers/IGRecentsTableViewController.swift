@@ -142,7 +142,7 @@ class IGRecentsTableViewController: UITableViewController {
             
         }, onDisposed: {
             
-        }).addDisposableTo(disposeBag)
+        }).disposed(by: disposeBag)
         
         self.addRoomChangeNotificationBlock()
         
@@ -195,8 +195,8 @@ class IGRecentsTableViewController: UITableViewController {
     }
     
     private func addRoomChangeNotificationBlock() {
-        self.notificationToken?.stop()
-        self.notificationToken = rooms!.addNotificationBlock { (changes: RealmCollectionChange) in
+        self.notificationToken?.invalidate()
+        self.notificationToken = rooms!.observe { (changes: RealmCollectionChange) in
             switch changes {
             case .initial:
                 self.tableView.reloadData()

@@ -121,7 +121,7 @@ class IGChannelInfoTableViewController: UITableViewController , UIGestureRecogni
         
         let predicate = NSPredicate(format: "id = %lld", (room?.id)!)
         room =  try! Realm().objects(IGRoom.self).filter(predicate).first!
-        self.notificationToken = room?.addNotificationBlock({ (objectChange) in
+        self.notificationToken = room?.observe({ (objectChange) in
             self.showChannelInfo()
         })
         
@@ -136,7 +136,7 @@ class IGChannelInfoTableViewController: UITableViewController , UIGestureRecogni
             
         }, onDisposed: {
             
-        }).addDisposableTo(disposeBag)
+        }).disposed(by: disposeBag)
 
             
             
@@ -957,7 +957,7 @@ extension IGChannelInfoTableViewController: UIImagePickerControllerDelegate {
                         DispatchQueue.main.async {
                             switch protoResponse {
                             case let avatarAddResponse as IGPChannelAvatarAddResponse:
-                                let userAvatar = IGChannelAddAvatarRequest.Handler.interpret(response: avatarAddResponse)
+                                _ = IGChannelAddAvatarRequest.Handler.interpret(response: avatarAddResponse)
                             default:
                                 break
                             }

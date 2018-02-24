@@ -156,7 +156,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
             
         }, onDisposed: {
             
-        }).addDisposableTo(disposeBag)
+        }).disposed(by: disposeBag)
         
 
         
@@ -242,8 +242,8 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
         
         
         inputTextView.delegate = self
-        inputTextView.placeHolder = "Write here ..."
-        inputTextView.placeHolderColor = UIColor(red: 173.0/255.0, green: 173.0/255.0, blue: 173.0/255.0, alpha: 1.0)
+        inputTextView.placeholder = "Write here ..."
+        inputTextView.placeholderColor = UIColor(red: 173.0/255.0, green: 173.0/255.0, blue: 173.0/255.0, alpha: 1.0)
         inputTextView.maxHeight = 83.0 // almost 4 lines
         inputTextView.contentInset = UIEdgeInsets(top: -5, left: 0, bottom: -5, right: 0)
         
@@ -306,7 +306,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
     }
     
     func updateObserver(){
-        self.notificationToken = messages?.addNotificationBlock { (changes: RealmCollectionChange) in
+        self.notificationToken = messages?.observe { (changes: RealmCollectionChange) in
             switch changes {
             case .initial:
                 break
@@ -443,7 +443,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
         } else if let draft = self.room!.draft {
             if draft.message != "" || draft.replyTo != -1 {
                 inputTextView.text = draft.message
-                inputTextView.placeHolder = "Write here ..."
+                inputTextView.placeholder = "Write here ..."
                 if draft.replyTo != -1 {
                     let predicate = NSPredicate(format: "id = %lld AND roomId = %lld", draft.replyTo, self.room!.id)
                     if let replyToMessage = try! Realm().objects(IGRoomMessage.self).filter(predicate).first {
@@ -475,7 +475,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
                         
                     }
                 }
-            }).addDisposableTo(disposeBag)
+            }).disposed(by: disposeBag)
 //            _ = Observable.from(roomVariable).subscribe(onNext: { (roomVariable) in
 //                print ("room changed")
 //            }, onError: nil, onCompleted: nil, onDisposed: nil)
@@ -520,7 +520,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
     
     deinit {
         if notificationToken != nil {
-            notificationToken?.stop()
+            notificationToken?.invalidate()
         }
     }
     
@@ -859,7 +859,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
             self.present(navigationBar, animated: true, completion: nil)
 
         })
-        let customActions = [contact, location]
+        _ = [contact, location]
         
         let attachmentPickerController = DBAttachmentPickerController(customActions: nil, finishPicking: { (files) in
             //at phase 1 we only select one media
@@ -1274,7 +1274,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
         self.selectedMessageToForwardToThisRoom = nil
         
         self.inputTextView.text = message.message
-        inputTextView.placeHolder = "Write here ..."
+        inputTextView.placeholder = "Write here ..."
         self.inputTextView.becomeFirstResponder()
         self.inputBarOriginalMessageViewSenderNameLabel.text = "Edit Message"
         self.inputBarOriginalMessageViewBodyTextLabel.text = message.message
@@ -2013,13 +2013,13 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
             self.report(room: self.room!, message: cellMessage)
         })
         
-        let more = UIAlertAction(title: "More", style: .default, handler: { (action) in
+        _ = UIAlertAction(title: "More", style: .default, handler: { (action) in
             for visibleCell in self.collectionView.visibleCells {
                 let aCell = visibleCell as! IGMessageGeneralCollectionViewCell
                 aCell.setMultipleSelectionMode(true)
             }
         })
-        let delete = UIAlertAction(title: "Delete", style: .destructive, handler: { (action) in
+        _ = UIAlertAction(title: "Delete", style: .destructive, handler: { (action) in
             self.deleteMessage(cellMessage)
         })
         let deleteForMe = UIAlertAction(title: "Delete for me", style: .destructive, handler: { (action) in

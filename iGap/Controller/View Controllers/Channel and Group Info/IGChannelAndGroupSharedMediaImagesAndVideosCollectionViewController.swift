@@ -36,12 +36,12 @@ class IGChannelAndGroupSharedMediaImagesAndVideosCollectionViewController: UICol
         if let thisRoom = room {
             let messagePredicate = NSPredicate(format: "roomId = %lld AND isDeleted == false AND  isFromSharedMedia == true", thisRoom.id)
             shareMediaMessage =  try! Realm().objects(IGRoomMessage.self).filter(messagePredicate)
-            self.notificationToken = shareMediaMessage.addNotificationBlock { (changes: RealmCollectionChange) in
+            self.notificationToken = shareMediaMessage.observe { (changes: RealmCollectionChange) in
                 switch changes {
                 case .initial:
                     self.collectionView?.reloadData()
                     break
-                case .update(_, let deletions, let insertions, let modifications):
+                case .update(_, let _, let _, let _):
                     print("updating members tableV")
                     // Query messages have changed, so apply them to the TableView
                     self.collectionView?.reloadData()

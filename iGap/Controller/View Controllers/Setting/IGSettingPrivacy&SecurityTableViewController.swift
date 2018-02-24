@@ -54,7 +54,7 @@ class IGSettingPrivacy_SecurityTableViewController: UITableViewController, UIGes
         blockedUsers = try! Realm().objects(IGRegisteredUser.self).filter(predicate)
         numberOfBlockedContacts.text = "\(blockedUsers.count) users"
         
-        self.notificationToken = blockedUsers.addNotificationBlock { (changes: RealmCollectionChange) in
+        self.notificationToken = blockedUsers.observe { (changes: RealmCollectionChange) in
             switch changes {
             case .initial:
                 self.tableView.reloadData()
@@ -69,7 +69,7 @@ class IGSettingPrivacy_SecurityTableViewController: UITableViewController, UIGes
             }
         }
         
-        self.notificationToken = allUserPrivacy.addNotificationBlock{ (changes: RealmCollectionChange) in
+        self.notificationToken = allUserPrivacy.observe{ (changes: RealmCollectionChange) in
             switch changes {
             case .initial:
                 self.tableView.reloadData()
