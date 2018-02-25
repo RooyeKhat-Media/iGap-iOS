@@ -242,8 +242,8 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
         
         
         inputTextView.delegate = self
-        inputTextView.placeholder = "Write here ..."
-        inputTextView.placeholderColor = UIColor(red: 173.0/255.0, green: 173.0/255.0, blue: 173.0/255.0, alpha: 1.0)
+        inputTextView.placeHolder = "Write here ..."
+        inputTextView.placeHolderColor = UIColor(red: 173.0/255.0, green: 173.0/255.0, blue: 173.0/255.0, alpha: 1.0)
         inputTextView.maxHeight = 83.0 // almost 4 lines
         inputTextView.contentInset = UIEdgeInsets(top: -5, left: 0, bottom: -5, right: 0)
         
@@ -443,7 +443,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
         } else if let draft = self.room!.draft {
             if draft.message != "" || draft.replyTo != -1 {
                 inputTextView.text = draft.message
-                inputTextView.placeholder = "Write here ..."
+                inputTextView.placeHolder = "Write here ..."
                 if draft.replyTo != -1 {
                     let predicate = NSPredicate(format: "id = %lld AND roomId = %lld", draft.replyTo, self.room!.id)
                     if let replyToMessage = try! Realm().objects(IGRoomMessage.self).filter(predicate).first {
@@ -1274,7 +1274,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
         self.selectedMessageToForwardToThisRoom = nil
         
         self.inputTextView.text = message.message
-        inputTextView.placeholder = "Write here ..."
+        inputTextView.placeHolder = "Write here ..."
         self.inputTextView.becomeFirstResponder()
         self.inputBarOriginalMessageViewSenderNameLabel.text = "Edit Message"
         self.inputBarOriginalMessageViewBodyTextLabel.text = message.message
