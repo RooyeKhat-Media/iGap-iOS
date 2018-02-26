@@ -14,9 +14,11 @@ import IGProtoBuff
 import SwiftProtobuf
 import RealmSwift
 import RxSwift
+import WebRTC
 
 class IGAppManager: NSObject {
     static let sharedManager = IGAppManager()
+    internal static var iceServersStatic: [RTCIceServer] = []
     
     enum ConnectionStatus {
         case waitingForNetwork
@@ -96,7 +98,31 @@ class IGAppManager: NSObject {
     public func setUserLoginSuccessful() {
         isUserLoggedIn.value = true
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: kIGUserLoggedInNotificationName), object: nil)
-       
+    }
+    
+    public func getSignalingConfiguration(force:Bool = false){
+        let realm = try! Realm()
+        let signalingConfig = try! realm.objects(IGSignaling.self).first
+        if signalingConfig == nil || force {
+            IGSignalingGetConfigurationRequest.Generator.generate().success({ (protoResponse) in
+                DispatchQueue.main.async {
+                    switch protoResponse {
+                    case let configurationResponse as IGPSignalingGetConfigurationResponse:
+                        IGSignalingGetConfigurationRequest.Handler.interpret(response: configurationResponse)
+                    default:
+                        break
+                    }
+                }
+            }).error ({ (errorCode, waitTime) in
+                switch errorCode {
+                case .timeout:
+                    self.getSignalingConfiguration()
+                    break
+                default:
+                    break
+                }
+            }).send()
+        }
     }
     
     public func isUserLoggiedIn() -> Bool {
@@ -226,6 +252,7 @@ class IGAppManager: NSObject {
                         case _ as IGPUserLoginResponse:
                             self.setUserLoginSuccessful()
                             self.setUserUpdateStatus(status: .online)
+                            self.getSignalingConfiguration(force: true)
                             break
                         default:
                             break
