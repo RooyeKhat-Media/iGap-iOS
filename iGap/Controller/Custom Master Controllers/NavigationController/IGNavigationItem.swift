@@ -19,6 +19,7 @@ class IGNavigationItem: UINavigationItem {
     var centerViewContainer: IGTappableView?
     var leftViewContainer:   IGTappableView?
     var backViewContainer:   IGTappableView?
+    var callViewContainer:   IGTappableView?
     var navigationController: IGNavigationController?
     private var centerViewMainLabel: UILabel?
     private var centerViewSubLabel:  UILabel?
@@ -133,6 +134,20 @@ class IGNavigationItem: UINavigationItem {
         if leftItemText != nil{
             addModalViewLeftItem(title: leftItemText!)
         }
+    }
+    
+    func addCallViewContainer(){
+        let rightViewFrame = CGRect(x:0, y:0, width: 50, height:40)
+        callViewContainer = IGTappableView(frame: rightViewFrame)
+        callViewContainer!.backgroundColor = UIColor.clear
+        let rightBarButton = UIBarButtonItem(customView: callViewContainer!)
+        self.rightBarButtonItem = rightBarButton
+        
+        let composeButtonFrame = CGRect(x: 15, y: 2.5, width: 35, height: 35)
+        let composeButtonImageView = UIImageView(frame: composeButtonFrame)
+        composeButtonImageView.image = UIImage(named:"IG_Tabbar_Call_On")
+        composeButtonImageView.tintColor = UIColor.organizationalColor()
+        callViewContainer!.addSubview(composeButtonImageView)
     }
     
     private func addTitleLabel(title: String) {

@@ -32,6 +32,35 @@ public protocol RTCClientDelegate: class {
     func rtcClient(client : RTCClient, didGenerateIceCandidate iceCandidate: RTCIceCandidate)
 }
 
+public enum RTCClientConnectionState {
+    
+    // enums for resolve iceCondidate State
+    case New
+    case Connecting // was checking before
+    case Connected
+    case Completed
+    case Failed
+    case Closed
+    case Count
+    
+    // enums for resolve protoResonse State
+    case Accepted
+    case Finished
+    case Missed
+    case NotAnswered
+    case Rejected
+    case TooLong
+    case Unavailable
+    
+    // enums for resolve protoResonse/iceCondidate State
+    case Disconnected
+    
+    // enums for other state
+    case IncommingCall
+    case Ringing
+    case Dialing
+}
+
 public extension RTCClientDelegate {
     // add default implementation to extension for optional methods
     func rtcClient(client : RTCClient, didReceiveError error: Error) {
@@ -48,13 +77,16 @@ public extension RTCClientDelegate {
 }
 
 public class RTCClient: NSObject {
-    static let instance = RTCClient(iceServers: IGAppManager.iceServersStatic,videoCall: false)
+    static var instanceValue: RTCClient!
     fileprivate var iceServers: [RTCIceServer] = []
     fileprivate var peerConnection: RTCPeerConnection?
     fileprivate var connectionFactory: RTCPeerConnectionFactory = RTCPeerConnectionFactory()
     fileprivate var remoteIceCandidates: [RTCIceCandidate] = []
     fileprivate var isVideoCall = true
+    var callStateDelegate: CallStateObserver!
+    static var needNewInstance = true
     
+    internal static var mediaStream: RTCMediaStream!
     internal static var offerSdp: RTCSessionDescription!
     
     public weak var delegate: RTCClientDelegate?
@@ -77,6 +109,14 @@ public class RTCClient: NSObject {
         didSet {
             self.delegate?.rtcClient(client: self, didChangeState: state)
         }
+    }
+    
+    static func getInstance() -> RTCClient{
+        if RTCClient.instanceValue == nil {
+            instanceValue = RTCClient(iceServers: IGAppManager.iceServersStatic,videoCall: false)
+            return instanceValue
+        }
+        return instanceValue
     }
     
     public override init() {
@@ -128,6 +168,10 @@ public class RTCClient: NSObject {
         }
     }
     
+    func initCallStateObserver(stateDelegate: CallStateObserver){
+        callStateDelegate = stateDelegate
+    }
+    
     public func configure() {
         initialisePeerConnectionFactory()
         initialisePeerConnection()
@@ -138,6 +182,8 @@ public class RTCClient: NSObject {
             return
         }
         self.state = .connecting
+        
+        IGCall.callStateStatic = "Connecting..."
         let localStream = self.localStream()
         peerConnection.add(localStream)
         
@@ -158,6 +204,7 @@ public class RTCClient: NSObject {
         if let stream = peerConnection.localStreams.first {
             peerConnection.remove(stream)
         }
+        RTCClient.instanceValue = nil
         self.delegate?.rtcClient(client: self, didChangeState: .disconnected)
     }
     
@@ -182,7 +229,7 @@ public class RTCClient: NSObject {
         /* Hint: should set this value after than received called sdp for avoid from send candicate before send accept
          * because candidate will be runned when set local and remote description
          */
-        RTCClient.instance.handleSdpGenerated(sdpDescription: RTCClient.offerSdp)
+        RTCClient.getInstance().handleSdpGenerated(sdpDescription: RTCClient.offerSdp)
         
         guard let remoteSdp = remoteSdp else {
             return
@@ -196,7 +243,7 @@ public class RTCClient: NSObject {
                 this.delegate?.rtcClient(client: this, didReceiveError: error)
             } else {
                 this.handleRemoteDescriptionSet()
-                this.state = .connected
+                this.state = .connecting
             }
         })
     }
@@ -205,7 +252,6 @@ public class RTCClient: NSObject {
         guard let remoteSdp = remoteSdp, let peerConnection = self.peerConnection else {
             return
         }
-        
         // Add remote description
         let sessionDescription = RTCSessionDescription(type: .offer, sdp: remoteSdp)
         self.peerConnection?.setRemoteDescription(sessionDescription, completionHandler: { [weak self] (error) in
@@ -216,18 +262,18 @@ public class RTCClient: NSObject {
                 this.delegate?.rtcClient(client: this, didReceiveError: error)
             } else {
                 this.handleRemoteDescriptionSet()
-                // create answer
-                // call following code when user answerd call
-                peerConnection.answer(for: this.callConstraint, completionHandler:
-                    { (sdp, error) in
-                        if let error = error {
-                            this.delegate?.rtcClient(client: this, didReceiveError: error)
-                        } else {
-                            this.sendAccept(sdp: (sdp?.sdp)!)
-                            this.handleSdpGenerated(sdpDescription: sdp)
-                            this.state = .connected
-                        }
-                })
+            }
+        })
+    }
+    
+    public func answerCall(){
+        self.peerConnection?.answer(for: self.callConstraint, completionHandler: { (sdp, error) in
+            if let error = error {
+                self.delegate?.rtcClient(client: self, didReceiveError: error)
+            } else {
+                self.sendAccept(sdp: (sdp?.sdp)!)
+                self.handleSdpGenerated(sdpDescription: sdp)
+                self.state = .connected
             }
         })
     }
@@ -295,6 +341,19 @@ public class RTCClient: NSObject {
             }
         }).send()
     }
+    
+    public func sendLeaveCall(){
+        IGSignalingLeaveRequest.Generator.generate().success({ (protoResponse) in
+        }).error ({ (errorCode, waitTime) in
+            switch errorCode {
+            case .timeout:
+                self.sendLeaveCall()
+                break
+            default:
+                break
+            }
+        }).send()
+    }
 }
 
 public struct ErrorDomain {
@@ -314,6 +373,8 @@ private extension RTCClient {
     func localStream() -> RTCMediaStream {
         let factory = self.connectionFactory
         let localStream = factory.mediaStream(withStreamId: "RTCmS")
+        
+        RTCClient.mediaStream = localStream
         
         if self.isVideoCall {
             if !AVCaptureState.isVideoDisabled {
@@ -392,6 +453,47 @@ extension RTCClient: RTCPeerConnectionDelegate {
     }
     
     public func peerConnection(_ peerConnection: RTCPeerConnection, didChange newState: RTCIceConnectionState) {
+        
+        guard let delegate = callStateDelegate else {
+            return
+        }
+        
+        switch newState.rawValue {
+            
+        case 0://RTCIceConnectionStateNew
+            break
+            
+        case 1://RTCIceConnectionStateChecking
+            delegate.onStateChange(state: RTCClientConnectionState.Connecting)
+            break
+            
+        case 2://RTCIceConnectionStateConnected
+            delegate.onStateChange(state: RTCClientConnectionState.Connected)
+            break
+            
+        case 3://RTCIceConnectionStateCompleted
+            delegate.onStateChange(state: RTCClientConnectionState.Connected)
+            break
+            
+        case 4://RTCIceConnectionStateFailed
+            delegate.onStateChange(state: RTCClientConnectionState.Failed)
+            break
+            
+        case 5://RTCIceConnectionStateDisconnected
+            delegate.onStateChange(state: RTCClientConnectionState.Disconnected)
+            break
+            
+        case 6://RTCIceConnectionStateClosed
+            delegate.onStateChange(state: RTCClientConnectionState.Closed)
+            break
+            
+        case 7://RTCIceConnectionStateCount
+            break
+            
+        default:
+            break
+        }
+        
         self.delegate?.rtcClient(client: self, didChangeConnectionState: newState)
     }
     

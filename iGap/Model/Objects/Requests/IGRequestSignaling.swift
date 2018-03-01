@@ -54,16 +54,24 @@ class IGSignalingOfferRequest : IGRequest {
     }
 
     class Handler : IGRequest.Handler{
-        class func interpret(response reponseProtoMessage:IGPSignalingOfferResponse) {}
+        class func interpret(response reponseProtoMessage:IGPSignalingOfferResponse) {
+            IGCall.sendLeaveRequest = true
+        }
 
         override class func handlePush(responseProtoMessage: Message) {
+            IGCall.sendLeaveRequest = true
             switch responseProtoMessage {
             case let offerProtoResponse as IGPSignalingOfferResponse:
+                RTCClient.getInstance().startConnection()
+                RTCClient.getInstance().sendRinging()
+                RTCClient.getInstance().createAnswerForOfferReceived(withRemoteSDP: offerProtoResponse.igpCallerSdp)
                 
-                RTCClient.instance.startConnection()
-                RTCClient.instance.sendRinging()
-                RTCClient.instance.createAnswerForOfferReceived(withRemoteSDP: offerProtoResponse.igpCallerSdp)
-                // HINT UI: show
+                DispatchQueue.main.async {
+                    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                    if appDelegate.isNeedToSetNickname {
+                        appDelegate.showCallPage(userId: offerProtoResponse.igpCallerUserID)
+                    }
+                }
                 
                 break
             default:
@@ -85,15 +93,11 @@ class IGSignalingRingingRequest : IGRequest {
         class func interpret(response reponseProtoMessage:IGPSignalingRingingResponse)  {}
 
         override class func handlePush(responseProtoMessage: Message) {
-            switch responseProtoMessage {
-            case let ringingProtoResponse as IGPSignalingRingingResponse:
-                // TODO: when received ringing set text ringing... in view
-                break
-            default:
-                break
+            guard let delegate = RTCClient.getInstance().callStateDelegate else {
+                return
             }
+            delegate.onStateChange(state: RTCClientConnectionState.Ringing)
         }
-
     }
 }
 
@@ -107,12 +111,15 @@ class IGSignalingAcceptRequest : IGRequest {
     }
 
     class Handler : IGRequest.Handler{
-        class func interpret(response reponseProtoMessage:IGPSignalingAcceptResponse)  {}
+        class func interpret(response reponseProtoMessage:IGPSignalingAcceptResponse)  {
+            IGCall.sendLeaveRequest = true
+        }
 
         override class func handlePush(responseProtoMessage: Message) {
             switch responseProtoMessage {
             case let acceptProtoResponse as IGPSignalingAcceptResponse:
-                RTCClient.instance.handleAnswerReceived(withRemoteSDP: acceptProtoResponse.igpCalledSdp)
+                IGCall.sendLeaveRequest = true
+                RTCClient.getInstance().handleAnswerReceived(withRemoteSDP: acceptProtoResponse.igpCalledSdp)
             default:
                 break
             }
@@ -139,7 +146,7 @@ class IGSignalingCandidateRequest : IGRequest {
             switch responseProtoMessage {
             case let candidateResponse as IGPSignalingCandidateResponse:
                 if !candidateResponse.igpResponse.isInitialized {
-                    RTCClient.instance.addIceCandidate(iceCandidate: RTCIceCandidate(sdp: candidateResponse.igpPeerCandidate,sdpMLineIndex: candidateResponse.igpPeerSdpMLineIndex ,sdpMid: candidateResponse.igpPeerSdpMID))
+                    RTCClient.getInstance().addIceCandidate(iceCandidate: RTCIceCandidate(sdp: candidateResponse.igpPeerCandidate,sdpMLineIndex: candidateResponse.igpPeerSdpMLineIndex ,sdpMid: candidateResponse.igpPeerSdpMID))
                 }
                 break
             default:
@@ -158,16 +165,56 @@ class IGSignalingLeaveRequest : IGRequest {
     }
 
     class Handler : IGRequest.Handler{
-        class func interpret(response reponseProtoMessage:IGPSignalingLeaveResponse)  {
-            RTCClient.instance.disconnect()
+        class func interpret(response responseProtoMessage:IGPSignalingLeaveResponse)  {
+            
+            guard let delegate = RTCClient.getInstance().callStateDelegate else {
+                return
+            }
+            
+            switch responseProtoMessage.igpType {
+                
+            case IGPSignalingLeaveResponse.IGPType.accepted:
+                delegate.onStateChange(state: RTCClientConnectionState.Accepted)
+                break
+                
+            case IGPSignalingLeaveResponse.IGPType.disconnected:
+                delegate.onStateChange(state: RTCClientConnectionState.Disconnected)
+                break
+                
+            case IGPSignalingLeaveResponse.IGPType.finished:
+                delegate.onStateChange(state: RTCClientConnectionState.Finished)
+                break
+                
+            case IGPSignalingLeaveResponse.IGPType.missed:
+                delegate.onStateChange(state: RTCClientConnectionState.Missed)
+                break
+                
+            case IGPSignalingLeaveResponse.IGPType.notAnswered:
+                delegate.onStateChange(state: RTCClientConnectionState.NotAnswered)
+                break
+                
+            case IGPSignalingLeaveResponse.IGPType.rejected:
+                delegate.onStateChange(state: RTCClientConnectionState.Rejected)
+                break
+                
+            case IGPSignalingLeaveResponse.IGPType.tooLong:
+                delegate.onStateChange(state: RTCClientConnectionState.TooLong)
+                break
+                
+            case IGPSignalingLeaveResponse.IGPType.unavailable:
+                delegate.onStateChange(state: RTCClientConnectionState.Unavailable)
+                break
+                
+            default:
+                break
+            }
+            
+            RTCClient.getInstance().disconnect()
         }
 
         override class func handlePush(responseProtoMessage: Message) {
-            switch responseProtoMessage {
-            case let leaveProtoResponse as IGPSignalingLeaveResponse:
-                self.interpret(response: leaveProtoResponse)
-            default:
-                break
+            if let signalingResponse = responseProtoMessage as? IGPSignalingLeaveResponse {
+                self.interpret(response: signalingResponse)
             }
         }
     }

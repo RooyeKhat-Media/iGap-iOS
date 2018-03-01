@@ -124,6 +124,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     }
     
+    func showCallPage(userId: Int64){
+        let storyboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let callPage = storyboard.instantiateViewController(withIdentifier: "IGCallShowing") as! IGCall
+        callPage.userId = userId
+        callPage.isIncommingCall = true
+        self.window?.rootViewController?.present(callPage, animated: true, completion: nil)
+    }
+    
+    func closeCallPage(){
+        self.window?.rootViewController?.dismiss(animated: true, completion: nil)
+    }
+    
     func showLoginFaieldAlert() {
         //DispatchQueue.main.sync(execute: {
             let badLoginAC = UIAlertController(title: "Login Failed", message: "There was a problem logging you in. Please login again", preferredStyle: .alert)
