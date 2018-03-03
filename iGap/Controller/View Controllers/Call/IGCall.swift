@@ -11,7 +11,7 @@
 import UIKit
 import RealmSwift
 import AVFoundation
-import SnapKit
+//import SnapKit
 
 class IGCall: UIViewController, CallStateObserver {
 
@@ -166,12 +166,12 @@ class IGCall: UIViewController, CallStateObserver {
             btnAnswer.isHidden = true
             txtCallTime.isHidden = true
             
-            btnCancel.snp.updateConstraints { (make) in
-                make.bottom.equalTo(btnChat.snp.top).offset(-54)
-                make.width.equalTo(70)
-                make.height.equalTo(70)
-                make.centerX.equalTo(btnChat.snp.centerX)
-            }
+            //            btnCancel.snp.updateConstraints { (make) in
+            //                make.bottom.equalTo(btnChat.snp.top).offset(-54)
+            //                make.width.equalTo(70)
+            //                make.height.equalTo(70)
+            //                make.centerX.equalTo(btnChat.snp.centerX)
+            //            }
         }
     }
     
@@ -270,6 +270,52 @@ class IGCall: UIViewController, CallStateObserver {
                 
             case .Dialing:
                 self.txtCallState.text = "Dialing..."
+                break
+                
+            case .signalingOfferForbiddenYouAreTalkingWithYourOtherDevices:
+                let alert = UIAlertController(title: "Signaling Forbidden", message: "You Are Talking With Your Other Devices", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "OK", style: .default, handler: { (action) in
+                    self.dismmis()
+                })
+                alert.addAction(okAction)
+                self.present(alert, animated: true, completion: nil)
+                break
+                
+            case .signalingOfferForbiddenTheUserIsInConversation:
+                let alert = UIAlertController(title: "Signaling Forbidden", message: "The User Is In Conversation", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "OK", style: .default, handler: { (action) in
+                    self.dismmis()
+                })
+                alert.addAction(okAction)
+                self.present(alert, animated: true, completion: nil)
+                break
+                
+            case .signalingOfferForbiddenDialedNumberIsNotActive:
+                let alert = UIAlertController(title: "Signaling Forbidden", message: "Dialed Number Is Not Active", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "OK", style: .default, handler: { (action) in
+                    self.dismmis()
+                })
+                alert.addAction(okAction)
+                self.present(alert, animated: true, completion: nil)
+                break
+                
+            case .signalingOfferForbiddenUserIsBlocked:
+                let alert = UIAlertController(title: "Signaling Forbidden", message: "User Is Blocked", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "OK", style: .default, handler: { (action) in
+                    self.dismmis()
+                })
+                alert.addAction(okAction)
+                self.present(alert, animated: true, completion: nil)
+                break
+                
+            case .signalingOfferForbiddenIsNotAllowedToCommunicate:
+                self.playSound(sound: "igap_disconnect")
+                let alert = UIAlertController(title: "Signaling Forbidden", message: "Is Not Allowed To Communicate", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "OK", style: .default, handler: { (action) in
+                    self.dismmis()
+                })
+                alert.addAction(okAction)
+                self.present(alert, animated: true, completion: nil)
                 break
                 
             default:

@@ -59,6 +59,13 @@ public enum RTCClientConnectionState {
     case IncommingCall
     case Ringing
     case Dialing
+    
+    // enums for connection error
+    case signalingOfferForbiddenUserIsBlocked
+    case signalingOfferForbiddenDialedNumberIsNotActive
+    case signalingOfferForbiddenYouAreTalkingWithYourOtherDevices
+    case signalingOfferForbiddenTheUserIsInConversation
+    case signalingOfferForbiddenIsNotAllowedToCommunicate
 }
 
 public extension RTCClientDelegate {
@@ -294,10 +301,37 @@ public class RTCClient: NSObject {
     private func sendOffer(userId: Int64, sdp: String){
         IGSignalingOfferRequest.Generator.generate(calledUserId: userId, type: IGPSignalingOffer.IGPType.voiceCalling,callerSdp: sdp).success({ (protoResponse) in
         }).error ({ (errorCode, waitTime) in
+            
+            guard let delegate = self.callStateDelegate else {
+                return
+            }
+            
             switch errorCode {
+                
             case .timeout:
                 self.sendOffer(userId: userId, sdp: sdp)
                 break
+                
+            case .signalingOfferForbiddenUserIsBlocked:
+                delegate.onStateChange(state: .signalingOfferForbiddenUserIsBlocked)
+                break
+                
+            case .signalingOfferForbiddenDialedNumberIsNotActive:
+                delegate.onStateChange(state: .signalingOfferForbiddenDialedNumberIsNotActive)
+                break
+                
+            case .signalingOfferForbiddenTheUserIsInConversation:
+                delegate.onStateChange(state: .signalingOfferForbiddenTheUserIsInConversation)
+                break
+                
+            case .signalingOfferForbiddenYouAreTalkingWithYourOtherDevices:
+                delegate.onStateChange(state: .signalingOfferForbiddenYouAreTalkingWithYourOtherDevices)
+                break
+                
+            case .signalingOfferForbiddenIsNotAllowedToCommunicate:
+                delegate.onStateChange(state: .signalingOfferForbiddenIsNotAllowedToCommunicate)
+                break
+                
             default:
                 break
             }
