@@ -73,13 +73,16 @@ class IGRegistredUserInfoTableViewController: UITableViewController , UIGestureR
         
         let navigaitonItem = self.navigationItem as! IGNavigationItem
         navigaitonItem.addNavigationViewItems(rightItemText: nil, title: "Contact Info")
-        navigaitonItem.addModalViewRightItem(title: "", iGapFont: true)
-        navigaitonItem.rightViewContainer?.addAction {
-            let storyBoard = UIStoryboard(name: "Main" , bundle:nil)
-            let callPage = storyBoard.instantiateViewController(withIdentifier: "IGCallShowing") as! IGCall
-            callPage.userId = (self.user?.id)!
-            callPage.isIncommingCall = false
-            self.present(callPage, animated: true, completion: nil)
+        
+        if IGAppManager.sharedManager.userID() != user?.id && !(room?.isReadOnly)! {
+            navigaitonItem.addModalViewRightItem(title: "", iGapFont: true)
+            navigaitonItem.rightViewContainer?.addAction {
+                let storyBoard = UIStoryboard(name: "Main" , bundle:nil)
+                let callPage = storyBoard.instantiateViewController(withIdentifier: "IGCallShowing") as! IGCall
+                callPage.userId = (self.user?.id)!
+                callPage.isIncommingCall = false
+                self.present(callPage, animated: true, completion: nil)
+            }
         }
         
         navigaitonItem.navigationController = self.navigationController as? IGNavigationController

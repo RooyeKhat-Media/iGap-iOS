@@ -647,7 +647,7 @@ Please wait 0:59</string>
                         <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <view key="tableHeaderView" contentMode="scaleToFill" misplaced="YES" id="V8S-0G-tEw">
+                        <view key="tableHeaderView" contentMode="scaleToFill" id="V8S-0G-tEw">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="5"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -718,9 +718,13 @@ Please wait 0:59</string>
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IG_Blur_Call" translatesAutoresizingMaskIntoConstraints="NO" id="qkh-A9-QLp">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IG_Blur_Call" translatesAutoresizingMaskIntoConstraints="NO" id="qkh-A9-QLp">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </imageView>
+                            <view hidden="YES" alpha="0.29999999999999999" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="32k-QA-fx6">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <color key="backgroundColor" red="0.26510139579999997" green="0.56691289420000002" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B2M-WZ-eh7">
                                 <rect key="frame" x="96" y="447" width="70" height="70"/>
                                 <color key="backgroundColor" white="0.67135959199999995" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -835,11 +839,13 @@ Please wait 0:59</string>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="9Qi-La-Dbk" firstAttribute="leading" secondItem="yza-sH-gpU" secondAttribute="leadingMargin" constant="10" id="0b1-Gr-kTi"/>
+                            <constraint firstItem="32k-QA-fx6" firstAttribute="leading" secondItem="yza-sH-gpU" secondAttribute="leading" id="3ci-yD-mDv"/>
                             <constraint firstItem="1s0-8u-bJd" firstAttribute="top" secondItem="u14-h2-GtB" secondAttribute="bottom" constant="5" id="60N-gT-svn"/>
                             <constraint firstAttribute="trailingMargin" secondItem="1s0-8u-bJd" secondAttribute="trailing" id="7mc-bK-x9A"/>
                             <constraint firstItem="u14-h2-GtB" firstAttribute="top" secondItem="fFu-Of-z9o" secondAttribute="bottom" constant="5" id="8xa-VI-dxd"/>
                             <constraint firstAttribute="trailingMargin" secondItem="u6D-Vd-Lv8" secondAttribute="trailing" priority="250" constant="80" id="8xf-un-9p8"/>
                             <constraint firstAttribute="trailingMargin" secondItem="u14-h2-GtB" secondAttribute="trailing" id="BY6-pT-m4s"/>
+                            <constraint firstAttribute="trailing" secondItem="32k-QA-fx6" secondAttribute="trailing" id="GEZ-n6-8UF"/>
                             <constraint firstItem="1s0-8u-bJd" firstAttribute="leading" secondItem="yza-sH-gpU" secondAttribute="leadingMargin" constant="10" id="HXp-fz-cX2"/>
                             <constraint firstItem="B2M-WZ-eh7" firstAttribute="leading" secondItem="yza-sH-gpU" secondAttribute="leadingMargin" constant="80" id="HbP-Bs-Et2"/>
                             <constraint firstItem="fFu-Of-z9o" firstAttribute="top" secondItem="PG3-bZ-M6c" secondAttribute="bottom" constant="10" id="LEQ-Og-dAZ"/>
@@ -848,12 +854,14 @@ Please wait 0:59</string>
                             <constraint firstAttribute="trailingMargin" secondItem="cOE-9I-nlw" secondAttribute="trailing" constant="10" id="Sur-tj-4b3"/>
                             <constraint firstItem="u14-h2-GtB" firstAttribute="leading" secondItem="yza-sH-gpU" secondAttribute="leadingMargin" constant="10" id="Ww9-Gd-O8a"/>
                             <constraint firstItem="qkh-A9-QLp" firstAttribute="leading" secondItem="yza-sH-gpU" secondAttribute="leadingMargin" constant="-16" id="XOR-i1-722"/>
+                            <constraint firstAttribute="bottom" secondItem="32k-QA-fx6" secondAttribute="bottom" id="XzX-38-GhG"/>
                             <constraint firstAttribute="trailingMargin" secondItem="9Qi-La-Dbk" secondAttribute="trailing" id="ZbY-wX-tYy"/>
                             <constraint firstAttribute="trailingMargin" secondItem="fFu-Of-z9o" secondAttribute="trailing" id="aG7-bg-vtf"/>
                             <constraint firstItem="9Qi-La-Dbk" firstAttribute="top" secondItem="1s0-8u-bJd" secondAttribute="bottom" constant="5" id="aTZ-w5-zsb"/>
                             <constraint firstAttribute="trailingMargin" secondItem="qkh-A9-QLp" secondAttribute="trailing" constant="-16" id="eGw-JU-NMk"/>
                             <constraint firstAttribute="bottomMargin" secondItem="qkh-A9-QLp" secondAttribute="bottom" id="k2v-Ti-rwB"/>
                             <constraint firstItem="lP5-6W-aPE" firstAttribute="top" secondItem="uIr-0Q-6G0" secondAttribute="bottom" constant="26" id="kEa-q7-LEm"/>
+                            <constraint firstItem="32k-QA-fx6" firstAttribute="top" secondItem="yza-sH-gpU" secondAttribute="top" id="n93-rt-U0h"/>
                             <constraint firstItem="lP5-6W-aPE" firstAttribute="top" secondItem="cOE-9I-nlw" secondAttribute="bottom" constant="26" id="o16-Yl-qY9"/>
                             <constraint firstAttribute="bottomMargin" secondItem="B2M-WZ-eh7" secondAttribute="bottom" constant="150" id="p9R-X5-Nol"/>
                             <constraint firstItem="HVS-4z-ILw" firstAttribute="centerX" secondItem="yza-sH-gpU" secondAttribute="centerX" id="pOy-Kw-QuE"/>
@@ -868,10 +876,12 @@ Please wait 0:59</string>
                         <outlet property="btnChat" destination="HVS-4z-ILw" id="huh-D2-MSq"/>
                         <outlet property="btnMute" destination="uIr-0Q-6G0" id="3Rb-pT-RD4"/>
                         <outlet property="btnSpeaker" destination="cOE-9I-nlw" id="YZu-as-T5j"/>
+                        <outlet property="imgAvatar" destination="qkh-A9-QLp" id="9FM-Es-iFn"/>
                         <outlet property="txtCallState" destination="1s0-8u-bJd" id="27z-gf-jyJ"/>
                         <outlet property="txtCallTime" destination="9Qi-La-Dbk" id="Rtk-Bb-YRx"/>
                         <outlet property="txtCallerName" destination="u14-h2-GtB" id="kD5-66-yjs"/>
                         <outlet property="txtiGap" destination="fFu-Of-z9o" id="esE-h0-fzo"/>
+                        <outlet property="viewTransparent" destination="32k-QA-fx6" id="Cza-Ee-Yn3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GDr-R3-fmZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -890,6 +900,9 @@ Please wait 0:59</string>
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IG_Blur_Call" translatesAutoresizingMaskIntoConstraints="NO" id="PLh-MM-IK9">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                            </imageView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="9G6-WI-YVj" customClass="IGMessageCollectionView" customModule="iGap" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="TTu-g1-jEU">
@@ -1221,6 +1234,7 @@ Please wait 0:59</string>
                             <constraint firstItem="uLc-FX-WjP" firstAttribute="leading" secondItem="ziz-lj-PYe" secondAttribute="leading" constant="5" id="62H-fk-IXR"/>
                             <constraint firstItem="4eQ-gi-PNj" firstAttribute="trailing" secondItem="9G6-WI-YVj" secondAttribute="trailing" id="74i-Qd-PtK"/>
                             <constraint firstItem="4eQ-gi-PNj" firstAttribute="leading" secondItem="ziz-lj-PYe" secondAttribute="leading" id="9rZ-uo-M4r"/>
+                            <constraint firstItem="PLh-MM-IK9" firstAttribute="top" secondItem="ziz-lj-PYe" secondAttribute="topMargin" id="ESh-6c-y7D"/>
                             <constraint firstItem="4eQ-gi-PNj" firstAttribute="top" secondItem="5mR-SM-BTR" secondAttribute="bottom" id="Obr-Bc-Azv"/>
                             <constraint firstItem="7LG-Y0-Ncx" firstAttribute="top" secondItem="uLc-FX-WjP" secondAttribute="bottom" constant="5" id="OnJ-wA-E9b"/>
                             <constraint firstAttribute="trailing" secondItem="uLc-FX-WjP" secondAttribute="trailing" constant="5" id="PwG-7u-wmd"/>
@@ -1228,8 +1242,11 @@ Please wait 0:59</string>
                             <constraint firstItem="9G6-WI-YVj" firstAttribute="top" secondItem="v1Y-Qo-n3M" secondAttribute="bottom" id="Ry3-td-qgA"/>
                             <constraint firstAttribute="trailing" secondItem="4eQ-gi-PNj" secondAttribute="trailing" id="STr-jl-Csu"/>
                             <constraint firstItem="9G6-WI-YVj" firstAttribute="bottom" secondItem="4eQ-gi-PNj" secondAttribute="bottom" id="bg0-rO-guD"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="PLh-MM-IK9" secondAttribute="bottom" id="h0k-48-e8Z"/>
                             <constraint firstItem="7LG-Y0-Ncx" firstAttribute="top" secondItem="4eQ-gi-PNj" secondAttribute="bottom" id="l9j-I8-pUw"/>
                             <constraint firstItem="4eQ-gi-PNj" firstAttribute="leading" secondItem="9G6-WI-YVj" secondAttribute="leading" id="n0a-xe-TX1"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="PLh-MM-IK9" secondAttribute="trailing" constant="-16" id="pSL-X5-paD"/>
+                            <constraint firstItem="PLh-MM-IK9" firstAttribute="leading" secondItem="ziz-lj-PYe" secondAttribute="leadingMargin" constant="-16" id="yGl-yK-T7P"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Title" id="yRi-nN-wYI" customClass="IGNavigationItem" customModule="iGap" customModuleProvider="target"/>
@@ -1307,7 +1324,7 @@ Please wait 0:59</string>
                         <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <view key="tableHeaderView" contentMode="scaleToFill" misplaced="YES" id="OrM-Sw-TGg">
+                        <view key="tableHeaderView" contentMode="scaleToFill" id="OrM-Sw-TGg">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="5"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1367,7 +1384,7 @@ Please wait 0:59</string>
                         <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <view key="tableHeaderView" contentMode="scaleToFill" misplaced="YES" id="3rp-9r-PIi">
+                        <view key="tableHeaderView" contentMode="scaleToFill" id="3rp-9r-PIi">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="5"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1408,7 +1425,7 @@ Please wait 0:59</string>
                         <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <view key="tableHeaderView" contentMode="scaleToFill" misplaced="YES" id="jnE-JQ-jrQ">
+                        <view key="tableHeaderView" contentMode="scaleToFill" id="jnE-JQ-jrQ">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="5"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -5218,7 +5235,7 @@ Cg
         <image name="IG_Tabbar_Recent_On" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="k9M-cr-cw2"/>
+        <segue reference="jRj-hY-oEr"/>
         <segue reference="Z1Q-fW-ByF"/>
         <segue reference="k1z-sz-mLi"/>
         <segue reference="xjE-gJ-o8r"/>

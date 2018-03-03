@@ -14,6 +14,8 @@ import SnapKit
 
 class IGCall: UIViewController, CallStateObserver {
 
+    @IBOutlet weak var imgAvatar: UIImageView!
+    @IBOutlet weak var viewTransparent: UIView!
     @IBOutlet weak var txtiGap: UILabel!
     @IBOutlet weak var txtCallerName: UILabel!
     @IBOutlet weak var txtCallState: UILabel!
@@ -108,6 +110,10 @@ class IGCall: UIViewController, CallStateObserver {
             incommingCall()
         } else {
             outgoingCall()
+        }
+        
+        if let avatar = userRegisteredInfo.avatar {
+            setImageMain(avatar: avatar)
         }
     }
     
@@ -280,6 +286,43 @@ class IGCall: UIViewController, CallStateObserver {
                 break
             }
         }).send()
+    }
+    
+    func setImageMain(avatar: IGAvatar) {
+        if let originalFile = avatar.file {
+            do {
+                if originalFile.attachedImage != nil {
+                    imgAvatar.image = originalFile.attachedImage
+                } else {
+                    var image: UIImage?
+                    let path = originalFile.path()
+                    if FileManager.default.fileExists(atPath: path!.path) {
+                        image = UIImage(contentsOfFile: path!.path)
+                    }
+                    
+                    if image != nil {
+                        self.imgAvatar.image = image
+                        self.viewTransparent.isHidden = false
+                    } else {
+                        throw NSError(domain: "asa", code: 1234, userInfo: nil)
+                    }
+                }
+            } catch {
+                IGDownloadManager.sharedManager.download(file: originalFile, previewType:.originalFile, completion: { (attachment) -> Void in
+                    DispatchQueue.main.async {
+                        let path = originalFile.path()
+                        if let data = try? Data(contentsOf: path!) {
+                            if let image = UIImage(data: data) {
+                                self.viewTransparent.isHidden = false
+                                self.imgAvatar.image = image
+                            }
+                        }
+                    }
+                }, failure: {
+                    
+                })
+            }
+        }
     }
 }
 
