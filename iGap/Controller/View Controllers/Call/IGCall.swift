@@ -10,6 +10,7 @@
 
 import UIKit
 import RealmSwift
+import AVFoundation
 import SnapKit
 
 class IGCall: UIViewController, CallStateObserver {
@@ -33,6 +34,7 @@ class IGCall: UIViewController, CallStateObserver {
     var isMuteEnable = false
     var callTimer: Timer!
     var recordedTime: Int = 0
+    var player: AVAudioPlayer?
     
     internal static var callStateStatic: String!
     internal static var sendLeaveRequest = true
@@ -49,6 +51,7 @@ class IGCall: UIViewController, CallStateObserver {
     @IBAction func btnCancel(_ sender: UIButton) {
         RTCClient.getInstance().disconnect()
         RTCClient.getInstance().sendLeaveCall()
+        self.playSound(sound: "igap_disconnect")
         dismiss(animated: true, completion: nil)
     }
     
@@ -108,7 +111,9 @@ class IGCall: UIViewController, CallStateObserver {
         
         if isIncommingCall {
             incommingCall()
+            playSound(sound: "tone", repeatEnable: true)
         } else {
+            playSound(sound: "igap_signaling", repeatEnable: true)
             outgoingCall()
         }
         
@@ -161,12 +166,12 @@ class IGCall: UIViewController, CallStateObserver {
             btnAnswer.isHidden = true
             txtCallTime.isHidden = true
             
-//            btnCancel.snp.updateConstraints { (make) in
-//                make.bottom.equalTo(btnChat.snp.top).offset(-54)
-//                make.width.equalTo(70)
-//                make.height.equalTo(70)
-//                make.centerX.equalTo(btnChat.snp.centerX)
-//            }
+            btnCancel.snp.updateConstraints { (make) in
+                make.bottom.equalTo(btnChat.snp.top).offset(-54)
+                make.width.equalTo(70)
+                make.height.equalTo(70)
+                make.centerX.equalTo(btnChat.snp.centerX)
+            }
         }
     }
     
@@ -198,14 +203,23 @@ class IGCall: UIViewController, CallStateObserver {
             case .Connected:
                 self.txtCallTime.isHidden = false
                 self.txtCallState.text = "Connected"
+                self.playSound(sound: "igap_connect")
+                
+                do {
+                    try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayAndRecord)
+                    try AVAudioSession.sharedInstance().setActive(true)
+                } catch let error {
+                    print(error.localizedDescription)
+                }
                 if self.callTimer == nil {
                     self.callTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(self.updateTimerLabel), userInfo: nil, repeats: true)
                     self.callTimer?.fire()
                 }
                 break
                 
-            case .Failed, .Finished, .Disconnected:
+            case .Finished, .Disconnected:
                 self.txtCallState.text = "Disconnected"
+                self.playSound(sound: "igap_disconnect")
                 self.dismmis()
                 break
                 
@@ -216,21 +230,31 @@ class IGCall: UIViewController, CallStateObserver {
                 
             case .NotAnswered:
                 self.txtCallState.text = "NotAnswered"
+                self.playSound(sound: "igap_noresponse")
                 self.dismmis()
                 break
                 
             case .Rejected:
                 self.txtCallState.text = "Rejected"
+                self.playSound(sound: "igap_disconnect")
                 self.dismmis()
                 break
                 
             case .TooLong:
                 self.txtCallState.text = "TooLong"
+                self.playSound(sound: "igap_disconnect")
+                self.dismmis()
+                break
+                
+            case .Failed:
+                self.txtCallState.text = "Failed"
+                self.playSound(sound: "igap_noresponse")
                 self.dismmis()
                 break
                 
             case .Unavailable:
                 self.txtCallState.text = "Unavailable"
+                self.playSound(sound: "igap_noresponse")
                 self.dismmis()
                 break
                 
@@ -240,6 +264,7 @@ class IGCall: UIViewController, CallStateObserver {
                 
             case .Ringing:
                 self.txtCallState.text = "Ringing..."
+                self.playSound(sound: "igap_ringing", repeatEnable: true)
                 break
                 
             case .Dialing:
@@ -286,6 +311,30 @@ class IGCall: UIViewController, CallStateObserver {
                 break
             }
         }).send()
+    }
+    
+    
+    func playSound(sound: String, repeatEnable: Bool = false) {
+        guard let url = Bundle.main.url(forResource: sound, withExtension: "mp3") else { return }
+        
+        do {
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+            try AVAudioSession.sharedInstance().setActive(true)
+        
+            if player != nil {
+                player?.stop()
+            }
+            
+            player = try AVAudioPlayer(contentsOf: url)
+            guard let player = player else { return }
+            if repeatEnable {
+                player.numberOfLoops = -1
+            }
+            player.play()
+            
+        } catch let error {
+            print(error.localizedDescription)
+        }
     }
     
     func setImageMain(avatar: IGAvatar) {
