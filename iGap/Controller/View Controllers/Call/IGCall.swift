@@ -221,6 +221,7 @@ class IGCall: UIViewController, CallStateObserver {
                 self.txtCallState.text = "Disconnected"
                 self.playSound(sound: "igap_disconnect")
                 self.dismmis()
+                RTCClient.getInstance().callStateDelegate = nil
                 break
                 
             case .Missed:

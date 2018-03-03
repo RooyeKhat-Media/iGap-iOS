@@ -98,6 +98,10 @@ class IGWebSocketManager: NSObject {
             IGAppManager.sharedManager.setNetworkConnectionStatus(.waitingForNetwork)
             IGAppManager.sharedManager.isUserLoggedIn.value = false
             self.socket.disconnect(forceTimeout:0)
+            guard let delegate = RTCClient.getInstance().callStateDelegate else {
+                return
+            }
+            delegate.onStateChange(state: .Disconnected)
         }
         do {
             try reachability.startNotifier()
