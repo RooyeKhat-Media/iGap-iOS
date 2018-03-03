@@ -73,8 +73,8 @@ class IGRegistredUserInfoTableViewController: UITableViewController , UIGestureR
         
         let navigaitonItem = self.navigationItem as! IGNavigationItem
         navigaitonItem.addNavigationViewItems(rightItemText: nil, title: "Contact Info")
-        navigaitonItem.addCallViewContainer()
-        navigaitonItem.callViewContainer?.addAction {
+        navigaitonItem.addModalViewRightItem(title: "", iGapFont: true)
+        navigaitonItem.rightViewContainer?.addAction {
             let storyBoard = UIStoryboard(name: "Main" , bundle:nil)
             let callPage = storyBoard.instantiateViewController(withIdentifier: "IGCallShowing") as! IGCall
             callPage.userId = (self.user?.id)!

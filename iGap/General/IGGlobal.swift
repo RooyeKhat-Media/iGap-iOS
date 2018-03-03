@@ -503,6 +503,10 @@ extension UIFont {
         }
     }
     
+    class func iGapFontico(ofSize fontSize: CGFloat) -> UIFont {
+        return UIFont(name: "iGap-Fontico", size: fontSize)!
+    }
+    
 //    func bold() -> UIFont {
 //        return withTraits(traits: .traitBold)
 //    }

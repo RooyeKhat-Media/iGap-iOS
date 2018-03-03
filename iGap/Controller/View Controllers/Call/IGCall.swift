@@ -75,6 +75,14 @@ class IGCall: UIViewController, CallStateObserver {
         isSpeakerEnable = !isSpeakerEnable
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        UIDevice.current.isProximityMonitoringEnabled = false
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        UIDevice.current.isProximityMonitoringEnabled = true
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -147,12 +155,12 @@ class IGCall: UIViewController, CallStateObserver {
             btnAnswer.isHidden = true
             txtCallTime.isHidden = true
             
-            btnCancel.snp.updateConstraints { (make) in
-                make.bottom.equalTo(btnChat.snp.top).offset(-54)
-                make.width.equalTo(70)
-                make.height.equalTo(70)
-                make.centerX.equalTo(btnChat.snp.centerX)
-            }
+//            btnCancel.snp.updateConstraints { (make) in
+//                make.bottom.equalTo(btnChat.snp.top).offset(-54)
+//                make.width.equalTo(70)
+//                make.height.equalTo(70)
+//                make.centerX.equalTo(btnChat.snp.centerX)
+//            }
         }
     }
     

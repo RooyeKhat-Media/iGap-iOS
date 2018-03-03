@@ -233,15 +233,16 @@ class IGRecentsTableViewController: UITableViewController {
         isLoadingMoreRooms = true
         IGClientGetRoomListRequest.Generator.generate(offset: 0, limit: 40).success { (responseProtoMessage) in
             self.isLoadingMoreRooms = false
-                DispatchQueue.main.async {
-                    switch responseProtoMessage {
-                    case let response as IGPClientGetRoomListResponse:
-                        self.sendClientCondition(clientCondition: clientCondition)
-                        self.numberOfRoomFetchedInLastRequest = IGClientGetRoomListRequest.Handler.interpret(response: response)
-                    default:
-                        break;
-                    }
+            DispatchQueue.main.async {
+                AVAudioSession.sharedInstance().requestRecordPermission { (granted) in }
+                switch responseProtoMessage {
+                case let response as IGPClientGetRoomListResponse:
+                    self.sendClientCondition(clientCondition: clientCondition)
+                    self.numberOfRoomFetchedInLastRequest = IGClientGetRoomListRequest.Handler.interpret(response: response)
+                default:
+                    break;
                 }
+            }
             }.error({ (errorCode, waitTime) in
                 
             }).send()

@@ -163,15 +163,23 @@ class IGNavigationItem: UINavigationItem {
         self.titleView = titleView
     }
     
-    private func addModalViewRightItem(title: String) {
+    public func addModalViewRightItem(title: String, iGapFont: Bool = false) {
         let rightViewFrame = CGRect(x:0, y:0, width: 50, height:40)
         rightViewContainer = IGTappableView(frame: rightViewFrame)
         rightViewContainer!.backgroundColor = UIColor.clear
         let rightBarButton = UIBarButtonItem(customView: rightViewContainer!)
         self.rightBarButtonItem = rightBarButton
         
-        let labelFrame = CGRect(x: -40, y: 0, width: 100, height:40)
-        let label = UILabel(frame: labelFrame)
+        var labelFrame: CGRect!
+        var label: UILabel!
+        if iGapFont {
+            labelFrame = CGRect(x: -5.0, y: 0, width: 50, height:40)
+            label = UILabel(frame: labelFrame)
+            label.font = UIFont.iGapFontico(ofSize: 20.0)
+        } else {
+            labelFrame = CGRect(x: -40, y: 0, width: 100, height:40)
+            label = UILabel(frame: labelFrame)
+        }
         label.textAlignment = .right
         label.text = title
         label.textColor = UIColor.white
