@@ -8,6 +8,6 @@
  * All rights reserved.
  */
 
-protocol CallStateObserver {
-    func onStateChange(state: RTCClientConnectionState)
+protocol ReturnToCallObserver {
+    func returnToCall()
 }

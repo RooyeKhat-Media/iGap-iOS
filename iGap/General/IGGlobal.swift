@@ -74,6 +74,10 @@ extension UIColor {
         return UIColor(red:180.0/255.0, green:255.0/255.0, blue:255.0/255.0, alpha:1.0)
     }
     
+    class func returnToCall() -> UIColor {
+        return UIColor(red:254.0/255.0, green:193.0/255.0, blue:7.0/255.0, alpha:1.0)
+    }
+    
     //MARK: MessageCVCell Bubble
     class func outgoingChatBuubleBackgroundColor() -> UIColor {
         return UIColor(red: 247.0/255.0, green: 247.0/255.0, blue: 247.0/255.0, alpha: 1.0)

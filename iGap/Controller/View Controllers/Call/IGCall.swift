@@ -11,9 +11,9 @@
 import UIKit
 import RealmSwift
 import AVFoundation
-//import SnapKit
+import SnapKit
 
-class IGCall: UIViewController, CallStateObserver {
+class IGCall: UIViewController, CallStateObserver, ReturnToCallObserver {
 
     @IBOutlet weak var imgAvatar: UIImageView!
     @IBOutlet weak var viewTransparent: UIView!
@@ -39,6 +39,8 @@ class IGCall: UIViewController, CallStateObserver {
     
     internal static var callStateStatic: String!
     internal static var sendLeaveRequest = true
+    internal static var callPageIsEnable = false // this varibale will be used for detect that call page is enable or no. connection state of call isn't important now!
+    internal static var staticReturnToCall: ReturnToCallObserver!
 
     /************************************************/
     /***************** User Actions *****************/
@@ -50,10 +52,9 @@ class IGCall: UIViewController, CallStateObserver {
     }
     
     @IBAction func btnCancel(_ sender: UIButton) {
-        RTCClient.getInstance().disconnect()
         RTCClient.getInstance().sendLeaveCall()
         self.playSound(sound: "igap_disconnect")
-        dismiss(animated: true, completion: nil)
+        self.dismmis()
     }
     
     @IBAction func btnMute(_ sender: UIButton) {
@@ -105,6 +106,9 @@ class IGCall: UIViewController, CallStateObserver {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        IGCall.staticReturnToCall = self
+        IGCall.callPageIsEnable = true
         
         buttonViewCustomize(button: btnAnswer, color: UIColor(red: 44.0/255.0, green: 170/255.0, blue: 163.0/255.0, alpha: 1.0), imgName: "IG_Tabbar_Call_On")
         buttonViewCustomize(button: btnCancel, color: UIColor.red, imgName: "IG_Nav_Bar_Plus")
@@ -181,12 +185,12 @@ class IGCall: UIViewController, CallStateObserver {
             btnAnswer.isHidden = true
             txtCallTime.isHidden = true
             
-            //            btnCancel.snp.updateConstraints { (make) in
-            //                make.bottom.equalTo(btnChat.snp.top).offset(-54)
-            //                make.width.equalTo(70)
-            //                make.height.equalTo(70)
-            //                make.centerX.equalTo(btnChat.snp.centerX)
-            //            }
+            btnCancel.snp.updateConstraints { (make) in
+                make.bottom.equalTo(btnChat.snp.top).offset(-54)
+                make.width.equalTo(70)
+                make.height.equalTo(70)
+                make.centerX.equalTo(btnChat.snp.centerX)
+            }
         }
     }
     
@@ -339,6 +343,12 @@ class IGCall: UIViewController, CallStateObserver {
         }
     }
     
+    func returnToCall() {
+        DispatchQueue.main.async {
+            self.dismiss(animated: true, completion: nil)
+        }
+    }
+    
     func updateTimerLabel() {
         recordedTime += 1
         let minute = String(format: "%02d", Int(recordedTime/60))
@@ -348,6 +358,8 @@ class IGCall: UIViewController, CallStateObserver {
     
     private func dismmis() {
         RTCClient.getInstance().disconnect()
+        IGCall.callPageIsEnable = false
+        
         if let timer = callTimer {
             timer.invalidate()
         }

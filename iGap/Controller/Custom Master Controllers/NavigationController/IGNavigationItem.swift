@@ -20,6 +20,7 @@ class IGNavigationItem: UINavigationItem {
     var leftViewContainer:   IGTappableView?
     var backViewContainer:   IGTappableView?
     var callViewContainer:   IGTappableView?
+    var returnToCall: IGTappableView?
     var navigationController: IGNavigationController?
     private var centerViewMainLabel: UILabel?
     private var centerViewSubLabel:  UILabel?
@@ -51,6 +52,7 @@ class IGNavigationItem: UINavigationItem {
         rightViewContainer!.backgroundColor = UIColor.clear
         let rightBarButton = UIBarButtonItem(customView: rightViewContainer!)
         self.rightBarButtonItem = rightBarButton
+        returnToCallMethod()
     }
     
     //MARK: - Connecting
@@ -62,8 +64,47 @@ class IGNavigationItem: UINavigationItem {
         setNavigationItemWithCenterActivityIndicator(text: "Waiting for network")
     }
     
+    private func returnToCallMethod(){
+        
+        if !IGCall.callPageIsEnable {
+            return
+        }
+        
+        self.returnToCall = IGTappableView(frame: CGRect(x: 0, y: 0, width: 140, height: 35))
+        self.titleView = self.returnToCall
+        
+        self.returnToCall?.backgroundColor = UIColor.returnToCall()
+        self.returnToCall?.layer.cornerRadius = 15
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 17.0, weight: UIFontWeightSemibold)
+        label.textAlignment = .center
+        label.textColor = UIColor.white
+        label.text = "Return To Call"
+        self.titleView?.addSubview(label)
+        
+        self.titleView?.snp.makeConstraints { (make) in
+            make.width.equalTo(150)
+            make.height.equalTo(30)
+        }
+
+        label.snp.makeConstraints { (make) in
+            make.centerX.equalTo(self.titleView!.snp.centerX)
+            make.centerY.equalTo(self.titleView!.snp.centerY)
+        }
+        
+        self.returnToCall?.addAction {
+            if IGCall.staticReturnToCall != nil {
+                IGCall.staticReturnToCall.returnToCall()
+            }
+        }
+    }
     
     private func setNavigationItemWithCenterActivityIndicator(text: String) {
+        
+        if IGCall.callPageIsEnable {
+            return
+        }
+        
         self.centerViewContainer?.subviews.forEach { $0.removeFromSuperview() }
         self.centerViewContainer?.removeFromSuperview()
         self.centerViewContainer = IGTappableView(frame: CGRect(x: 0, y: 0, width: 200, height: 45))
@@ -110,7 +151,7 @@ class IGNavigationItem: UINavigationItem {
         let backViewFrame = CGRect(x:0, y:0, width: 50, height:50)
         backViewContainer = IGTappableView(frame: backViewFrame)
         backViewContainer!.backgroundColor = UIColor.clear
-        let backArrowImageView = UIImageView(frame: CGRect(x: -10, y: 10, width: 25, height: 25))
+        let backArrowImageView = UIImageView(frame: CGRect(x: 5, y: 10, width: 25, height: 25))
         backArrowImageView.image = UIImage(named: "IG_Nav_Bar_BackButton")
         backViewContainer?.addSubview(backArrowImageView)
         let backBarButton = UIBarButtonItem(customView: backViewContainer!)
@@ -151,6 +192,11 @@ class IGNavigationItem: UINavigationItem {
     }
     
     private func addTitleLabel(title: String) {
+        
+        if IGCall.callPageIsEnable {
+            return
+        }
+        
         let height = self.navigationController?.navigationBar.frame.height
         let titleView = UIView(frame: CGRect(x: 0, y: 0, width: 150, height: 40))
         let label = UILabel(frame: CGRect(x: 0, y: 0, width: 150, height: 40))
@@ -229,6 +275,11 @@ class IGNavigationItem: UINavigationItem {
     }
     
     private func addiGapLogo() {
+        
+        if IGCall.callPageIsEnable {
+            return
+        }
+        
         let titleView = UIView(frame: CGRect(x: 0, y: 0, width: 67, height: 40))
         let logoImageView = UIImageView(frame: CGRect(x: 0, y: 8, width: 67, height: 23))
         logoImageView.image = UIImage(named: "IG_Nav_Bar_Logo")
@@ -246,6 +297,11 @@ class IGNavigationItem: UINavigationItem {
     }
     
     func updateNavigationBarForRoom(_ room: IGRoom) {
+        
+        if IGCall.callPageIsEnable || centerViewMainLabel == nil {
+            return
+        }
+        
         self.centerViewMainLabel!.text = room.title
         //        if room.chatRoom?.peer?.id == IGAppManager.sharedManager.userID() {
         //            //my cloud
@@ -315,6 +371,11 @@ class IGNavigationItem: UINavigationItem {
     }
     
     private func setRoomInfo(_ room: IGRoom) {
+        
+        if IGCall.callPageIsEnable {
+            return
+        }
+        
         self.centerViewContainer?.subviews.forEach { $0.removeFromSuperview() }
         
         self.centerViewContainer = IGTappableView(frame: CGRect(x: 0, y: 0, width: 200, height: 45))

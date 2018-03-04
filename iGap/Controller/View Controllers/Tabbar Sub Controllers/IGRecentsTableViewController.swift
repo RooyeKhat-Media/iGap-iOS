@@ -34,20 +34,22 @@ class IGRecentsTableViewController: UITableViewController {
     private let disposeBag = DisposeBag()
     
     private func updateNavigationBarBasedOnNetworkStatus(_ status: IGAppManager.ConnectionStatus) {
-        let navigationItem = self.tabBarController?.navigationItem as! IGNavigationItem
-        switch status {
-        case .waitingForNetwork:
-            navigationItem.setNavigationItemForWaitingForNetwork()
-            connectionStatus = .waitingForNetwork
-            break
-        case .connecting:
-            navigationItem.setNavigationItemForConnecting()
-            connectionStatus = .connecting
-            break
-        case .connected:
-            connectionStatus = .connected
-            self.setDefaultNavigationItem()
-            break
+        
+        if let navigationItem = self.tabBarController?.navigationItem as? IGNavigationItem {
+            switch status {
+            case .waitingForNetwork:
+                navigationItem.setNavigationItemForWaitingForNetwork()
+                connectionStatus = .waitingForNetwork
+                break
+            case .connecting:
+                navigationItem.setNavigationItemForConnecting()
+                connectionStatus = .connecting
+                break
+            case .connected:
+                connectionStatus = .connected
+                self.setDefaultNavigationItem()
+                break
+            }
         }
     }
     

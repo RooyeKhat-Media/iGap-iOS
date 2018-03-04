@@ -247,6 +247,7 @@
 		FAC34DB61E1A651200BB9823 /* IGContactInMessageCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC34DB51E1A651200BB9823 /* IGContactInMessageCellView.swift */; };
 		FAC42C851E36267400F2CB5C /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC42C831E36267400F2CB5C /* Fabric.framework */; };
 		FAC42C861E36267400F2CB5C /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC42C841E36267400F2CB5C /* Crashlytics.framework */; };
+		FAC5B690204C08580018E017 /* ReturnToCallObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC5B68F204C08580018E017 /* ReturnToCallObserver.swift */; };
 		FAD2B5821DFBF1ED007D6F87 /* IGDownloadUploadIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD2B5811DFBF1ED007D6F87 /* IGDownloadUploadIndicatorView.swift */; };
 		FAD2BB0C1E0E993100761B11 /* IGDotActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD2BB0B1E0E993100761B11 /* IGDotActivityIndicator.swift */; };
 		FAD5305E1E0BD7BA00FE6C54 /* IGTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD5305D1E0BD7BA00FE6C54 /* IGTabBarController.swift */; };
@@ -546,6 +547,7 @@
 		FAC34DB51E1A651200BB9823 /* IGContactInMessageCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IGContactInMessageCellView.swift; path = iGap/VIew/ReusableViews/IGContactInMessageCellView.swift; sourceTree = SOURCE_ROOT; };
 		FAC42C831E36267400F2CB5C /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		FAC42C841E36267400F2CB5C /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
+		FAC5B68F204C08580018E017 /* ReturnToCallObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReturnToCallObserver.swift; sourceTree = "<group>"; };
 		FAD2B5811DFBF1ED007D6F87 /* IGDownloadUploadIndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGDownloadUploadIndicatorView.swift; sourceTree = "<group>"; };
 		FAD2BB0B1E0E993100761B11 /* IGDotActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGDotActivityIndicator.swift; sourceTree = "<group>"; };
 		FAD5305D1E0BD7BA00FE6C54 /* IGTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGTabBarController.swift; sourceTree = "<group>"; };
@@ -682,6 +684,7 @@
 				FA03C19B2042945D008812E3 /* IGCall.swift */,
 				FA03C19F20429D46008812E3 /* RTCClient.swift */,
 				FA03C1A120429DB5008812E3 /* AVCaptureState.swift */,
+				FAC5B68F204C08580018E017 /* ReturnToCallObserver.swift */,
 				FA899B6E2046DFC8001A33CB /* CallStateObserver.swift */,
 			);
 			path = Call;
@@ -1736,6 +1739,7 @@
 				FABB9B061DB25E5E00D794A4 /* IGSecurityManager.swift in Sources */,
 				FA0953551E1B97700043ED3F /* IGSettingChatStickersTableViewController.swift in Sources */,
 				FA358D1E1E0A6F49001D0935 /* IGChatsTableViewController.swift in Sources */,
+				FAC5B690204C08580018E017 /* ReturnToCallObserver.swift in Sources */,
 				FA927E0420284D7800DF7145 /* GifCell.swift in Sources */,
 				FA0CC8081E5D7D4400556283 /* ActiveLabel.swift in Sources */,
 				FA930D9B1E5B178F00069EE1 /* WebSocket.swift in Sources */,
