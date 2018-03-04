@@ -29,6 +29,7 @@ class IGRecentsTableViewController: UITableViewController {
     var connectionStatus: IGAppManager.ConnectionStatus?
     var isLoadingMoreRooms: Bool = false
     var numberOfRoomFetchedInLastRequest: Int = -1
+    static var needGetInfo: Bool = true
     
     private let disposeBag = DisposeBag()
     
@@ -147,9 +148,11 @@ class IGRecentsTableViewController: UITableViewController {
         self.addRoomChangeNotificationBlock()
         
         if IGAppManager.sharedManager.isUserLoggiedIn() {
-            self.fetchRoomList()
-            self.saveAndSendContacts()
-            self.requestToGetUserPrivacy()
+            if IGRecentsTableViewController.needGetInfo {
+                self.fetchRoomList()
+                self.saveAndSendContacts()
+                self.requestToGetUserPrivacy()
+            }
         } else {
             NotificationCenter.default.addObserver(self,
                                                    selector: #selector(self.userDidLogin),

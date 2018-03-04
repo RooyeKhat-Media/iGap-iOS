@@ -111,6 +111,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
     var messageCellIdentifer = IGMessageCollectionViewCell.cellReuseIdentifier()
     var logMessageCellIdentifer = IGMessageLogCollectionViewCell.cellReuseIdentifier()
     var room : IGRoom?
+    var customizeBackItem: Bool = false
     //let currentLoggedInUserID = IGAppManager.sharedManager.userID()
     let currentLoggedInUserAuthorHash = IGAppManager.sharedManager.authorHash()
     
@@ -191,6 +192,11 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
             }
         }
         
+        if customizeBackItem {
+            navigationItem.backViewContainer?.addAction {
+                self.performSegue(withIdentifier: "showRoomList", sender: self)
+            }
+        }
         
         if room!.isReadOnly {
             if room!.isParticipant == false {

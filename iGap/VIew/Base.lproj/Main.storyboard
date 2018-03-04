@@ -706,6 +706,25 @@ Please wait 0:59</string>
             </objects>
             <point key="canvasLocation" x="1169" y="-4649"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="7e6-fX-8Mp">
+            <objects>
+                <navigationController id="CFP-Hu-weJ" customClass="IGNavigationController" customModule="iGap" customModuleProvider="target" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="bVU-nq-kMP" customClass="IGNavigationBar" customModule="iGap" customModuleProvider="target">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" red="0.0" green="0.69019607839999997" blue="0.74901960779999999" alpha="1" colorSpace="calibratedRGB"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="KJT-Hl-jm5" kind="relationship" relationship="rootViewController" id="cmM-gF-ANr"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zKu-yu-hLq" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-591" y="-6275"/>
+        </scene>
         <!--Call-->
         <scene sceneID="gZz-0U-mVt">
             <objects>
@@ -870,6 +889,7 @@ Please wait 0:59</string>
                             <constraint firstItem="uIr-0Q-6G0" firstAttribute="leading" secondItem="yza-sH-gpU" secondAttribute="leadingMargin" constant="10" id="zMq-Uj-K4G"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="gkI-S8-jAz"/>
                     <connections>
                         <outlet property="btnAnswer" destination="B2M-WZ-eh7" id="RE5-9d-MzS"/>
                         <outlet property="btnCancel" destination="u6D-Vd-Lv8" id="Z8D-Kh-1ZH"/>
@@ -882,6 +902,7 @@ Please wait 0:59</string>
                         <outlet property="txtCallerName" destination="u14-h2-GtB" id="kD5-66-yjs"/>
                         <outlet property="txtiGap" destination="fFu-Of-z9o" id="esE-h0-fzo"/>
                         <outlet property="viewTransparent" destination="32k-QA-fx6" id="Cza-Ee-Yn3"/>
+                        <segue destination="CFP-Hu-weJ" kind="presentation" identifier="showRoomMessages" id="QJB-pO-R8A"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GDr-R3-fmZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1287,6 +1308,7 @@ Please wait 0:59</string>
                         <segue destination="IMI-O0-WbA" kind="show" identifier="showGroupInfo" id="EiK-dt-3cR"/>
                         <segue destination="kXl-mH-2Sj" kind="presentation" identifier="showForwardMessageTable" id="Paj-YA-riE"/>
                         <segue destination="u0S-Sh-Wik" kind="show" identifier="showReportPage" id="jRj-hY-oEr"/>
+                        <segue destination="QWV-7y-MRV" kind="presentation" identifier="showRoomList" id="CDS-7g-pRV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="43J-bV-cLm" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -5235,13 +5257,13 @@ Cg
         <image name="IG_Tabbar_Recent_On" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="jRj-hY-oEr"/>
+        <segue reference="k9M-cr-cw2"/>
         <segue reference="Z1Q-fW-ByF"/>
         <segue reference="k1z-sz-mLi"/>
         <segue reference="xjE-gJ-o8r"/>
         <segue reference="Whi-Zq-oPV"/>
         <segue reference="liy-Td-nok"/>
-        <segue reference="m3u-p1-8tV"/>
+        <segue reference="R4P-x7-LEg"/>
         <segue reference="OlC-Gu-0Zm"/>
     </inferredMetricsTieBreakers>
 </document>

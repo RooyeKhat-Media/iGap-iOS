@@ -29,6 +29,7 @@ class IGCall: UIViewController, CallStateObserver {
     
     var userId: Int64!
     var userInfo: IGRegisteredUser!
+    var room: IGRoom!
     var isIncommingCall: Bool!
     var isSpeakerEnable = false
     var isMuteEnable = false
@@ -66,7 +67,21 @@ class IGCall: UIViewController, CallStateObserver {
     }
     
     @IBAction func btnChat(_ sender: UIButton) {
-        self.dismiss(animated: true, completion: nil)
+        IGRecentsTableViewController.needGetInfo = false
+        
+        let realm = try! Realm()
+        let predicate = NSPredicate(format: "chatRoom.peer.id = %lld", userId)
+        if let roomInfo = try realm.objects(IGRoom.self).filter(predicate).first {
+            room = roomInfo
+            performSegue(withIdentifier: "showRoomMessages", sender: self)
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let navigationController = segue.destination as! IGNavigationController
+        let messageViewController = navigationController.topViewController as! IGMessageViewController
+        messageViewController.room = room
+        messageViewController.customizeBackItem = true
     }
     
     @IBAction func btnSpeaker(_ sender: UIButton) {
@@ -343,6 +358,7 @@ class IGCall: UIViewController, CallStateObserver {
         }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.dismiss(animated: true, completion: nil)
             self.dismiss(animated: true, completion: nil)
         }
     }
