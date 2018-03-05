@@ -79,10 +79,12 @@ class IGCall: UIViewController, CallStateObserver, ReturnToCallObserver {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let navigationController = segue.destination as! IGNavigationController
-        let messageViewController = navigationController.topViewController as! IGMessageViewController
-        messageViewController.room = room
-        messageViewController.customizeBackItem = true
+        if segue.identifier == "showRoomMessages" {
+            let navigationController = segue.destination as! IGNavigationController
+            let messageViewController = navigationController.topViewController as! IGMessageViewController
+            messageViewController.room = room
+            messageViewController.customizeBackItem = true
+        }
     }
     
     @IBAction func btnSpeaker(_ sender: UIButton) {
@@ -369,7 +371,7 @@ class IGCall: UIViewController, CallStateObserver, ReturnToCallObserver {
             sendLeaveCall()
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.dismiss(animated: true, completion: nil)
             self.dismiss(animated: true, completion: nil)
         }

@@ -78,6 +78,10 @@ extension UIColor {
         return UIColor(red:254.0/255.0, green:193.0/255.0, blue:7.0/255.0, alpha:1.0)
     }
     
+    class func callRatingView() -> UIColor {
+        return UIColor(red: 44.0/255.0, green: 170/255.0, blue: 163.0/255.0, alpha: 1.0)
+    }
+    
     //MARK: MessageCVCell Bubble
     class func outgoingChatBuubleBackgroundColor() -> UIColor {
         return UIColor(red: 247.0/255.0, green: 247.0/255.0, blue: 247.0/255.0, alpha: 1.0)

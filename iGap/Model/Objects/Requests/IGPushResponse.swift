@@ -100,7 +100,9 @@ class IGPushRateSignalingRequest : IGRequest {
         override class func handlePush(responseProtoMessage:Message) {
             switch responseProtoMessage {
             case let pushRateSignalingResponse as IGPPushRateSignalingResponse:
-                self.interpret(response: pushRateSignalingResponse)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                    (UIApplication.shared.delegate as! AppDelegate).showCallQualityPage(rateId: pushRateSignalingResponse.igpID)
+                }
                 break
             default:
                 break

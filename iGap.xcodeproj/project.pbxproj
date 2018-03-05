@@ -226,6 +226,8 @@
 		FA96EF541DEB09A6009BE640 /* IGRequestChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA96EF531DEB09A6009BE640 /* IGRequestChat.swift */; };
 		FA97D444201716270087BBD0 /* TextCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA97D443201708310087BBD0 /* TextCell.xib */; };
 		FA97D44820174C2C0087BBD0 /* AbstractCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA97D44720174C2C0087BBD0 /* AbstractCell.swift */; };
+		FA98F838204D37670070424E /* IGCallQuality.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA98F837204D37670070424E /* IGCallQuality.swift */; };
+		FA98F83A204D41AB0070424E /* Cosmos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA98F839204D41AA0070424E /* Cosmos.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		FAA2A85A200A31CB00CAA7C7 /* IGSettingAccountBioTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA2A859200A31CB00CAA7C7 /* IGSettingAccountBioTableViewController.swift */; };
 		FAA30F671DAA6F790061B8C9 /* IGWebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA30F661DAA6F790061B8C9 /* IGWebSocketManager.swift */; };
 		FAA3604D201614B600736F95 /* TextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA3604B201614B600736F95 /* TextCell.swift */; };
@@ -526,6 +528,8 @@
 		FA96EF531DEB09A6009BE640 /* IGRequestChat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGRequestChat.swift; sourceTree = "<group>"; };
 		FA97D443201708310087BBD0 /* TextCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextCell.xib; sourceTree = "<group>"; };
 		FA97D44720174C2C0087BBD0 /* AbstractCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbstractCell.swift; sourceTree = "<group>"; };
+		FA98F837204D37670070424E /* IGCallQuality.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGCallQuality.swift; sourceTree = "<group>"; };
+		FA98F839204D41AA0070424E /* Cosmos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cosmos.framework; path = Carthage/Build/iOS/Cosmos.framework; sourceTree = "<group>"; };
 		FAA2A859200A31CB00CAA7C7 /* IGSettingAccountBioTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGSettingAccountBioTableViewController.swift; sourceTree = "<group>"; };
 		FAA30F661DAA6F790061B8C9 /* IGWebSocketManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IGWebSocketManager.swift; path = "WebSocket Manager/IGWebSocketManager.swift"; sourceTree = "<group>"; };
 		FAA3604B201614B600736F95 /* TextCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextCell.swift; sourceTree = "<group>"; };
@@ -611,6 +615,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA98F83A204D41AB0070424E /* Cosmos.framework in Frameworks */,
 				FA9402AC2042D49D00D1A35C /* WebRTC.framework in Frameworks */,
 				931DC8C91E388418008F04A9 /* CoreLocation.framework in Frameworks */,
 				FAF985A01E2E10EC00B26940 /* AKMaskField.framework in Frameworks */,
@@ -686,6 +691,7 @@
 				FA03C1A120429DB5008812E3 /* AVCaptureState.swift */,
 				FAC5B68F204C08580018E017 /* ReturnToCallObserver.swift */,
 				FA899B6E2046DFC8001A33CB /* CallStateObserver.swift */,
+				FA98F837204D37670070424E /* IGCallQuality.swift */,
 			);
 			path = Call;
 			sourceTree = "<group>";
@@ -1334,6 +1340,7 @@
 		FAF985881E2E10EC00B26940 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FA98F839204D41AA0070424E /* Cosmos.framework */,
 				FA9402AB2042D49C00D1A35C /* WebRTC.framework */,
 				FAF5D2E61F8D81A600A26EE1 /* SwiftProtobuf.framework */,
 				93CE90801EC4B93F002BFEC1 /* NVActivityIndicatorView.framework */,
@@ -1534,6 +1541,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/NVActivityIndicatorView.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/SwiftProtobuf.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/WebRTC.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Cosmos.framework",
 			);
 			name = "[RS] Copy Carthage Frameworks";
 			outputPaths = (
@@ -1686,6 +1694,7 @@
 				FAD530651E0BDE2A00FE6C54 /* IGNavigationItem.swift in Sources */,
 				FA63BA9D1DD6E030000B60AD /* IGFile.swift in Sources */,
 				FA77C2A71E2B85E4001B2152 /* IGRegistredUserInfoTableViewController.swift in Sources */,
+				FA98F838204D37670070424E /* IGCallQuality.swift in Sources */,
 				FA0CC80C1E5D7D4400556283 /* StringTrimExtension.swift in Sources */,
 				FA0953441E1B97700043ED3F /* IGDeleteAccountReasonTableViewController.swift in Sources */,
 				FA0953711E1B97700043ED3F /* IGSettingTableViewController.swift in Sources */,

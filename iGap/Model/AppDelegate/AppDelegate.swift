@@ -132,8 +132,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.rootViewController?.present(callPage, animated: true, completion: nil)
     }
     
-    func closeCallPage(){
-        self.window?.rootViewController?.dismiss(animated: true, completion: nil)
+    func showCallQualityPage(rateId: Int64){
+        let storyboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let callQualityPage = storyboard.instantiateViewController(withIdentifier: "IGCallQualityShowing") as! IGCallQuality
+        callQualityPage.rateId = rateId
+        self.window?.rootViewController?.present(callQualityPage, animated: true, completion: nil)
     }
     
     func showLoginFaieldAlert() {
