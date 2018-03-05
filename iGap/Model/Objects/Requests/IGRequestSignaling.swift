@@ -67,10 +67,7 @@ class IGSignalingOfferRequest : IGRequest {
                 RTCClient.getInstance().createAnswerForOfferReceived(withRemoteSDP: offerProtoResponse.igpCallerSdp)
                 
                 DispatchQueue.main.async {
-                    let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                    if appDelegate.isNeedToSetNickname {
-                        appDelegate.showCallPage(userId: offerProtoResponse.igpCallerUserID)
-                    }
+                    (UIApplication.shared.delegate as! AppDelegate).showCallPage(userId: offerProtoResponse.igpCallerUserID)
                 }
                 
                 break

@@ -20,7 +20,7 @@ class IGNavigationItem: UINavigationItem {
     var leftViewContainer:   IGTappableView?
     var backViewContainer:   IGTappableView?
     var callViewContainer:   IGTappableView?
-    var returnToCall: IGTappableView?
+    var returnToCall:        IGTappableView?
     var navigationController: IGNavigationController?
     private var centerViewMainLabel: UILabel?
     private var centerViewSubLabel:  UILabel?
@@ -28,7 +28,6 @@ class IGNavigationItem: UINavigationItem {
     var isUpdatingUserStatusForAction : Bool = false
     var isProccesing: Bool = true
     var hud = MBProgressHUD()
-    //    var centerViewSubText:   UITextField?
     
     private var tapOnRightView:  (()->())?
     private var tapOncenterView: (()->())?
@@ -303,11 +302,6 @@ class IGNavigationItem: UINavigationItem {
         }
         
         self.centerViewMainLabel!.text = room.title
-        //        if room.chatRoom?.peer?.id == IGAppManager.sharedManager.userID() {
-        //            //my cloud
-        //            self.centerViewSubLabel!.text = "My Cloud"
-        //            return
-        //        }
         
         if isCloud(room: room){
             return
@@ -318,16 +312,15 @@ class IGNavigationItem: UINavigationItem {
                 typingIndicatorView = IGDotActivityIndicator()
                 self.centerViewContainer!.addSubview(typingIndicatorView!)
                 typingIndicatorView!.snp.makeConstraints { (make) in
-                    make.right.equalTo(self.centerViewSubLabel!.snp.left)
+                    make.left.equalTo(self.centerViewSubLabel!.snp.right)
                     make.centerY.equalTo(self.centerViewSubLabel!.snp.centerY)
                     make.width.equalTo(40)
                 }
             }
             
-            
             self.centerViewSubLabel!.snp.remakeConstraints { (make) in
                 make.top.equalTo(self.centerViewMainLabel!.snp.bottom).offset(3)
-                make.centerX.equalTo(self.centerViewContainer!.snp.centerX).offset(20)
+                make.leading.equalTo(self.centerViewContainer!.snp.leading).offset(5)
             }
             
             self.centerViewSubLabel!.text = room.currentActionString()
@@ -337,8 +330,9 @@ class IGNavigationItem: UINavigationItem {
             typingIndicatorView = nil
             self.centerViewSubLabel!.snp.makeConstraints { (make) in
                 make.top.equalTo(self.centerViewMainLabel!.snp.bottom).offset(3)
-                make.centerX.equalTo(self.centerViewContainer!.snp.centerX)
+                make.leading.equalTo(self.centerViewContainer!.snp.leading).offset(5)
             }
+            
             if let peer = room.chatRoom?.peer {
                 if room.currenctActionsByUsers.first?.value.1 != .typing {
                     setLastSeenLabelForUser(peer, room: room)
@@ -352,10 +346,7 @@ class IGNavigationItem: UINavigationItem {
         }
     }
     
-    private func initilizeNavigationBarForRoom(_ room: IGRoom) {
-        
-        
-    }
+    private func initilizeNavigationBarForRoom(_ room: IGRoom) {}
     
     private func setRoomAvatar(_ room: IGRoom) {
         let avatarViewFrame = CGRect(x: 0, y: 0, width: 40, height:40)
@@ -367,7 +358,6 @@ class IGNavigationItem: UINavigationItem {
         DispatchQueue.main.asyncAfter(deadline: .now() + 10.0) {
             self.setRoomAvatar(room)
         }
-        
     }
     
     private func setRoomInfo(_ room: IGRoom) {
@@ -376,16 +366,55 @@ class IGNavigationItem: UINavigationItem {
             return
         }
         
+        var userId: Int64 = 0
+        
+        if let id = room.chatRoom?.peer?.id {
+            userId = id
+        }
+        
         self.centerViewContainer?.subviews.forEach { $0.removeFromSuperview() }
+        self.centerViewContainer = IGTappableView()
+        let callView = IGTappableView()
         
-        self.centerViewContainer = IGTappableView(frame: CGRect(x: 0, y: 0, width: 200, height: 45))
+        let titleContainerView = UIView(frame: CGRect(x: 0, y: 0, width: 200, height: 45))
+
+        self.titleView = titleContainerView
+        titleContainerView.addSubview(self.centerViewContainer!)
+        titleContainerView.addSubview(callView)
         
-        self.titleView = self.centerViewContainer
-        //        if (UIScreen.main.bounds.width) == 320.0 {
-        //            self.centerViewMainLabel = UILabel(frame: CGRect(x: -10, y: 0, width: 200, height: 18))
-        //        } else {
-        //            self.centerViewMainLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 18))
-        //        }
+        callView.snp.makeConstraints { (make) in
+            make.top.equalTo(titleContainerView.snp.top)
+            make.bottom.equalTo(titleContainerView.snp.bottom)
+            make.trailing.equalTo(titleContainerView.snp.trailing)
+            make.width.equalTo(50)
+        }
+
+        self.centerViewContainer?.snp.makeConstraints { (make) in
+            make.top.equalTo(titleContainerView.snp.top)
+            make.bottom.equalTo(titleContainerView.snp.bottom)
+            make.leading.equalTo(titleContainerView.snp.leading)
+            make.trailing.equalTo(callView.snp.leading)
+        }
+        
+        if userId != 0 && userId != IGAppManager.sharedManager.userID() && !room.isReadOnly { // check isReadOnly for iGapMessanger
+            let callViewLabel = UILabel()
+            callViewLabel.textColor = UIColor.white
+            callViewLabel.textAlignment = .center
+            callViewLabel.font = UIFont.iGapFontico(ofSize: 18.0)
+            callViewLabel.text = ""
+            callView.addSubview(callViewLabel)
+            callViewLabel.snp.makeConstraints { (make) in
+                make.centerX.equalTo(callView.snp.centerX)
+                make.centerY.equalTo(callView.snp.centerY)
+            }
+            
+            callView.addAction {
+                DispatchQueue.main.async {
+                    (UIApplication.shared.delegate as! AppDelegate).showCallPage(userId: userId, isIncommmingCall: false)
+                }
+            }
+        }
+        
         self.centerViewMainLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 18))
         self.centerViewMainLabel!.text = room.title
         self.centerViewMainLabel!.textColor = UIColor.white
@@ -394,7 +423,8 @@ class IGNavigationItem: UINavigationItem {
         self.centerViewContainer!.addSubview(self.centerViewMainLabel!)
         self.centerViewMainLabel!.snp.makeConstraints { (make) in
             make.top.equalTo(self.centerViewContainer!.snp.top).offset(0)
-            make.centerX.equalTo(self.centerViewContainer!.snp.centerX)
+            make.leading.equalTo(self.centerViewContainer!.snp.leading).offset(5).priority(.required)
+            make.width.lessThanOrEqualToSuperview()
         }
         
         self.centerViewSubLabel = UILabel()//frame: CGRect(x: 0, y: 20, width: 200, height: 16))
@@ -404,7 +434,7 @@ class IGNavigationItem: UINavigationItem {
         self.centerViewContainer!.addSubview(self.centerViewSubLabel!)
         self.centerViewSubLabel!.snp.makeConstraints { (make) in
             make.top.equalTo(self.centerViewMainLabel!.snp.bottom).offset(3)
-            make.centerX.equalTo(self.centerViewContainer!.snp.centerX)
+            make.leading.equalTo(self.centerViewContainer!.snp.leading).offset(5)
         }
         
         if room.mute == .mute {
@@ -431,7 +461,6 @@ class IGNavigationItem: UINavigationItem {
         } else if let channelRoom = room.channelRoom {
             self.centerViewSubLabel!.text = "\(channelRoom.participantCount) member\(channelRoom.participantCount>1 ? "s" : "")"
         }
-        
     }
     
     private func setLastSeenLabelForUser(_ user: IGRegisteredUser , room : IGRoom) {

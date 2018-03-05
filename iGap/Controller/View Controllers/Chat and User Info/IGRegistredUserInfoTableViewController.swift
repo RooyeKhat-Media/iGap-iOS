@@ -74,7 +74,7 @@ class IGRegistredUserInfoTableViewController: UITableViewController , UIGestureR
         let navigaitonItem = self.navigationItem as! IGNavigationItem
         navigaitonItem.addNavigationViewItems(rightItemText: nil, title: "Contact Info")
         
-        if IGAppManager.sharedManager.userID() != user?.id && !(room?.isReadOnly)! {
+        if IGAppManager.sharedManager.userID() != user?.id && !(room?.isReadOnly)! && !IGCall.callPageIsEnable {
             navigaitonItem.addModalViewRightItem(title: "", iGapFont: true)
             navigaitonItem.rightViewContainer?.addAction {
                 let storyBoard = UIStoryboard(name: "Main" , bundle:nil)

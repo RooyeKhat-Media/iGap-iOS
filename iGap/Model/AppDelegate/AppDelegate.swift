@@ -124,11 +124,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     }
     
-    func showCallPage(userId: Int64){
+    func showCallPage(userId: Int64 , isIncommmingCall: Bool = true){
         let storyboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let callPage = storyboard.instantiateViewController(withIdentifier: "IGCallShowing") as! IGCall
         callPage.userId = userId
-        callPage.isIncommingCall = true
+        callPage.isIncommingCall = isIncommmingCall
         self.window?.rootViewController?.present(callPage, animated: true, completion: nil)
     }
     
