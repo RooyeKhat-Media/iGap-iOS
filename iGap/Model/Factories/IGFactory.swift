@@ -1541,6 +1541,40 @@ class IGFactory: NSObject {
         self.performNextFactoryTaskIfPossible()
     }
     
+    func setSignalingConfiguration(configuration: IGPSignalingGetConfigurationResponse) {
+        let task = IGFactoryTask()
+        
+        task.task = {
+            IGDatabaseManager.shared.perfrmOnDatabaseThread {
+                
+                try! IGDatabaseManager.shared.realm.write {
+                    if let signaling = IGDatabaseManager.shared.realm.objects(IGSignaling.self).first {
+                        signaling.voiceCalling = configuration.igpVoiceCalling
+                        signaling.videoCalling = configuration.igpVideoCalling
+                        signaling.secretChat = configuration.igpSecretChat
+                        signaling.screenSharing = configuration.igpScreenSharing
+                        
+                        for iceServer in configuration.igpIceServer {
+                            signaling.iceServer.append(IGIceServer(iceServer: iceServer))
+                        }
+                    } else {
+                         IGDatabaseManager.shared.realm.add(IGSignaling(signalingConfiguration: configuration))
+                    }
+                }
+                
+                IGFactory.shared.performInFactoryQueue {
+                    task.success!()
+                }
+            }
+        }
+        task.success {
+            self.removeTaskFromQueueAndPerformNext(task)
+            }.error {
+                self.removeTaskFromQueueAndPerformNext(task)
+            }.addToQueue()
+        self.performNextFactoryTaskIfPossible()
+    }
+    
     func setCallLog(callLog: IGPSignalingGetLogResponse.IGPSignalingLog) {
         let task = IGFactoryTask()
         

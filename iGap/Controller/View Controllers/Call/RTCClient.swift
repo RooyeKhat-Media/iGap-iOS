@@ -141,13 +141,21 @@ public class RTCClient: NSObject {
                     IGAppManager.iceServersStatic.append(RTCIceServer(urlStrings:[ice.url],username:ice.username,credential:ice.credential))
                 }
                 
-                self.iceServers = iceServers
+                self.iceServers = IGAppManager.iceServersStatic
                 self.configure()
             } else {
                 IGSignalingGetConfigurationRequest.Generator.generate().success({ (protoResponse) in
                     
-                    self.iceServers = iceServers
-                    self.configure()
+                    if let configurationResponse = protoResponse as? IGPSignalingGetConfigurationResponse {
+                        
+                        for ice in configurationResponse.igpIceServer {
+                            IGAppManager.iceServersStatic.append(RTCIceServer(urlStrings:[ice.igpURL],username:ice.igpUsername,credential:ice.igpCredential))
+                        }
+                        
+                        // TODO - Not Start Call From Here !?
+                        self.iceServers = IGAppManager.iceServersStatic
+                        self.configure()
+                    }
                     
                 }).error ({ (errorCode, waitTime) in
                     

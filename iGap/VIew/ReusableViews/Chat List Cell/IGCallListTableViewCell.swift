@@ -84,7 +84,7 @@ class IGCallListTableViewCell: UITableViewCell {
             
         case 2: //INCOMING
             callStateView.text = ""
-            callState.text = callLog.duration.convertToHumanReadable()
+            callState.text = convertDurationToHour(duration: callLog.duration)
             
             callStateView.textColor = UIColor.callStatusColor(status: 2)
             callState.textColor = UIColor.callStatusColor(status: 2)
@@ -92,7 +92,7 @@ class IGCallListTableViewCell: UITableViewCell {
             
         case 3: //OUTGOING
             callStateView.text = ""
-            callState.text = callLog.duration.convertToHumanReadable()
+            callState.text = convertDurationToHour(duration: callLog.duration)
             
             callStateView.textColor = UIColor.callStatusColor(status: 3)
             callState.textColor = UIColor.callStatusColor(status: 3)
@@ -101,6 +101,12 @@ class IGCallListTableViewCell: UITableViewCell {
         default:
             break
         }
+    }
+    
+    private func convertDurationToHour(duration: Int32) -> String{
+        let minute = String(format: "%02d", Int(duration / 60))
+        let seconds = String(format: "%02d", Int(duration % 60))
+        return minute+":"+seconds
     }
 }
 

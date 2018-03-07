@@ -77,10 +77,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         tabBarItemApperance.setTitleTextAttributes([NSForegroundColorAttributeName:UIColor.red], for: UIControlState.normal)
         tabBarItemApperance.setTitleTextAttributes([NSForegroundColorAttributeName:UIColor.white], for: UIControlState.selected)
         
-        
-        
         UserDefaults.standard.setValue(false, forKey:"_UIConstraintBasedLayoutLogUnsatisfiable")
-        print("SSS \(Realm.Configuration.defaultConfiguration.fileURL!)")
 
         return true
     }

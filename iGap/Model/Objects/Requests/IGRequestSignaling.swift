@@ -24,7 +24,7 @@ class IGSignalingGetConfigurationRequest : IGRequest {
 
     class Handler : IGRequest.Handler{
         class func interpret(response reponseProtoMessage:IGPSignalingGetConfigurationResponse) {
-            IGSignaling(signalingConfiguration: reponseProtoMessage)
+            IGFactory.shared.setSignalingConfiguration(configuration: reponseProtoMessage)
             for ice in reponseProtoMessage.igpIceServer {
                 IGAppManager.iceServersStatic.append(RTCIceServer(urlStrings:[ice.igpURL],username:ice.igpUsername,credential:ice.igpCredential))
             }

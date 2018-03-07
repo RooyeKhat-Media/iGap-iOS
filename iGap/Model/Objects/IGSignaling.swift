@@ -56,7 +56,7 @@ class IGRealmCallLog: Object {
     @objc dynamic var status             : Int = 0
     @objc dynamic var registeredUser     : IGRegisteredUser!
     @objc dynamic var offerTime          : Date!
-    @objc dynamic var duration           : Date!
+    @objc dynamic var duration           : Int32 = 0
     
     convenience init(signalingLog: IGPSignalingGetLogResponse.IGPSignalingLog) {
         self.init()
@@ -65,7 +65,7 @@ class IGRealmCallLog: Object {
         self.signalingOfferType = signalingLog.igpType.rawValue
         self.status = signalingLog.igpStatus.rawValue
         self.offerTime = Date(timeIntervalSince1970: TimeInterval(signalingLog.igpOfferTime))
-        self.duration = Date(timeIntervalSinceNow: TimeInterval(signalingLog.igpDuration))
+        self.duration = signalingLog.igpDuration
         
         let predicate = NSPredicate(format: "id = %lld", signalingLog.igpPeer.igpID)
         let realm = try! Realm()

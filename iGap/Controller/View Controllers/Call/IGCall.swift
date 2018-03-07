@@ -11,6 +11,7 @@
 import UIKit
 import RealmSwift
 import AVFoundation
+import IGProtoBuff
 import SnapKit
 
 class IGCall: UIViewController, CallStateObserver, ReturnToCallObserver {
@@ -395,7 +396,13 @@ class IGCall: UIViewController, CallStateObserver, ReturnToCallObserver {
     }
     
     private func getLatestCallLog(){
-        IGSignalingGetLogRequest.Generator.generate(offset: Int32(0), limit: 1).success { (responseProtoMessage) in }.error({ (errorCode, waitTime) in
+        IGSignalingGetLogRequest.Generator.generate(offset: Int32(0), limit: 1).success { (responseProtoMessage) in
+            
+            if let logResponse = responseProtoMessage as? IGPSignalingGetLogResponse {
+                IGSignalingGetLogRequest.Handler.interpret(response: logResponse)
+            }
+            
+            }.error({ (errorCode, waitTime) in
                 switch errorCode {
                 case .timeout:
                     self.getLatestCallLog()

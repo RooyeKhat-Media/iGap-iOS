@@ -66,7 +66,12 @@ class IGRecentsTableViewController: UITableViewController {
                         let hud = MBProgressHUD.showAdded(to: self.view, animated: true)
                         hud.mode = .indeterminate
                         
-                        IGSignalingClearLogRequest.Generator.generate(clearId: userId).success({ (protoResponse) in
+                        let sortProperties = [SortDescriptor(keyPath: "offerTime", ascending: false)]
+                        guard let clearId = try! Realm().objects(IGRealmCallLog.self).sorted(by: sortProperties).first?.id else {
+                            return
+                        }
+                        
+                        IGSignalingClearLogRequest.Generator.generate(clearId: clearId).success({ (protoResponse) in
                             DispatchQueue.main.async {
                                 if let clearLogResponse = protoResponse as? IGPSignalingClearLogResponse {
                                     IGSignalingClearLogRequest.Handler.interpret(response: clearLogResponse)
