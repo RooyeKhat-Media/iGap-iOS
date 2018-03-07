@@ -136,7 +136,7 @@ class IGRecentsTableViewController: UITableViewController {
                     }).send()
                 }
             })
-            let newChat = UIAlertAction(title: "New Conversation", style: .default, handler: { (action) in
+            let newChat = UIAlertAction(title: "New (Conversation OR Call)", style: .default, handler: { (action) in
                 self.performSegue(withIdentifier: "createANewChat", sender: self)
             })
             let newGroup = UIAlertAction(title: "New Group", style: .default, handler: { (action) in

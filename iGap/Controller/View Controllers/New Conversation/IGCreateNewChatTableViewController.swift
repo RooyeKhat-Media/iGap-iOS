@@ -15,7 +15,7 @@ import IGProtoBuff
 import MBProgressHUD
 
 
-class IGCreateNewChatTableViewController: UITableViewController, UISearchResultsUpdating , UIGestureRecognizerDelegate {
+class IGCreateNewChatTableViewController: UITableViewController, UISearchResultsUpdating , UIGestureRecognizerDelegate, IGCallFromContactListObserver {
     
     class User: NSObject {
         let registredUser: IGRegisteredUser
@@ -35,6 +35,8 @@ class IGCreateNewChatTableViewController: UITableViewController, UISearchResults
     }
     
     @IBOutlet weak var AddContactButton: UIBarButtonItem!
+    
+    internal static var callDelegate: IGCallFromContactListObserver!
     
     var contacts = try! Realm().objects(IGRegisteredUser.self).filter("isInContacts == 1")
     
@@ -70,6 +72,9 @@ class IGCreateNewChatTableViewController: UITableViewController, UISearchResults
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        IGCreateNewChatTableViewController.callDelegate = self
+        
         let navigationItem = self.navigationItem as! IGNavigationItem
         navigationItem.addModalViewItems(leftItemText: "Close", rightItemText: nil, title: "New Conversation")
         navigationItem.navigationController = self.navigationController as! IGNavigationController
@@ -165,6 +170,13 @@ class IGCreateNewChatTableViewController: UITableViewController, UISearchResults
 //        return self.collation.section(forSectionIndexTitle: index - 1)
     }
     
+    func call(user: IGRegisteredUser) {
+        self.dismiss(animated: false, completion: {
+            DispatchQueue.main.async {
+                (UIApplication.shared.delegate as! AppDelegate).showCallPage(userId: user.id, isIncommmingCall: false)
+            }
+        })
+    }
     
     func predicateForContacts(matchingName name: String) -> NSPredicate{
         return predicateForContacts(matchingName: self.resultSearchController.searchBar.text!)

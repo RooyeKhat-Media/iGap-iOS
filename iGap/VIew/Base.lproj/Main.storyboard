@@ -647,7 +647,7 @@ Please wait 0:59</string>
                         <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <view key="tableHeaderView" contentMode="scaleToFill" misplaced="YES" id="V8S-0G-tEw">
+                        <view key="tableHeaderView" contentMode="scaleToFill" id="V8S-0G-tEw">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="5"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1546,7 +1546,7 @@ Please wait 0:59</string>
                         <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <view key="tableHeaderView" contentMode="scaleToFill" misplaced="YES" id="jnE-JQ-jrQ">
+                        <view key="tableHeaderView" contentMode="scaleToFill" id="jnE-JQ-jrQ">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="5"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -2311,6 +2311,7 @@ Cg
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
+                                    <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <constraints>
                                         <constraint firstItem="zTM-BS-IOd" firstAttribute="leading" secondItem="Gii-kY-gp0" secondAttribute="leading" constant="15" id="1fU-XQ-67w"/>
                                         <constraint firstItem="4ZF-45-AqG" firstAttribute="top" secondItem="Gii-kY-gp0" secondAttribute="topMargin" constant="4" id="1hV-Z5-4Qe"/>
@@ -2347,11 +2348,28 @@ Cg
                                                 <constraint firstAttribute="height" constant="30" id="pvY-Y0-AvS"/>
                                             </constraints>
                                         </view>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="djM-mu-Rwb">
+                                            <rect key="frame" x="315" y="3" width="50" height="40"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="50" id="MTQ-BR-bQz"/>
+                                                <constraint firstAttribute="height" constant="40" id="txa-wv-geQ"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" name="iGap-Fontico" family="iGap-Fontico" pointSize="17"/>
+                                            <state key="normal" title="">
+                                                <color key="titleColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="btnCall:" destination="Uh4-p5-byK" eventType="touchUpInside" id="pMl-sG-4K1"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
+                                    <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="djM-mu-Rwb" secondAttribute="trailing" constant="10" id="01u-oP-Mh7"/>
                                         <constraint firstItem="5tJ-ZV-UN1" firstAttribute="leading" secondItem="Dc4-6z-Rw9" secondAttribute="leading" constant="53" id="CSE-uv-X7u"/>
                                         <constraint firstItem="TyJ-Ia-nry" firstAttribute="centerY" secondItem="Dc4-6z-Rw9" secondAttribute="centerY" id="OnE-3F-edL"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="5tJ-ZV-UN1" secondAttribute="bottom" constant="2" id="UYV-ZH-XHA"/>
+                                        <constraint firstItem="djM-mu-Rwb" firstAttribute="centerY" secondItem="5tJ-ZV-UN1" secondAttribute="centerY" id="iqi-VC-Mfj"/>
                                         <constraint firstItem="TyJ-Ia-nry" firstAttribute="leading" secondItem="Dc4-6z-Rw9" secondAttribute="leading" constant="15" id="tQ6-72-yuy"/>
                                         <constraint firstItem="5tJ-ZV-UN1" firstAttribute="top" secondItem="Dc4-6z-Rw9" secondAttribute="topMargin" constant="4" id="vFB-gD-4FK"/>
                                     </constraints>

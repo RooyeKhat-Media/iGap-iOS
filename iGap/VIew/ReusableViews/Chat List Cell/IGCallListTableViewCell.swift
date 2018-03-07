@@ -58,7 +58,7 @@ class IGCallListTableViewCell: UITableViewCell {
         }
         
         contactName.text = user?.displayName
-        offerTime.text = callLog.offerTime.convertToHumanReadable()
+        offerTime.text = callLog.offerTime.completeHumanReadableTime()
         
         setState(callLog: callLog)
     }

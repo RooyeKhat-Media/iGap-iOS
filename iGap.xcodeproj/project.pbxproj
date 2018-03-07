@@ -277,6 +277,7 @@
 		FAEE8D8F1E30ABA100599600 /* IGClientCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAEE8D8E1E30ABA100599600 /* IGClientCondition.swift */; };
 		FAEEB0C11E1BC04E00B6775F /* IGContactManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAEEB0C01E1BC04E00B6775F /* IGContactManager.swift */; };
 		FAEEB0C31E1BC11600B6775F /* IGContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAEEB0C21E1BC11600B6775F /* IGContact.swift */; };
+		FAF45932205021AF005E0539 /* IGCallFromContactListObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF45931205021AF005E0539 /* IGCallFromContactListObserver.swift */; };
 		FAF5D2E71F8D81A900A26EE1 /* SwiftProtobuf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAF5D2E61F8D81A600A26EE1 /* SwiftProtobuf.framework */; };
 		FAF78EAD1E2EA77700C6F523 /* DBAttachmentPickerControllerLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAF78EAC1E2EA77700C6F523 /* DBAttachmentPickerControllerLibrary.framework */; };
 		FAF796051DAA392F0030509B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FAF796001DAA392F0030509B /* Assets.xcassets */; };
@@ -585,6 +586,7 @@
 		FAEE8D8E1E30ABA100599600 /* IGClientCondition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGClientCondition.swift; sourceTree = "<group>"; };
 		FAEEB0C01E1BC04E00B6775F /* IGContactManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGContactManager.swift; sourceTree = "<group>"; };
 		FAEEB0C21E1BC11600B6775F /* IGContact.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGContact.swift; sourceTree = "<group>"; };
+		FAF45931205021AF005E0539 /* IGCallFromContactListObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGCallFromContactListObserver.swift; sourceTree = "<group>"; };
 		FAF5D2E61F8D81A600A26EE1 /* SwiftProtobuf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftProtobuf.framework; path = Carthage/Build/iOS/SwiftProtobuf.framework; sourceTree = "<group>"; };
 		FAF78EAC1E2EA77700C6F523 /* DBAttachmentPickerControllerLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DBAttachmentPickerControllerLibrary.framework; path = Carthage/Build/iOS/DBAttachmentPickerControllerLibrary.framework; sourceTree = "<group>"; };
 		FAF795EA1DAA330C0030509B /* iGap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iGap.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -698,6 +700,7 @@
 				FAC5B68F204C08580018E017 /* ReturnToCallObserver.swift */,
 				FA899B6E2046DFC8001A33CB /* CallStateObserver.swift */,
 				FA98F837204D37670070424E /* IGCallQuality.swift */,
+				FAF45931205021AF005E0539 /* IGCallFromContactListObserver.swift */,
 			);
 			path = Call;
 			sourceTree = "<group>";
@@ -1582,6 +1585,7 @@
 				FA0953611E1B97700043ED3F /* IGSettingContactsTableViewController.swift in Sources */,
 				FAC34DB41E1A3F7E00BB9823 /* IGRealm.swift in Sources */,
 				FA42EF0A1E5C224F00CF8A32 /* FrameStore.swift in Sources */,
+				FAF45932205021AF005E0539 /* IGCallFromContactListObserver.swift in Sources */,
 				FA0CC8091E5D7D4400556283 /* ActiveType.swift in Sources */,
 				FAD530621E0BD80800FE6C54 /* IGNavigationBar.swift in Sources */,
 				FAD959071F48D4EF00FBD306 /* IGSettingQrScannerViewController.swift in Sources */,

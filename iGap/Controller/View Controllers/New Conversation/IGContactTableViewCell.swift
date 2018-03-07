@@ -11,7 +11,8 @@
 import UIKit
 
 class IGContactTableViewCell: UITableViewCell {
-
+    
+    var userRegister : IGRegisteredUser!
     
     @IBOutlet weak var userAvatarView: IGAvatarView!
     @IBOutlet weak var contactNameLable: UILabel!
@@ -27,5 +28,13 @@ class IGContactTableViewCell: UITableViewCell {
     func setUser(_ user: IGRegisteredUser) {
         contactNameLable.text = user.displayName
         userAvatarView.setUser(user)
+        self.userRegister = user
+    }
+    
+    @IBAction func btnCall(_ sender: UIButton) {
+        
+        if let delegate = IGCreateNewChatTableViewController.callDelegate {
+            delegate.call(user: userRegister)
+        }
     }
 }
