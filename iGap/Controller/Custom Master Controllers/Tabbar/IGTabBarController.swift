@@ -12,6 +12,16 @@ import UIKit
 
 class IGTabBarController: UITabBarController {
     
+    enum CurrentTab {
+        case Recent
+        case Chat
+        case Group
+        case Channel
+        case Call
+    }
+    
+    internal static var currentTabStatic: CurrentTab = .Recent
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tabBar.barTintColor = UIColor.organizationalColor()
@@ -33,6 +43,7 @@ class IGTabBarController: UITabBarController {
     func selectedItemTitleMustbeBold(){
         for item in tabBar.items!{
             if tabBar.selectedItem == item {
+                setCurrentTab(tag: (tabBar.selectedItem?.tag)!)
                 let selectedTitleFont = UIFont.systemFont(ofSize: 9, weight: UIFontWeightBold)
                 let selectedTitleColor = UIColor.white
                 item.setTitleTextAttributes([NSFontAttributeName: selectedTitleFont, NSForegroundColorAttributeName: selectedTitleColor], for: UIControlState.normal)
@@ -42,6 +53,34 @@ class IGTabBarController: UITabBarController {
                 item.setTitleTextAttributes([NSFontAttributeName: normalTitleFont, NSForegroundColorAttributeName: normalTitleColor], for: UIControlState.normal)
             }
         }
+    }
+    
+    private func setCurrentTab(tag: Int){
+        switch tag {
+            
+        case 0:
+            IGTabBarController.currentTabStatic = .Recent
+            return
+            
+        case 1:
+            IGTabBarController.currentTabStatic = .Chat
+            return
+            
+        case 2:
+            IGTabBarController.currentTabStatic = .Group
+            return
+            
+        case 3:
+            IGTabBarController.currentTabStatic = .Channel
+            return
         
+        case 4:
+            IGTabBarController.currentTabStatic = .Call
+            return
+            
+        default:
+            IGTabBarController.currentTabStatic = .Recent
+            return
+        }
     }
 }

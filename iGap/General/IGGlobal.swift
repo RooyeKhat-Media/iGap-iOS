@@ -82,6 +82,29 @@ extension UIColor {
         return UIColor(red: 44.0/255.0, green: 170/255.0, blue: 163.0/255.0, alpha: 1.0)
     }
     
+    //MARK: Call State Colors
+    class func callStatusColor(status: Int) -> UIColor {
+        
+        switch status {
+            
+        case 0: //MISSED
+            return UIColor(red: 242.0/255.0, green: 49.0/255.0, blue: 49.0/255.0, alpha: 1.0)
+            
+        case 1: //CANCELED
+            return UIColor(red: 0.0/255.0, green: 176/255.0, blue: 191.0/255.0, alpha: 1.0)
+            
+        case 2: //INCOMING
+            return UIColor(red: 63.0/255.0, green: 81.0/255.0, blue: 181.0/255.0, alpha: 1.0)
+            
+        case 3: //OUTGOING
+            return UIColor(red: 0.0/255.0, green: 176/255.0, blue: 191.0/255.0, alpha: 1.0)
+            
+        default:
+            return UIColor(red: 0.0/255.0, green: 176/255.0, blue: 191.0/255.0, alpha: 1.0)
+        }
+        
+    }
+    
     //MARK: MessageCVCell Bubble
     class func outgoingChatBuubleBackgroundColor() -> UIColor {
         return UIColor(red: 247.0/255.0, green: 247.0/255.0, blue: 247.0/255.0, alpha: 1.0)

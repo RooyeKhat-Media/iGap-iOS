@@ -1002,7 +1002,6 @@ Please wait 0:59</string>
                         <outlet property="txtiGap" destination="fFu-Of-z9o" id="esE-h0-fzo"/>
                         <outlet property="viewTransparent" destination="32k-QA-fx6" id="Cza-Ee-Yn3"/>
                         <segue destination="CFP-Hu-weJ" kind="presentation" identifier="showRoomMessages" id="QJB-pO-R8A"/>
-                        <segue destination="oI0-sa-N4L" kind="show" identifier="showCallQuality" id="CRe-WK-aXn"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GDr-R3-fmZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1431,7 +1430,7 @@ Please wait 0:59</string>
                         <segue destination="lnn-LO-l7t" kind="relationship" relationship="viewControllers" id="CKs-ZR-Hfw"/>
                         <segue destination="XTU-9B-zWi" kind="relationship" relationship="viewControllers" id="4mB-0X-6CE"/>
                         <segue destination="ZlR-QV-eEC" kind="relationship" relationship="viewControllers" id="CPP-s5-buA"/>
-                        <segue destination="ZIS-sC-LPY" kind="relationship" relationship="viewControllers" id="Wse-hq-uy1"/>
+                        <segue destination="A1t-3N-bJQ" kind="relationship" relationship="viewControllers" id="Xcb-xq-sDT"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lET-3R-lG0" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1466,7 +1465,7 @@ Please wait 0:59</string>
                             <outlet property="delegate" destination="lnn-LO-l7t" id="FYQ-bx-fPF"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" title="Chat" image="IG_Tabbar_Chat_Off" selectedImage="IG_Tabbar_Chat_On" id="XT3-ee-7Kk">
+                    <tabBarItem key="tabBarItem" tag="1" title="Chat" image="IG_Tabbar_Chat_Off" selectedImage="IG_Tabbar_Chat_On" id="XT3-ee-7Kk">
                         <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="-4"/>
                     </tabBarItem>
                     <navigationItem key="navigationItem" title="Chats" id="O9t-Iy-ktM"/>
@@ -1526,7 +1525,7 @@ Please wait 0:59</string>
                             <outlet property="delegate" destination="XTU-9B-zWi" id="4bf-Rf-bJE"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" title="Group Chat" image="IG_Tabbar_Group_Off" selectedImage="IG_Tabbar_Group_On" id="Q4u-T1-NQz">
+                    <tabBarItem key="tabBarItem" tag="2" title="Group Chat" image="IG_Tabbar_Group_Off" selectedImage="IG_Tabbar_Group_On" id="Q4u-T1-NQz">
                         <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="-4"/>
                     </tabBarItem>
                     <navigationItem key="navigationItem" title="Groups" id="lxH-uI-Dp1"/>
@@ -1581,25 +1580,36 @@ Please wait 0:59</string>
             <point key="canvasLocation" x="527" y="-1950"/>
         </scene>
         <!--Call-->
-        <scene sceneID="mJT-cS-hqO">
+        <scene sceneID="koA-SO-dk7">
             <objects>
-                <viewController id="ZIS-sC-LPY" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="BhQ-HB-BQ6"/>
-                        <viewControllerLayoutGuide type="bottom" id="9B3-C0-a6q"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="Zrf-Km-2f0">
+                <tableViewController id="A1t-3N-bJQ" customClass="IGCallsTableViewController" customModule="iGap" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="OxV-Wv-eBa">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" tag="4" enabled="NO" title="Call" image="IG_Tabbar_Call_Off" selectedImage="IG_Tabbar_Call_On" id="DWZ-O2-HJw">
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="rfh-bM-Tni">
+                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="rfh-bM-Tni" id="TQt-49-JBH">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="A1t-3N-bJQ" id="suO-g5-IoN"/>
+                            <outlet property="delegate" destination="A1t-3N-bJQ" id="aVG-Q6-WUL"/>
+                        </connections>
+                    </tableView>
+                    <tabBarItem key="tabBarItem" tag="4" title="Call" image="IG_Tabbar_Call_Off" selectedImage="IG_Tabbar_Call_On" id="oqI-zk-FQV">
                         <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="-4"/>
                     </tabBarItem>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="hUA-NB-Trc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                    <navigationItem key="navigationItem" title="Call" id="ata-Zx-iH3"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5hN-bq-gbN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="543" y="-1077"/>
+            <point key="canvasLocation" x="534" y="-1182"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="t50-Ay-Bx2">
@@ -5358,7 +5368,7 @@ Cg
         <image name="IG_Tabbar_Recent_On" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="jRj-hY-oEr"/>
+        <segue reference="k9M-cr-cw2"/>
         <segue reference="Z1Q-fW-ByF"/>
         <segue reference="k1z-sz-mLi"/>
         <segue reference="xjE-gJ-o8r"/>

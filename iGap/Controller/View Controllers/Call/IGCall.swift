@@ -371,6 +371,10 @@ class IGCall: UIViewController, CallStateObserver, ReturnToCallObserver {
             sendLeaveCall()
         }
         
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+            self.getLatestCallLog()
+        }
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.dismiss(animated: true, completion: nil)
             self.dismiss(animated: true, completion: nil)
@@ -388,6 +392,18 @@ class IGCall: UIViewController, CallStateObserver, ReturnToCallObserver {
                 break
             }
         }).send()
+    }
+    
+    private func getLatestCallLog(){
+        IGSignalingGetLogRequest.Generator.generate(offset: Int32(0), limit: 1).success { (responseProtoMessage) in }.error({ (errorCode, waitTime) in
+                switch errorCode {
+                case .timeout:
+                    self.getLatestCallLog()
+                    break
+                default:
+                    break
+                }
+            }).send()
     }
     
     

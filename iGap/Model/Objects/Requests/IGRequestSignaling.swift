@@ -246,20 +246,29 @@ class IGSignalingSessionHoldRequest : IGRequest {
 
 class IGSignalingGetLogRequest : IGRequest {
     class Generator : IGRequest.Generator{
-        class func generate() -> IGRequestWrapper {
-            return IGRequestWrapper(message: IGPSignalingGetLog(), actionID: 907)
+        class func generate(offset: Int32, limit: Int32) -> IGRequestWrapper {
+            var signalingGetLog = IGPSignalingGetLog()
+            var pagination = IGPPagination()
+            pagination.igpLimit = limit
+            pagination.igpOffset = offset
+            signalingGetLog.igpPagination = pagination
+            return IGRequestWrapper(message: signalingGetLog, actionID: 907)
         }
     }
-
+    
     class Handler : IGRequest.Handler{
-        class func interpret(response reponseProtoMessage:IGPSignalingGetLogResponse)  {}
-
+        class func interpret(response reponseProtoMessage:IGPSignalingGetLogResponse) -> Int {
+            
+            for callLog in reponseProtoMessage.igpSignalingLog {
+                IGFactory.shared.setCallLog(callLog: callLog)
+            }
+            
+            return reponseProtoMessage.igpSignalingLog.count
+        }
+        
         override class func handlePush(responseProtoMessage: Message) {
-            switch responseProtoMessage {
-            case let getLogProtoResponse as IGPSignalingGetLogResponse:
-                self.interpret(response: getLogProtoResponse)
-            default:
-                break
+            if let callLogResponse = responseProtoMessage as? IGPSignalingGetLogResponse {
+                self.interpret(response: callLogResponse)
             }
         }
     }
@@ -276,7 +285,9 @@ class IGSignalingClearLogRequest : IGRequest {
     }
 
     class Handler : IGRequest.Handler{
-        class func interpret(response reponseProtoMessage:IGPSignalingClearLogResponse)  {}
+        class func interpret(response reponseProtoMessage:IGPSignalingClearLogResponse)  {
+            IGFactory.shared.clearCallLog()
+        }
 
         override class func handlePush(responseProtoMessage: Message) {
             switch responseProtoMessage {

@@ -269,6 +269,7 @@
 		FAD959051F48AD8600FBD306 /* MTBBarcodeScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = FAD959041F48AD8600FBD306 /* MTBBarcodeScanner.m */; };
 		FAD959071F48D4EF00FBD306 /* IGSettingQrScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD959061F48D4EF00FBD306 /* IGSettingQrScannerViewController.swift */; };
 		FADE97B31DF2DBF100FF714A /* IGMusicPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADE97B21DF2DBF100FF714A /* IGMusicPlayer.swift */; };
+		FAE11243204E96FA009F402B /* IGCallsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE11242204E96FA009F402B /* IGCallsTableViewController.swift */; };
 		FAEA75D91DDAFFA200C387F1 /* IGRoomMessageLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAEA75D81DDAFFA200C387F1 /* IGRoomMessageLocation.swift */; };
 		FAEA75DB1DDB012800C387F1 /* IGRoomMessageLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAEA75DA1DDB012800C387F1 /* IGRoomMessageLog.swift */; };
 		FAEA75DD1DDB035400C387F1 /* IGRoomMessageContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAEA75DC1DDB035400C387F1 /* IGRoomMessageContact.swift */; };
@@ -301,6 +302,8 @@
 		FAF985B01E2E10EC00B26940 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAF985991E2E10EC00B26940 /* RxSwift.framework */; };
 		FAF985B21E2E10EC00B26940 /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAF9859B1E2E10EC00B26940 /* SnapKit.framework */; };
 		FAF985B51E2E10EC00B26940 /* SwiftyRSA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAF9859E1E2E10EC00B26940 /* SwiftyRSA.framework */; };
+		FAFDB3B4204EBC770022D183 /* IGCallListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE11244204E9813009F402B /* IGCallListTableViewCell.swift */; };
+		FAFDB3B6204EBCCA0022D183 /* IGCallListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FAE11246204E982D009F402B /* IGCallListTableViewCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -572,6 +575,9 @@
 		FAD959041F48AD8600FBD306 /* MTBBarcodeScanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTBBarcodeScanner.m; sourceTree = "<group>"; };
 		FAD959061F48D4EF00FBD306 /* IGSettingQrScannerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGSettingQrScannerViewController.swift; sourceTree = "<group>"; };
 		FADE97B21DF2DBF100FF714A /* IGMusicPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGMusicPlayer.swift; sourceTree = "<group>"; };
+		FAE11242204E96FA009F402B /* IGCallsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGCallsTableViewController.swift; sourceTree = "<group>"; };
+		FAE11244204E9813009F402B /* IGCallListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGCallListTableViewCell.swift; sourceTree = "<group>"; };
+		FAE11246204E982D009F402B /* IGCallListTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = IGCallListTableViewCell.xib; sourceTree = "<group>"; };
 		FAEA75D81DDAFFA200C387F1 /* IGRoomMessageLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGRoomMessageLocation.swift; sourceTree = "<group>"; };
 		FAEA75DA1DDB012800C387F1 /* IGRoomMessageLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGRoomMessageLog.swift; sourceTree = "<group>"; };
 		FAEA75DC1DDB035400C387F1 /* IGRoomMessageContact.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGRoomMessageContact.swift; sourceTree = "<group>"; };
@@ -950,6 +956,8 @@
 			children = (
 				FA5EC5D81E06728C006E2850 /* IGChatRoomListTableViewCell.swift */,
 				FA5EC5D91E06728C006E2850 /* IGChatRoomListTableViewCell.xib */,
+				FAE11244204E9813009F402B /* IGCallListTableViewCell.swift */,
+				FAE11246204E982D009F402B /* IGCallListTableViewCell.xib */,
 			);
 			path = "Chat List Cell";
 			sourceTree = "<group>";
@@ -1016,6 +1024,7 @@
 				FA358D1D1E0A6F49001D0935 /* IGChatsTableViewController.swift */,
 				FA358D1F1E0A6F6A001D0935 /* IGGroupsTableViewController.swift */,
 				FA358D211E0A6F76001D0935 /* IGChannelsTableViewController.swift */,
+				FAE11242204E96FA009F402B /* IGCallsTableViewController.swift */,
 			);
 			path = "Tabbar Sub Controllers";
 			sourceTree = "<group>";
@@ -1465,6 +1474,7 @@
 				FA33063B1F445AE80096031A /* IRANSans_Bold.ttf in Resources */,
 				FA5656BD204AB18F00DB46F0 /* igap_connect.mp3 in Resources */,
 				FA3306361F445A570096031A /* IRANSans.ttf in Resources */,
+				FAFDB3B6204EBCCA0022D183 /* IGCallListTableViewCell.xib in Resources */,
 				FA927E02202841C900DF7145 /* VideoCell.xib in Resources */,
 				FAF7960A1DAA39460030509B /* Info.plist in Resources */,
 				FA4BD8A41DF2A53400CCB239 /* IGMusicViewController.xib in Resources */,
@@ -1585,6 +1595,7 @@
 				FA8F22581DD89F7C005A90D1 /* IGAvatar.swift in Sources */,
 				93193F321E5813030039AC0C /* IGGroupInfoMemberListTableViewCell.swift in Sources */,
 				FA0953401E1B97700043ED3F /* IGAccountTableViewController.swift in Sources */,
+				FAE11243204E96FA009F402B /* IGCallsTableViewController.swift in Sources */,
 				FA09536A1E1B97700043ED3F /* IGSettingPrivacyAndSecurityActiveSessionMoreDetailsTableViewCell.swift in Sources */,
 				93193F341E5813620039AC0C /* IGGroupMemberListInvitedLinkTableViewCell.swift in Sources */,
 				FA03C1A52042AD44008812E3 /* IGSignaling.swift in Sources */,
@@ -1783,6 +1794,7 @@
 				93321E7C1E5C12A3004D4454 /* IGForwardContactsTableViewCell.swift in Sources */,
 				FA0CC8121E5DD99400556283 /* Thread.swift in Sources */,
 				FA50A8CD1DD35EFD00C6D2EA /* IGRegistrationStepPhoneViewController.swift in Sources */,
+				FAFDB3B4204EBC770022D183 /* IGCallListTableViewCell.swift in Sources */,
 				FAA9DFB01F4B1B330076A22F /* IGSettingPrivacyAndSecurityTwoStepVerificationSetTwoStepVerificationTableViewController.swift in Sources */,
 				FA8F224E1DD89AC5005A90D1 /* IGRoomMessage.swift in Sources */,
 				FA0953871E1B97E20043ED3F /* IGCreateNewChannelTableViewController.swift in Sources */,

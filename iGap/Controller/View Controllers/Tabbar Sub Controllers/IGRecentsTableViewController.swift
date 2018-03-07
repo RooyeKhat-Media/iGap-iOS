@@ -57,8 +57,47 @@ class IGRecentsTableViewController: UITableViewController {
         let navigationItem = self.tabBarController?.navigationItem as! IGNavigationItem
         navigationItem.setChatListsNavigationItems()
         navigationItem.rightViewContainer?.addAction {
-            
-           // self.performSegue(withIdentifier: "createANewChat", sender: self)
+
+            if IGTabBarController.currentTabStatic == .Call {
+             
+                let alertController = UIAlertController(title: "Clear Call History", message: "Are you sure you want to clear all incoming and outgoing calls?", preferredStyle: .actionSheet)
+                let clearCallLog = UIAlertAction(title: "Clear", style: .default, handler: { (action) in
+                    if let userId = IGAppManager.sharedManager.userID() {
+                        let hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+                        hud.mode = .indeterminate
+                        
+                        IGSignalingClearLogRequest.Generator.generate(clearId: userId).success({ (protoResponse) in
+                            DispatchQueue.main.async {
+                                if let clearLogResponse = protoResponse as? IGPSignalingClearLogResponse {
+                                    IGSignalingClearLogRequest.Handler.interpret(response: clearLogResponse)
+                                    hud.hide(animated: true)
+                                }
+                            }
+                        }).error({ (errorCode, waitTime) in
+                            DispatchQueue.main.async {
+                                switch errorCode {
+                                case .timeout:
+                                    let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                                    alert.addAction(okAction)
+                                    self.present(alert, animated: true, completion: nil)
+                                default:
+                                    break
+                                }
+                                self.hud.hide(animated: true)
+                            }
+                        }).send()
+                    }
+                })
+                
+                let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                
+                alertController.addAction(clearCallLog)
+                alertController.addAction(cancel)
+                
+                self.present(alertController, animated: true, completion: nil)
+                return
+            }
             
             let alertController = UIAlertController(title: "New Message", message: "Which type of conversation would you like to initiate?", preferredStyle: .actionSheet)
             let myCloud = UIAlertAction(title: "My Cloud", style: .default, handler: { (action) in

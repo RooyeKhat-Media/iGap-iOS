@@ -31,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        
 //        _ = try! Realm()
         let config = Realm.Configuration(
-            schemaVersion: 9,
+            schemaVersion: 10,
             
             // Set the block which will be called automatically when opening a Realm with
             // a schema version lower than the one set above
@@ -57,6 +57,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     //version 0.1.5 build 449
                 } else if (oldSchemaVersion < 9) {
                     //version 0.2.0 build 452
+                } else if (oldSchemaVersion < 10) {
+                    //version 0.2.1 build 453
                 }
         })
         Realm.Configuration.defaultConfiguration = config
@@ -78,7 +80,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         
         UserDefaults.standard.setValue(false, forKey:"_UIConstraintBasedLayoutLogUnsatisfiable")
-        
+        print("SSS \(Realm.Configuration.defaultConfiguration.fileURL!)")
+
         return true
     }
     
