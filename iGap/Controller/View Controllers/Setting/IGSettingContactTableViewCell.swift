@@ -15,6 +15,8 @@ class IGSettingContactTableViewCell: UITableViewCell {
     @IBOutlet weak var userAvatarView: IGAvatarView!
     @IBOutlet weak var contactNameLable: UILabel!
     @IBOutlet weak var lastSeenStatusLabel: UILabel!
+    
+    var registeredUser: IGRegisteredUser!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -25,7 +27,22 @@ class IGSettingContactTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
     
+    @IBAction func btnCall(_ sender: UIButton) {
+        
+        if IGCall.callPageIsEnable {
+            return
+        }
+        
+        if let delegate = IGSettingContactsTableViewController.callDelegate {
+            delegate.call(user: registeredUser)
+        }
+        
+    }
+    
     func setUser(_ user: IGRegisteredUser) {
+        
+        self.registeredUser = user
+        
         contactNameLable.text = user.displayName
         userAvatarView.setUser(user)
         if user.isBlocked {

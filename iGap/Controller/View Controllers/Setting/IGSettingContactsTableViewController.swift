@@ -14,7 +14,7 @@ import RealmSwift
 import MBProgressHUD
 import IGProtoBuff
 
-class IGSettingContactsTableViewController: UITableViewController,UISearchResultsUpdating , UIGestureRecognizerDelegate {
+class IGSettingContactsTableViewController: UITableViewController,UISearchResultsUpdating , UIGestureRecognizerDelegate, IGCallFromContactListObserver {
     
     class User:NSObject {
         let registredUser: IGRegisteredUser
@@ -41,8 +41,13 @@ class IGSettingContactsTableViewController: UITableViewController,UISearchResult
     var resultSearchController = UISearchController()
     var hud = MBProgressHUD()
     
+    internal static var callDelegate: IGCallFromContactListObserver!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        IGSettingContactsTableViewController.callDelegate = self
+        
         setupSearchBar()
         self.tableView.sectionIndexBackgroundColor = UIColor.clear
         resultSearchController.searchBar.delegate = self
@@ -154,6 +159,14 @@ class IGSettingContactsTableViewController: UITableViewController,UISearchResult
         }
         self.contactSections = sections
         return self.contactSections!
+    }
+    
+    func call(user: IGRegisteredUser) {
+        self.dismiss(animated: false, completion: {
+            DispatchQueue.main.async {
+                (UIApplication.shared.delegate as! AppDelegate).showCallPage(userId: user.id, isIncommmingCall: false)
+            }
+        })
     }
     
     // MARK: - Table view data source

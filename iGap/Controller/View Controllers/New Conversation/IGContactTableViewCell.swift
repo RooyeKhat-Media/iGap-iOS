@@ -33,6 +33,10 @@ class IGContactTableViewCell: UITableViewCell {
     
     @IBAction func btnCall(_ sender: UIButton) {
         
+        if IGCall.callPageIsEnable {
+            return
+        }
+        
         if let delegate = IGCreateNewChatTableViewController.callDelegate {
             delegate.call(user: userRegister)
         }

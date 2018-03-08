@@ -1410,12 +1410,28 @@ To proceed, confirm that your new number can recieve SMS or calls and tap Next t
                                                 <constraint firstAttribute="width" constant="40" id="fEf-7d-k0q"/>
                                             </constraints>
                                         </view>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7nz-yi-dbc">
+                                            <rect key="frame" x="354" y="0.0" width="50" height="50"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="50" id="KMc-pH-sCU"/>
+                                                <constraint firstAttribute="height" constant="50" id="OuM-hb-zkI"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" name="iGap-Fontico" family="iGap-Fontico" pointSize="20"/>
+                                            <state key="normal" title="">
+                                                <color key="titleColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="btnCall:" destination="ue6-FI-qvU" eventType="touchUpInside" id="lBW-yv-esI"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="AfS-DV-hwR" firstAttribute="leading" secondItem="vzn-zu-Jl3" secondAttribute="trailing" constant="18" id="08N-MK-2SR"/>
+                                        <constraint firstAttribute="trailing" secondItem="7nz-yi-dbc" secondAttribute="trailing" constant="10" id="BJt-FK-eJ3"/>
                                         <constraint firstItem="fMq-Fl-71A" firstAttribute="bottom" secondItem="AfS-DV-hwR" secondAttribute="bottom" id="HoH-Gh-RgH"/>
                                         <constraint firstItem="Tbh-Uh-fyc" firstAttribute="leading" secondItem="vzn-zu-Jl3" secondAttribute="trailing" constant="18" id="IFM-CR-i8a"/>
                                         <constraint firstItem="fMq-Fl-71A" firstAttribute="leading" secondItem="AfS-DV-hwR" secondAttribute="trailing" constant="8" id="IfL-o0-L09"/>
+                                        <constraint firstItem="7nz-yi-dbc" firstAttribute="centerY" secondItem="vzn-zu-Jl3" secondAttribute="centerY" id="PO0-7N-2di"/>
                                         <constraint firstItem="AfS-DV-hwR" firstAttribute="top" secondItem="Bfj-Wm-it9" secondAttribute="topMargin" constant="-6" id="W2e-1X-CWc"/>
                                         <constraint firstItem="fMq-Fl-71A" firstAttribute="top" secondItem="AfS-DV-hwR" secondAttribute="top" id="bdO-RO-jko"/>
                                         <constraint firstItem="Tbh-Uh-fyc" firstAttribute="top" secondItem="AfS-DV-hwR" secondAttribute="bottom" constant="2" id="eDL-xD-us8"/>
@@ -5609,6 +5625,6 @@ Afg
         <segue reference="v4b-3a-R6D"/>
         <segue reference="Qum-5d-uYe"/>
         <segue reference="Xzv-Yc-EAf"/>
-        <segue reference="7wc-J4-g56"/>
+        <segue reference="FWu-Ni-6zD"/>
     </inferredMetricsTieBreakers>
 </document>
