@@ -631,7 +631,7 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
         
         if txtSenderNameAbs == nil {
             txtSenderNameAbs = UILabel()
-            txtSenderNameAbs.textColor = UIColor.senderNameColor()
+            txtSenderNameAbs.textColor = UIColor.senderNameColorDark()
             txtSenderNameAbs.font = UIFont.igFont(ofSize: 8.0)
             self.contentView.addSubview(txtSenderNameAbs)
         }
