@@ -13,7 +13,7 @@ import Cosmos
 import IGProtoBuff
 import SnapKit
 
-class IGCallQuality: UIViewController {
+class IGCallQuality: UIViewController, UITextFieldDelegate {
     
     @IBOutlet var mainView: UIView!
     @IBOutlet weak var txtiGapCallQuality: UILabel!
@@ -43,9 +43,16 @@ class IGCallQuality: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        edtReason.delegate = self
+        
         edtReason.isHidden = true
         userActionView.layer.cornerRadius = 15
         makeRatingView()
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
     }
     
     private func makeRatingView(){

@@ -34,6 +34,7 @@ class IGCall: UIViewController, CallStateObserver, ReturnToCallObserver {
     var isIncommingCall: Bool!
     var isSpeakerEnable = false
     var isMuteEnable = false
+    var callIsConnected = false
     var callTimer: Timer!
     var recordedTime: Int = 0
     var player: AVAudioPlayer?
@@ -225,7 +226,11 @@ class IGCall: UIViewController, CallStateObserver, ReturnToCallObserver {
             case .Connected:
                 self.txtCallTime.isHidden = false
                 self.txtCallState.text = "Connected"
-                self.playSound(sound: "igap_connect")
+                
+                if !self.callIsConnected {
+                    self.callIsConnected = true
+                    self.playSound(sound: "igap_connect")
+                }
                 
                 do {
                     try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayAndRecord)
@@ -362,6 +367,7 @@ class IGCall: UIViewController, CallStateObserver, ReturnToCallObserver {
     private func dismmis() {
         RTCClient.getInstance().disconnect()
         IGCall.callPageIsEnable = false
+        callIsConnected = false
         
         if let timer = callTimer {
             timer.invalidate()

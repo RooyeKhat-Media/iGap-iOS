@@ -750,7 +750,7 @@ Please wait 0:59</string>
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bkj-vM-vKt">
-                                <rect key="frame" x="67.5" y="367" width="240" height="50"/>
+                                <rect key="frame" x="67.5" y="366" width="240" height="50"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="N9Z-S5-niI">
                                         <rect key="frame" x="0.0" y="0.0" width="120" height="50"/>
@@ -786,7 +786,7 @@ Please wait 0:59</string>
                                 </constraints>
                             </view>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Please enter your reason..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Nem-UB-8Cx">
-                                <rect key="frame" x="36" y="287" width="303" height="50"/>
+                                <rect key="frame" x="36" y="286" width="303" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="KjP-tG-w6f"/>
                                 </constraints>
@@ -806,10 +806,10 @@ Please wait 0:59</string>
                             <constraint firstAttribute="trailingMargin" secondItem="Nem-UB-8Cx" secondAttribute="trailing" constant="20" id="I2N-MD-FdN"/>
                             <constraint firstItem="bYM-59-EEU" firstAttribute="centerX" secondItem="pdf-1j-jve" secondAttribute="centerX" id="OTI-89-UQ2"/>
                             <constraint firstItem="Nem-UB-8Cx" firstAttribute="leading" secondItem="pdf-1j-jve" secondAttribute="leadingMargin" constant="20" id="Oxb-1B-bXD"/>
-                            <constraint firstItem="Bkj-vM-vKt" firstAttribute="top" secondItem="Nem-UB-8Cx" secondAttribute="bottom" constant="30" id="Q3z-71-6WC"/>
-                            <constraint firstAttribute="bottomMargin" secondItem="Bkj-vM-vKt" secondAttribute="bottom" constant="250" id="XGc-82-3RY"/>
+                            <constraint firstItem="Bkj-vM-vKt" firstAttribute="top" secondItem="Nem-UB-8Cx" secondAttribute="bottom" constant="30" id="PIn-07-OOR"/>
                             <constraint firstItem="bYM-59-EEU" firstAttribute="top" secondItem="pdf-1j-jve" secondAttribute="topMargin" constant="20" id="ZeK-8s-1Dz"/>
                             <constraint firstItem="3Ts-7H-7ep" firstAttribute="leading" secondItem="pdf-1j-jve" secondAttribute="leadingMargin" id="pLr-iB-pPo"/>
+                            <constraint firstItem="Nem-UB-8Cx" firstAttribute="top" secondItem="3Ts-7H-7ep" secondAttribute="bottom" constant="70" id="s0x-lq-HtD"/>
                         </constraints>
                     </view>
                     <connections>
@@ -844,11 +844,11 @@ Please wait 0:59</string>
                                 <color key="backgroundColor" red="0.26510139579999997" green="0.56691289420000002" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B2M-WZ-eh7">
-                                <rect key="frame" x="96" y="447" width="70" height="70"/>
+                                <rect key="frame" x="97.5" y="447" width="70" height="70"/>
                                 <color key="backgroundColor" white="0.67135959199999995" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="70" id="Ag7-ei-BCS"/>
-                                    <constraint firstAttribute="width" constant="70" id="pLj-Tz-4fT"/>
+                                    <constraint firstAttribute="height" constant="70" id="Nb7-Pt-qNC"/>
+                                    <constraint firstAttribute="width" constant="70" id="xUf-aH-UDx"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="iGap-Fontico" family="iGap-Fontico" pointSize="30"/>
                                 <state key="normal" title=""/>
@@ -857,11 +857,11 @@ Please wait 0:59</string>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u6D-Vd-Lv8">
-                                <rect key="frame" x="209" y="447" width="70" height="70"/>
+                                <rect key="frame" x="207.5" y="447" width="70" height="70"/>
                                 <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="70" id="G2B-fm-h9h"/>
-                                    <constraint firstAttribute="width" constant="70" id="lfi-Hk-Khu"/>
+                                    <constraint firstAttribute="height" constant="70" id="OUe-z5-TDP"/>
+                                    <constraint firstAttribute="width" constant="70" id="vhW-HV-Ze2"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="iGap-Fontico" family="iGap-Fontico" pointSize="30"/>
                                 <color key="tintColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -961,15 +961,15 @@ Please wait 0:59</string>
                             <constraint firstItem="1s0-8u-bJd" firstAttribute="top" secondItem="u14-h2-GtB" secondAttribute="bottom" constant="5" id="60N-gT-svn"/>
                             <constraint firstAttribute="trailingMargin" secondItem="1s0-8u-bJd" secondAttribute="trailing" id="7mc-bK-x9A"/>
                             <constraint firstItem="u14-h2-GtB" firstAttribute="top" secondItem="fFu-Of-z9o" secondAttribute="bottom" constant="5" id="8xa-VI-dxd"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="u6D-Vd-Lv8" secondAttribute="trailing" priority="250" constant="80" id="8xf-un-9p8"/>
+                            <constraint firstItem="u6D-Vd-Lv8" firstAttribute="centerX" secondItem="32k-QA-fx6" secondAttribute="centerX" constant="55" id="B4c-pU-7FQ"/>
                             <constraint firstAttribute="trailingMargin" secondItem="u14-h2-GtB" secondAttribute="trailing" id="BY6-pT-m4s"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="B2M-WZ-eh7" secondAttribute="bottom" constant="150" id="CtP-ak-LiN"/>
                             <constraint firstAttribute="trailing" secondItem="32k-QA-fx6" secondAttribute="trailing" id="GEZ-n6-8UF"/>
                             <constraint firstItem="1s0-8u-bJd" firstAttribute="leading" secondItem="yza-sH-gpU" secondAttribute="leadingMargin" constant="10" id="HXp-fz-cX2"/>
-                            <constraint firstItem="B2M-WZ-eh7" firstAttribute="leading" secondItem="yza-sH-gpU" secondAttribute="leadingMargin" constant="80" id="HbP-Bs-Et2"/>
                             <constraint firstItem="fFu-Of-z9o" firstAttribute="top" secondItem="PG3-bZ-M6c" secondAttribute="bottom" constant="10" id="LEQ-Og-dAZ"/>
                             <constraint firstItem="qkh-A9-QLp" firstAttribute="top" secondItem="yza-sH-gpU" secondAttribute="topMargin" constant="-20" id="NRt-sc-aUT"/>
-                            <constraint firstAttribute="bottomMargin" secondItem="u6D-Vd-Lv8" secondAttribute="bottom" constant="150" id="SJX-sa-ikn"/>
                             <constraint firstAttribute="trailingMargin" secondItem="cOE-9I-nlw" secondAttribute="trailing" constant="10" id="Sur-tj-4b3"/>
+                            <constraint firstItem="B2M-WZ-eh7" firstAttribute="centerX" secondItem="32k-QA-fx6" secondAttribute="centerX" constant="-55" id="VOD-nZ-IQ5"/>
                             <constraint firstItem="u14-h2-GtB" firstAttribute="leading" secondItem="yza-sH-gpU" secondAttribute="leadingMargin" constant="10" id="Ww9-Gd-O8a"/>
                             <constraint firstItem="qkh-A9-QLp" firstAttribute="leading" secondItem="yza-sH-gpU" secondAttribute="leadingMargin" constant="-16" id="XOR-i1-722"/>
                             <constraint firstAttribute="bottom" secondItem="32k-QA-fx6" secondAttribute="bottom" id="XzX-38-GhG"/>
@@ -977,11 +977,11 @@ Please wait 0:59</string>
                             <constraint firstAttribute="trailingMargin" secondItem="fFu-Of-z9o" secondAttribute="trailing" id="aG7-bg-vtf"/>
                             <constraint firstItem="9Qi-La-Dbk" firstAttribute="top" secondItem="1s0-8u-bJd" secondAttribute="bottom" constant="5" id="aTZ-w5-zsb"/>
                             <constraint firstAttribute="trailingMargin" secondItem="qkh-A9-QLp" secondAttribute="trailing" constant="-16" id="eGw-JU-NMk"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="u6D-Vd-Lv8" secondAttribute="bottom" constant="150" id="iKP-L4-TzT"/>
                             <constraint firstAttribute="bottomMargin" secondItem="qkh-A9-QLp" secondAttribute="bottom" id="k2v-Ti-rwB"/>
                             <constraint firstItem="lP5-6W-aPE" firstAttribute="top" secondItem="uIr-0Q-6G0" secondAttribute="bottom" constant="26" id="kEa-q7-LEm"/>
                             <constraint firstItem="32k-QA-fx6" firstAttribute="top" secondItem="yza-sH-gpU" secondAttribute="top" id="n93-rt-U0h"/>
                             <constraint firstItem="lP5-6W-aPE" firstAttribute="top" secondItem="cOE-9I-nlw" secondAttribute="bottom" constant="26" id="o16-Yl-qY9"/>
-                            <constraint firstAttribute="bottomMargin" secondItem="B2M-WZ-eh7" secondAttribute="bottom" constant="150" id="p9R-X5-Nol"/>
                             <constraint firstItem="HVS-4z-ILw" firstAttribute="centerX" secondItem="yza-sH-gpU" secondAttribute="centerX" id="pOy-Kw-QuE"/>
                             <constraint firstItem="lP5-6W-aPE" firstAttribute="top" secondItem="HVS-4z-ILw" secondAttribute="bottom" constant="26" id="t0D-RF-R46"/>
                             <constraint firstItem="fFu-Of-z9o" firstAttribute="leading" secondItem="yza-sH-gpU" secondAttribute="leadingMargin" constant="10" id="wCh-GH-vkS"/>

@@ -424,7 +424,7 @@ class IGNavigationItem: UINavigationItem {
         self.centerViewMainLabel!.snp.makeConstraints { (make) in
             make.top.equalTo(self.centerViewContainer!.snp.top).offset(0)
             make.leading.equalTo(self.centerViewContainer!.snp.leading).offset(5).priority(.required)
-            make.width.lessThanOrEqualToSuperview()
+            make.width.lessThanOrEqualToSuperview().offset(-25)
         }
         
         self.centerViewSubLabel = UILabel()//frame: CGRect(x: 0, y: 20, width: 200, height: 16))
@@ -448,7 +448,7 @@ class IGNavigationItem: UINavigationItem {
             self.centerViewContainer!.addSubview(imgMute)
             imgMute.snp.makeConstraints { (make) in
                 make.top.equalTo(self.centerViewMainLabel!.snp.top).offset(3)
-                make.right.equalTo(self.centerViewMainLabel!.snp.left).offset(-8)
+                make.right.equalTo(self.centerViewMainLabel!.snp.right).offset(20)
             }
         }
         
