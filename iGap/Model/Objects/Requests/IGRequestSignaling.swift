@@ -142,9 +142,7 @@ class IGSignalingCandidateRequest : IGRequest {
         override class func handlePush(responseProtoMessage: Message) {
             switch responseProtoMessage {
             case let candidateResponse as IGPSignalingCandidateResponse:
-                if !candidateResponse.igpResponse.isInitialized {
-                    RTCClient.getInstance().addIceCandidate(iceCandidate: RTCIceCandidate(sdp: candidateResponse.igpPeerCandidate,sdpMLineIndex: candidateResponse.igpPeerSdpMLineIndex ,sdpMid: candidateResponse.igpPeerSdpMID))
-                }
+                RTCClient.getInstance().addIceCandidate(iceCandidate: RTCIceCandidate(sdp: candidateResponse.igpPeerCandidate,sdpMLineIndex: candidateResponse.igpPeerSdpMLineIndex ,sdpMid: candidateResponse.igpPeerSdpMID))
                 break
             default:
                 break
