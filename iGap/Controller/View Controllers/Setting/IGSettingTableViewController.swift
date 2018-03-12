@@ -294,7 +294,7 @@ class IGSettingTableViewController: UITableViewController , NVActivityIndicatorV
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return 6
+            return 7
         case 1:
             return 1
         case 2:
@@ -306,7 +306,6 @@ class IGSettingTableViewController: UITableViewController , NVActivityIndicatorV
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-
         if indexPath.section == 0 {
             if indexPath.row == 0 {
                 self.tableView.isUserInteractionEnabled = false
@@ -316,21 +315,23 @@ class IGSettingTableViewController: UITableViewController , NVActivityIndicatorV
                 performSegue(withIdentifier: "GoToContactListPage", sender: self)
             } else if indexPath.row == 2 {
                 self.tableView.isUserInteractionEnabled = false
-                performSegue(withIdentifier: "GoToPrivacyAndPolicySettingsPage", sender: self)
+                performSegue(withIdentifier: "showLookAndFind", sender: self)
             } else if indexPath.row == 3 {
+                self.tableView.isUserInteractionEnabled = false
+                performSegue(withIdentifier: "GoToPrivacyAndPolicySettingsPage", sender: self)
+            } else if indexPath.row == 4 {
                 shareContent = "Hey Join iGap and start new connection with friends and family for free, no matter what device they are on!\niGap Limitless Connection\nwww.iGap.net"
                 let activityViewController = UIActivityViewController(activityItems: [shareContent as NSString], applicationActivities: nil)
-                
                 present(activityViewController, animated: true, completion: {})
-            } else if indexPath.row == 4 {
+            } else if indexPath.row == 5 {
                 self.tableView.isUserInteractionEnabled = false
                 performSegue(withIdentifier: "GoToAboutSettingPage", sender: self)
-            } else if indexPath.row == 5 {
-                showLogoutActionSheet()
             } else if indexPath.row == 6 {
+                showLogoutActionSheet()
+            } else if indexPath.row == 7 {
                 self.tableView.isUserInteractionEnabled = false
                 performSegue(withIdentifier: "GoToChatSettingPage", sender: self)
-            } else if indexPath.row == 7 {
+            } else if indexPath.row == 8 {
                 self.tableView.isUserInteractionEnabled = false
                 performSegue(withIdentifier: "GoToNotificationSettingsPage", sender: self)
             }

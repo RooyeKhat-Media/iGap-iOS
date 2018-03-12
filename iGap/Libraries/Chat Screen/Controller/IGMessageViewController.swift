@@ -111,6 +111,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
     var messageCellIdentifer = IGMessageCollectionViewCell.cellReuseIdentifier()
     var logMessageCellIdentifer = IGMessageLogCollectionViewCell.cellReuseIdentifier()
     var room : IGRoom?
+    var openChatFromLink: Bool = false
     var customizeBackItem: Bool = false
     //let currentLoggedInUserID = IGAppManager.sharedManager.userID()
     let currentLoggedInUserAuthorHash = IGAppManager.sharedManager.authorHash()
@@ -309,6 +310,10 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
         
         messages = findAllMessages()
         updateObserver()
+        
+        if messages.count == 0 {
+            fetchRoomHistoryWhenDbIsClear()
+        }
     }
     
     func updateObserver(){
@@ -520,7 +525,9 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
         self.sendCancelRecoringVoice()
         if let room = self.room {
             IGFactory.shared.markAllMessagesAsRead(roomId: room.id)
-
+            if openChatFromLink { // TODO - also check if user before joined to this room don't send this request
+                sendUnsubscribForRoom(roomId: room.id)
+            }
         }
     }
     
@@ -541,8 +548,17 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
         self.collectionView!.collectionViewLayout.invalidateLayout()
     }
     
-    
-    
+    private func sendUnsubscribForRoom(roomId: Int64){
+        IGClientUnsubscribeFromRoomRequest.Generator.generate(roomId: roomId).success { (responseProtoMessage) in
+            }.error({ (errorCode, waitTime) in
+                switch errorCode {
+                case .timeout:
+                    self.sendUnsubscribForRoom(roomId: roomId)
+                default:
+                    break
+                }
+            }).send()
+    }
     
     //MARK - Send Seen Status
     private func setMessagesRead() {
@@ -1001,6 +1017,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
             self.hud = MBProgressHUD.showAdded(to: self.view, animated: true)
             self.hud.mode = .indeterminate
             IGClientJoinByUsernameRequest.Generator.generate(userName: publicRooomUserName).success({ (protoResponse) in
+                self.openChatFromLink = false
                 DispatchQueue.main.async {
                     switch protoResponse {
                     case let clientJoinbyUsernameResponse as IGPClientJoinByUsernameResponse:
@@ -1839,6 +1856,31 @@ extension IGMessageViewController: UICollectionViewDelegateFlowLayout {
         } else {
             isEndOfScroll = false
         }
+    }
+    
+    public func fetchRoomHistoryWhenDbIsClear(){
+        IGClientGetRoomHistoryRequest.Generator.generate(roomID: self.room!.id, firstMessageID: 0).success({ (responseProto) in
+            DispatchQueue.main.async {
+                if let roomHistoryReponse = responseProto as? IGPClientGetRoomHistoryResponse {
+                    IGClientGetRoomHistoryRequest.Handler.interpret(response: roomHistoryReponse, roomId: self.room!.id)
+                }
+            }
+        }).error({ (errorCode, waitTime) in
+            DispatchQueue.main.async {
+                switch errorCode {
+                case .clinetGetRoomHistoryNoMoreMessage:
+                    self.allowForGetHistory = false
+                    break
+                case .timeout:
+                    self.allowForGetHistory = true
+                    self.fetchRoomHistoryWhenDbIsClear()
+                    break
+                default:
+                    self.allowForGetHistory = true
+                    break
+                }
+            }
+        }).send()
     }
     
     private func fetchRoomHistoryIfPossibleBefore(message: IGRoomMessage, forceGetHistory: Bool = false) {

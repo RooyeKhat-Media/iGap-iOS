@@ -222,6 +222,9 @@
 		FA93EE2C2029DB1300DD1521 /* AudioCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA93EE2B2029DB1300DD1521 /* AudioCell.swift */; };
 		FA93EE2E2029DBE300DD1521 /* AudioCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA93EE2D2029DBC300DD1521 /* AudioCell.xib */; };
 		FA9402AC2042D49D00D1A35C /* WebRTC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA9402AB2042D49C00D1A35C /* WebRTC.framework */; };
+		FA96A8152053EBD1004369C7 /* IGRealmClientSearchUsername.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA96A8142053EBD1004369C7 /* IGRealmClientSearchUsername.swift */; };
+		FA96A8182053FC3D004369C7 /* IGLookAndFindCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA96A8172053FC3D004369C7 /* IGLookAndFindCell.swift */; };
+		FA96A81A2053FC4F004369C7 /* IGLookAndFind.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA96A8192053FC4F004369C7 /* IGLookAndFind.swift */; };
 		FA96EF4E1DEB0431009BE640 /* IGMessageSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA96EF4D1DEB0431009BE640 /* IGMessageSender.swift */; };
 		FA96EF541DEB09A6009BE640 /* IGRequestChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA96EF531DEB09A6009BE640 /* IGRequestChat.swift */; };
 		FA97D444201716270087BBD0 /* TextCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA97D443201708310087BBD0 /* TextCell.xib */; };
@@ -528,6 +531,9 @@
 		FA93EE2B2029DB1300DD1521 /* AudioCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioCell.swift; sourceTree = "<group>"; };
 		FA93EE2D2029DBC300DD1521 /* AudioCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AudioCell.xib; sourceTree = "<group>"; };
 		FA9402AB2042D49C00D1A35C /* WebRTC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebRTC.framework; path = Carthage/Build/iOS/WebRTC.framework; sourceTree = "<group>"; };
+		FA96A8142053EBD1004369C7 /* IGRealmClientSearchUsername.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGRealmClientSearchUsername.swift; sourceTree = "<group>"; };
+		FA96A8172053FC3D004369C7 /* IGLookAndFindCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGLookAndFindCell.swift; sourceTree = "<group>"; };
+		FA96A8192053FC4F004369C7 /* IGLookAndFind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGLookAndFind.swift; sourceTree = "<group>"; };
 		FA96EF4D1DEB0431009BE640 /* IGMessageSender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGMessageSender.swift; sourceTree = "<group>"; };
 		FA96EF531DEB09A6009BE640 /* IGRequestChat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGRequestChat.swift; sourceTree = "<group>"; };
 		FA97D443201708310087BBD0 /* TextCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextCell.xib; sourceTree = "<group>"; };
@@ -714,6 +720,7 @@
 				FA68A20F1DD9B0CD003A6651 /* Tabbar Sub Controllers */,
 				FA77C2A51E2B85D2001B2152 /* Chat and User Info */,
 				FA09530D1E1B97590043ED3F /* New Conversation */,
+				FA96A8162053FC0C004369C7 /* Look And Find */,
 				FA0953081E1B88660043ED3F /* Setting */,
 			);
 			path = "View Controllers";
@@ -1068,6 +1075,7 @@
 				FAEEB0C21E1BC11600B6775F /* IGContact.swift */,
 				FAEE8D8E1E30ABA100599600 /* IGClientCondition.swift */,
 				FAA9DFBD1F4B23380076A22F /* IGTwoStepVerification.swift */,
+				FA96A8142053EBD1004369C7 /* IGRealmClientSearchUsername.swift */,
 			);
 			path = Objects;
 			sourceTree = "<group>";
@@ -1092,6 +1100,15 @@
 				FA930D991E5B178F00069EE1 /* WebSocket.swift */,
 			);
 			path = Starscream;
+			sourceTree = "<group>";
+		};
+		FA96A8162053FC0C004369C7 /* Look And Find */ = {
+			isa = PBXGroup;
+			children = (
+				FA96A8172053FC3D004369C7 /* IGLookAndFindCell.swift */,
+				FA96A8192053FC4F004369C7 /* IGLookAndFind.swift */,
+			);
+			path = "Look And Find";
 			sourceTree = "<group>";
 		};
 		FA96AF141DDB1E72005AC571 /* ReusableViews */ = {
@@ -1641,6 +1658,7 @@
 				FA0953851E1B97E20043ED3F /* IGChooseMemberToCreateGroupBottomViewCollectionViewCell.swift in Sources */,
 				FA93EE282029A39000DD1521 /* VoiceCell.swift in Sources */,
 				93AA67C01E4F35CF0053380C /* IGChannelInfoEditTypeTableViewController.swift in Sources */,
+				FA96A81A2053FC4F004369C7 /* IGLookAndFind.swift in Sources */,
 				FA63BAA71DD70E1A000B60AD /* IGRequestUser.swift in Sources */,
 				FA0953661E1B97700043ED3F /* IGSettingPrivacy&SecurityEnterPasscodeLockViewController.swift in Sources */,
 				93C299941E77D5FD00EE37C4 /* IGChannelAndGroupInfoSharedAudioAndVoiceTableViewCell.swift in Sources */,
@@ -1670,6 +1688,7 @@
 				FA09535B1E1B97700043ED3F /* IGSettingChatWhenDownloadDataTableViewController.swift in Sources */,
 				FA09535C1E1B97700043ED3F /* IGSettingChooseContactToAddToBlockListTableViewCell.swift in Sources */,
 				93AA67C81E4F38A20053380C /* IGChannelInfoAdminsListTableViewController.swift in Sources */,
+				FA96A8182053FC3D004369C7 /* IGLookAndFindCell.swift in Sources */,
 				FAEE8D8F1E30ABA100599600 /* IGClientCondition.swift in Sources */,
 				932D1AB31E740046000F0D97 /* IGGroupInfoShareMediaLinkTableViewCell.swift in Sources */,
 				FA8560AA1FFBA6FC00A25DC3 /* IGSettingPrivacyAndSecurityTwoStepVerificationVerifyUnconfirmedEmail.swift in Sources */,
@@ -1806,6 +1825,7 @@
 				FAAC57D31DE2CE9F00A28058 /* IGDownloadManager.swift in Sources */,
 				FA358D201E0A6F6A001D0935 /* IGGroupsTableViewController.swift in Sources */,
 				DF3EDEF64399AA713B2D0C2F /* IGRequestSignaling.swift in Sources */,
+				FA96A8152053EBD1004369C7 /* IGRealmClientSearchUsername.swift in Sources */,
 				FAA9DFB21F4B1B600076A22F /* IGSettingPrivacyAndSecurityTwoStepVerificationVerifyPasswordTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

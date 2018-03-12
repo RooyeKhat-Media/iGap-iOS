@@ -321,6 +321,44 @@ class IGFactory: NSObject {
         }
     }
     
+    //MARK: ▶︎▶︎ Client Search Username
+    func saveSearchUsernameResult(_ searchUsernameResult: [IGPClientSearchUsernameResponse.IGPResult] ) {
+        let task = IGFactoryTask()
+        task.task = {
+            IGDatabaseManager.shared.perfrmOnDatabaseThread {
+                try! IGDatabaseManager.shared.realm.write {
+                    for searchUsername in searchUsernameResult {
+
+                        var predicate: NSPredicate!
+
+                        if searchUsername.igpType.rawValue == IGPClientSearchUsernameResponse.IGPResult.IGPType.room.rawValue {
+                            predicate = NSPredicate(format: "room.id = %lld", searchUsername.igpRoom.igpID)
+                        } else {
+                            predicate = NSPredicate(format: "user.id = %lld", searchUsername.igpUser.igpID)
+                        }
+
+                        if let searchResult = IGDatabaseManager.shared.realm.objects(IGRealmClientSearchUsername.self).filter(predicate).first {
+                            searchResult.room = searchResult.setRoom(room: searchUsername.igpRoom)
+                            searchResult.user = searchResult.setUser(user: searchUsername.igpUser)
+                            searchResult.type = searchUsername.igpType.rawValue
+                        } else {
+                            IGDatabaseManager.shared.realm.add(IGRealmClientSearchUsername(searchUsernameResult: searchUsername))
+                        }
+                        
+                    }
+                }
+                IGFactory.shared.performInFactoryQueue {
+                    task.success!()
+                }
+            }
+        }
+        task.success {
+            self.removeTaskFromQueueAndPerformNext(task)
+            }.error {
+                self.removeTaskFromQueueAndPerformNext(task)
+            }.addToQueue()
+        self.performNextFactoryTaskIfPossible()
+    }
 
     
     //MARK: --------------------------------------------------------
