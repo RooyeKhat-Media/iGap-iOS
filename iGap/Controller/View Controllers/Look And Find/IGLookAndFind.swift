@@ -127,6 +127,10 @@ class IGLookAndFind: UIViewController, UITableViewDataSource, UITableViewDelegat
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         self.view.endEditing(true)
+        self.deleteBeforeSearch()
+        if let text = searchBar.text {
+            self.search(query: text)
+        }
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
