@@ -527,6 +527,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
             IGFactory.shared.markAllMessagesAsRead(roomId: room.id)
             if openChatFromLink { // TODO - also check if user before joined to this room don't send this request
                 sendUnsubscribForRoom(roomId: room.id)
+                IGFactory.shared.updateRoomParticipant(roomId: room.id, isParticipant: false)
             }
         }
     }
