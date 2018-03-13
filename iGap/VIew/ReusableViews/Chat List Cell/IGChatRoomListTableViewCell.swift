@@ -195,23 +195,23 @@ class IGChatRoomListTableViewCell: MGSwipeTableCell {
         
         
         self.nameLabel.text = room.title
-        
-        if let roomVariable = IGRoomManager.shared.varible(for: room) {
-            roomVariableFromRoomManagerCache = roomVariable
-            roomVariableFromRoomManagerCache?.asObservable().subscribe({ (event) in
-                
-                DispatchQueue.main.async {
-                    if self.roomVariableFromRoomManagerCache?.value.id != room.id {
-                        return
-                    }
-                    if self.roomVariableFromRoomManagerCache?.value.currenctActionsByUsers.count != 0 {
-                        self.lastMessageLabel.text = self.roomVariableFromRoomManagerCache!.value.currentActionString() + " ..."
-                    } else {
-                        self.setLastMessage(for: room)
-                    }
-                }
-            }).addDisposableTo(disposeBag)
-        }
+// Commented this codes for avoid from crash after logout and login again
+//        if let roomVariable = IGRoomManager.shared.varible(for: room) {
+//            roomVariableFromRoomManagerCache = roomVariable
+//            roomVariableFromRoomManagerCache?.asObservable().subscribe({ (event) in
+//
+//                DispatchQueue.main.async {
+//                    if self.roomVariableFromRoomManagerCache?.value.id != room.id {
+//                        return
+//                    }
+//                    if self.roomVariableFromRoomManagerCache?.value.currenctActionsByUsers.count != 0 {
+//                        self.lastMessageLabel.text = self.roomVariableFromRoomManagerCache!.value.currentActionString() + " ..."
+//                    } else {
+//                        self.setLastMessage(for: room)
+//                    }
+//                }
+//            }).addDisposableTo(disposeBag)
+//        }
         
         setLastMessage(for: room)
         
