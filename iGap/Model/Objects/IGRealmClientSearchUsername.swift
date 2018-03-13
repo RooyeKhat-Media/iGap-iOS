@@ -26,6 +26,20 @@ class IGRealmClientSearchUsername: Object {
         self.type = searchUsernameResult.igpType.rawValue
     }
     
+    convenience init(room: IGRoom) {
+        self.init()
+        self.room = room
+        self.user = nil
+        self.type = IGPClientSearchUsernameResponse.IGPResult.IGPType.room.rawValue
+    }
+    
+    convenience init(room: IGRoom, user: IGRegisteredUser) {
+        self.init()
+        self.room = room
+        self.user = user
+        self.type = IGPClientSearchUsernameResponse.IGPResult.IGPType.user.rawValue
+    }
+    
     public func setRoom(room: IGPRoom) -> IGRoom{
         let predicate = NSPredicate(format: "id = %lld", room.igpID)
         let realm = try! Realm()

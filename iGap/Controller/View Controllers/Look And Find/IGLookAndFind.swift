@@ -20,12 +20,20 @@ class IGLookAndFind: UIViewController, UITableViewDataSource, UITableViewDelegat
     
     var searchResults: Results<IGRealmClientSearchUsername>!
     var notificationToken: NotificationToken?
+    var searchLocal = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        var title = ""
+        if searchLocal {
+            title = "Find Local Room"
+        } else {
+            title = "Look And Find"
+        }
+        
         let navigationItem = self.navigationItem as! IGNavigationItem
-        navigationItem.addNavigationViewItems(rightItemText: nil, title: "Look And Find")
+        navigationItem.addNavigationViewItems(rightItemText: nil, title: title)
         navigationItem.navigationController = self.navigationController as? IGNavigationController
         let navigationController = self.navigationController as! IGNavigationController
         navigationController.interactivePopGestureRecognizer?.delegate = self
@@ -86,24 +94,35 @@ class IGLookAndFind: UIViewController, UITableViewDataSource, UITableViewDelegat
     }
     
     private func openChatRoom(searchResult: IGRealmClientSearchUsername){
-        IGClientSubscribeToRoomRequest.Generator.generate(roomId: searchResult.room.id).success { (responseProtoMessage) in
+        
+        if existRoomInLocal(roomId: searchResult.room.id) {
             DispatchQueue.main.async {
                 let room = searchResult.room
                 let storyboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
                 let roomVC = storyboard.instantiateViewController(withIdentifier: "messageViewController") as! IGMessageViewController
                 roomVC.room = room
-                roomVC.openChatFromLink = true
+                roomVC.openChatFromLink = false
                 self.navigationController!.pushViewController(roomVC, animated: true)
             }
-            }.error({ (errorCode, waitTime) in
-                switch errorCode {
-                case .timeout:
-                    self.openChatRoom(searchResult: searchResult)
-                default:
-                    break
+        } else {
+            IGClientSubscribeToRoomRequest.Generator.generate(roomId: searchResult.room.id).success { (responseProtoMessage) in
+                DispatchQueue.main.async {
+                    let room = searchResult.room
+                    let storyboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+                    let roomVC = storyboard.instantiateViewController(withIdentifier: "messageViewController") as! IGMessageViewController
+                    roomVC.room = room
+                    roomVC.openChatFromLink = true
+                    self.navigationController!.pushViewController(roomVC, animated: true)
                 }
-            }).send()
-        
+                }.error({ (errorCode, waitTime) in
+                    switch errorCode {
+                    case .timeout:
+                        self.openChatRoom(searchResult: searchResult)
+                    default:
+                        break
+                    }
+                }).send()
+        }
     }
     
     private func openUserProfile(searchResult: IGRealmClientSearchUsername){
@@ -127,6 +146,11 @@ class IGLookAndFind: UIViewController, UITableViewDataSource, UITableViewDelegat
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         self.view.endEditing(true)
+        
+        if searchLocal {
+            return
+        }
+        
         self.deleteBeforeSearch()
         if let text = searchBar.text {
             self.search(query: text)
@@ -134,14 +158,49 @@ class IGLookAndFind: UIViewController, UITableViewDataSource, UITableViewDelegat
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        self.deleteBeforeSearch()
         
-        if(searchText.count >= 5){
-            self.deleteBeforeSearch()
-            
-            if let text = searchBar.text {
-                self.search(query: text)
+        if searchLocal {
+            searchLocalRooms(searchText: searchText)
+        } else {
+            if(searchText.count >= 5){
+                if let text = searchBar.text {
+                    self.search(query: text)
+                }
             }
         }
+    }
+    
+    private func searchLocalRooms(searchText: String){
+        
+        let realm = try! Realm()
+        
+        let predicate = NSPredicate(format: "((title BEGINSWITH[c] %@) OR (title CONTAINS[c] %@)) AND (isParticipant = 1)", searchText , searchText)
+        let searchResults = realm.objects(IGRoom.self).filter(predicate)
+        
+        for result in searchResults {
+            var user: IGRegisteredUser!
+            if result.type == IGRoom.IGType.chat {
+                user = result.chatRoom?.peer
+            }
+            
+            try! realm.write {
+                if user != nil {
+                    realm.add(IGRealmClientSearchUsername(room: result, user: user))
+                } else {
+                    realm.add(IGRealmClientSearchUsername(room: result))
+                }
+            }
+        }
+    }
+    
+    /* check that room exist in local and user is participant in this room */
+    private func existRoomInLocal(roomId: Int64) -> Bool{
+        let predicate = NSPredicate(format: "id = %lld AND isParticipant = 1", roomId)
+        if let _ = try! Realm().objects(IGRoom.self).filter(predicate).first {
+            return true
+        }
+        return false
     }
     
     //****************** tableView ******************

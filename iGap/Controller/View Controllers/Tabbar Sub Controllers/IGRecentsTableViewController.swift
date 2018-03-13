@@ -145,6 +145,12 @@ class IGRecentsTableViewController: UITableViewController {
             let newChannel = UIAlertAction(title: "New Channel", style: .default, handler: { (action) in
                 self.performSegue(withIdentifier: "createANewChannel", sender: self)
             })
+            let searchInCurrentRoom = UIAlertAction(title: "Find Local Room", style: .default, handler: { (action) in
+                let storyboard : UIStoryboard = UIStoryboard(name: "IGSettingStoryboard", bundle: nil)
+                let lookAndFind = storyboard.instantiateViewController(withIdentifier: "IGLookAndFind") as! IGLookAndFind
+                lookAndFind.searchLocal = true
+                self.navigationController!.pushViewController(lookAndFind, animated: true)
+            })
             
             let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
                 
@@ -154,6 +160,7 @@ class IGRecentsTableViewController: UITableViewController {
             alertController.addAction(newChat)
             alertController.addAction(newGroup)
             alertController.addAction(newChannel)
+            alertController.addAction(searchInCurrentRoom)
             alertController.addAction(cancel)
             
             self.present(alertController, animated: true, completion: nil)
