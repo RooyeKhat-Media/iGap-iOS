@@ -74,9 +74,32 @@ class IGCall: UIViewController, CallStateObserver, ReturnToCallObserver {
         
         let realm = try! Realm()
         let predicate = NSPredicate(format: "chatRoom.peer.id = %lld", userId)
-        if let roomInfo = try realm.objects(IGRoom.self).filter(predicate).first {
+        if let roomInfo = try! realm.objects(IGRoom.self).filter(predicate).first {
             room = roomInfo
             performSegue(withIdentifier: "showRoomMessages", sender: self)
+        } else {
+            IGChatGetRoomRequest.Generator.generate(peerId: userId).success({ (protoResponse) in
+                DispatchQueue.main.async {
+                    if let chatGetRoomResponse = protoResponse as? IGPChatGetRoomResponse {
+                        IGChatGetRoomRequest.Handler.interpret(response: chatGetRoomResponse)
+                        self.room = IGRoom(igpRoom: chatGetRoomResponse.igpRoom)
+                        self.performSegue(withIdentifier: "showRoomMessages", sender: self)
+                    }
+                }
+            }).error({ (errorCode, waitTime) in
+                switch errorCode {
+                case .timeout:
+                    DispatchQueue.main.async {
+                        let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                default:
+                    break
+                }
+                
+            }).send()
         }
     }
     
