@@ -388,12 +388,20 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
             label.customColor[customInvitedLink] = UIColor.organizationalColor()
             
             label.handleMentionTap { mention in
-                self.delegate?.didTapOnMention(mentionText: mention ) }
+                self.delegate?.didTapOnMention(mentionText: mention )
+            }
+            
             label.handleHashtagTap { hashtag in
-                self.delegate?.didTapOnHashtag(hashtagText: hashtag) }
+                self.delegate?.didTapOnHashtag(hashtagText: hashtag)
+            }
+            
             label.handleURLTap { url in
-                self.delegate?.didTapOnURl(url: url) }
-            label.handleCustomTap(for:customInvitedLink) { self.delegate?.didTapOnRoomLink(link: $0) }
+                self.delegate?.didTapOnURl(url: url)
+            }
+            
+            label.handleCustomTap(for:customInvitedLink) {
+                self.delegate?.didTapOnRoomLink(link: $0)
+            }
         }
     }
     

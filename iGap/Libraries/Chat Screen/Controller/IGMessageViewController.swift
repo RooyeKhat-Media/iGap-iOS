@@ -2273,7 +2273,15 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
     }
     
     func didTapOnURl(url: URL) {
-        var urlString = url.absoluteString.lowercased()
+        var urlString = url.absoluteString
+        
+        if urlString.contains("https://iGap.net/join") || urlString.contains("http://iGap.net/join") {
+            didTapOnRoomLink(link: urlString)
+            return
+        }
+        
+        urlString = urlString.lowercased()
+        
         if !(urlString.contains("https://")) && !(urlString.contains("http://")) {
             urlString = "http://" + urlString
         }
@@ -2283,103 +2291,108 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
         //TODO: handle "igap.net/join"
     }
     func didTapOnRoomLink(link: String) {
-       let sth =  link.chopPrefix(14)
-        print(sth)
-        let alert = UIAlertController(title: "iGap", message: "Are you sure want to join this room?", preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .default, handler: { (action) in
-            self.joinRoombyInvitedLink(invitedToken: sth)
-        })
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-
-        alert.addAction(okAction)
-        alert.addAction(cancelAction)
-        self.present(alert, animated: true, completion: nil)
-
+        let token = link.chopPrefix(22)
+        self.requestToCheckInvitedLink(invitedLink: token)
     }
     
-    func joinRoombyInvitedLink(invitedToken: String) {
+    func joinRoombyInvitedLink(room:IGPRoom, invitedToken: String) {
         self.hud = MBProgressHUD.showAdded(to: self.view, animated: true)
         self.hud.mode = .indeterminate
         IGClientJoinByInviteLinkRequest.Generator.generate(invitedToken: invitedToken).success({ (protoResponse) in
             DispatchQueue.main.async {
-                switch protoResponse {
-                case let clinetJoinByInvitedlink as IGPClientJoinByInviteLinkResponse:
-                   let response = IGClientJoinByInviteLinkRequest.Handler.interpret(response: clinetJoinByInvitedlink)
-                    print(response)
-                   //self.requestToCheckInvitedLink(invitedLink: invitedToken)
-                    self.hud.hide(animated: true)
-                default:
-                    break
+                if let _ = protoResponse as? IGPClientJoinByInviteLinkResponse {
+                    IGFactory.shared.updateRoomParticipant(roomId: room.igpID, isParticipant: true)
+                    let predicate = NSPredicate(format: "id = %lld", room.igpID)
+                    if let roomInfo = try! Realm().objects(IGRoom.self).filter(predicate).first {
+                        self.openChatAfterJoin(room: roomInfo)
+                    }
                 }
+                self.hud.hide(animated: true)
             }
         }).error ({ (errorCode, waitTime) in
-            switch errorCode {
-            case .timeout:
-                DispatchQueue.main.async {
+            DispatchQueue.main.async {
+                switch errorCode {
+                case .timeout:
                     let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
                     let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
                     alert.addAction(okAction)
-                    
                     self.present(alert, animated: true, completion: nil)
-                }
-            case .clientJoinByInviteLinkForbidden:
-                DispatchQueue.main.async {
+                    
+                case .clientJoinByInviteLinkForbidden:
                     let alert = UIAlertController(title: "Error", message: "Sorry,this group does not seem to exist.", preferredStyle: .alert)
                     let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
                     alert.addAction(okAction)
                     self.hud.hide(animated: true)
                     self.present(alert, animated: true, completion: nil)
+                    
+                case .clientJoinByInviteLinkAlreadyJoined:
+                    self.openChatAfterJoin(room: IGRoom(igpRoom: room), before: true)
+                default:
+                    break
                 }
-            case .clientJoinByInviteLinkAlreadyJoined:
-                DispatchQueue.main.async {
-                    self.requestToCheckInvitedLink(invitedLink: invitedToken)
-                }
-
-            default:
-                break
+                self.hud.hide(animated: true)
             }
-            self.hud.hide(animated: true)
-            
         }).send()
 
     }
     func requestToCheckInvitedLink(invitedLink: String) {
+        self.hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+        self.hud.mode = .indeterminate
         IGClinetCheckInviteLinkRequest.Generator.generate(invitedToken: invitedLink).success({ (protoResponse) in
             DispatchQueue.main.async {
-                switch protoResponse {
-                    case let clinetcheckInvitedlink as IGPClientCheckInviteLinkResponse:
-                        let room = IGClinetCheckInviteLinkRequest.Handler.interpret(response: clinetcheckInvitedlink)
-                        print(room)
-                        
-                        self.hud.hide(animated: true)
-                            NotificationCenter.default.post(name: NSNotification.Name(rawValue: kIGNotificationNameDidCreateARoom),
-                                                            object: nil,
-                                                            userInfo: ["room": room.id])
-                            
-
-                default:
-                    break
+                self.hud.hide(animated: true)
+                if let clinetCheckInvitedlink = protoResponse as? IGPClientCheckInviteLinkResponse {
+                    let alert = UIAlertController(title: "iGap", message: "Are you sure want to join \(clinetCheckInvitedlink.igpRoom.igpTitle)?", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: { (action) in
+                        self.joinRoombyInvitedLink(room:clinetCheckInvitedlink.igpRoom, invitedToken: invitedLink)
+                    })
+                    let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                    
+                    alert.addAction(okAction)
+                    alert.addAction(cancelAction)
+                    self.present(alert, animated: true, completion: nil)
                 }
             }
         }).error ({ (errorCode, waitTime) in
-            switch errorCode {
-            case .timeout:
-                DispatchQueue.main.async {
+            DispatchQueue.main.async {
+                switch errorCode {
+                case .timeout:
+                    
                     let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
                     let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
                     alert.addAction(okAction)
                     
                     self.present(alert, animated: true, completion: nil)
+                default:
+                    break
                 }
-                
-            default:
-                break
+                self.hud.hide(animated: true)
             }
-            self.hud.hide(animated: true)
             
         }).send()
     }
-
+    
+    private func openChatAfterJoin(room: IGRoom, before:Bool = false){
+        
+        var beforeString = ""
+        if before {
+            beforeString = "before "
+        }
+        
+        DispatchQueue.main.async {
+            let alert = UIAlertController(title: "Success", message: "You joined \(beforeString)to \(room.title!)!", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+            let openNow = UIAlertAction(title: "Open Now", style: .default, handler: { (action) in
+                let storyboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+                let chatPage = storyboard.instantiateViewController(withIdentifier: "messageViewController") as! IGMessageViewController
+                chatPage.room = room
+                self.navigationController!.pushViewController(chatPage, animated: true)
+            })
+            alert.addAction(okAction)
+            alert.addAction(openNow)
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
 }
 
 //MARK: - IGForwardMessageDelegate

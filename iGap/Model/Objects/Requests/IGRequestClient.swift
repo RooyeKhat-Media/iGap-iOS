@@ -210,14 +210,9 @@ class IGClinetCheckInviteLinkRequest: IGRequest {
         }
     }
     class Handler: IGRequest.Handler {
-        class func interpret( response responseProtoMessage : IGPClientCheckInviteLinkResponse) -> IGRoom {
-            let igpRoom = responseProtoMessage.igpRoom
-            let room = IGRoom(igpRoom: igpRoom)
-            return room
-        }
+        class func interpret( response responseProtoMessage : IGPClientCheckInviteLinkResponse) {}
         override class func handlePush(responseProtoMessage: Message) {}
     }
-    
 }
     
 
@@ -231,9 +226,7 @@ class IGClientJoinByInviteLinkRequest: IGRequest {
         }
     }
     class Handler: IGRequest.Handler {
-        class func interpret( response responseProtoMessage : IGPClientJoinByInviteLinkResponse) {
-            
-        }
+        class func interpret( response responseProtoMessage : IGPClientJoinByInviteLinkResponse) {}
         override class func handlePush(responseProtoMessage: Message) {}
     }
 }
