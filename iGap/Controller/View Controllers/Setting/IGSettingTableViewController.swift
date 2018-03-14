@@ -159,12 +159,12 @@ class IGSettingTableViewController: UITableViewController , NVActivityIndicatorV
         let trashImageView = UIImageView()
         trashImageView.image = UIImage(named: "IG_Trash_avatar")
         trashImageView.frame = CGRect(x: 0, y: 0, width: 25, height: 25)
-        deleteView = IGTappableView(frame: deleteViewFrame)
-        deleteView?.addSubview(trashImageView)
+//        deleteView = IGTappableView(frame: deleteViewFrame)
+//        deleteView?.addSubview(trashImageView)
         let downloadViewFrame = self.view.bounds
-        deleteView?.addAction {
-            self.didTapOnTrashButton()
-        }
+//        deleteView?.addAction {
+//            self.didTapOnTrashButton()
+//        }
         let downloadIndicatorMainView = UIView()
         downloadIndicatorMainView.backgroundColor = UIColor.white
         downloadIndicatorMainView.frame = downloadViewFrame
@@ -196,8 +196,10 @@ class IGSettingTableViewController: UITableViewController , NVActivityIndicatorV
             
             if let attachment = currentAvatarFile {
                 IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: { (attachment) -> Void in
-                    galleryPreview.hiddenDownloadView()
-                    self.stopAnimating()
+                    DispatchQueue.main.async {
+                        galleryPreview.hiddenDownloadView()
+                        self.stopAnimating()
+                    }
                 }, failure: {
                     
                 })
