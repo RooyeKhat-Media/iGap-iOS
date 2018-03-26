@@ -16,9 +16,10 @@ protocol IGRegistrationStepSelectCountryTableViewControllerDelegate {
 }
 
 
-class IGRegistrationStepSelectCountryTableViewController: UITableViewController {
+class IGRegistrationStepSelectCountryTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate , UINavigationControllerDelegate , UIGestureRecognizerDelegate  {
 
     @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var tableView: UITableView!
     
     var delegate : IGRegistrationStepSelectCountryTableViewControllerDelegate?
     
@@ -35,7 +36,9 @@ class IGRegistrationStepSelectCountryTableViewController: UITableViewController 
             IGRegistrationStepPhoneViewController.allowGetCountry = false
             self.dismiss(animated: true, completion: nil)
         }
-        
+
+        tableView.delegate = self
+        tableView.dataSource = self
         searchBar.delegate = self
         listOfCountries = IGCountry.getSortedListOfCountriesWithPhone()
         self.createDataSetForTableview(countries: listOfCountries)
@@ -47,28 +50,23 @@ class IGRegistrationStepSelectCountryTableViewController: UITableViewController 
 
     // MARK: - Table view data source
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return dictionaryOfSectionedCountries.keys.count
     }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return dictionaryOfSectionedCountries[sortedListOfKeys[section]]!.count
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = self.tableView.dequeueReusableCell(withIdentifier: "countryCell", for: indexPath)
-
-        
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell: IGSelectCountryCell = self.tableView.dequeueReusableCell(withIdentifier: "countryCell", for: indexPath) as! IGSelectCountryCell
         let countriesInThisSection = dictionaryOfSectionedCountries[sortedListOfKeys[indexPath.section]]
         let country = countriesInThisSection?[indexPath.row]
-        let countryNameLabel = cell.viewWithTag(10) as! UILabel
-        countryNameLabel.text = country!.localizedName
-        let countryCodeLabel = cell.viewWithTag(11) as! UILabel
-        countryCodeLabel.text = "+"+country!.phoneCode
+        cell.setSearchResult(country: country!)
         return cell
     }
 
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return sortedListOfKeys[section]
     }
     
@@ -81,7 +79,7 @@ class IGRegistrationStepSelectCountryTableViewController: UITableViewController 
 //        return index
 //    }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let countriesInThisSection = dictionaryOfSectionedCountries[sortedListOfKeys[indexPath.section]]
         let country = countriesInThisSection?[indexPath.row]
         let isoCode = (country?.isoCode)!
@@ -126,9 +124,7 @@ class IGRegistrationStepSelectCountryTableViewController: UITableViewController 
         let keys = [String] (dictionaryOfSectionedCountries.keys)
         sortedListOfKeys = keys.sorted(by: { $0 < $1 })
     }
-}
 
-extension IGRegistrationStepSelectCountryTableViewController : UISearchBarDelegate {
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         print(#function)
         self.createDataSetForTableview(countries: self.listOfCountries)
@@ -153,4 +149,30 @@ extension IGRegistrationStepSelectCountryTableViewController : UISearchBarDelega
         self.tableView.reloadData()
     }
 }
+
+//extension IGRegistrationStepSelectCountryTableViewController : UISearchBarDelegate {
+//    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+//        print(#function)
+//        self.createDataSetForTableview(countries: self.listOfCountries)
+//        self.tableView.reloadData()
+//    }
+//
+//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+//        print(#function)
+//
+//        if (searchText == ""){
+//            self.searchBarTextDidEndEditing(searchBar)
+//            return
+//        }
+//
+//        var listOfCountriesAfterSearch = Array<IGCountry>()
+//        for country in listOfCountries {
+//            if (country.localizedName.lowercased().contains(searchText.lowercased())) {
+//                listOfCountriesAfterSearch.append(country)
+//            }
+//        }
+//        self.createDataSetForTableview(countries: listOfCountriesAfterSearch)
+//        self.tableView.reloadData()
+//    }
+//}
 

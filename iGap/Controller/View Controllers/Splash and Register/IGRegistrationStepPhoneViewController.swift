@@ -271,7 +271,7 @@ class IGRegistrationStepPhoneViewController: UIViewController {
     
 
     func showCountriesList() {
-        performSegue(withIdentifier: "presentConutries", sender: self)
+        performSegue(withIdentifier: "showCountryCell", sender: self) //presentConutries
     }
     
     func showTerms() {
@@ -311,7 +311,7 @@ class IGRegistrationStepPhoneViewController: UIViewController {
     
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "presentConutries" {
+        if segue.identifier == "showCountryCell" {
             let nav = segue.destination as! UINavigationController
             let destination = nav.topViewController as! IGRegistrationStepSelectCountryTableViewController
             destination.delegate = self

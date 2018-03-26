@@ -231,6 +231,7 @@
 		FA97D44820174C2C0087BBD0 /* AbstractCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA97D44720174C2C0087BBD0 /* AbstractCell.swift */; };
 		FA98F838204D37670070424E /* IGCallQuality.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA98F837204D37670070424E /* IGCallQuality.swift */; };
 		FA98F83A204D41AB0070424E /* Cosmos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA98F839204D41AA0070424E /* Cosmos.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		FA9CE15B2068DF4F0056C866 /* IGSelectCountryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CE15A2068DF4E0056C866 /* IGSelectCountryCell.swift */; };
 		FAA2A85A200A31CB00CAA7C7 /* IGSettingAccountBioTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA2A859200A31CB00CAA7C7 /* IGSettingAccountBioTableViewController.swift */; };
 		FAA30F671DAA6F790061B8C9 /* IGWebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA30F661DAA6F790061B8C9 /* IGWebSocketManager.swift */; };
 		FAA3604D201614B600736F95 /* TextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA3604B201614B600736F95 /* TextCell.swift */; };
@@ -540,6 +541,7 @@
 		FA97D44720174C2C0087BBD0 /* AbstractCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbstractCell.swift; sourceTree = "<group>"; };
 		FA98F837204D37670070424E /* IGCallQuality.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGCallQuality.swift; sourceTree = "<group>"; };
 		FA98F839204D41AA0070424E /* Cosmos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cosmos.framework; path = Carthage/Build/iOS/Cosmos.framework; sourceTree = "<group>"; };
+		FA9CE15A2068DF4E0056C866 /* IGSelectCountryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGSelectCountryCell.swift; sourceTree = "<group>"; };
 		FAA2A859200A31CB00CAA7C7 /* IGSettingAccountBioTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGSettingAccountBioTableViewController.swift; sourceTree = "<group>"; };
 		FAA30F661DAA6F790061B8C9 /* IGWebSocketManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IGWebSocketManager.swift; path = "WebSocket Manager/IGWebSocketManager.swift"; sourceTree = "<group>"; };
 		FAA3604B201614B600736F95 /* TextCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextCell.swift; sourceTree = "<group>"; };
@@ -940,6 +942,7 @@
 				FA50A8CB1DD35EFD00C6D2EA /* IGRegistrationStepVerificationCodeViewController.swift */,
 				FA50A8C81DD35EFD00C6D2EA /* IGRegistrationStepProfileInfoViewController.swift */,
 				FA50A8C91DD35EFD00C6D2EA /* IGRegistrationStepSelectCountryTableViewController.swift */,
+				FA9CE15A2068DF4E0056C866 /* IGSelectCountryCell.swift */,
 				FA50A8CA1DD35EFD00C6D2EA /* IGRegistrationStepTermsViewController.swift */,
 				4FFCE29F1EEAF21400F7D0AE /* IGRegistrationStepPasswordViewController.swift */,
 				FAEC02D61F439E47001EB4B6 /* IGRegistrationStepQrViewController.swift */,
@@ -1788,6 +1791,7 @@
 				FA930D9B1E5B178F00069EE1 /* WebSocket.swift in Sources */,
 				FA0953691E1B97700043ED3F /* IGSettingPrivacyAndScurityAutoLockAfterTableViewController.swift in Sources */,
 				FA930D9A1E5B178F00069EE1 /* SSLSecurity.swift in Sources */,
+				FA9CE15B2068DF4F0056C866 /* IGSelectCountryCell.swift in Sources */,
 				FA63BA9B1DD6DF32000B60AD /* IGUploadManager.swift in Sources */,
 				FA0953531E1B97700043ED3F /* IGSettingChatStickerModalCollectionViewCell.swift in Sources */,
 				FA8F224C1DD89910005A90D1 /* IGRoom.swift in Sources */,
