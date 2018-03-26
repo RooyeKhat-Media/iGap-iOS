@@ -106,31 +106,34 @@ class IGNavigationItem: UINavigationItem {
         
         self.centerViewContainer?.subviews.forEach { $0.removeFromSuperview() }
         self.centerViewContainer?.removeFromSuperview()
-        self.centerViewContainer = IGTappableView(frame: CGRect(x: 0, y: 0, width: 200, height: 45))
+        self.centerViewContainer = IGTappableView()
+        
+        self.titleView = centerViewContainer
+        self.titleView?.snp.makeConstraints { (make) in
+            make.width.equalTo(150)
+            make.height.equalTo(30)
+        }
         
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 17.0, weight: UIFontWeightSemibold)
         label.textAlignment = .center
         label.textColor = UIColor.white
         label.text = text
-        centerViewContainer?.addSubview(label)
+        self.titleView?.addSubview(label)
         label.snp.makeConstraints { (make) in
-            make.centerX.equalTo(self.centerViewContainer!.snp.centerX).offset(14)
-            make.centerY.equalTo(self.centerViewContainer!.snp.centerY).offset(-5)
+            make.centerX.equalTo(self.centerViewContainer!.snp.centerX)
+            make.centerY.equalTo(self.centerViewContainer!.snp.centerY)
         }
         
         let activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .white)
-        centerViewContainer?.addSubview(activityIndicatorView)
+        self.titleView?.addSubview(activityIndicatorView)
         activityIndicatorView.startAnimating()
         activityIndicatorView.snp.makeConstraints { (make) in
             make.right.equalTo(label.snp.left).offset(-4)
-            make.centerY.equalTo(self.centerViewContainer!.snp.centerY).offset(-5)
+            make.centerY.equalTo(self.centerViewContainer!.snp.centerY)
             make.width.equalTo(20.0)
             make.height.equalTo(20.0)
         }
-        
-        self.titleView = centerViewContainer
-        
     }
     
     
