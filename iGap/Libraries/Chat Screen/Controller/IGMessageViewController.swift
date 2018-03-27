@@ -172,7 +172,14 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
         navigationItem.rightViewContainer?.addAction {
             if self.room?.type == .chat {
                 self.selectedUserToSeeTheirInfo = (self.room?.chatRoom?.peer)!
-                self.performSegue(withIdentifier: "showUserInfo", sender: self)
+                //self.performSegue(withIdentifier: "showUserInfo", sender: self)
+
+                let profile = IGRegistredUserInfoTableViewController.instantiateFromAppStroryboard(appStoryboard: .Profile)
+                profile.user = self.selectedUserToSeeTheirInfo
+                profile.previousRoomId = self.room?.id
+                profile.room = self.room
+                self.navigationController!.pushViewController(profile, animated: true)
+
             }
             if self.room?.type == .channel {
                 self.selectedChannelToSeeTheirInfo = self.room?.channelRoom

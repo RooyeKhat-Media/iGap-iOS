@@ -45,6 +45,16 @@ class IGGlobal {
     }
 }
 
+extension UIViewController {
+    class var storyboardID : String {
+        return "\(self)"
+    }
+    
+    static func instantiateFromAppStroryboard(appStoryboard: AppStoryboard) -> Self {
+        return appStoryboard.viewController(viewControllerClass: self)
+    }
+}
+
 //MARK: -
 extension UIColor {
     convenience init(hexString: String) {
