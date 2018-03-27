@@ -106,13 +106,9 @@ class IGNavigationItem: UINavigationItem {
         
         self.centerViewContainer?.subviews.forEach { $0.removeFromSuperview() }
         self.centerViewContainer?.removeFromSuperview()
-        self.centerViewContainer = IGTappableView()
+        self.centerViewContainer = IGTappableView(frame: CGRect(x: 0, y: 0, width: 200, height: 45))
         
         self.titleView = centerViewContainer
-        self.titleView?.snp.makeConstraints { (make) in
-            make.width.equalTo(150)
-            make.height.equalTo(30)
-        }
         
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 17.0, weight: UIFontWeightSemibold)
@@ -212,7 +208,7 @@ class IGNavigationItem: UINavigationItem {
     }
     
     public func addModalViewRightItem(title: String, iGapFont: Bool = false) {
-        let rightViewFrame = CGRect(x:0, y:0, width: 50, height:40)
+        let rightViewFrame = CGRect(x:0, y:0, width: 60, height:40)
         rightViewContainer = IGTappableView(frame: rightViewFrame)
         rightViewContainer!.backgroundColor = UIColor.clear
         let rightBarButton = UIBarButtonItem(customView: rightViewContainer!)
@@ -225,7 +221,7 @@ class IGNavigationItem: UINavigationItem {
             label = UILabel(frame: labelFrame)
             label.font = UIFont.iGapFontico(ofSize: 20.0)
         } else {
-            labelFrame = CGRect(x: -40, y: 0, width: 100, height:40)
+            labelFrame = CGRect(x: -50, y: 0, width: 100, height:40)
             label = UILabel(frame: labelFrame)
         }
         label.textAlignment = .right
@@ -241,7 +237,7 @@ class IGNavigationItem: UINavigationItem {
         let leftBarButton = UIBarButtonItem(customView: leftViewContainer!)
         self.leftBarButtonItem = leftBarButton
         
-        let labelFrame = CGRect(x: -10, y: 4.5, width: 100, height:31)
+        let labelFrame = CGRect(x: 0, y: 4.5, width: 100, height:31)
         let label = UILabel(frame: labelFrame)
         label.text = title
         label.textColor = UIColor.white
