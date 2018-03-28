@@ -101,16 +101,16 @@ class IGChooseMemberFromContactToCreateChannelViewController: UIViewController ,
         let navigationController = self.navigationController as! IGNavigationController
         navigationController.interactivePopGestureRecognizer?.delegate = self
         if mode == "Admin" {
-            navigationItem.addModalViewItems(leftItemText: "Close", rightItemText: nil , title: "Add Admin")
+            navigationItem.addModalViewItems(leftItemText: "Close", rightItemText: "Add" , title: "Add Admin")
         }
         if mode == "Moderator" {
-            navigationItem.addModalViewItems(leftItemText: "Close", rightItemText: nil , title: "Add Moderator")
+            navigationItem.addModalViewItems(leftItemText: "Close", rightItemText: "Add" , title: "Add Moderator")
         }
         if mode == "CreateChannel" {
         navigationItem.addModalViewItems(leftItemText: "Close", rightItemText: "Create", title: "New Channel")
         }
         if mode == "Members" {
-            navigationItem.addModalViewItems(leftItemText: "Close", rightItemText: nil , title: "Add Member")
+            navigationItem.addModalViewItems(leftItemText: "Close", rightItemText: "Add" , title: "Add Member")
         }
         navigationItem.leftViewContainer?.addAction {
             if self.mode == "Admin"  || self.mode == "Moderator" || self.mode == "Members" {
@@ -125,11 +125,16 @@ class IGChooseMemberFromContactToCreateChannelViewController: UIViewController ,
             }
         }
         navigationItem.rightViewContainer?.addAction {
-           // if self.selectedUsers.count > 0 {
-                if self.mode == "CreateChannel" {
-                    self.requestToCreateChannel()
-                }
-            //}
+            // if self.selectedUsers.count > 0 {
+            if self.mode == "CreateChannel" {
+                self.requestToCreateChannel()
+            } else if self.mode == "Admin" {
+                self.requestToAddAdminInChannel()
+            } else if self.mode == "Moderator" {
+                self.requestToAddModeratorInChannel()
+            } else if self.mode == "Members" {
+                self.requestToAddmember()
+            }
         }
         
         
@@ -211,7 +216,6 @@ class IGChooseMemberFromContactToCreateChannelViewController: UIViewController ,
                         case let channelAddAdminResponse as IGPChannelAddAdminResponse :
                             IGChannelAddAdminRequest.Handler.interpret(response: channelAddAdminResponse, memberRole: .admin)
                             self.hud.hide(animated: true)
-                            
                         default:
                             break
                         }

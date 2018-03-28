@@ -202,6 +202,7 @@ class IGCreateNewGroupTableViewController: UITableViewController , UIGestureReco
     }
     
     func requestToCreateGroup() {
+        
         if let roomName = self.groupNameTextField.text {
             if roomName != "" {
                 
@@ -255,12 +256,7 @@ class IGCreateNewGroupTableViewController: UITableViewController , UIGestureReco
                                                             case let groupAvatarAddResponse as IGPGroupAvatarAddResponse:
                                                                 IGGroupAvatarAddRequest.Handler.interpret(response: groupAvatarAddResponse)
                                                                 self.hideProgress()
-                                                                self.dismiss(animated: true, completion: {
-                                                                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: kIGNotificationNameDidCreateARoom),
-                                                                                                    object: nil,
-                                                                                                    userInfo: ["room": getRoomProtoResponse.igpRoom.igpID])
-                                                                })
-                                                                
+                                                                self.dismissView(roomId: getRoomProtoResponse.igpRoom.igpID)
                                                             default:
                                                                 break
                                                             }
@@ -274,11 +270,7 @@ class IGCreateNewGroupTableViewController: UITableViewController , UIGestureReco
                                             })
                                         } else {
                                             self.hideProgress()
-                                            self.dismiss(animated: true, completion: {
-                                                NotificationCenter.default.post(name: NSNotification.Name(rawValue: kIGNotificationNameDidCreateARoom),
-                                                                                object: nil,
-                                                                                userInfo: ["room": getRoomProtoResponse.igpRoom.igpID])
-                                            })
+                                            self.dismissView(roomId: getRoomProtoResponse.igpRoom.igpID)
                                         }
 
                                     default:
@@ -306,6 +298,15 @@ class IGCreateNewGroupTableViewController: UITableViewController , UIGestureReco
         }
     }
     
+    func dismissView(roomId: Int64){
+        self.navigationController?.popToRootViewController(animated: true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: kIGNotificationNameDidCreateARoom),
+                                            object: nil,
+                                            userInfo: ["room": roomId])
+        }
+    }
+    
     func requestToConvertChatToGroup() {
         if let roomName = self.groupNameTextField.text {
             if roomName != "" {
@@ -315,20 +316,10 @@ class IGCreateNewGroupTableViewController: UITableViewController , UIGestureReco
                         switch protoResponse {
                         case let chatConvertToGroupResponse as IGPChatConvertToGroupResponse:
                             let convertChatToGroupResponse =  IGChatConvertToGroupRequest.Handler.interpret(response: chatConvertToGroupResponse)
-                             let newRoomId = convertChatToGroupResponse.roomId
-                            print(self.roomId)
-                            print(newRoomId)
+                            let newRoomId = convertChatToGroupResponse.roomId
                             if self.navigationController is IGNavigationController {
-                                //TODO: Whta the heck is these two l    ines?
-                                self.navigationController?.popViewController(animated: true)
                                 self.navigationController?.popToRootViewController(animated: true)
                             }
-
-//                             self.dismiss(animated: true, completion: {
-//                                NotificationCenter.default.post(name: NSNotification.Name(rawValue: kIGNotificationNameDidCreateARoom),
-//                                                                object: nil,
-//                                                                userInfo: ["room": newRoomId])
-//                             })
                         default:
                             break
                         }

@@ -58,7 +58,11 @@ class IGNewChannelChoosePublicOrPrivateTableViewController: UITableViewControlle
             if self.radioButtonController?.selectedButton() == self.publicChannelButton {
                 self.convertChannelToPublic()
             } else {
-                self.performSegue(withIdentifier: "GoToChooseMemberFromContactPage", sender: self)
+                //self.performSegue(withIdentifier: "GoToChooseMemberFromContactPage", sender: self)
+                let profile = IGChooseMemberFromContactToCreateChannelViewController.instantiateFromAppStroryboard(appStoryboard: .Profile)
+                profile.igpRoom = self.igpRoom
+                profile.mode = "CreateChannel"
+                self.navigationController!.pushViewController(profile, animated: true)
             }
         }
     }
@@ -89,7 +93,11 @@ class IGNewChannelChoosePublicOrPrivateTableViewController: UITableViewControlle
                 DispatchQueue.main.async {
                     switch protoResponse {
                     case is IGPChannelUpdateUsernameResponse :
-                        self.performSegue(withIdentifier: "GoToChooseMemberFromContactPage", sender: self)
+                        //self.performSegue(withIdentifier: "GoToChooseMemberFromContactPage", sender: self)
+                        let profile = IGChooseMemberFromContactToCreateChannelViewController.instantiateFromAppStroryboard(appStoryboard: .Profile)
+                        profile.igpRoom = self.igpRoom
+                        profile.mode = "CreateChannel"
+                        self.navigationController!.pushViewController(profile, animated: true)
                         break
                     default:
                         break

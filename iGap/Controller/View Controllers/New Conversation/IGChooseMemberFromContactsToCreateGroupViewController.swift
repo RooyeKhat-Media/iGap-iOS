@@ -81,6 +81,9 @@ class IGChooseMemberFromContactsToCreateGroupViewController: UIViewController , 
         return self.contactSections!
     }
     
+    func dismmisDelegate(){
+        self.dismiss(animated: true, completion: nil)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -121,9 +124,10 @@ class IGChooseMemberFromContactsToCreateGroupViewController: UIViewController , 
                 }
                 
             }else{
-                self.dismiss(animated: true, completion: {
-                    
-                })
+                if self.navigationController is IGNavigationController {
+                    self.navigationController?.popViewController(animated: true)
+                }
+                //self.dismiss(animated: true, completion: nil)
             }
         }
         
@@ -135,7 +139,15 @@ class IGChooseMemberFromContactsToCreateGroupViewController: UIViewController , 
             } else if self.mode == "Admin"{
                 self.requestToAddAdminInGroup()
             } else {
-                self.performSegue(withIdentifier: "CreateGroupPage", sender: self)
+                //self.performSegue(withIdentifier: "CreateGroupPage", sender: self)
+                let createGroup = IGCreateNewGroupTableViewController.instantiateFromAppStroryboard(appStoryboard: .CreateRoom)
+                let selectedUsersToCreateGroup = self.selectedUsers.map({ (user) -> IGRegisteredUser in
+                    return user.registredUser
+                })
+                createGroup.selectedUsersToCreateGroup = selectedUsersToCreateGroup
+                createGroup.mode = self.mode
+                createGroup.roomId = self.roomID
+                self.navigationController!.pushViewController(createGroup, animated: true)
             }
         }
     }

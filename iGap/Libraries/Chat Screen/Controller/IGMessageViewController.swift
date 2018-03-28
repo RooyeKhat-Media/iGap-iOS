@@ -183,11 +183,21 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
             }
             if self.room?.type == .channel {
                 self.selectedChannelToSeeTheirInfo = self.room?.channelRoom
-                self.performSegue(withIdentifier: "showChannelinfo", sender: self)
+                //self.performSegue(withIdentifier: "showChannelinfo", sender: self)
+                
+                let profile = IGChannelInfoTableViewController.instantiateFromAppStroryboard(appStoryboard: .Profile)
+                profile.selectedChannel = self.selectedChannelToSeeTheirInfo
+                profile.room = self.room
+                self.navigationController!.pushViewController(profile, animated: true)
             }
             if self.room?.type == .group {
                 self.selectedGroupToSeeTheirInfo = self.room?.groupRoom
-                self.performSegue(withIdentifier: "showGroupInfo", sender: self)
+                //self.performSegue(withIdentifier: "showGroupInfo", sender: self)
+                
+                let profile = IGGroupInfoTableViewController.instantiateFromAppStroryboard(appStoryboard: .Profile)
+                profile.selectedGroup = self.selectedGroupToSeeTheirInfo
+                profile.room = self.room
+                self.navigationController!.pushViewController(profile, animated: true)
             }
             
         }

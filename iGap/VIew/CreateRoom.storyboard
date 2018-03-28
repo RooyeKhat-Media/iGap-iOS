@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Navigation Controller-->
+        <scene sceneID="ANy-tY-UcH">
+            <objects>
+                <navigationController id="AKF-si-6I2" customClass="IGNavigationController" customModule="iGap" customModuleProvider="target" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="TeA-P7-wI9">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="dhL-mK-4VC" kind="relationship" relationship="rootViewController" id="6Pg-oc-VWY"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="eIi-16-TkO" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2166" y="-2128"/>
+        </scene>
+        <!--Create New Group Table View Controller-->
+        <scene sceneID="407-dQ-rzx">
+            <objects>
+                <tableViewController storyboardIdentifier="IGCreateNewGroupTableViewController" id="dhL-mK-4VC" customClass="IGCreateNewGroupTableViewController" customModule="iGap" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="vka-bm-Bna">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <sections>
+                            <tableViewSection id="1wY-iM-Amy">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="238" id="auj-Cu-mu8">
+                                        <rect key="frame" x="0.0" y="35" width="375" height="238"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="auj-Cu-mu8" id="5BD-T4-S6R">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="237.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Group name" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fBq-Cq-Su4">
+                                                    <rect key="frame" x="97.5" y="168" width="180" height="30"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="30" id="HVN-pQ-V2i"/>
+                                                        <constraint firstAttribute="width" constant="180" id="gwr-1n-eyD"/>
+                                                    </constraints>
+                                                    <nil key="textColor"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                                    <textInputTraits key="textInputTraits"/>
+                                                </textField>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IG_New_Group_Generic_Avatar" translatesAutoresizingMaskIntoConstraints="NO" id="xhX-6E-zDH">
+                                                    <rect key="frame" x="137.5" y="60" width="100" height="100"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="100" id="S5g-4s-g2r"/>
+                                                        <constraint firstAttribute="width" constant="100" id="SF3-sl-lI9"/>
+                                                    </constraints>
+                                                </imageView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="fBq-Cq-Su4" firstAttribute="top" secondItem="xhX-6E-zDH" secondAttribute="bottom" constant="8" id="9Vq-aL-ih1"/>
+                                                <constraint firstItem="fBq-Cq-Su4" firstAttribute="centerX" secondItem="5BD-T4-S6R" secondAttribute="centerX" id="AZZ-lL-2vQ"/>
+                                                <constraint firstItem="xhX-6E-zDH" firstAttribute="top" secondItem="5BD-T4-S6R" secondAttribute="topMargin" constant="49" id="JQ0-JV-G6a"/>
+                                                <constraint firstItem="xhX-6E-zDH" firstAttribute="centerX" secondItem="5BD-T4-S6R" secondAttribute="centerX" id="djC-GU-Hfd"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection footerTitle="You can provide an optional description for your group" id="0Sx-Z4-vpk">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="4Fc-ob-1B5">
+                                        <rect key="frame" x="0.0" y="309" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="4Fc-ob-1B5" id="F3p-8N-2Sb">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Description" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="CL7-HS-5nd">
+                                                    <rect key="frame" x="14.5" y="0.0" width="356" height="43"/>
+                                                    <nil key="textColor"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits"/>
+                                                </textField>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="CL7-HS-5nd" firstAttribute="width" secondItem="F3p-8N-2Sb" secondAttribute="width" multiplier="0.95" id="0zW-RM-yZz"/>
+                                                <constraint firstItem="CL7-HS-5nd" firstAttribute="height" secondItem="F3p-8N-2Sb" secondAttribute="height" id="EYy-kz-Zkk"/>
+                                                <constraint firstItem="CL7-HS-5nd" firstAttribute="centerY" secondItem="F3p-8N-2Sb" secondAttribute="centerY" id="UGi-SW-qfH"/>
+                                                <constraint firstItem="CL7-HS-5nd" firstAttribute="centerX" secondItem="F3p-8N-2Sb" secondAttribute="centerX" constant="5" id="uFj-Yc-sEU"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="dhL-mK-4VC" id="qqv-Bi-0ie"/>
+                            <outlet property="delegate" destination="dhL-mK-4VC" id="u5r-EG-1ib"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="4w2-Lh-lcK" customClass="IGNavigationItem" customModule="iGap" customModuleProvider="target">
+                        <barButtonItem key="rightBarButtonItem" title="Create" id="fbq-3o-XyK">
+                            <color key="tintColor" red="0.0" green="0.69019607839999997" blue="0.74901960779999999" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <action selector="createButtonClicked:" destination="dhL-mK-4VC" id="RA1-wh-LXL"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="descriptionTextField" destination="CL7-HS-5nd" id="W7a-k2-22r"/>
+                        <outlet property="groupAvatarImage" destination="xhX-6E-zDH" id="mg6-U5-Lqi"/>
+                        <outlet property="groupNameCell" destination="auj-Cu-mu8" id="qbO-ES-ize"/>
+                        <outlet property="groupNameTextField" destination="fBq-Cq-Su4" id="0ni-cL-YDz"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jge-6Z-oCR" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3059" y="-2127"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="IG_New_Group_Generic_Avatar" width="90" height="90"/>
+    </resources>
+</document>

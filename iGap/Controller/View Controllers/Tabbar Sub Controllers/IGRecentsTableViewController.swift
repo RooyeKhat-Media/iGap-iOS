@@ -140,7 +140,10 @@ class IGRecentsTableViewController: UITableViewController {
                 self.performSegue(withIdentifier: "createANewChat", sender: self)
             })
             let newGroup = UIAlertAction(title: "New Group", style: .default, handler: { (action) in
-                self.performSegue(withIdentifier: "createANewGroup", sender: self)
+                //self.performSegue(withIdentifier: "createANewGroup", sender: self)
+                let createGroup = IGChooseMemberFromContactsToCreateGroupViewController.instantiateFromAppStroryboard(appStoryboard: .Profile)
+                createGroup.mode = "CreateGroup"
+                self.navigationController!.pushViewController(createGroup, animated: true)
             })
             let newChannel = UIAlertAction(title: "New Channel", style: .default, handler: { (action) in
                 self.performSegue(withIdentifier: "createANewChannel", sender: self)
