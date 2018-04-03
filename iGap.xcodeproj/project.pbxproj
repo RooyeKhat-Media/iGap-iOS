@@ -219,6 +219,7 @@
 		FA927E0E20288AEE00DF7145 /* FileCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA927E0D20288AA200DF7145 /* FileCell.xib */; };
 		FA930D9A1E5B178F00069EE1 /* SSLSecurity.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA930D981E5B178F00069EE1 /* SSLSecurity.swift */; };
 		FA930D9B1E5B178F00069EE1 /* WebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA930D991E5B178F00069EE1 /* WebSocket.swift */; };
+		FA936906207364E100A0D86A /* Register.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA936905207364E100A0D86A /* Register.storyboard */; };
 		FA93EE282029A39000DD1521 /* VoiceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA93EE272029A39000DD1521 /* VoiceCell.swift */; };
 		FA93EE2A2029A41200DD1521 /* VoiceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA93EE292029A3FF00DD1521 /* VoiceCell.xib */; };
 		FA93EE2C2029DB1300DD1521 /* AudioCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA93EE2B2029DB1300DD1521 /* AudioCell.swift */; };
@@ -530,6 +531,7 @@
 		FA927E0D20288AA200DF7145 /* FileCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FileCell.xib; sourceTree = "<group>"; };
 		FA930D981E5B178F00069EE1 /* SSLSecurity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSLSecurity.swift; sourceTree = "<group>"; };
 		FA930D991E5B178F00069EE1 /* WebSocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebSocket.swift; sourceTree = "<group>"; };
+		FA936905207364E100A0D86A /* Register.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Register.storyboard; sourceTree = "<group>"; };
 		FA93EE272029A39000DD1521 /* VoiceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceCell.swift; sourceTree = "<group>"; };
 		FA93EE292029A3FF00DD1521 /* VoiceCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VoiceCell.xib; sourceTree = "<group>"; };
 		FA93EE2B2029DB1300DD1521 /* AudioCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioCell.swift; sourceTree = "<group>"; };
@@ -1332,6 +1334,7 @@
 				FA0953061E1B87E40043ED3F /* IGSettingStoryboard.storyboard */,
 				FAA51753206A254200471EA0 /* profile.storyboard */,
 				FA786D59206A746700608A2D /* CreateRoom.storyboard */,
+				FA936905207364E100A0D86A /* Register.storyboard */,
 			);
 			path = VIew;
 			sourceTree = "<group>";
@@ -1515,6 +1518,7 @@
 				FA786D58206A575300608A2D /* profile.storyboard in Resources */,
 				FA786D5A206A746700608A2D /* CreateRoom.storyboard in Resources */,
 				FA93EE2E2029DBE300DD1521 /* AudioCell.xib in Resources */,
+				FA936906207364E100A0D86A /* Register.storyboard in Resources */,
 				FAF796061DAA392F0030509B /* LaunchScreen.storyboard in Resources */,
 				FA97D444201716270087BBD0 /* TextCell.xib in Resources */,
 				FAB0F9461FE956D1008F23EB /* Splash.gif in Resources */,
