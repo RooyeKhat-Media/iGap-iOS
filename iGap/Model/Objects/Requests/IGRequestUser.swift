@@ -221,7 +221,7 @@ class IGUserProfileSetNicknameRequest : IGRequest {
 //MARK:
 class IGUserContactsImportRequest : IGRequest {
     class Generator : IGRequest.Generator{
-        class func generate(contacts: [IGContact]) -> IGRequestWrapper {
+        class func generate(contacts: [IGContact], force: Bool = false) -> IGRequestWrapper {
             var contactsImportRequestMessage = IGPUserContactsImport()
             var igpContacts = Array<IGPUserContactsImport.IGPContact>()
             for contact in contacts {
@@ -238,7 +238,7 @@ class IGUserContactsImportRequest : IGRequest {
             }
             contactsImportRequestMessage.igpContacts = igpContacts
             //TODO: pass force value here
-            contactsImportRequestMessage.igpForce = false
+            contactsImportRequestMessage.igpForce = force
             return IGRequestWrapper(message: contactsImportRequestMessage, actionID: 106)
         }
     }

@@ -1435,8 +1435,8 @@ To proceed, confirm that your new number can recieve SMS or calls and tap Next t
                     </navigationItem>
                     <connections>
                         <outlet property="AddContactButton" destination="HuG-VN-80D" id="q86-CX-weR"/>
-                        <segue destination="jZb-oN-oRW" kind="show" identifier="GoToAddNewContactPage" id="V8h-ZS-ZX4"/>
                         <segue destination="dYd-F8-aEP" kind="show" identifier="GoToBlockListPage" id="FWu-Ni-6zD"/>
+                        <segue destination="GSR-9L-Tsd" kind="show" identifier="GoToAddNewContactPage" id="DCb-NA-RbG"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="N7h-NR-Ztc" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -3906,6 +3906,99 @@ Please wait 0:59</string>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="w9k-Dw-fMu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1112" y="-1745"/>
+        </scene>
+        <!--Setting Add Contact View Controller-->
+        <scene sceneID="atb-Do-cXk">
+            <objects>
+                <viewController id="GSR-9L-Tsd" customClass="IGSettingAddContactViewController" customModule="iGap" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Eek-8A-cLv"/>
+                        <viewControllerLayoutGuide type="bottom" id="rLA-J0-9Cr"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="XVf-Hp-DrF">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="First Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="1kv-eK-wxW">
+                                <rect key="frame" x="36" y="84" width="342" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="X6a-wh-uAZ"/>
+                                </constraints>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Last Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="z1N-y5-WbT">
+                                <rect key="frame" x="36" y="136" width="342" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="ziu-mx-CDN"/>
+                                </constraints>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="D7n-ns-bdX">
+                                <rect key="frame" x="36" y="188" width="342" height="40"/>
+                                <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="K4a-eG-CcH"/>
+                                </constraints>
+                                <state key="normal" title="Choose Country">
+                                    <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="btnChooseCountry:" destination="GSR-9L-Tsd" eventType="touchUpInside" id="jGK-B0-PMq"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="479-jb-QQB">
+                                <rect key="frame" x="36" y="240" width="60" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="ClD-EV-a00"/>
+                                    <constraint firstAttribute="width" constant="60" id="fn8-na-s7j"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="pRL-1u-ZYw" customClass="AKMaskField" customModule="AKMaskField">
+                                <rect key="frame" x="106" y="240" width="272" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="tCd-r5-35q"/>
+                                </constraints>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                        </subviews>
+                        <color key="backgroundColor" red="0.92143100499999997" green="0.92145264149999995" blue="0.92144101860000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="479-jb-QQB" firstAttribute="top" secondItem="D7n-ns-bdX" secondAttribute="bottom" constant="12" id="2MA-we-Wim"/>
+                            <constraint firstItem="z1N-y5-WbT" firstAttribute="top" secondItem="1kv-eK-wxW" secondAttribute="bottom" constant="12" id="4eh-4q-zmt"/>
+                            <constraint firstItem="D7n-ns-bdX" firstAttribute="leading" secondItem="XVf-Hp-DrF" secondAttribute="leadingMargin" constant="16" id="8ug-lc-XRc"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="pRL-1u-ZYw" secondAttribute="trailing" constant="16" id="B0O-1g-r5D"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="D7n-ns-bdX" secondAttribute="trailing" constant="16" id="Hro-he-FjU"/>
+                            <constraint firstItem="D7n-ns-bdX" firstAttribute="top" secondItem="z1N-y5-WbT" secondAttribute="bottom" constant="12" id="JVC-vc-gLP"/>
+                            <constraint firstItem="1kv-eK-wxW" firstAttribute="top" secondItem="XVf-Hp-DrF" secondAttribute="topMargin" constant="20" id="TMM-pf-h3Z"/>
+                            <constraint firstItem="z1N-y5-WbT" firstAttribute="leading" secondItem="XVf-Hp-DrF" secondAttribute="leadingMargin" constant="16" id="UJl-Di-3ou"/>
+                            <constraint firstItem="1kv-eK-wxW" firstAttribute="leading" secondItem="XVf-Hp-DrF" secondAttribute="leadingMargin" constant="16" id="Z0p-7S-1tX"/>
+                            <constraint firstItem="pRL-1u-ZYw" firstAttribute="leading" secondItem="479-jb-QQB" secondAttribute="trailing" constant="10" id="dg0-Vj-bPc"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="1kv-eK-wxW" secondAttribute="trailing" constant="16" id="fBe-fj-2Qk"/>
+                            <constraint firstItem="pRL-1u-ZYw" firstAttribute="top" secondItem="D7n-ns-bdX" secondAttribute="bottom" constant="12" id="nj7-pd-BqA"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="z1N-y5-WbT" secondAttribute="trailing" constant="16" id="wXh-Cm-vKY"/>
+                            <constraint firstItem="479-jb-QQB" firstAttribute="leading" secondItem="XVf-Hp-DrF" secondAttribute="leadingMargin" constant="16" id="zeu-C1-XnU"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="btnChooseCountry" destination="D7n-ns-bdX" id="4Ii-pE-GuZ"/>
+                        <outlet property="edtFirstName" destination="1kv-eK-wxW" id="LNQ-vv-KPB"/>
+                        <outlet property="edtLastName" destination="z1N-y5-WbT" id="mh5-PP-MjL"/>
+                        <outlet property="edtPhoneNumber" destination="pRL-1u-ZYw" id="b9g-k3-DLK"/>
+                        <outlet property="txtCountryCode" destination="479-jb-QQB" id="JVE-Sb-w8r"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="pzM-ir-xti" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-194" y="-1745"/>
         </scene>
         <!--Choose Contact-->
         <scene sceneID="eS3-vH-glp">
