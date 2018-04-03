@@ -137,7 +137,8 @@ class IGRecentsTableViewController: UITableViewController {
                 }
             })
             let newChat = UIAlertAction(title: "New (Conversation OR Call)", style: .default, handler: { (action) in
-                self.performSegue(withIdentifier: "createANewChat", sender: self)
+                let createChat = IGCreateNewChatTableViewController.instantiateFromAppStroryboard(appStoryboard: .CreateRoom)
+                self.navigationController!.pushViewController(createChat, animated: true)
             })
             let newGroup = UIAlertAction(title: "New Group", style: .default, handler: { (action) in
                 //self.performSegue(withIdentifier: "createANewGroup", sender: self)
@@ -146,7 +147,8 @@ class IGRecentsTableViewController: UITableViewController {
                 self.navigationController!.pushViewController(createGroup, animated: true)
             })
             let newChannel = UIAlertAction(title: "New Channel", style: .default, handler: { (action) in
-                self.performSegue(withIdentifier: "createANewChannel", sender: self)
+                let createChannel = IGCreateNewChannelTableViewController.instantiateFromAppStroryboard(appStoryboard: .CreateRoom)
+                self.navigationController!.pushViewController(createChannel, animated: true)
             })
             let searchInCurrentRoom = UIAlertAction(title: "Find Local Room", style: .default, handler: { (action) in
                 let storyboard : UIStoryboard = UIStoryboard(name: "IGSettingStoryboard", bundle: nil)
