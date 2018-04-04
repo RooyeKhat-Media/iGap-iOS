@@ -36,7 +36,7 @@ class IGCreateNewChannelTableViewController: UITableViewController {
         let navigationItem = self.navigationItem as! IGNavigationItem
         navigationItem.addModalViewItems(leftItemText: "Cancel", rightItemText: "Next", title: "New Channel")
         navigationItem.leftViewContainer?.addAction {
-            self.dismiss(animated: true, completion: nil)
+            self.navigationController?.popToRootViewController(animated: true)
         }
         navigationItem.rightViewContainer?.addAction {
             if self.channelnameTextField.text?.isEmpty == true {

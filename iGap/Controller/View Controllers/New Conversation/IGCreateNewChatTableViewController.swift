@@ -81,11 +81,8 @@ class IGCreateNewChatTableViewController: UITableViewController, UISearchResults
         let navigationController = self.navigationController as! IGNavigationController
         navigationController.interactivePopGestureRecognizer?.delegate = self
         navigationItem.leftViewContainer?.addAction {
-            self.dismiss(animated: true, completion: {
-                
-            })
+            self.navigationController?.popToRootViewController(animated: true)
         }
-//        setupSearchBar()
         self.tableView.sectionIndexBackgroundColor = UIColor.clear
     }
 
@@ -203,14 +200,14 @@ class IGCreateNewChatTableViewController: UITableViewController, UISearchResults
         IGChatGetRoomRequest.Generator.generate(peerId: user.registredUser.id).success({ (protoResponse) in
             switch protoResponse {
             case let chatGetRoomResponse as IGPChatGetRoomResponse:
-                let roomId = IGChatGetRoomRequest.Handler.interpret(response: chatGetRoomResponse)
-                self.dismiss(animated: true, completion: {
-                    //segue to created chat
+                DispatchQueue.main.async {
+                    let roomId = IGChatGetRoomRequest.Handler.interpret(response: chatGetRoomResponse)
+                    self.navigationController?.popToRootViewController(animated: true)
                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: kIGNotificationNameDidCreateARoom),
                                                     object: nil,
                                                     userInfo: ["room": roomId])
-                })
-                hud.hide(animated: true)
+                    hud.hide(animated: true)
+                }
                 break
             default:
                 break

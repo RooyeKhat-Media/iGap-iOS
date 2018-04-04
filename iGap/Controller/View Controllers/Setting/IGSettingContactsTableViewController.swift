@@ -52,10 +52,14 @@ class IGSettingContactsTableViewController: UITableViewController,UISearchResult
         self.tableView.sectionIndexBackgroundColor = UIColor.clear
         resultSearchController.searchBar.delegate = self
         let navigationItem = self.navigationItem as! IGNavigationItem
-        navigationItem.addNavigationViewItems(rightItemText: nil, title: "Contacts")
+        navigationItem.addNavigationViewItems(rightItemText: "Add", title: "Contacts")
         navigationItem.navigationController = self.navigationController as? IGNavigationController
         let navigationController = self.navigationController as! IGNavigationController
         navigationController.interactivePopGestureRecognizer?.delegate = self
+        
+        navigationItem.rightViewContainer?.addAction {
+            self.performSegue(withIdentifier: "GoToAddNewContactPage", sender: self)
+        }
         
         self.notificationToken = blockedUsers.observe { (changes: RealmCollectionChange) in
             switch changes {

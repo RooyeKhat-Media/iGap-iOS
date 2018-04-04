@@ -3907,7 +3907,7 @@ Please wait 0:59</string>
             </objects>
             <point key="canvasLocation" x="-1112" y="-1745"/>
         </scene>
-        <!--Setting Add Contact View Controller-->
+        <!--Title-->
         <scene sceneID="atb-Do-cXk">
             <objects>
                 <viewController id="GSR-9L-Tsd" customClass="IGSettingAddContactViewController" customModule="iGap" customModuleProvider="target" sceneMemberID="viewController">
@@ -3988,6 +3988,7 @@ Please wait 0:59</string>
                             <constraint firstItem="479-jb-QQB" firstAttribute="leading" secondItem="XVf-Hp-DrF" secondAttribute="leadingMargin" constant="16" id="zeu-C1-XnU"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" title="Title" id="85d-k0-Ta9" customClass="IGNavigationItem" customModule="iGap" customModuleProvider="target"/>
                     <connections>
                         <outlet property="btnChooseCountry" destination="D7n-ns-bdX" id="4Ii-pE-GuZ"/>
                         <outlet property="edtFirstName" destination="1kv-eK-wxW" id="LNQ-vv-KPB"/>

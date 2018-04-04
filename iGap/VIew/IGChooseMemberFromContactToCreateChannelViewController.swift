@@ -119,9 +119,9 @@ class IGChooseMemberFromContactToCreateChannelViewController: UIViewController ,
                 }
 
             }else{
-            self.dismiss(animated: true, completion: {
-                
-            })
+                if self.navigationController is IGNavigationController {
+                    self.navigationController?.popToRootViewController(animated: true)
+                }
             }
         }
         navigationItem.rightViewContainer?.addAction {
@@ -184,9 +184,10 @@ class IGChooseMemberFromContactToCreateChannelViewController: UIViewController ,
                     switch protoResponse {
                     case let channelAddMemberResponse as IGPChannelAddMemberResponse :
                         IGChannelAddMemberRequest.Handler.interpret(response: channelAddMemberResponse)
-                        self.dismiss(animated: true, completion: {
-                            NotificationCenter.default.post(name: NSNotification.Name(rawValue: kIGNotificationNameDidCreateARoom),object: nil,userInfo: ["room": self.igpRoom.igpID])
-                        })
+                        if self.navigationController is IGNavigationController {
+                            self.navigationController?.popToRootViewController(animated: true)
+                        }
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: kIGNotificationNameDidCreateARoom),object: nil,userInfo: ["room": self.igpRoom.igpID])
                     default:
                         break
                     }
