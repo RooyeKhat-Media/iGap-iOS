@@ -22,12 +22,15 @@ class IGSettingAddContactViewController: UIViewController, UIGestureRecognizerDe
     
     @IBAction func btnChooseCountry(_ sender: UIButton) {
         let chooseCountry = IGRegistrationStepSelectCountryTableViewController.instantiateFromAppStroryboard(appStoryboard: .Register)
+        chooseCountry.popView = true
         chooseCountry.delegate = self
         self.navigationController!.pushViewController(chooseCountry, animated: true)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        makeView()
 
         let navigationItem = self.navigationItem as! IGNavigationItem
         navigationItem.addNavigationViewItems(rightItemText: "Done", title: "Add Contact")
@@ -39,8 +42,17 @@ class IGSettingAddContactViewController: UIViewController, UIGestureRecognizerDe
         }
     }
     
+    private func makeView(){
+        btnChooseCountry.layer.cornerRadius = 5
+        btnChooseCountry.layer.borderWidth = 1
+        btnChooseCountry.layer.borderColor = UIColor.black.cgColor
+        
+        txtCountryCode.layer.cornerRadius = 5
+        txtCountryCode.layer.borderWidth = 1
+        txtCountryCode.layer.borderColor = UIColor.black.cgColor
+    }
+    
     private func addContact(){
-//        contacts.append(IGContact(phoneNumber: phone.value.stringValue, firstName: contact.givenName, lastName: contact.familyName))
         
         if edtPhoneNumber != nil && !(edtPhoneNumber.text?.isEmpty)! && edtFirstName != nil && !(edtFirstName.text?.isEmpty)! && edtLastName != nil && !(edtLastName.text?.isEmpty)! {
             // continue
@@ -48,12 +60,12 @@ class IGSettingAddContactViewController: UIViewController, UIGestureRecognizerDe
             return
         }
         
-        let contact = IGContact(phoneNumber: edtPhoneNumber.text!, firstName: edtFirstName.text, lastName: edtLastName.text)
+        let contact = IGContact(phoneNumber: "\(txtCountryCode.text)\(edtPhoneNumber.text!)", firstName: edtFirstName.text, lastName: edtLastName.text)
         IGUserContactsImportRequest.Generator.generate(contacts: [contact], force: true).success({ (protoResponse) in
             DispatchQueue.main.async {
                 if let contactImportResponse = protoResponse as? IGPUserContactsImportResponse {
                     IGUserContactsImportRequest.Handler.interpret(response: contactImportResponse)
-                    self.navigationController?.popViewController(animated: true)
+                    self.getContactListFromServer()
                 }
             }
         }).error ({ (errorCode, waitTime) in
@@ -72,10 +84,27 @@ class IGSettingAddContactViewController: UIViewController, UIGestureRecognizerDe
         }).send()
     }
     
+    func getContactListFromServer() {
+        IGUserContactsGetListRequest.Generator.generate().success { (protoResponse) in
+            switch protoResponse {
+            case let contactGetListResponse as IGPUserContactsGetListResponse:
+                DispatchQueue.main.async {
+                    self.navigationController?.popViewController(animated: true)
+                    IGUserContactsGetListRequest.Handler.interpret(response: contactGetListResponse)
+                }
+                break
+            default:
+                break
+            }
+            }.error { (errorCode, waitTime) in
+                
+            }.send()
+    }
+    
     
     fileprivate func setSelectedCountry(_ country:IGCountryInfo) {
-        txtCountryCode.text = country.countryName
-        btnChooseCountry.setTitle("+" + String(Int((country.countryCode))), for: UIControlState.normal)
+        txtCountryCode.text = "+" + String(Int((country.countryCode)))
+        btnChooseCountry.setTitle(country.countryName , for: UIControlState.normal)
         
         if country.codePattern != nil && country.codePattern != "" {
             edtPhoneNumber.setMask((country.codePatternMask), withMaskTemplate: country.codePatternTemplate)

@@ -27,6 +27,8 @@ class IGRegistrationStepSelectCountryTableViewController: UIViewController, UITa
     var dictionaryOfSectionedCountries = Dictionary<String, [IGCountry]>()
     var sortedListOfKeys = Array<String>()
     
+    var popView: Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -34,7 +36,11 @@ class IGRegistrationStepSelectCountryTableViewController: UIViewController, UITa
         navItem.addModalViewItems(leftItemText: nil, rightItemText: "Close", title: "Country")
         navItem.rightViewContainer?.addAction {
             IGRegistrationStepPhoneViewController.allowGetCountry = false
-            self.dismiss(animated: true, completion: nil)
+            if self.popView {
+                self.navigationController?.popViewController(animated: true)
+            } else {
+                self.dismiss(animated: true, completion: nil)
+            }
         }
 
         tableView.delegate = self
@@ -93,7 +99,11 @@ class IGRegistrationStepSelectCountryTableViewController: UIViewController, UITa
                     countryInfo.countryISO = isoCode
                     self.delegate?.didSelectCountry(country: countryInfo)
                     IGRegistrationStepPhoneViewController.allowGetCountry = false
-                    self.dismiss(animated: true, completion: nil)
+                    if self.popView {
+                        self.navigationController?.popViewController(animated: true)
+                    } else {
+                        self.dismiss(animated: true, completion: nil)
+                    }
                 default:
                     break
                 }    
