@@ -482,11 +482,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" alpha="0.5" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IG_Blur_Call" translatesAutoresizingMaskIntoConstraints="NO" id="PLh-MM-IK9">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </imageView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="9G6-WI-YVj" customClass="IGMessageCollectionView" customModule="iGap" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="TTu-g1-jEU">
                                     <size key="itemSize" width="50" height="50"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -1189,6 +1189,55 @@
             </objects>
             <point key="canvasLocation" x="3894" y="-3297"/>
         </scene>
+        <!--Map-->
+        <scene sceneID="Xfd-ZL-7Jy">
+            <objects>
+                <viewController storyboardIdentifier="IGMap" id="hsi-ex-lNf" customClass="IGMap" customModule="iGap" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="MaP-La-5Ha"/>
+                        <viewControllerLayoutGuide type="bottom" id="SWU-Vq-U8i"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="E87-JL-NHt">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="satellite" translatesAutoresizingMaskIntoConstraints="NO" id="Lag-5t-Bo2">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                            </mapView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="Lag-5t-Bo2" firstAttribute="top" secondItem="MaP-La-5Ha" secondAttribute="bottom" id="8tE-5d-nCC"/>
+                            <constraint firstItem="Lag-5t-Bo2" firstAttribute="leading" secondItem="E87-JL-NHt" secondAttribute="leadingMargin" constant="-16" id="PHE-ax-WRR"/>
+                            <constraint firstItem="Lag-5t-Bo2" firstAttribute="trailing" secondItem="E87-JL-NHt" secondAttribute="trailingMargin" constant="16" id="YUp-o9-qOo"/>
+                            <constraint firstItem="SWU-Vq-U8i" firstAttribute="top" secondItem="Lag-5t-Bo2" secondAttribute="bottom" id="qGi-AU-TET"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Map" id="cMV-mk-Mj0" customClass="IGNavigationItem" customModule="iGap" customModuleProvider="target"/>
+                    <connections>
+                        <outlet property="mapView" destination="Lag-5t-Bo2" id="Hha-eZ-Ksn"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zau-as-hgw" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2569" y="-4121"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="mjG-90-cxT">
+            <objects>
+                <navigationController id="hzm-cV-P5b" customClass="IGNavigationController" customModule="iGap" customModuleProvider="target" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Xsr-Kl-K9a">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="hsi-ex-lNf" kind="relationship" relationship="rootViewController" id="dlO-S1-czf"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mPm-Cl-sOc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1705" y="-4121"/>
+        </scene>
         <!--Report-->
         <scene sceneID="jCV-2M-SGV">
             <objects>
@@ -1262,6 +1311,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="jRj-hY-oEr"/>
-        <segue reference="cmM-gF-ANr"/>
+        <segue reference="ebc-Vg-0Gq"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -201,6 +201,8 @@
 		FA8204382025C97300A795D5 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8204362025C97300A795D5 /* ImageCell.swift */; };
 		FA82043B2025D90800A795D5 /* ImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA82043A2025C99300A795D5 /* ImageCell.xib */; };
 		FA8560AA1FFBA6FC00A25DC3 /* IGSettingPrivacyAndSecurityTwoStepVerificationVerifyUnconfirmedEmail.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8560A91FFBA6FC00A25DC3 /* IGSettingPrivacyAndSecurityTwoStepVerificationVerifyUnconfirmedEmail.swift */; };
+		FA865C7220789C2600B9D585 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA865C7120789C2600B9D585 /* MapKit.framework */; };
+		FA865C752078A32000B9D585 /* IGMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA865C742078A32000B9D585 /* IGMap.swift */; };
 		FA899B6F2046DFC8001A33CB /* CallStateObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA899B6E2046DFC8001A33CB /* CallStateObserver.swift */; };
 		FA8D056D20739C96007861E7 /* IGSettingAddContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8D056C20739C96007861E7 /* IGSettingAddContactViewController.swift */; };
 		FA8F224C1DD89910005A90D1 /* IGRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8F224B1DD89910005A90D1 /* IGRoom.swift */; };
@@ -514,6 +516,8 @@
 		FA8204362025C97300A795D5 /* ImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
 		FA82043A2025C99300A795D5 /* ImageCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ImageCell.xib; sourceTree = "<group>"; };
 		FA8560A91FFBA6FC00A25DC3 /* IGSettingPrivacyAndSecurityTwoStepVerificationVerifyUnconfirmedEmail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGSettingPrivacyAndSecurityTwoStepVerificationVerifyUnconfirmedEmail.swift; sourceTree = "<group>"; };
+		FA865C7120789C2600B9D585 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		FA865C742078A32000B9D585 /* IGMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGMap.swift; sourceTree = "<group>"; };
 		FA899B6E2046DFC8001A33CB /* CallStateObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallStateObserver.swift; sourceTree = "<group>"; };
 		FA8D056C20739C96007861E7 /* IGSettingAddContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGSettingAddContactViewController.swift; sourceTree = "<group>"; };
 		FA8F224B1DD89910005A90D1 /* IGRoom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGRoom.swift; sourceTree = "<group>"; };
@@ -639,6 +643,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA865C7220789C2600B9D585 /* MapKit.framework in Frameworks */,
 				FA98F83A204D41AB0070424E /* Cosmos.framework in Frameworks */,
 				FA9402AC2042D49D00D1A35C /* WebRTC.framework in Frameworks */,
 				931DC8C91E388418008F04A9 /* CoreLocation.framework in Frameworks */,
@@ -724,6 +729,7 @@
 		FA087B2C1DC4A27200E139FA /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				FA865C732078A2D700B9D585 /* Map */,
 				FA03C19A20429437008812E3 /* Call */,
 				93AA67B81E4F03290053380C /* Channel and Group Info */,
 				FA50A8C61DD35EFD00C6D2EA /* Splash and Register */,
@@ -1092,6 +1098,14 @@
 			path = Objects;
 			sourceTree = "<group>";
 		};
+		FA865C732078A2D700B9D585 /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				FA865C742078A32000B9D585 /* IGMap.swift */,
+			);
+			path = Map;
+			sourceTree = "<group>";
+		};
 		FA930D961E5B178F00069EE1 /* ThirdParty Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -1384,6 +1398,7 @@
 		FAF985881E2E10EC00B26940 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FA865C7120789C2600B9D585 /* MapKit.framework */,
 				FA98F839204D41AA0070424E /* Cosmos.framework */,
 				FA9402AB2042D49C00D1A35C /* WebRTC.framework */,
 				FAF5D2E61F8D81A600A26EE1 /* SwiftProtobuf.framework */,
@@ -1842,6 +1857,7 @@
 				FA8F224E1DD89AC5005A90D1 /* IGRoomMessage.swift in Sources */,
 				FA0953871E1B97E20043ED3F /* IGCreateNewChannelTableViewController.swift in Sources */,
 				FAD530631E0BD80800FE6C54 /* IGNavigationController.swift in Sources */,
+				FA865C752078A32000B9D585 /* IGMap.swift in Sources */,
 				FAAC57D31DE2CE9F00A28058 /* IGDownloadManager.swift in Sources */,
 				FA358D201E0A6F6A001D0935 /* IGGroupsTableViewController.swift in Sources */,
 				DF3EDEF64399AA713B2D0C2F /* IGRequestSignaling.swift in Sources */,
