@@ -280,6 +280,7 @@
 		FAD959071F48D4EF00FBD306 /* IGSettingQrScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD959061F48D4EF00FBD306 /* IGSettingQrScannerViewController.swift */; };
 		FADE97B31DF2DBF100FF714A /* IGMusicPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADE97B21DF2DBF100FF714A /* IGMusicPlayer.swift */; };
 		FAE11243204E96FA009F402B /* IGCallsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE11242204E96FA009F402B /* IGCallsTableViewController.swift */; };
+		FAE6BAB2207B537B00E54ECE /* MKHipsterTileOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE6BAB1207B537B00E54ECE /* MKHipsterTileOverlay.swift */; };
 		FAEA75D91DDAFFA200C387F1 /* IGRoomMessageLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAEA75D81DDAFFA200C387F1 /* IGRoomMessageLocation.swift */; };
 		FAEA75DB1DDB012800C387F1 /* IGRoomMessageLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAEA75DA1DDB012800C387F1 /* IGRoomMessageLog.swift */; };
 		FAEA75DD1DDB035400C387F1 /* IGRoomMessageContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAEA75DC1DDB035400C387F1 /* IGRoomMessageContact.swift */; };
@@ -599,6 +600,7 @@
 		FAE11242204E96FA009F402B /* IGCallsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGCallsTableViewController.swift; sourceTree = "<group>"; };
 		FAE11244204E9813009F402B /* IGCallListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGCallListTableViewCell.swift; sourceTree = "<group>"; };
 		FAE11246204E982D009F402B /* IGCallListTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = IGCallListTableViewCell.xib; sourceTree = "<group>"; };
+		FAE6BAB1207B537B00E54ECE /* MKHipsterTileOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MKHipsterTileOverlay.swift; sourceTree = "<group>"; };
 		FAEA75D81DDAFFA200C387F1 /* IGRoomMessageLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGRoomMessageLocation.swift; sourceTree = "<group>"; };
 		FAEA75DA1DDB012800C387F1 /* IGRoomMessageLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGRoomMessageLog.swift; sourceTree = "<group>"; };
 		FAEA75DC1DDB035400C387F1 /* IGRoomMessageContact.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGRoomMessageContact.swift; sourceTree = "<group>"; };
@@ -1102,6 +1104,7 @@
 			isa = PBXGroup;
 			children = (
 				FA865C742078A32000B9D585 /* IGMap.swift */,
+				FAE6BAB1207B537B00E54ECE /* MKHipsterTileOverlay.swift */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -1624,6 +1627,7 @@
 				FA401FA41E10F80500A50C5A /* IGLabel.swift in Sources */,
 				93193F2E1E5812830039AC0C /* IGGroupInfoEditTypeTableViewController.swift in Sources */,
 				FA3C8E041E6D785800D94FBB /* IGClientActionManager.swift in Sources */,
+				FAE6BAB2207B537B00E54ECE /* MKHipsterTileOverlay.swift in Sources */,
 				93AA67C41E4F38260053380C /* IGChannelInfoAdminsAndModeratorsTableViewController.swift in Sources */,
 				93A3D3CE1E4087B000D2686F /* IGNewChannelBottomViewCollectionCell.swift in Sources */,
 				FA09534C1E1B97700043ED3F /* IGSettingAccountUsernameTableViewController.swift in Sources */,

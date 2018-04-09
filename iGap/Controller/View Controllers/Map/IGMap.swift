@@ -77,7 +77,7 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
         annotation.title = "iGap Map"
         annotation.subtitle = "iGap map user simple description. \n iGap map user simple description"
         mapView.addAnnotation(annotation)
-        let span = MKCoordinateSpanMake(0.05, 0.05)
+        let span = MKCoordinateSpanMake(0, 360 / pow(2, Double(14)) * Double(mapView.frame.size.width) / 256)
         let region = MKCoordinateRegionMake(currentLocation.coordinate, span)
         mapView.setRegion(region, animated: true)
     }
