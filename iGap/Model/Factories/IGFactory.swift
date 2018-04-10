@@ -1041,10 +1041,12 @@ class IGFactory: NSObject {
         let task = IGFactoryTask()
         task.task = {
             IGDatabaseManager.shared.perfrmOnDatabaseThread {
-                let predicate = NSPredicate(format: "id = %lld", roomID)
-                if let roomInDb = try! Realm().objects(IGRoom.self).filter(predicate).first {
-                   try! IGDatabaseManager.shared.realm.write {
-                        roomInDb.isParticipant = false
+                if IGAppManager.sharedManager.userID() == memberId {
+                    let predicate = NSPredicate(format: "id = %lld", roomID)
+                    if let roomInDb = try! Realm().objects(IGRoom.self).filter(predicate).first {
+                        try! IGDatabaseManager.shared.realm.write {
+                            roomInDb.isParticipant = false
+                        }
                     }
                 }
                 IGFactory.shared.performInFactoryQueue {
