@@ -707,6 +707,7 @@ class IGRecentsTableViewController: UITableViewController {
                 self.hud.mode = .indeterminate
                 IGClientGetRoomRequest.Generator.generate(roomId: roomId).success({ (protoResponse) in
                         DispatchQueue.main.async {
+                            self.hud.hide(animated: true)
                             switch protoResponse {
                             case let clientGetRoomResponse as IGPClientGetRoomResponse:
                                 IGClientGetRoomRequest.Handler.interpret(response: clientGetRoomResponse)
@@ -714,7 +715,6 @@ class IGRecentsTableViewController: UITableViewController {
                             default:
                                 break
                             }
-                            self.hud.hide(animated: true)
                         }
                     }).error ({ (errorCode, waitTime) in
                         DispatchQueue.main.async {
