@@ -172,7 +172,9 @@ class IGRecentsTableViewController: UITableViewController {
             
         }
         navigationItem.leftViewContainer?.addAction {
-            self.performSegue(withIdentifier: "showSettings", sender: self)
+            //self.performSegue(withIdentifier: "showSettings", sender: self)
+            let createGroup = IGMap.instantiateFromAppStroryboard(appStoryboard: .Main)
+            self.navigationController!.pushViewController(createGroup, animated: true)
         }
     }
     

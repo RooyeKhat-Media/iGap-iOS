@@ -25,7 +25,10 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
     
     var showMarker = true
     var room: IGRoom!
-
+    let MIN_ZOOM_LEVEL = 16.5
+    let MAX_ZOOM_LEVEL = 18.0
+    var span: MKCoordinateSpan!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -35,7 +38,7 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
         let navigationController = self.navigationController as! IGNavigationController
         navigationController.interactivePopGestureRecognizer?.delegate = self
         navigationItem.rightViewContainer?.addAction {
-            // TODO - Saeed Mozaffari - show nearby coordinate list
+            // TODO - show nearby coordinate list
         }
         
         setupTileRenderer()
@@ -77,14 +80,14 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
         annotation.title = "iGap Map"
         annotation.subtitle = "iGap map user simple description. \n iGap map user simple description"
         mapView.addAnnotation(annotation)
-        let span = MKCoordinateSpanMake(0, 360 / pow(2, Double(14)) * Double(mapView.frame.size.width) / 256)
+        span = MKCoordinateSpanMake(0, 360 / pow(2, Double(16)) * Double(mapView.frame.size.width) / 256)
         let region = MKCoordinateRegionMake(currentLocation.coordinate, span)
         mapView.setRegion(region, animated: true)
     }
     
     func setupTileRenderer() {
         let template = "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-        let overlay = MKTileOverlay(urlTemplate: template)
+        let overlay = MKHipsterTileOverlay(urlTemplate: template)
         overlay.canReplaceMapContent = true
         mapView.add(overlay, level: .aboveLabels)
         tileRenderer = MKTileOverlayRenderer(tileOverlay: overlay)
@@ -175,6 +178,34 @@ extension IGMap: MKMapViewDelegate {
             
             return pinView
         }
+    }
+    
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        let coordinate = CLLocationCoordinate2DMake(mapView.region.center.latitude, mapView.region.center.longitude)
+        let zoomLevel = getZoomLevel()
+        
+        if MIN_ZOOM_LEVEL > zoomLevel || MAX_ZOOM_LEVEL < zoomLevel {
+            let region = MKCoordinateRegionMake(coordinate, self.span)
+            mapView.setRegion(region, animated:true)
+        } else {
+            self.span = MKCoordinateSpanMake(0, 360 / pow(2, Double(zoomLevel-1)) * Double(mapView.frame.size.width) / 256)
+        }
+    }
+    
+    func getZoomLevel() -> Double {
+        var angleCamera = mapView.camera.heading
+        if angleCamera > 270 {
+            angleCamera = 360 - angleCamera
+        } else if angleCamera > 90 {
+            angleCamera = fabs(angleCamera - 180)
+        }
+        let angleRad = M_PI * angleCamera / 180
+        let width = Double(mapView.frame.size.width)
+        let height = Double(mapView.frame.size.height)
+        let heightOffset : Double = 20 // the offset (status bar height) which is taken by MapKit into consideration to calculate visible area height
+        // calculating Longitude span corresponding to normal (non-rotated) width
+        let spanStraight = width * mapView.region.span.longitudeDelta / (width * cos(angleRad) + (height - heightOffset) * sin(angleRad))
+        return log2(360 * ((width / 256) / spanStraight)) + 1
     }
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
