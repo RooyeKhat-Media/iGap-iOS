@@ -25,6 +25,7 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
     let locationManager = CLLocationManager()
     
     var showMarker = true
+    var isFirstSetRegion = true
     var room: IGRoom!
     
     var span: MKCoordinateSpan!
@@ -40,7 +41,7 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
     let DISTANCE_METERS = 5000
     
     @IBAction func btnCurrentLocation(_ sender: UIButton) {
-        setCurrentLocation()
+        setCurrentLocation(setRegion: true)
     }
     
     override func viewDidLoad() {
@@ -131,29 +132,30 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
         annotation.title = "iGap Map"
         annotation.subtitle = "iGap map user simple description. \n iGap map user simple description"
         mapView.addAnnotation(annotation)
-        setCurrentLocation()
-        latestSpan = span
     }
     
-    func setCurrentLocation(){
+    func setCurrentLocation(setRegion: Bool){
         span = MKCoordinateSpanMake(0, 360 / pow(2, Double(16)) * Double(mapView.frame.size.width) / 256)
         let region = MKCoordinateRegionMake(currentLocation.coordinate, span)
-        mapView.setRegion(region, animated: true)
+        if setRegion || isFirstSetRegion{
+            isFirstSetRegion = false
+            mapView.setRegion(region, animated: true)
+        }
     }
 
-    func openChat(){
+    func manageOpenChat(){
         let realm = try! Realm()
-        let predicate = NSPredicate(format: "chatRoom.peer.id = %lld", 10) // userId
+        let predicate = NSPredicate(format: "chatRoom.peer.id = %lld", 245) // userId
         if let roomInfo = try! realm.objects(IGRoom.self).filter(predicate).first {
             room = roomInfo
-            performSegue(withIdentifier: "showRoomMessages", sender: self)
+            openChat()
         } else {
-            IGChatGetRoomRequest.Generator.generate(peerId: 10).success({ (protoResponse) in
+            IGChatGetRoomRequest.Generator.generate(peerId: 245).success({ (protoResponse) in
                 DispatchQueue.main.async {
                     if let chatGetRoomResponse = protoResponse as? IGPChatGetRoomResponse {
                         IGChatGetRoomRequest.Handler.interpret(response: chatGetRoomResponse)
                         self.room = IGRoom(igpRoom: chatGetRoomResponse.igpRoom)
-                        self.performSegue(withIdentifier: "showRoomMessages", sender: self)
+                        self.openChat()
                     }
                 }
             }).error({ (errorCode, waitTime) in
@@ -171,6 +173,13 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
                 
             }).send()
         }
+    }
+    
+    func openChat(){
+        let storyboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let roomVC = storyboard.instantiateViewController(withIdentifier: "messageViewController") as! IGMessageViewController
+        roomVC.room = room
+        self.navigationController!.pushViewController(roomVC, animated: true)
     }
     
     /************************************************************/
@@ -198,11 +207,11 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
     /******************* Overrided Method ********************/
     /*********************************************************/
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {}
-
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         self.currentLocation = locations.last!
         addMarker()
+        setCurrentLocation(setRegion: false)
+        latestSpan = span
         detectBoundingBox(location: self.currentLocation)
     }
 }
@@ -227,7 +236,7 @@ extension IGMap: MKMapViewDelegate {
             let smallSquare = CGSize(width: 30, height: 30)
             let button = UIButton(frame: CGRect(origin: CGPoint(x: 0,y :0), size: smallSquare))
             button.setBackgroundImage(UIImage(named: "IG_Settings_Chats"), for: .normal)
-            button.addTarget(self, action: #selector(IGMap.openChat), for: .touchUpInside)
+            button.addTarget(self, action: #selector(IGMap.manageOpenChat), for: .touchUpInside)
             pinView?.leftCalloutAccessoryView = button
             
             let label1 = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 21))
@@ -264,6 +273,9 @@ extension IGMap: MKMapViewDelegate {
             if latitude < northLimitation && latitude > southLimitation && longitude < eastLimitation && longitude > westLimitation {
                 lastCenterCoordinate = coordinate
             } else {
+                if lastCenterCoordinate == nil {
+                    return
+                }
                 span = MKCoordinateSpanMake(0, 360 / pow(2, Double(16)) * Double(mapView.frame.size.width) / 256)
                 let region = MKCoordinateRegionMake(lastCenterCoordinate, span)
                 mapView.setRegion(region, animated: true)

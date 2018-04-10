@@ -172,14 +172,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
         navigationItem.rightViewContainer?.addAction {
             if self.room?.type == .chat {
                 self.selectedUserToSeeTheirInfo = (self.room?.chatRoom?.peer)!
-                //self.performSegue(withIdentifier: "showUserInfo", sender: self)
-
-                let profile = IGRegistredUserInfoTableViewController.instantiateFromAppStroryboard(appStoryboard: .Profile)
-                profile.user = self.selectedUserToSeeTheirInfo
-                profile.previousRoomId = self.room?.id
-                profile.room = self.room
-                self.navigationController!.pushViewController(profile, animated: true)
-
+                self.openUserProfile()
             }
             if self.room?.type == .channel {
                 self.selectedChannelToSeeTheirInfo = self.room?.channelRoom
@@ -204,7 +197,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
         navigationItem.centerViewContainer?.addAction {
             if self.room?.type == .chat {
                 self.selectedUserToSeeTheirInfo = (self.room?.chatRoom?.peer)!
-                self.performSegue(withIdentifier: "showUserInfo", sender: self)
+                self.openUserProfile()
             } else {
                 
             }
@@ -331,6 +324,14 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
         if messages.count == 0 {
             fetchRoomHistoryWhenDbIsClear()
         }
+    }
+    
+    func openUserProfile(){
+        let profile = IGRegistredUserInfoTableViewController.instantiateFromAppStroryboard(appStoryboard: .Profile)
+        profile.user = self.selectedUserToSeeTheirInfo
+        profile.previousRoomId = self.room?.id
+        profile.room = self.room
+        self.navigationController!.pushViewController(profile, animated: true)
     }
     
     func updateObserver(){
@@ -1493,20 +1494,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
     
     //MARK: Segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showUserInfo" {
-            let destinationVC = segue.destination as! IGRegistredUserInfoTableViewController
-            destinationVC.user = self.selectedUserToSeeTheirInfo
-            destinationVC.previousRoomId = room?.id
-            destinationVC.room = room
-        } else if segue.identifier == "showChannelinfo" {
-            let destinationVC = segue.destination as! IGChannelInfoTableViewController
-            destinationVC.selectedChannel = selectedChannelToSeeTheirInfo
-            destinationVC.room = room
-        } else if segue.identifier == "showGroupInfo" {
-            let destinationTv = segue.destination as! IGGroupInfoTableViewController
-            destinationTv.selectedGroup = selectedGroupToSeeTheirInfo
-            destinationTv.room = room
-        } else if segue.identifier == "showForwardMessageTable" {
+        if segue.identifier == "showForwardMessageTable" {
             let navigationController = segue.destination as! IGNavigationController
             let destinationTv = navigationController.topViewController as! IGForwardMessageTableViewController
             destinationTv.delegate = self
@@ -2235,7 +2223,7 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
     func didTapOnSenderAvatar(cellMessage: IGRoomMessage, cell: IGMessageGeneralCollectionViewCell) {
         if let sender = cellMessage.authorUser {
             self.selectedUserToSeeTheirInfo = sender
-            self.performSegue(withIdentifier: "showUserInfo", sender: self)
+            openUserProfile()
         }
     }
     
@@ -2256,7 +2244,7 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
                     switch clientResponse.clientResolveUsernametype {
                     case .user:
                         self.selectedUserToSeeTheirInfo = clientResponse.user
-                        self.performSegue(withIdentifier: "showUserInfo", sender: self)
+                        self.openUserProfile()
                     case .room:
                         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
                         let messagesVc = storyBoard.instantiateViewController(withIdentifier: "messageViewController") as! IGMessageViewController
