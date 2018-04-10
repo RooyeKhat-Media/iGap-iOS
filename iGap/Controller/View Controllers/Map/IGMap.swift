@@ -26,10 +26,18 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
     
     var showMarker = true
     var room: IGRoom!
-    let MIN_ZOOM_LEVEL = 16.5
-    let MAX_ZOOM_LEVEL = 18.0
+    
     var span: MKCoordinateSpan!
     var latestSpan: MKCoordinateSpan!
+    var lastCenterCoordinate: CLLocationCoordinate2D!
+    var northLimitation: Double!
+    var southLimitation: Double!
+    var westLimitation: Double!
+    var eastLimitation: Double!
+    
+    let MIN_ZOOM_LEVEL = 16.5
+    let MAX_ZOOM_LEVEL = 18.0
+    let DISTANCE_METERS = 5000
     
     @IBAction func btnCurrentLocation(_ sender: UIButton) {
         setCurrentLocation()
@@ -38,8 +46,18 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        initNavigationBar()
+        setupTileRenderer()
+        checkLocationPermission()
+        initMapView()
         buttonViewCustomize(button: btnCurrentLocation, color: UIColor.white)
-
+    }
+    
+    /************************************************************/
+    /********************** Common Methods **********************/
+    /************************************************************/
+    
+    func initNavigationBar(){
         let navigationItem = self.navigationItem as! IGNavigationItem
         navigationItem.addNavigationViewItems(rightItemText: "Users", title: "Nearby")
         navigationItem.navigationController = self.navigationController as? IGNavigationController
@@ -48,9 +66,26 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
         navigationItem.rightViewContainer?.addAction {
             // TODO - show nearby coordinate list
         }
-        
-        setupTileRenderer()
-        
+    }
+    
+    func initMapView(){
+        let initialRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 35.689197, longitude: 51.388974), span: MKCoordinateSpan(latitudeDelta: 0.16405544070813249, longitudeDelta: 0.1232528799585566))
+        mapView.region = initialRegion
+        mapView.showsUserLocation = true
+        mapView.showsCompass = true
+        mapView.setUserTrackingMode(.follow, animated: true)
+        mapView.delegate = self
+    }
+    
+    func setupTileRenderer() {
+        let template = "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+        let overlay = MKHipsterTileOverlay(urlTemplate: template)
+        overlay.canReplaceMapContent = true
+        mapView.add(overlay, level: .aboveLabels)
+        tileRenderer = MKTileOverlayRenderer(tileOverlay: overlay)
+    }
+    
+    func checkLocationPermission(){
         let status  = CLLocationManager.authorizationStatus()
         if status == .notDetermined {
             locationManager.requestWhenInUseAuthorization()
@@ -68,13 +103,6 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
         locationManager.requestAlwaysAuthorization()
         locationManager.startUpdatingLocation()
         locationManager.delegate = self
-       
-        let initialRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 35.689197, longitude: 51.388974), span: MKCoordinateSpan(latitudeDelta: 0.16405544070813249, longitudeDelta: 0.1232528799585566))
-        mapView.region = initialRegion
-        mapView.showsUserLocation = true
-        mapView.showsCompass = true
-        mapView.setUserTrackingMode(.follow, animated: true)
-        mapView.delegate = self
     }
     
     private func buttonViewCustomize(button: UIButton, color: UIColor){
@@ -112,16 +140,6 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
         let region = MKCoordinateRegionMake(currentLocation.coordinate, span)
         mapView.setRegion(region, animated: true)
     }
-    
-    func setupTileRenderer() {
-        let template = "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-        let overlay = MKHipsterTileOverlay(urlTemplate: template)
-        overlay.canReplaceMapContent = true
-        mapView.add(overlay, level: .aboveLabels)
-        tileRenderer = MKTileOverlayRenderer(tileOverlay: overlay)
-    }
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {}
 
     func openChat(){
         let realm = try! Realm()
@@ -154,27 +172,46 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
             }).send()
         }
     }
+    
+    /************************************************************/
+    /*********************** Map Bounding ***********************/
+    /************************************************************/
+    
+    func detectBoundingBox(location: CLLocation) {
+        let latRadian = degreesToRadians(degrees: CGFloat(location.coordinate.latitude))
+        let degLatKm = 110.574235
+        let degLongKm = 110.572833 * cos(latRadian)
+        let deltaLat = 5000 / 1000.0 / degLatKm
+        let deltaLong = 5000 / 1000.0 / degLongKm
+        
+        southLimitation = location.coordinate.latitude - deltaLat
+        westLimitation = Double(CGFloat(location.coordinate.longitude) - deltaLong)
+        northLimitation =  location.coordinate.latitude + deltaLat
+        eastLimitation = Double(CGFloat(location.coordinate.longitude) + deltaLong)
+    }
+    
+    func degreesToRadians(degrees: CGFloat) -> CGFloat {
+        return degrees * CGFloat(M_PI) / 180
+    }
+    
+    /*********************************************************/
+    /******************* Overrided Method ********************/
+    /*********************************************************/
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {}
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let currentLocation = locations.last!
-        print("Current location: \(currentLocation)")
-        self.currentLocation = currentLocation
+        self.currentLocation = locations.last!
         addMarker()
+        detectBoundingBox(location: self.currentLocation)
     }
-
-    func locationManager(_ manager: CLLocationManager, monitoringDidFailFor region: CLRegion?, withError error: Error) {
-        print("Monitoring failed for region with identifier: \(region!.identifier)")
-    }
-
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("Location Manager failed with the following error: \(error)")
-    }
-
 }
 
-// MARK: - MapView Delegate
 extension IGMap: MKMapViewDelegate {
-
+    
+    /*********************************************************/
+    /***************** Manage Annotation View ****************/
+    /*********************************************************/
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         if annotation is MKUserLocation {
             return nil
@@ -208,6 +245,9 @@ extension IGMap: MKMapViewDelegate {
         }
     }
     
+    /*********************************************************/
+    /************ Manage Zoom & Scroll Limitation ************/
+    /*********************************************************/
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         let coordinate = CLLocationCoordinate2DMake(mapView.region.center.latitude, mapView.region.center.longitude)
         let zoomLevel = getZoomLevel()
@@ -217,6 +257,17 @@ extension IGMap: MKMapViewDelegate {
             mapView.setRegion(region, animated:true)
         } else {
             self.latestSpan = MKCoordinateSpanMake(0, 360 / pow(2, Double(zoomLevel-1)) * Double(mapView.frame.size.width) / 256)
+            
+            let latitude = mapView.region.center.latitude
+            let longitude = mapView.region.center.longitude
+            
+            if latitude < northLimitation && latitude > southLimitation && longitude < eastLimitation && longitude > westLimitation {
+                lastCenterCoordinate = coordinate
+            } else {
+                span = MKCoordinateSpanMake(0, 360 / pow(2, Double(16)) * Double(mapView.frame.size.width) / 256)
+                let region = MKCoordinateRegionMake(lastCenterCoordinate, span)
+                mapView.setRegion(region, animated: true)
+            }
         }
     }
     
@@ -230,12 +281,14 @@ extension IGMap: MKMapViewDelegate {
         let angleRad = M_PI * angleCamera / 180
         let width = Double(mapView.frame.size.width)
         let height = Double(mapView.frame.size.height)
-        let heightOffset : Double = 20 // the offset (status bar height) which is taken by MapKit into consideration to calculate visible area height
-        // calculating Longitude span corresponding to normal (non-rotated) width
+        let heightOffset : Double = 20
         let spanStraight = width * mapView.region.span.longitudeDelta / (width * cos(angleRad) + (height - heightOffset) * sin(angleRad))
         return log2(360 * ((width / 256) / spanStraight)) + 1
     }
     
+    /*********************************************************/
+    /********************* Set Map Tiles *********************/
+    /*********************************************************/
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         return tileRenderer
     }
