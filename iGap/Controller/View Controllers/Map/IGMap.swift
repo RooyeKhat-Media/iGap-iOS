@@ -18,7 +18,8 @@ import IGProtoBuff
 class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDelegate {
 
     @IBOutlet weak var mapView: MKMapView!
-
+    @IBOutlet weak var btnCurrentLocation: UIButton!
+    
     var tileRenderer: MKTileOverlayRenderer!
     var currentLocation: CLLocation!
     let locationManager = CLLocationManager()
@@ -28,9 +29,16 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
     let MIN_ZOOM_LEVEL = 16.5
     let MAX_ZOOM_LEVEL = 18.0
     var span: MKCoordinateSpan!
+    var latestSpan: MKCoordinateSpan!
+    
+    @IBAction func btnCurrentLocation(_ sender: UIButton) {
+        setCurrentLocation()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        buttonViewCustomize(button: btnCurrentLocation, color: UIColor.white)
 
         let navigationItem = self.navigationItem as! IGNavigationItem
         navigationItem.addNavigationViewItems(rightItemText: "Users", title: "Nearby")
@@ -68,6 +76,21 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
         mapView.setUserTrackingMode(.follow, animated: true)
         mapView.delegate = self
     }
+    
+    private func buttonViewCustomize(button: UIButton, color: UIColor){
+        button.backgroundColor = color
+        
+        button.layer.shadowColor = UIColor.darkGray.cgColor
+        button.layer.shadowOffset = CGSize(width: 0.0, height: 2.0)
+        button.layer.shadowRadius = 0.1
+        button.layer.shadowOpacity = 0.1
+        
+        button.layer.borderWidth = 1.5
+        button.layer.borderColor = UIColor.darkGray.cgColor
+        button.layer.masksToBounds = false
+        button.layer.cornerRadius = button.frame.width / 2
+    }
+    
 
     func addMarker(){
         if !showMarker {
@@ -80,6 +103,11 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
         annotation.title = "iGap Map"
         annotation.subtitle = "iGap map user simple description. \n iGap map user simple description"
         mapView.addAnnotation(annotation)
+        setCurrentLocation()
+        latestSpan = span
+    }
+    
+    func setCurrentLocation(){
         span = MKCoordinateSpanMake(0, 360 / pow(2, Double(16)) * Double(mapView.frame.size.width) / 256)
         let region = MKCoordinateRegionMake(currentLocation.coordinate, span)
         mapView.setRegion(region, animated: true)
@@ -185,10 +213,10 @@ extension IGMap: MKMapViewDelegate {
         let zoomLevel = getZoomLevel()
         
         if MIN_ZOOM_LEVEL > zoomLevel || MAX_ZOOM_LEVEL < zoomLevel {
-            let region = MKCoordinateRegionMake(coordinate, self.span)
+            let region = MKCoordinateRegionMake(coordinate, self.latestSpan)
             mapView.setRegion(region, animated:true)
         } else {
-            self.span = MKCoordinateSpanMake(0, 360 / pow(2, Double(zoomLevel-1)) * Double(mapView.frame.size.width) / 256)
+            self.latestSpan = MKCoordinateSpanMake(0, 360 / pow(2, Double(zoomLevel-1)) * Double(mapView.frame.size.width) / 256)
         }
     }
     
