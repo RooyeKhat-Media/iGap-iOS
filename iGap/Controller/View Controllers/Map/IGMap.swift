@@ -40,6 +40,8 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
     let MAX_ZOOM_LEVEL = 18.0
     let DISTANCE_METERS = 5000
     
+    var userIdDictionary:[Int:Int64] = [:]
+    
     @IBAction func btnCurrentLocation(_ sender: UIButton) {
         setCurrentLocation(setRegion: true)
     }
@@ -121,7 +123,7 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
     }
     
 
-    func addMarker(){
+    func addMarker(userId: Int64 = 0){
         if !showMarker {
             return
         }
@@ -131,6 +133,8 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
         annotation.coordinate = currentLocation.coordinate
         annotation.title = "iGap Map"
         annotation.subtitle = "iGap map user simple description. \n iGap map user simple description"
+        
+        userIdDictionary[annotation.hash] = userId
         mapView.addAnnotation(annotation)
     }
     
@@ -143,14 +147,15 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
         }
     }
 
-    func manageOpenChat(){
+    func manageOpenChat(sender: UIButton){
+        let userId = userIdDictionary[sender.tag]
         let realm = try! Realm()
-        let predicate = NSPredicate(format: "chatRoom.peer.id = %lld", 245) // userId
+        let predicate = NSPredicate(format: "chatRoom.peer.id = %lld", userId!)
         if let roomInfo = try! realm.objects(IGRoom.self).filter(predicate).first {
             room = roomInfo
             openChat()
         } else {
-            IGChatGetRoomRequest.Generator.generate(peerId: 245).success({ (protoResponse) in
+            IGChatGetRoomRequest.Generator.generate(peerId: userId!).success({ (protoResponse) in
                 DispatchQueue.main.async {
                     if let chatGetRoomResponse = protoResponse as? IGPChatGetRoomResponse {
                         IGChatGetRoomRequest.Handler.interpret(response: chatGetRoomResponse)
@@ -170,7 +175,7 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
                 default:
                     break
                 }
-                
+
             }).send()
         }
     }
@@ -236,11 +241,13 @@ extension IGMap: MKMapViewDelegate {
             pinView?.canShowCallout = true
             let realm = try! Realm()
             
-            let predicate = NSPredicate(format: "id = %lld", 245) //245 , 162405267
+            let userIdDic = "\(userIdDictionary[annotation.hash]!)"
+            
+            let predicate = NSPredicate(format: "id = %lld", Int64(userIdDic)!) //245 , 162405267
             let user = realm.objects(IGRegisteredUser.self).filter(predicate).first
             
             let frame = CGRect(x:0 ,y:0 ,width:30 ,height:30)
-            var avatarViewAbs = IGAvatarView(frame: frame)
+            let avatarViewAbs = IGAvatarView(frame: frame)
             avatarViewAbs.setUser(user!)
             
             var pinImage :UIImage!
@@ -258,6 +265,7 @@ extension IGMap: MKMapViewDelegate {
             
             let smallSquare = CGSize(width: 30, height: 30)
             let button = UIButton(frame: CGRect(origin: CGPoint(x: 0,y :0), size: smallSquare))
+            button.tag = annotation.hash
             button.setBackgroundImage(UIImage(named: "IG_Settings_Chats"), for: .normal)
             button.addTarget(self, action: #selector(IGMap.manageOpenChat), for: .touchUpInside)
             pinView?.leftCalloutAccessoryView = button
