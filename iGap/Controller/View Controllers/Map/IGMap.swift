@@ -229,29 +229,73 @@ extension IGMap: MKMapViewDelegate {
                 return nil
             }
             let reuseId = "pin"
-            var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
-            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
-            pinView?.pinTintColor = UIColor.orange
+            var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId)
+            pinView = MKAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            pinView?.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+
             pinView?.canShowCallout = true
+            let realm = try! Realm()
+            
+            let predicate = NSPredicate(format: "id = %lld", 245) //245 , 162405267
+            let user = realm.objects(IGRegisteredUser.self).filter(predicate).first
+            
+            let frame = CGRect(x:0 ,y:0 ,width:30 ,height:30)
+            var avatarViewAbs = IGAvatarView(frame: frame)
+            avatarViewAbs.setUser(user!)
+            
+            var pinImage :UIImage!
+            if let image = avatarViewAbs.avatarImageView?.image {
+                pinImage = image
+            } else {
+                pinImage = UIImage(named: "IG_Map")
+            }
+            let size = CGSize(width: 50, height: 50)
+            UIGraphicsBeginImageContext(size)
+            pinImage!.draw(in: CGRect(x: 0, y: 0, width: size.width, height: size.height))
+            let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            pinView?.image = maskRoundedImage(image: (resizedImage)!, radius:  CGFloat(25))
+            
             let smallSquare = CGSize(width: 30, height: 30)
             let button = UIButton(frame: CGRect(origin: CGPoint(x: 0,y :0), size: smallSquare))
             button.setBackgroundImage(UIImage(named: "IG_Settings_Chats"), for: .normal)
             button.addTarget(self, action: #selector(IGMap.manageOpenChat), for: .touchUpInside)
             pinView?.leftCalloutAccessoryView = button
-            
+
             let label1 = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 21))
             label1.text = "iGap map user simple description.\niGap map user simple description"
             label1.numberOfLines = 0
             pinView?.detailCalloutAccessoryView = label1;
-            
+
             let width = NSLayoutConstraint(item: label1, attribute: NSLayoutAttribute.width, relatedBy: NSLayoutRelation.lessThanOrEqual, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: 200)
             label1.addConstraint(width)
-            
+
             let height = NSLayoutConstraint(item: label1, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: 90)
             label1.addConstraint(height)
-            
+
             return pinView
         }
+    }
+    
+    func maskRoundedImage(image: UIImage, radius: CGFloat) -> UIImage {
+        let imageView: UIImageView = UIImageView(image: image)
+        let layer = imageView.layer
+        
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOffset = CGSize(width: 0.0, height: 10.0)
+        layer.shadowRadius = 10
+        layer.shadowOpacity = 0.1
+        
+        layer.borderWidth = 3
+        layer.borderColor = UIColor.white.cgColor
+        layer.masksToBounds = true
+        layer.cornerRadius = radius
+        
+        UIGraphicsBeginImageContext(imageView.bounds.size)
+        layer.render(in: UIGraphicsGetCurrentContext()!)
+        let roundedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return roundedImage!
     }
     
     /*********************************************************/
