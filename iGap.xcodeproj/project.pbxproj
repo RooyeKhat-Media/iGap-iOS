@@ -251,6 +251,7 @@
 		FAA9DFBC1F4B1CD60076A22F /* IGSettingPrivacyAndSecurityTwoStepVerificationChangeSecurityQuestionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA9DFBB1F4B1CD60076A22F /* IGSettingPrivacyAndSecurityTwoStepVerificationChangeSecurityQuestionsTableViewController.swift */; };
 		FAA9DFBE1F4B23390076A22F /* IGTwoStepVerification.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA9DFBD1F4B23380076A22F /* IGTwoStepVerification.swift */; };
 		FAAC57D31DE2CE9F00A28058 /* IGDownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAAC57D21DE2CE9F00A28058 /* IGDownloadManager.swift */; };
+		FAAFD434208375AA003470B3 /* IGGeoRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAAFD433208375AA003470B3 /* IGGeoRequest.swift */; };
 		FAB09D9B1DB76F81001A27C4 /* IGRequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB09D9A1DB76F81001A27C4 /* IGRequestManager.swift */; };
 		FAB0F9461FE956D1008F23EB /* Splash.gif in Resources */ = {isa = PBXBuildFile; fileRef = FAB0F9451FE956D1008F23EB /* Splash.gif */; };
 		FAB2C2DF1DF7F6E8001F30B5 /* IGSessionInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB2C2DE1DF7F6E8001F30B5 /* IGSessionInfo.swift */; };
@@ -568,6 +569,7 @@
 		FAA9DFBB1F4B1CD60076A22F /* IGSettingPrivacyAndSecurityTwoStepVerificationChangeSecurityQuestionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGSettingPrivacyAndSecurityTwoStepVerificationChangeSecurityQuestionsTableViewController.swift; sourceTree = "<group>"; };
 		FAA9DFBD1F4B23380076A22F /* IGTwoStepVerification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGTwoStepVerification.swift; sourceTree = "<group>"; };
 		FAAC57D21DE2CE9F00A28058 /* IGDownloadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGDownloadManager.swift; sourceTree = "<group>"; };
+		FAAFD433208375AA003470B3 /* IGGeoRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGGeoRequest.swift; sourceTree = "<group>"; };
 		FAB09D9A1DB76F81001A27C4 /* IGRequestManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IGRequestManager.swift; path = "Request Manager/IGRequestManager.swift"; sourceTree = "<group>"; };
 		FAB0F9451FE956D1008F23EB /* Splash.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = Splash.gif; sourceTree = "<group>"; };
 		FAB2C2DE1DF7F6E8001F30B5 /* IGSessionInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGSessionInfo.swift; sourceTree = "<group>"; };
@@ -1096,6 +1098,7 @@
 				FAEE8D8E1E30ABA100599600 /* IGClientCondition.swift */,
 				FAA9DFBD1F4B23380076A22F /* IGTwoStepVerification.swift */,
 				FA96A8142053EBD1004369C7 /* IGRealmClientSearchUsername.swift */,
+				FAAFD433208375AA003470B3 /* IGGeoRequest.swift */,
 			);
 			path = Objects;
 			sourceTree = "<group>";
@@ -1729,6 +1732,7 @@
 				FAEE8D8F1E30ABA100599600 /* IGClientCondition.swift in Sources */,
 				932D1AB31E740046000F0D97 /* IGGroupInfoShareMediaLinkTableViewCell.swift in Sources */,
 				FA8560AA1FFBA6FC00A25DC3 /* IGSettingPrivacyAndSecurityTwoStepVerificationVerifyUnconfirmedEmail.swift in Sources */,
+				FAAFD434208375AA003470B3 /* IGGeoRequest.swift in Sources */,
 				FA3D947C1E6AA9580087D368 /* IGRoomManager.swift in Sources */,
 				FA0953841E1B97E20043ED3F /* IGChooseMemberFromContactsToCreateGroupViewController.swift in Sources */,
 				FA899B6F2046DFC8001A33CB /* CallStateObserver.swift in Sources */,

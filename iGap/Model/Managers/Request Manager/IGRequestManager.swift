@@ -330,6 +330,23 @@ let protoClassesLookupTable: [Int: (proto: ResponseMessage.Type, reponseHandler:
             IGSignalingClearLogRequest.Handler.self        as IGRequest.Handler.Type),
     30909: (IGPSignalingRateResponse.self                  as ResponseMessage.Type,
             IGSignalingRateRequest.Handler.self            as IGRequest.Handler.Type),
+    
+    31000: (IGPGeoGetRegisterStatusResponse.self           as ResponseMessage.Type,
+            IGGeoGetRegisterStatus.Handler.self            as IGRequest.Handler.Type),
+    31001: (IGPGeoRegisterResponse.self                    as ResponseMessage.Type,
+            IGGeoRegister.Handler.self                     as IGRequest.Handler.Type),
+    31002: (IGPGeoUpdatePositionResponse.self              as ResponseMessage.Type,
+            IGGeoUpdatePosition.Handler.self               as IGRequest.Handler.Type),
+    31003: (IGPGeoGetCommentResponse.self                  as ResponseMessage.Type,
+            IGGeoGetComment.Handler.self                   as IGRequest.Handler.Type),
+    31004: (IGPGeoUpdateCommentResponse.self               as ResponseMessage.Type,
+            IGGeoGetComment.Handler.self                   as IGRequest.Handler.Type),
+    31005: (IGPGeoGetNearbyDistanceResponse.self           as ResponseMessage.Type,
+            IGGeoGetNearbyDistance.Handler.self            as IGRequest.Handler.Type),
+    31006: (IGPGeoGetNearbyCoordinateResponse.self         as ResponseMessage.Type,
+            IGGeoGetCoordinateDistance.Handler.self        as IGRequest.Handler.Type),
+    31007: (IGPGeoGetConfigurationResponse.self            as ResponseMessage.Type,
+            IGGeoGetConfiguration.Handler.self             as IGRequest.Handler.Type),
 
     //Push: 600xx
     60000: (IGPPushLoginTokenResponse.self                 as ResponseMessage.Type,
