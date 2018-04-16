@@ -31,6 +31,7 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
     var span: MKCoordinateSpan!
     var latestSpan: MKCoordinateSpan!
     var lastCenterCoordinate: CLLocationCoordinate2D!
+    var latestUpdatePosition: Int64?
     var northLimitation: Double!
     var southLimitation: Double!
     var westLimitation: Double!
@@ -39,6 +40,7 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
     let MIN_ZOOM_LEVEL = 16.5
     let MAX_ZOOM_LEVEL = 18.0
     let DISTANCE_METERS = 5000
+    let UPDATE_POSITION_DELAY = 60 * 1000 // allow send update poistion for each one minute
     
     var userIdDictionary:[Int:Int64] = [:]
     
@@ -49,7 +51,6 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        geoRegister()
         initNavigationBar()
         checkLocationPermission()
         initMapView()
@@ -62,13 +63,40 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
     
     func initNavigationBar(){
         let navigationItem = self.navigationItem as! IGNavigationItem
-        navigationItem.addNavigationViewItems(rightItemText: "Users", title: "Nearby")
+        navigationItem.addNavigationViewItems(rightItemText: nil, title: "Nearby")
         navigationItem.navigationController = self.navigationController as? IGNavigationController
         let navigationController = self.navigationController as! IGNavigationController
         navigationController.interactivePopGestureRecognizer?.delegate = self
+        
+        navigationItem.addModalViewRightItem(title: "", iGapFont: true, fontSize: 25.0, xPosition: 5.0)
         navigationItem.rightViewContainer?.addAction {
-            // TODO - show nearby coordinate list
+            self.mapOptionsAlert()
         }
+    }
+    
+    func mapOptionsAlert(){
+        let option = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        let updateMap = UIAlertAction(title: "Manually Update the Map", style: .default, handler: { (action) in
+            self.detectUsersCoordinate()
+        })
+        
+        let nearbyDistance = UIAlertAction(title: "Users Nearby Distance", style: .default, handler: { (action) in
+            
+        })
+        
+        let nearbyState = UIAlertAction(title: "Disable Nearby Visibility", style: .default, handler: { (action) in
+            self.geoRegister()
+        })
+        
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        option.addAction(updateMap)
+        option.addAction(nearbyDistance)
+        option.addAction(nearbyState)
+        option.addAction(cancel)
+        
+        self.present(option, animated: true, completion: {})
     }
     
     func initMapView(){
@@ -138,13 +166,24 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
     }
     
     func setCurrentLocation(setRegion: Bool){
+        
+        if currentLocation == nil {
+            return
+        }
+        
         span = MKCoordinateSpanMake(0, 360 / pow(2, Double(16)) * Double(mapView.frame.size.width) / 256)
         let region = MKCoordinateRegionMake(currentLocation.coordinate, span)
+        
+        if isFirstSetRegion {
+            detectUsersCoordinate()
+        }
+        
         if setRegion || isFirstSetRegion{
             isFirstSetRegion = false
             mapView.setRegion(region, animated: true)
-            detectUsersCoordinate()
         }
+        
+        updatePosition(lat: currentLocation.coordinate.latitude, lon: currentLocation.coordinate.longitude)
     }
 
     func callToUser(sender: UIButton){
@@ -167,15 +206,55 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
         self.navigationController!.pushViewController(roomVC, animated: true)
     }
     
+    func getCurrentMillis()->Int64 {
+        return Int64(Date().timeIntervalSince1970 * 1000)
+    }
+    
     /************************************************************/
     /************************* Requests *************************/
     /************************************************************/
     
-    func geoRegister(){
-        IGGeoRegister.Generator.generate(enable: true).success({ (protoResponse) in
+    func geoRegister(enable: Bool = false){
+        IGGeoRegister.Generator.generate(enable: enable).success({ (protoResponse) in
             DispatchQueue.main.async {
                 if let registerResponse = protoResponse as? IGPGeoRegisterResponse {
                     IGGeoRegister.Handler.interpret(response: registerResponse)
+                    IGAppManager.sharedManager.setMapEnable(enable: registerResponse.igpEnable)
+                    self.navigationController?.popViewController(animated: true)
+                }
+            }
+        }).error ({ (errorCode, waitTime) in
+            switch errorCode {
+            case .timeout:
+                DispatchQueue.main.async {
+                    let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: nil)
+                }
+            default:
+                break
+            }
+            
+        }).send()
+    }
+    
+    func updatePosition(lat: Double, lon: Double){
+        
+        let currentTime = getCurrentMillis()
+        
+        if let updateTime = latestUpdatePosition {
+            if (currentTime - updateTime) < UPDATE_POSITION_DELAY {
+                return
+            }
+        }
+        
+        IGGeoUpdatePosition.Generator.generate(lat: lat, lon: lon).success({ (protoResponse) in
+            DispatchQueue.main.async {
+                self.latestUpdatePosition = currentTime
+                
+                if let updatePosition = protoResponse as? IGPGeoUpdatePositionResponse {
+                    IGGeoUpdatePosition.Handler.interpret(response: updatePosition)
                 }
             }
         }).error ({ (errorCode, waitTime) in
@@ -338,7 +417,8 @@ extension IGMap: MKMapViewDelegate {
                 pinImage = UIImage(named: "IG_Map")
             }
             let size = CGSize(width: 50, height: 50)
-            UIGraphicsBeginImageContext(size)
+            //UIGraphicsBeginImageContext(size)
+            UIGraphicsBeginImageContextWithOptions(size, true, 0)
             pinImage!.draw(in: CGRect(x: 0, y: 0, width: size.width, height: size.height))
             let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
             UIGraphicsEndImageContext()

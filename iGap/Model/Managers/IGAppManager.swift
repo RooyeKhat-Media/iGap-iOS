@@ -37,6 +37,7 @@ class IGAppManager: NSObject {
     private var _userID: Int64?
     private var _authorHash: String?
     private var _nickname: String?
+    private var _mapEnable: Bool = false
     
     private override init() {
         connectionStatus = Variable(.waitingForNetwork)
@@ -115,6 +116,7 @@ class IGAppManager: NSObject {
         _userID = nil
         _authorHash = nil
         _nickname = nil
+        _mapEnable = false
     }
     
     public func isUserPreviouslyLoggedIn() -> Bool {
@@ -277,6 +279,14 @@ class IGAppManager: NSObject {
         return _nickname
     }
     
+    public func mapEnable() -> Bool {
+        return _mapEnable
+    }
+    
+    public func setMapEnable(enable: Bool) {
+        _mapEnable = enable
+    }
+    
     public func login() {
         if !self.isTryingToLoginUser {
             self.isTryingToLoginUser = true
@@ -289,6 +299,7 @@ class IGAppManager: NSObject {
                             self.setUserLoginSuccessful()
                             self.setUserUpdateStatus(status: .online)
                             self.getSignalingConfiguration(force: true)
+                            self.getGeoRegisterStatus()
                             break
                         default:
                             break
@@ -315,6 +326,23 @@ class IGAppManager: NSObject {
             
         }
         
+    }
+    
+    public func getGeoRegisterStatus(){
+        IGGeoGetRegisterStatus.Generator.generate().success({ (responseProto) in
+            DispatchQueue.main.async {
+                if let geoStatus = responseProto as? IGPGeoGetRegisterStatusResponse {
+                    self._mapEnable = geoStatus.igpEnable
+                }
+            }
+        }).error({ (errorCode, waitTime) in
+            switch errorCode {
+            case .timeout:
+                self.getGeoRegisterStatus()
+            default:
+                break
+            }
+        }).send()
     }
     
 }
