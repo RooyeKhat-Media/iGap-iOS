@@ -1327,7 +1327,6 @@
         <image name="IG_Tabbar_Recent_On" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="QR2-GA-Hdv"/>
         <segue reference="jRj-hY-oEr"/>
         <segue reference="ebc-Vg-0Gq"/>
         <segue reference="ONr-pK-81u"/>

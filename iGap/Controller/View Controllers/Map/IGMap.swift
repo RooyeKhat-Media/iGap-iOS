@@ -49,8 +49,8 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        geoRegister()
         initNavigationBar()
-        setupTileRenderer()
         checkLocationPermission()
         initMapView()
         buttonViewCustomize(button: btnCurrentLocation, color: UIColor.white)
@@ -122,18 +122,17 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
         button.layer.cornerRadius = button.frame.width / 2
     }
     
-
-    func addMarker(userId: Int64 = 0){
-        if !showMarker {
-            return
-        }
-        showMarker = false
-        mapView.removeAnnotations(mapView.annotations)
+    func addMarker(userId: Int64, lat: Double, lon: Double){
+        let realm = try! Realm()
         let annotation = MKPointAnnotation()
-        annotation.coordinate = currentLocation.coordinate
-        annotation.title = "iGap Map"
+        let userLocation = CLLocationCoordinate2D(latitude: lat, longitude: lon)
+        annotation.coordinate = userLocation
         annotation.subtitle = "iGap map user simple description. \n iGap map user simple description"
         
+        let predicate = NSPredicate(format: "id = %lld", userId)
+        if let userInfo = try! realm.objects(IGRegisteredUser.self).filter(predicate).first {
+            annotation.title = userInfo.displayName
+        }
         userIdDictionary[annotation.hash] = userId
         mapView.addAnnotation(annotation)
     }
@@ -144,9 +143,95 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
         if setRegion || isFirstSetRegion{
             isFirstSetRegion = false
             mapView.setRegion(region, animated: true)
+            detectUsersCoordinate()
         }
     }
 
+    func callToUser(sender: UIButton){
+        if IGCall.callPageIsEnable {
+            return
+        }
+        
+        let userId = userIdDictionary[sender.tag]
+        let storyBoard = UIStoryboard(name: "Main" , bundle:nil)
+        let callPage = storyBoard.instantiateViewController(withIdentifier: "IGCallShowing") as! IGCall
+        callPage.userId = userId
+        callPage.isIncommingCall = false
+        self.present(callPage, animated: true, completion: nil)
+    }
+    
+    func openChat(){
+        let storyboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let roomVC = storyboard.instantiateViewController(withIdentifier: "messageViewController") as! IGMessageViewController
+        roomVC.room = room
+        self.navigationController!.pushViewController(roomVC, animated: true)
+    }
+    
+    /************************************************************/
+    /************************* Requests *************************/
+    /************************************************************/
+    
+    func geoRegister(){
+        IGGeoRegister.Generator.generate(enable: true).success({ (protoResponse) in
+            DispatchQueue.main.async {
+                if let registerResponse = protoResponse as? IGPGeoRegisterResponse {
+                    IGGeoRegister.Handler.interpret(response: registerResponse)
+                }
+            }
+        }).error ({ (errorCode, waitTime) in
+            switch errorCode {
+            case .timeout:
+                DispatchQueue.main.async {
+                    let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: nil)
+                }
+            default:
+                break
+            }
+            
+        }).send()
+    }
+    
+    func detectUsersCoordinate(){
+        IGGeoGetCoordinateDistance.Generator.generate(lat: currentLocation.coordinate.latitude, lon: currentLocation.coordinate.longitude).success({ (protoResponse) in
+            DispatchQueue.main.async {
+                switch protoResponse {
+                case let coordinateDistanceResponse as IGPGeoGetNearbyCoordinateResponse:
+                    
+                    // first remove all annotations
+                    self.mapView.removeAnnotations(self.mapView.annotations)
+                    
+                    // then show new markers
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2){
+                        for result in coordinateDistanceResponse.igpResult {
+                            result.igpHasComment
+                            self.addMarker(userId: result.igpUserID, lat: result.igpLat, lon: result.igpLon)
+                        }
+                    }
+                    
+                    IGGeoGetCoordinateDistance.Handler.interpret(response: coordinateDistanceResponse)
+                default:
+                    break
+                }
+            }
+        }).error ({ (errorCode, waitTime) in
+            switch errorCode {
+            case .timeout:
+                DispatchQueue.main.async {
+                    let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: nil)
+                }
+            default:
+                break
+            }
+            
+        }).send()
+    }
+    
     func manageOpenChat(sender: UIButton){
         let userId = userIdDictionary[sender.tag]
         let realm = try! Realm()
@@ -180,13 +265,6 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
         }
     }
     
-    func openChat(){
-        let storyboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let roomVC = storyboard.instantiateViewController(withIdentifier: "messageViewController") as! IGMessageViewController
-        roomVC.room = room
-        self.navigationController!.pushViewController(roomVC, animated: true)
-    }
-    
     /************************************************************/
     /*********************** Map Bounding ***********************/
     /************************************************************/
@@ -214,7 +292,6 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         self.currentLocation = locations.last!
-        addMarker()
         setCurrentLocation(setRegion: false)
         latestSpan = span
         detectBoundingBox(location: self.currentLocation)
@@ -236,15 +313,19 @@ extension IGMap: MKMapViewDelegate {
             let reuseId = "pin"
             var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId)
             pinView = MKAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
-            pinView?.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
 
             pinView?.canShowCallout = true
             let realm = try! Realm()
             
             let userIdDic = "\(userIdDictionary[annotation.hash]!)"
             
-            let predicate = NSPredicate(format: "id = %lld", Int64(userIdDic)!) //245 , 162405267
-            let user = realm.objects(IGRegisteredUser.self).filter(predicate).first
+            let predicate = NSPredicate(format: "id = %lld", Int64(userIdDic)!)
+            var user = realm.objects(IGRegisteredUser.self).filter(predicate).first
+            
+            if user == nil {
+                let predicate1 = NSPredicate(format: "id = %lld", 245)
+                user = realm.objects(IGRegisteredUser.self).filter(predicate1).first
+            }
             
             let frame = CGRect(x:0 ,y:0 ,width:30 ,height:30)
             let avatarViewAbs = IGAvatarView(frame: frame)
@@ -263,22 +344,29 @@ extension IGMap: MKMapViewDelegate {
             UIGraphicsEndImageContext()
             pinView?.image = maskRoundedImage(image: (resizedImage)!, radius:  CGFloat(25))
             
-            let smallSquare = CGSize(width: 30, height: 30)
+            let smallSquare = CGSize(width: 32, height: 25)
+            
             let button = UIButton(frame: CGRect(origin: CGPoint(x: 0,y :0), size: smallSquare))
             button.tag = annotation.hash
-            button.setBackgroundImage(UIImage(named: "IG_Settings_Chats"), for: .normal)
+            button.setBackgroundImage(UIImage(named: "IG_Splash_Cute_3"), for: .normal)
             button.addTarget(self, action: #selector(IGMap.manageOpenChat), for: .touchUpInside)
             pinView?.leftCalloutAccessoryView = button
+            
+            let buttonRigth = UIButton(frame: CGRect(origin: CGPoint(x: 0,y :0), size: smallSquare))
+            buttonRigth.tag = annotation.hash
+            buttonRigth.setBackgroundImage(UIImage(named: "IG_Splash_Cute_5"), for: .normal)
+            buttonRigth.addTarget(self, action: #selector(IGMap.callToUser), for: .touchUpInside)
+            pinView?.rightCalloutAccessoryView = buttonRigth
 
             let label1 = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 21))
-            label1.text = "iGap map user simple description.\niGap map user simple description"
-            label1.numberOfLines = 0
+            label1.text = "iGap map user simple description"
+            label1.numberOfLines = 1
             pinView?.detailCalloutAccessoryView = label1;
 
-            let width = NSLayoutConstraint(item: label1, attribute: NSLayoutAttribute.width, relatedBy: NSLayoutRelation.lessThanOrEqual, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: 200)
+            let width = NSLayoutConstraint(item: label1, attribute: NSLayoutAttribute.width, relatedBy: NSLayoutRelation.lessThanOrEqual, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: 220)
             label1.addConstraint(width)
 
-            let height = NSLayoutConstraint(item: label1, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: 90)
+            let height = NSLayoutConstraint(item: label1, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: 32)
             label1.addConstraint(height)
 
             return pinView
