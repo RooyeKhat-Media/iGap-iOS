@@ -31,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        
 //        _ = try! Realm()
         let config = Realm.Configuration(
-            schemaVersion: 11,
+            schemaVersion: 12,
             
             // Set the block which will be called automatically when opening a Realm with
             // a schema version lower than the one set above
@@ -61,6 +61,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     //version 0.3.0 build 453
                 } else if (oldSchemaVersion < 11) {
                     //version 0.3.1 build 454
+                } else if (oldSchemaVersion < 12) {
+                    //version 0.3.2 build 455
                 }
         })
         Realm.Configuration.defaultConfiguration = config

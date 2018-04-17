@@ -152,10 +152,8 @@ class IGGeoGetNearbyDistance : IGRequest {
     
     class Handler : IGRequest.Handler{
         class func interpret(response reponseProtoMessage:IGPGeoGetNearbyDistanceResponse) {
-            for result in reponseProtoMessage.igpResult {
-                result.igpUserID
-                result.igpHasComment
-                result.igpDistance
+            for nearbyDistance in reponseProtoMessage.igpResult {
+                IGFactory.shared.setMapNearbyUsersDistance(nearbyDistance: nearbyDistance)
             }
         }
         

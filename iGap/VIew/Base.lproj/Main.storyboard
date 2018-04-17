@@ -283,7 +283,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Fny-Sd-0fh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3894" y="-4630"/>
+            <point key="canvasLocation" x="2662" y="-3761"/>
         </scene>
         <!--Call-->
         <scene sceneID="gZz-0U-mVt">
@@ -1153,6 +1153,35 @@
             </objects>
             <point key="canvasLocation" x="6582" y="-2991"/>
         </scene>
+        <!--Title-->
+        <scene sceneID="eA2-Iy-kax">
+            <objects>
+                <tableViewController storyboardIdentifier="IGMapNearbyDistanceTableViewController" id="Vp1-Pw-XJD" customClass="IGMapNearbyDistanceTableViewController" customModule="iGap" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="zcW-TZ-q21">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="EF0-Op-cbi">
+                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="EF0-Op-cbi" id="LEa-ai-HP4">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="Vp1-Pw-XJD" id="8bQ-Pc-dMp"/>
+                            <outlet property="delegate" destination="Vp1-Pw-XJD" id="Z8K-ot-4DP"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Title" id="czR-fN-gJW" customClass="IGNavigationItem" customModule="iGap" customModuleProvider="target"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="aDB-QH-AdB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5233" y="-3761"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="miS-XJ-wun">
             <objects>
@@ -1285,6 +1314,7 @@
                         <outlet property="mapView" destination="Lag-5t-Bo2" id="Hha-eZ-Ksn"/>
                         <outlet property="viewShadow" destination="ldf-Fa-K1P" id="c0Z-iF-Es5"/>
                         <segue destination="CFP-Hu-weJ" kind="presentation" identifier="showRoomMessages" id="ONr-pK-81u"/>
+                        <segue destination="Vp1-Pw-XJD" kind="show" id="2BV-nj-IKW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zau-as-hgw" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1305,7 +1335,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mPm-Cl-sOc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6582" y="-4630"/>
+            <point key="canvasLocation" x="7902" y="-3761"/>
         </scene>
         <!--Report-->
         <scene sceneID="jCV-2M-SGV">

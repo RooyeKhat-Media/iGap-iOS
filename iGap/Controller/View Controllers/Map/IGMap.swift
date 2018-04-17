@@ -112,7 +112,7 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
         })
         
         let nearbyDistance = UIAlertAction(title: "Users Nearby Distance", style: .default, handler: { (action) in
-            
+            self.openNearbyDistanceList()
         })
         
         let nearbyState = UIAlertAction(title: "Disable Nearby Visibility", style: .default, handler: { (action) in
@@ -290,6 +290,17 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
         self.present(callPage, animated: true, completion: nil)
     }
     
+    func openNearbyDistanceList(){
+        if currentLocation == nil {
+            return
+        }
+        
+        let mapNearbyDistanceList = IGMapNearbyDistanceTableViewController.instantiateFromAppStroryboard(appStoryboard: .Main)
+        mapNearbyDistanceList.latitude = currentLocation.coordinate.latitude
+        mapNearbyDistanceList.longitude = currentLocation.coordinate.longitude
+        self.navigationController!.pushViewController(mapNearbyDistanceList, animated: true)
+    }
+    
     func openChat(){
         let storyboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let roomVC = storyboard.instantiateViewController(withIdentifier: "messageViewController") as! IGMessageViewController
@@ -400,11 +411,9 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
                     self.mapView.removeAnnotations(self.mapView.annotations)
                     
                     // then show new markers
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2){
-                        for result in coordinateDistanceResponse.igpResult {
-                            result.igpHasComment
-                            self.addMarker(userId: result.igpUserID, lat: result.igpLat, lon: result.igpLon)
-                        }
+                    for result in coordinateDistanceResponse.igpResult {
+                        result.igpHasComment
+                        self.addMarker(userId: result.igpUserID, lat: result.igpLat, lon: result.igpLon)
                     }
                     
                     IGGeoGetCoordinateDistance.Handler.interpret(response: coordinateDistanceResponse)
@@ -670,10 +679,14 @@ extension IGMap: MKMapViewDelegate {
         let coordinate = CLLocationCoordinate2DMake(mapView.region.center.latitude, mapView.region.center.longitude)
         let zoomLevel = getZoomLevel()
         
-        if MIN_ZOOM_LEVEL > zoomLevel || MAX_ZOOM_LEVEL < zoomLevel {
+        if (self.latestSpan != nil) && (MIN_ZOOM_LEVEL > zoomLevel || MAX_ZOOM_LEVEL < zoomLevel) {
             let region = MKCoordinateRegionMake(coordinate, self.latestSpan)
             mapView.setRegion(region, animated:true)
         } else {
+            if northLimitation == nil {
+                return
+            }
+            
             self.latestSpan = MKCoordinateSpanMake(0, 360 / pow(2, Double(zoomLevel-1)) * Double(mapView.frame.size.width) / 256)
             
             let latitude = mapView.region.center.latitude
