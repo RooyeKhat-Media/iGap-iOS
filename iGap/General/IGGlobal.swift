@@ -92,6 +92,10 @@ extension UIColor {
         return UIColor(red: 44.0/255.0, green: 170/255.0, blue: 163.0/255.0, alpha: 1.0)
     }
     
+    class func iGapColor() -> UIColor {
+        return UIColor(red: 44.0/255.0, green: 170/255.0, blue: 163.0/255.0, alpha: 1.0)
+    }
+    
     //MARK: Call State Colors
     class func callStatusColor(status: Int) -> UIColor {
         

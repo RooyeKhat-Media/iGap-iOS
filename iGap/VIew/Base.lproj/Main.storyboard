@@ -1204,6 +1204,48 @@
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Lag-5t-Bo2">
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                             </mapView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ldf-Fa-K1P">
+                                <rect key="frame" x="6" y="70" width="363" height="40"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="2xH-j0-oLm"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zw1-Rt-Hey">
+                                <rect key="frame" x="6" y="70" width="363" height="40"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TNo-OT-S8V">
+                                        <rect key="frame" x="323" y="0.0" width="40" height="40"/>
+                                        <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="40" id="AQo-B4-rgc"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="iGap-Fontico" family="iGap-Fontico" pointSize="20"/>
+                                        <state key="normal" title="ok"/>
+                                        <connections>
+                                            <action selector="btnUpdateComment:" destination="hsi-ex-lNf" eventType="touchUpInside" id="jf5-5A-ebz"/>
+                                        </connections>
+                                    </button>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Your Status" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="e0D-HW-VKn">
+                                        <rect key="frame" x="7" y="0.0" width="316" height="40"/>
+                                        <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="e0D-HW-VKn" secondAttribute="bottom" id="2yN-sj-dXI"/>
+                                    <constraint firstAttribute="height" constant="40" id="3B4-Cw-gIh"/>
+                                    <constraint firstItem="e0D-HW-VKn" firstAttribute="top" secondItem="Zw1-Rt-Hey" secondAttribute="top" id="DEG-7n-fha"/>
+                                    <constraint firstAttribute="bottom" secondItem="TNo-OT-S8V" secondAttribute="bottom" id="SqQ-xt-uvO"/>
+                                    <constraint firstItem="e0D-HW-VKn" firstAttribute="leading" secondItem="Zw1-Rt-Hey" secondAttribute="leading" constant="7" id="ca6-Mh-eWB"/>
+                                    <constraint firstItem="TNo-OT-S8V" firstAttribute="leading" secondItem="e0D-HW-VKn" secondAttribute="trailing" id="kW8-Ny-bFa"/>
+                                    <constraint firstItem="TNo-OT-S8V" firstAttribute="top" secondItem="Zw1-Rt-Hey" secondAttribute="top" id="ok1-Bq-c20"/>
+                                    <constraint firstAttribute="trailing" secondItem="TNo-OT-S8V" secondAttribute="trailing" id="wyp-hJ-13u"/>
+                                </constraints>
+                            </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p1s-Tl-xih">
                                 <rect key="frame" x="304" y="592" width="55" height="55"/>
                                 <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1220,18 +1262,28 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="ldf-Fa-K1P" firstAttribute="top" secondItem="E87-JL-NHt" secondAttribute="topMargin" constant="6" id="0PY-Uf-4nE"/>
+                            <constraint firstItem="ldf-Fa-K1P" firstAttribute="leading" secondItem="E87-JL-NHt" secondAttribute="leadingMargin" constant="-10" id="4TD-MI-5XT"/>
                             <constraint firstItem="Lag-5t-Bo2" firstAttribute="top" secondItem="MaP-La-5Ha" secondAttribute="bottom" id="8tE-5d-nCC"/>
                             <constraint firstItem="p1s-Tl-xih" firstAttribute="trailing" secondItem="E87-JL-NHt" secondAttribute="trailingMargin" id="95F-IQ-amo"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Zw1-Rt-Hey" secondAttribute="trailing" constant="-10" id="BlH-Yu-rcp"/>
                             <constraint firstItem="SWU-Vq-U8i" firstAttribute="top" secondItem="p1s-Tl-xih" secondAttribute="bottom" constant="20" id="CcI-Ya-a8Y"/>
+                            <constraint firstItem="Zw1-Rt-Hey" firstAttribute="leading" secondItem="E87-JL-NHt" secondAttribute="leadingMargin" constant="-10" id="IVv-kB-vBV"/>
+                            <constraint firstItem="Zw1-Rt-Hey" firstAttribute="top" secondItem="E87-JL-NHt" secondAttribute="topMargin" constant="6" id="Ovc-nb-zya"/>
                             <constraint firstItem="Lag-5t-Bo2" firstAttribute="leading" secondItem="E87-JL-NHt" secondAttribute="leadingMargin" constant="-16" id="PHE-ax-WRR"/>
                             <constraint firstItem="Lag-5t-Bo2" firstAttribute="trailing" secondItem="E87-JL-NHt" secondAttribute="trailingMargin" constant="16" id="YUp-o9-qOo"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="ldf-Fa-K1P" secondAttribute="trailing" constant="-10" id="pZf-BD-OOE"/>
                             <constraint firstItem="SWU-Vq-U8i" firstAttribute="top" secondItem="Lag-5t-Bo2" secondAttribute="bottom" id="qGi-AU-TET"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Map" id="cMV-mk-Mj0" customClass="IGNavigationItem" customModule="iGap" customModuleProvider="target"/>
                     <connections>
+                        <outlet property="btnComment" destination="TNo-OT-S8V" id="1KE-in-Gqz"/>
                         <outlet property="btnCurrentLocation" destination="p1s-Tl-xih" id="hxJ-9Y-Hk8"/>
+                        <outlet property="commentView" destination="Zw1-Rt-Hey" id="zWE-4x-muq"/>
+                        <outlet property="edtComment" destination="e0D-HW-VKn" id="Lzw-UC-DEu"/>
                         <outlet property="mapView" destination="Lag-5t-Bo2" id="Hha-eZ-Ksn"/>
+                        <outlet property="viewShadow" destination="ldf-Fa-K1P" id="c0Z-iF-Es5"/>
                         <segue destination="CFP-Hu-weJ" kind="presentation" identifier="showRoomMessages" id="ONr-pK-81u"/>
                     </connections>
                 </viewController>

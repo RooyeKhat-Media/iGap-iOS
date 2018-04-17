@@ -14,16 +14,28 @@ import CoreLocation
 import RealmSwift
 import IGProtoBuff
 
+enum CommentState {
+    case UPDATE
+    case CLEAR
+    case NONE
+}
 
-class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDelegate {
+class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDelegate, UITextFieldDelegate {
 
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var btnCurrentLocation: UIButton!
+    @IBOutlet weak var commentView: UIView!
+    @IBOutlet weak var viewShadow: UIView!
+    @IBOutlet weak var edtComment: UITextField!
+    @IBOutlet weak var btnComment: UIButton!
     
     var tileRenderer: MKTileOverlayRenderer!
     var currentLocation: CLLocation!
     let locationManager = CLLocationManager()
     
+    var latestComment: String? // changed comment before send to server
+    var latestMainComment: String? // server comment
+    var latestCommentState: CommentState?
     var showMarker = true
     var isFirstSetRegion = true
     var room: IGRoom!
@@ -39,6 +51,7 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
     
     let MIN_ZOOM_LEVEL = 16.5
     let MAX_ZOOM_LEVEL = 18.0
+    let MAX_COMMENT_LENGTH = 70
     let DISTANCE_METERS = 5000
     let UPDATE_POSITION_DELAY = 60 * 1000 // allow send update poistion for each one minute
     
@@ -48,12 +61,29 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
         setCurrentLocation(setRegion: true)
     }
     
+    @IBAction func btnUpdateComment(_ sender: UIButton) {
+        if latestCommentState == .NONE {
+            return
+        } else if latestCommentState == .CLEAR {
+            updateComment(comment: "")
+        } else if latestCommentState == .UPDATE {
+            updateComment(comment: edtComment.text!)
+        }
+        
+        self.view.endEditing(true)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        edtComment.delegate = self
         
         initNavigationBar()
         checkLocationPermission()
         initMapView()
+        getMyComment()
+        manageCommentView()
+        manageCommentButtonView(commentState: .NONE)
         buttonViewCustomize(button: btnCurrentLocation, color: UIColor.white)
     }
     
@@ -99,6 +129,13 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
         self.present(option, animated: true, completion: {})
     }
     
+    func commentMaxAlert(){
+        let option = UIAlertController(title: nil, message: "Comment cannot be more than \(MAX_COMMENT_LENGTH) characters!", preferredStyle: .alert)
+        let cancel = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
+        option.addAction(cancel)
+        self.present(option, animated: true, completion: {})
+    }
+    
     func initMapView(){
         let initialRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 35.689197, longitude: 51.388974), span: MKCoordinateSpan(latitudeDelta: 0.16405544070813249, longitudeDelta: 0.1232528799585566))
         mapView.region = initialRegion
@@ -136,7 +173,37 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
         locationManager.delegate = self
     }
     
-    private func buttonViewCustomize(button: UIButton, color: UIColor){
+    func manageCommentView(){
+        viewShadow.layer.shadowColor = UIColor.black.cgColor
+        viewShadow.layer.shadowOffset = CGSize(width: 0, height: 2)
+        viewShadow.layer.shadowRadius = 5.0
+        viewShadow.layer.shadowOpacity = 0.3
+        viewShadow.layer.masksToBounds = false
+        viewShadow.layer.cornerRadius = 7.0
+        
+        commentView.layer.cornerRadius = 7.0
+        commentView.layer.borderWidth = 0.1
+        commentView.layer.borderColor = UIColor.darkGray.cgColor
+        commentView.layer.masksToBounds = true
+    }
+    
+    func manageCommentButtonView(commentState: CommentState){
+        
+        latestCommentState = commentState
+        
+        if commentState == .UPDATE {
+            btnComment.setTitle("", for: UIControlState.normal)
+            btnComment.setTitleColor(UIColor.iGapColor(), for: UIControlState.normal)
+        } else if commentState == .CLEAR {
+            btnComment.setTitle("", for: UIControlState.normal)
+            btnComment.setTitleColor(UIColor.red, for: UIControlState.normal)
+        } else if commentState == .NONE {
+            btnComment.setTitle(" ", for: UIControlState.normal)
+            btnComment.setTitleColor(UIColor.clear, for: UIControlState.normal)
+        }
+    }
+    
+    func buttonViewCustomize(button: UIButton, color: UIColor){
         button.backgroundColor = color
         
         button.layer.shadowColor = UIColor.darkGray.cgColor
@@ -239,6 +306,32 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
         }).send()
     }
     
+    func getMyComment(){
+        IGGeoGetComment.Generator.generate(userId: IGAppManager.sharedManager.userID()!).success({ (protoResponse) in
+            DispatchQueue.main.async {
+                if let comment = protoResponse as? IGPGeoGetCommentResponse {
+                    self.latestComment = comment.igpComment
+                    self.latestMainComment = comment.igpComment
+                    self.edtComment.text = comment.igpComment
+                    
+                    if comment.igpComment.isEmpty {
+                        self.manageCommentButtonView(commentState: .NONE)
+                    } else {
+                        self.manageCommentButtonView(commentState: .CLEAR)
+                    }
+                }
+            }
+        }).error ({ (errorCode, waitTime) in
+            switch errorCode {
+            case .timeout:
+                self.getMyComment()
+            default:
+                break
+            }
+            
+        }).send()
+    }
+    
     func updatePosition(lat: Double, lon: Double){
         
         let currentTime = getCurrentMillis()
@@ -293,6 +386,35 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
                     IGGeoGetCoordinateDistance.Handler.interpret(response: coordinateDistanceResponse)
                 default:
                     break
+                }
+            }
+        }).error ({ (errorCode, waitTime) in
+            switch errorCode {
+            case .timeout:
+                DispatchQueue.main.async {
+                    let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: nil)
+                }
+            default:
+                break
+            }
+            
+        }).send()
+    }
+    
+    func updateComment(comment: String){
+        IGGeoUpdateComment.Generator.generate(comment: comment).success({ (protoResponse) in
+            DispatchQueue.main.async {
+                if let updateComment = protoResponse as? IGPGeoUpdateCommentResponse {
+                    self.edtComment.text = updateComment.igpComment
+                    if updateComment.igpComment.isEmpty {
+                        self.manageCommentButtonView(commentState: .NONE)
+                    } else {
+                        self.manageCommentButtonView(commentState: .CLEAR)
+                    }
+                    IGGeoUpdateComment.Handler.interpret(response: updateComment)
                 }
             }
         }).error ({ (errorCode, waitTime) in
@@ -374,6 +496,49 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
         setCurrentLocation(setRegion: false)
         latestSpan = span
         detectBoundingBox(location: self.currentLocation)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        var commentText: String! = edtComment.text!
+        
+        if !string.isEmpty {
+            commentText = "\(commentText!)\(string)"
+        } else {
+            commentText = String(commentText!.prefix(commentText!.characters.count - 1))
+        }
+        
+        
+        if commentText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            if latestMainComment == commentText.trimmingCharacters(in: .whitespacesAndNewlines) {
+                manageCommentButtonView(commentState: .NONE)
+            } else {
+                manageCommentButtonView(commentState: .CLEAR)
+            }
+        } else {
+            if latestMainComment == commentText.trimmingCharacters(in: .whitespacesAndNewlines) {
+                manageCommentButtonView(commentState: .CLEAR)
+            } else {
+                manageCommentButtonView(commentState: .UPDATE)
+            }
+        }
+        
+        if let text = edtComment.text {
+            let newLength = text.characters.count + string.characters.count - range.length
+            if (newLength > MAX_COMMENT_LENGTH) {
+                edtComment.text = latestComment
+                commentMaxAlert()
+            } else {
+                latestComment = text
+            }
+        }
+        
+        return true
     }
 }
 
