@@ -65,7 +65,7 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
         if latestCommentState == .NONE {
             return
         } else if latestCommentState == .CLEAR {
-            updateComment(comment: "")
+            clearCommentAlert()
         } else if latestCommentState == .UPDATE {
             updateComment(comment: edtComment.text!)
         }
@@ -116,7 +116,7 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
         })
         
         let nearbyState = UIAlertAction(title: "Disable Nearby Visibility", style: .default, handler: { (action) in
-            self.geoRegister()
+            self.disableNearbyVisibilityAlert()
         })
         
         let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
@@ -132,6 +132,30 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
     func commentMaxAlert(){
         let option = UIAlertController(title: nil, message: "Comment cannot be more than \(MAX_COMMENT_LENGTH) characters!", preferredStyle: .alert)
         let cancel = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
+        option.addAction(cancel)
+        self.present(option, animated: true, completion: {})
+    }
+    
+    func clearCommentAlert(){
+        let option = UIAlertController(title: "Clear Status", message: "You will be visible to others with no status. Are you sure to continue ?", preferredStyle: .alert)
+        let ok = UIAlertAction(title: "Ok", style: .destructive, handler: { (action) in
+            self.updateComment(comment: "")
+        })
+        let cancel = UIAlertAction(title: "No", style: .cancel, handler: nil)
+        
+        option.addAction(ok)
+        option.addAction(cancel)
+        self.present(option, animated: true, completion: {})
+    }
+    
+    func disableNearbyVisibilityAlert(){
+        let option = UIAlertController(title: "Disable Nearby", message: "Disabling nearby will not only result in hiding your status from others, but you won't also be able to see others status within your certain range. Are you still sure to continue ?", preferredStyle: .alert)
+        let ok = UIAlertAction(title: "Ok", style: .destructive, handler: { (action) in
+            self.geoRegister()
+        })
+        let cancel = UIAlertAction(title: "No", style: .cancel, handler: nil)
+        
+        option.addAction(ok)
         option.addAction(cancel)
         self.present(option, animated: true, completion: {})
     }
