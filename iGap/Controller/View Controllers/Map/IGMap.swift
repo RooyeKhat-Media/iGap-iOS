@@ -49,13 +49,15 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
     var westLimitation: Double!
     var eastLimitation: Double!
     
-    let MIN_ZOOM_LEVEL = 16.5
-    let MAX_ZOOM_LEVEL = 18.0
+    let MIN_ZOOM_LEVEL = 15.0
+    let MAX_ZOOM_LEVEL = 19.0
     let MAX_COMMENT_LENGTH = 70
     let DISTANCE_METERS = 5000
     let UPDATE_POSITION_DELAY = 60 * 1000 // allow send update poistion for each one minute
     
     var userIdDictionary:[Int:Int64] = [:]
+    var usersCommentDictionary:[Int64:String] = [:]
+    var userNoInfoDictionary:[Int64:IGPGeoGetNearbyCoordinateResponse.IGPResult] = [:]
     
     @IBAction func btnCurrentLocation(_ sender: UIButton) {
         setCurrentLocation(setRegion: true)
@@ -243,17 +245,16 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
     
     func addMarker(userId: Int64, lat: Double, lon: Double){
         let realm = try! Realm()
-        let annotation = MKPointAnnotation()
-        let userLocation = CLLocationCoordinate2D(latitude: lat, longitude: lon)
-        annotation.coordinate = userLocation
-        annotation.subtitle = "iGap map user simple description. \n iGap map user simple description"
-        
         let predicate = NSPredicate(format: "id = %lld", userId)
         if let userInfo = try! realm.objects(IGRegisteredUser.self).filter(predicate).first {
+            let annotation = MKPointAnnotation()
+            let userLocation = CLLocationCoordinate2D(latitude: lat, longitude: lon)
+            annotation.coordinate = userLocation
+            annotation.subtitle = "Status ..."
             annotation.title = userInfo.displayName
+            userIdDictionary[annotation.hash] = userId
+            mapView.addAnnotation(annotation)
         }
-        userIdDictionary[annotation.hash] = userId
-        mapView.addAnnotation(annotation)
     }
     
     func setCurrentLocation(setRegion: Bool){
@@ -410,10 +411,33 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
                     // first remove all annotations
                     self.mapView.removeAnnotations(self.mapView.annotations)
                     
+                    let realm = try! Realm()
+                    
                     // then show new markers
                     for result in coordinateDistanceResponse.igpResult {
-                        result.igpHasComment
-                        self.addMarker(userId: result.igpUserID, lat: result.igpLat, lon: result.igpLon)
+                        
+                        let predicate = NSPredicate(format: "id = %lld", result.igpUserID)
+                        if let _ = try! realm.objects(IGRegisteredUser.self).filter(predicate).first {
+                            
+                            if result.igpHasComment {
+                                
+                                let comment = self.usersCommentDictionary[result.igpUserID]
+                                if comment != nil { // if comment exist reuse that again
+                                    self.addMarker(userId: result.igpUserID, lat: result.igpLat, lon: result.igpLon)
+                                } else {
+                                    self.userNoInfoDictionary[result.igpUserID] = result
+                                    self.getUserComment(userId: result.igpUserID)
+                                }
+                                
+                            } else {
+                                self.usersCommentDictionary[result.igpUserID] = ""
+                                self.addMarker(userId: result.igpUserID, lat: result.igpLat, lon: result.igpLon)
+                            }
+                            
+                        } else {
+                            self.userNoInfoDictionary[result.igpUserID] = result
+                            self.getUserInfo(userId: result.igpUserID)
+                        }
                     }
                     
                     IGGeoGetCoordinateDistance.Handler.interpret(response: coordinateDistanceResponse)
@@ -435,6 +459,46 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
             }
             
         }).send()
+    }
+    
+    func getUserInfo(userId: Int64){
+        IGUserInfoRequest.Generator.generate(userID: userId).success({ (protoResponse) in
+            DispatchQueue.main.async {
+                switch protoResponse {
+                case let userInfoResponse as IGPUserInfoResponse:
+                    let igpUser = userInfoResponse.igpUser
+                    IGFactory.shared.saveRegistredUsers([igpUser])
+                    
+                    let nearbyCoordinate = self.userNoInfoDictionary[igpUser.igpID]!
+                    if nearbyCoordinate.igpHasComment {
+                        self.getUserComment(userId: igpUser.igpID)
+                    } else {
+                        self.usersCommentDictionary[nearbyCoordinate.igpUserID] = ""
+                        self.addMarker(userId: igpUser.igpID, lat: nearbyCoordinate.igpLat, lon: nearbyCoordinate.igpLon)
+                        self.userNoInfoDictionary.removeValue(forKey: igpUser.igpID)
+                    }
+                    
+                    break
+                default:
+                    break
+                }
+            }
+        }).error({ (errorCode, waitTime) in }).send()
+    }
+    
+    func getUserComment(userId: Int64){
+        IGGeoGetComment.Generator.generate(userId: userId, identity: "\(userId)").successPowerful ({ (protoResponse, requestWrapper) in
+            DispatchQueue.main.async {
+                if let comment = protoResponse as? IGPGeoGetCommentResponse {
+                    let userId = Int64(requestWrapper.identity)!
+                    self.usersCommentDictionary[userId] = comment.igpComment
+                    
+                    let nearbyCoordinate = self.userNoInfoDictionary[userId]!
+                    self.addMarker(userId: userId, lat: nearbyCoordinate.igpLat, lon: nearbyCoordinate.igpLon)
+                    self.userNoInfoDictionary.removeValue(forKey: userId)
+                }
+            }
+        }).error({ (errorCode, waitTime) in }).send()
     }
     
     func updateComment(comment: String){
@@ -587,23 +651,19 @@ extension IGMap: MKMapViewDelegate {
             if annotation is MKUserLocation {
                 return nil
             }
-            let reuseId = "pin"
-            var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId)
-            pinView = MKAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
-
-            pinView?.canShowCallout = true
+            
             let realm = try! Realm()
-            
             let userIdDic = "\(userIdDictionary[annotation.hash]!)"
-            
             let predicate = NSPredicate(format: "id = %lld", Int64(userIdDic)!)
             var user = realm.objects(IGRegisteredUser.self).filter(predicate).first
             
-            if user == nil {
-                let predicate1 = NSPredicate(format: "id = %lld", 245)
-                user = realm.objects(IGRegisteredUser.self).filter(predicate1).first
-            }
+            //********** annotation view **********//
+            let reuseId = "pin"
+            var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId)
+            pinView = MKAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            pinView?.canShowCallout = true
             
+            //********** set avatar **********//
             let frame = CGRect(x:0 ,y:0 ,width:30 ,height:30)
             let avatarViewAbs = IGAvatarView(frame: frame)
             avatarViewAbs.setUser(user!)
@@ -614,6 +674,9 @@ extension IGMap: MKMapViewDelegate {
             } else {
                 pinImage = UIImage(named: "IG_Map")
             }
+            
+            
+            //********** make circlur annotation view **********//
             let size = CGSize(width: 50, height: 50)
             //UIGraphicsBeginImageContext(size)
             UIGraphicsBeginImageContextWithOptions(size, true, 0)
@@ -622,29 +685,46 @@ extension IGMap: MKMapViewDelegate {
             UIGraphicsEndImageContext()
             pinView?.image = maskRoundedImage(image: (resizedImage)!, radius:  CGFloat(25))
             
-            let smallSquare = CGSize(width: 32, height: 25)
             
-            let button = UIButton(frame: CGRect(origin: CGPoint(x: 0,y :0), size: smallSquare))
-            button.tag = annotation.hash
-            button.setBackgroundImage(UIImage(named: "IG_Splash_Cute_3"), for: .normal)
-            button.addTarget(self, action: #selector(IGMap.manageOpenChat), for: .touchUpInside)
-            pinView?.leftCalloutAccessoryView = button
+            //********** annotation dialog view **********//
+            let smallSquare = CGSize(width: 48, height: 37.5)
             
-            let buttonRigth = UIButton(frame: CGRect(origin: CGPoint(x: 0,y :0), size: smallSquare))
-            buttonRigth.tag = annotation.hash
-            buttonRigth.setBackgroundImage(UIImage(named: "IG_Splash_Cute_5"), for: .normal)
-            buttonRigth.addTarget(self, action: #selector(IGMap.callToUser), for: .touchUpInside)
-            pinView?.rightCalloutAccessoryView = buttonRigth
+            let buttonLeftOpenChat = UIButton(frame: CGRect(origin: CGPoint(x: 0,y :0), size: smallSquare))
+            buttonLeftOpenChat.tag = annotation.hash
+            buttonLeftOpenChat.setBackgroundImage(UIImage(named: "IG_Splash_Cute_3"), for: .normal)
+            buttonLeftOpenChat.addTarget(self, action: #selector(IGMap.manageOpenChat), for: .touchUpInside)
+            pinView?.leftCalloutAccessoryView = buttonLeftOpenChat
+            
+            let buttonRigthCall = UIButton(frame: CGRect(origin: CGPoint(x: 0,y :0), size: smallSquare))
+            buttonRigthCall.tag = annotation.hash
+            buttonRigthCall.setBackgroundImage(UIImage(named: "IG_Splash_Cute_5"), for: .normal)
+            buttonRigthCall.addTarget(self, action: #selector(IGMap.callToUser), for: .touchUpInside)
+            pinView?.rightCalloutAccessoryView = buttonRigthCall
 
-            let label1 = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 21))
-            label1.text = "iGap map user simple description"
-            label1.numberOfLines = 1
+            //***** manage user comment view in annotation *****//
+            
+            let font = UIFont.igFont(ofSize: 15.0)
+            
+            let label1 = UILabel(frame: CGRect(x: 0, y: 0, width: 40, height: 21))
+            label1.font = font
+            
+            let comment = self.usersCommentDictionary[(user?.id)!]
+            if comment != nil && !(comment?.isEmpty)! {
+                label1.text = comment
+            } else {
+                label1.text = "No Status"
+            }
+            
+            label1.numberOfLines = 0
             pinView?.detailCalloutAccessoryView = label1;
 
-            let width = NSLayoutConstraint(item: label1, attribute: NSLayoutAttribute.width, relatedBy: NSLayoutRelation.lessThanOrEqual, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: 220)
-            label1.addConstraint(width)
+            let widthSize = CGFloat(200)
+            let heightSize = comment?.height(withConstrainedWidth: widthSize, font: font) // compute height according to width and font size
 
-            let height = NSLayoutConstraint(item: label1, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: 32)
+            let width = NSLayoutConstraint(item: label1, attribute: NSLayoutAttribute.width, relatedBy: NSLayoutRelation.lessThanOrEqual, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: widthSize)
+            let height = NSLayoutConstraint(item: label1, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: heightSize!)
+            
+            label1.addConstraint(width)
             label1.addConstraint(height)
 
             return pinView
