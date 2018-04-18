@@ -49,9 +49,9 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
     var westLimitation: Double!
     var eastLimitation: Double!
     
-    let MIN_ZOOM_LEVEL = 15.0
-    let MAX_ZOOM_LEVEL = 19.0
-    let MAX_COMMENT_LENGTH = 70
+    let MIN_ZOOM_LEVEL = 15.5
+    let MAX_ZOOM_LEVEL = 18.5
+    let MAX_COMMENT_LENGTH = 200
     let DISTANCE_METERS = 5000
     let UPDATE_POSITION_DELAY = 60 * 1000 // allow send update poistion for each one minute
     
@@ -267,7 +267,7 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
         let region = MKCoordinateRegionMake(currentLocation.coordinate, span)
         
         if isFirstSetRegion {
-            detectUsersCoordinate()
+            detectUsersCoordinate(delay: 2)
         }
         
         if setRegion || isFirstSetRegion{
@@ -330,7 +330,7 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
             switch errorCode {
             case .timeout:
                 DispatchQueue.main.async {
-                    let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                    let alert = UIAlertController(title: "Timeout", message: "Please try again later for disable your map status!", preferredStyle: .alert)
                     let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
                     alert.addAction(okAction)
                     self.present(alert, animated: true, completion: nil)
@@ -386,79 +386,68 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
                     IGGeoUpdatePosition.Handler.interpret(response: updatePosition)
                 }
             }
-        }).error ({ (errorCode, waitTime) in
-            switch errorCode {
-            case .timeout:
-                DispatchQueue.main.async {
-                    let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
-                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                    alert.addAction(okAction)
-                    self.present(alert, animated: true, completion: nil)
-                }
-            default:
-                break
-            }
-            
-        }).send()
+        }).error ({ (errorCode, waitTime) in }).send()
     }
     
-    func detectUsersCoordinate(){
-        IGGeoGetCoordinateDistance.Generator.generate(lat: currentLocation.coordinate.latitude, lon: currentLocation.coordinate.longitude).success({ (protoResponse) in
-            DispatchQueue.main.async {
-                switch protoResponse {
-                case let coordinateDistanceResponse as IGPGeoGetNearbyCoordinateResponse:
-                    
-                    // first remove all annotations
-                    self.mapView.removeAnnotations(self.mapView.annotations)
-                    
-                    let realm = try! Realm()
-                    
-                    // then show new markers
-                    for result in coordinateDistanceResponse.igpResult {
+    func detectUsersCoordinate(delay: Double = 0){
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+            IGGeoGetCoordinateDistance.Generator.generate(lat: self.currentLocation.coordinate.latitude, lon: self.currentLocation.coordinate.longitude).success({ (protoResponse) in
+                DispatchQueue.main.async {
+                    switch protoResponse {
+                    case let coordinateDistanceResponse as IGPGeoGetNearbyCoordinateResponse:
                         
-                        let predicate = NSPredicate(format: "id = %lld", result.igpUserID)
-                        if let _ = try! realm.objects(IGRegisteredUser.self).filter(predicate).first {
+                        // first remove all annotations
+                        self.mapView.removeAnnotations(self.mapView.annotations)
+                        
+                        let realm = try! Realm()
+                        
+                        // then show new markers
+                        for result in coordinateDistanceResponse.igpResult {
                             
-                            if result.igpHasComment {
+                            let predicate = NSPredicate(format: "id = %lld", result.igpUserID)
+                            if let _ = try! realm.objects(IGRegisteredUser.self).filter(predicate).first {
                                 
-                                let comment = self.usersCommentDictionary[result.igpUserID]
-                                if comment != nil { // if comment exist reuse that again
-                                    self.addMarker(userId: result.igpUserID, lat: result.igpLat, lon: result.igpLon)
+                                if result.igpHasComment {
+                                    
+                                    let comment = self.usersCommentDictionary[result.igpUserID]
+                                    if comment != nil { // if comment exist reuse that again
+                                        self.addMarker(userId: result.igpUserID, lat: result.igpLat, lon: result.igpLon)
+                                    } else {
+                                        self.userNoInfoDictionary[result.igpUserID] = result
+                                        self.getUserComment(userId: result.igpUserID)
+                                    }
+                                    
                                 } else {
-                                    self.userNoInfoDictionary[result.igpUserID] = result
-                                    self.getUserComment(userId: result.igpUserID)
+                                    self.usersCommentDictionary[result.igpUserID] = ""
+                                    self.addMarker(userId: result.igpUserID, lat: result.igpLat, lon: result.igpLon)
                                 }
                                 
                             } else {
-                                self.usersCommentDictionary[result.igpUserID] = ""
-                                self.addMarker(userId: result.igpUserID, lat: result.igpLat, lon: result.igpLon)
+                                self.userNoInfoDictionary[result.igpUserID] = result
+                                self.getUserInfo(userId: result.igpUserID)
                             }
-                            
-                        } else {
-                            self.userNoInfoDictionary[result.igpUserID] = result
-                            self.getUserInfo(userId: result.igpUserID)
                         }
+                        
+                        IGGeoGetCoordinateDistance.Handler.interpret(response: coordinateDistanceResponse)
+                    default:
+                        break
                     }
-                    
-                    IGGeoGetCoordinateDistance.Handler.interpret(response: coordinateDistanceResponse)
+                }
+            }).error ({ (errorCode, waitTime) in
+                switch errorCode {
+                case .timeout:
+                    DispatchQueue.main.async {
+                        let alert = UIAlertController(title: "Timeout", message: "Please try again later for get other users position in map!", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                    }
                 default:
                     break
                 }
-            }
-        }).error ({ (errorCode, waitTime) in
-            switch errorCode {
-            case .timeout:
-                DispatchQueue.main.async {
-                    let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
-                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                    alert.addAction(okAction)
-                    self.present(alert, animated: true, completion: nil)
-                }
-            default:
-                break
-            }
-            
-        }).send()
+                
+            }).send()
+        }
     }
     
     func getUserInfo(userId: Int64){
@@ -518,7 +507,7 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
             switch errorCode {
             case .timeout:
                 DispatchQueue.main.async {
-                    let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                    let alert = UIAlertController(title: "Timeout", message: "Please try again later for update your comment!", preferredStyle: .alert)
                     let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
                     alert.addAction(okAction)
                     self.present(alert, animated: true, completion: nil)
@@ -550,7 +539,7 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
                 switch errorCode {
                 case .timeout:
                     DispatchQueue.main.async {
-                        let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                        let alert = UIAlertController(title: "Timeout", message: "Please try again later for start chat with this user!", preferredStyle: .alert)
                         let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
                         alert.addAction(okAction)
                         self.present(alert, animated: true, completion: nil)

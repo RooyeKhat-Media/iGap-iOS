@@ -97,6 +97,43 @@ class IGMapNearbyDistanceTableViewController: UITableViewController, UIGestureRe
             }}.error({ (errorCode, waitTime) in }).send()
     }
     
+    func manageOpenChat(userId: Int64){
+        let realm = try! Realm()
+        let predicate = NSPredicate(format: "chatRoom.peer.id = %lld", userId)
+        if let roomInfo = try! realm.objects(IGRoom.self).filter(predicate).first {
+            openChat(roomInfo: roomInfo)
+        } else {
+            IGChatGetRoomRequest.Generator.generate(peerId: userId).success({ (protoResponse) in
+                DispatchQueue.main.async {
+                    if let chatGetRoomResponse = protoResponse as? IGPChatGetRoomResponse {
+                        IGChatGetRoomRequest.Handler.interpret(response: chatGetRoomResponse)
+                        self.openChat(roomInfo: IGRoom(igpRoom: chatGetRoomResponse.igpRoom))
+                    }
+                }
+            }).error({ (errorCode, waitTime) in
+                switch errorCode {
+                case .timeout:
+                    DispatchQueue.main.async {
+                        let alert = UIAlertController(title: "Timeout", message: "Please try again later for start chat with this user!", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                default:
+                    break
+                }
+                
+            }).send()
+        }
+    }
+    
+    func openChat(roomInfo: IGRoom){
+        let storyboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let roomVC = storyboard.instantiateViewController(withIdentifier: "messageViewController") as! IGMessageViewController
+        roomVC.room = roomInfo
+        self.navigationController!.pushViewController(roomVC, animated: true)
+    }
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -117,25 +154,8 @@ class IGMapNearbyDistanceTableViewController: UITableViewController, UIGestureRe
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
         self.tableView.isUserInteractionEnabled = false
-        let userId = nearbyDistanceList![indexPath.row].id
-        
-        let realm = try! Realm()
-        
-        let predicate2 = NSPredicate(format: "chatRoom.peer.id = %lld", userId)
-        var roomInfo = try! realm.objects(IGRoom.self).filter(predicate2).first
-        
-        if roomInfo == nil {
-            let predicate2 = NSPredicate(format: "chatRoom.peer.id = %lld", 245)
-            roomInfo = try! realm.objects(IGRoom.self).filter(predicate2).first
-        }
-        
-        let storyboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let roomVC = storyboard.instantiateViewController(withIdentifier: "messageViewController") as! IGMessageViewController
-        roomVC.room = roomInfo
-        self.navigationController!.pushViewController(roomVC, animated: true)
-        
+        manageOpenChat(userId: nearbyDistanceList![indexPath.row].id)
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
