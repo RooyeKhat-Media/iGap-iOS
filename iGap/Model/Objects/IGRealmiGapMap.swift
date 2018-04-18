@@ -17,6 +17,7 @@ class IGRealmMapNearbyDistance: Object {
     @objc dynamic var id                 : Int64 = 0
     @objc dynamic var distance           : Int32 = 0
     @objc dynamic var hasComment         : Bool = true
+    @objc dynamic var comment            : String = "Receiving status..."
     
     convenience init(nearbyDistance: IGPGeoGetNearbyDistanceResponse.IGPResult) {
         self.init()

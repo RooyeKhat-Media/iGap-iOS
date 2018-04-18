@@ -1116,10 +1116,10 @@
 			isa = PBXGroup;
 			children = (
 				FA865C742078A32000B9D585 /* IGMap.swift */,
-				FAE6BAB1207B537B00E54ECE /* MKHipsterTileOverlay.swift */,
 				FA7F3735208605F00024F8BF /* IGMapNearbyDistanceTableViewController.swift */,
 				FA8F8A672086027100AF03CB /* IGMapNearbyDistanceCell.swift */,
 				FA8F8A66208600AB00AF03CB /* IGMapNearbyDistanceCell.xib */,
+				FAE6BAB1207B537B00E54ECE /* MKHipsterTileOverlay.swift */,
 			);
 			path = Map;
 			sourceTree = "<group>";

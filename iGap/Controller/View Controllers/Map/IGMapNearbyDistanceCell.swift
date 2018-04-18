@@ -51,17 +51,16 @@ class IGMapNearbyDistanceCell: UITableViewCell {
     func setUserInfo(nearbyDistance : IGRealmMapNearbyDistance) {
         let realm = try! Realm()
         let predicate = NSPredicate(format: "id = %lld", nearbyDistance.id)
-        var userInfo = try! realm.objects(IGRegisteredUser.self).filter(predicate).first
-        
-        if userInfo == nil {
-            let predicate = NSPredicate(format: "id = %lld", 245)
-            userInfo = try! realm.objects(IGRegisteredUser.self).filter(predicate).first
+        if let userInfo = try! realm.objects(IGRegisteredUser.self).filter(predicate).first {
+            avatarView.setUser(userInfo)
+            contactName.text = userInfo.displayName
+            if nearbyDistance.hasComment {
+                userComment.text = nearbyDistance.comment
+            } else {
+                userComment.text = "No Status"
+            }
+            userDistance.text = "about \(nearbyDistance.distance) m"
         }
-        
-        avatarView.setUser(userInfo!)
-        contactName.text = userInfo?.displayName
-        
-        userDistance.text = "about \(nearbyDistance.distance) m"
     }
 }
 
