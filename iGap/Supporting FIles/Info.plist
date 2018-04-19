@@ -15,7 +15,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.3.2</string>
+	<string>0.4.0</string>
 	<key>CFBundleVersion</key>
 	<string>455</string>
 	<key>Fabric</key>
@@ -42,15 +42,20 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>iGap needs to access your camera</string>
+	<string>iGap needs to access your Camera.
+It has access to take photos and send to others. Note that you can not access this if you do not want to take a photo.</string>
 	<key>NSContactsUsageDescription</key>
-	<string>iGap needs to access your contact to connect you to your family and friends</string>
+	<string>iGap needs to access your Contact.
+This access is for us to check out your contacts, which one of these programs will use and introduce to you.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>iGap needs to access your Location</string>
+	<string>iGap needs to access your Location.
+This access is that perhaps you are sending your position to someone else or using the Nearby to view people around you.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>iGap needs to access your microphone to record and send your voice messages</string>
+	<string>iGap needs to access your Microphone.
+It has access to record your voice, you want to record your voice and send it to another.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>iGap needs to access your photo library</string>
+	<string>iGap needs to access your Photo-Library.
+This is the option to choose a photo from your gallery and send it to someone else.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>iGap-Fontico.ttf</string>
