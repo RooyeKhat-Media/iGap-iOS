@@ -782,12 +782,14 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
         
         inputTextView.text = inputTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
         
-        if connectionStatus == .waitingForNetwork || connectionStatus == .connecting {
+        if (self.inputTextView.text.isEmpty) {
+            self.inputTextView.text = ""
+        } else if connectionStatus == .waitingForNetwork || connectionStatus == .connecting {
             let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
             let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
             alert.addAction(okAction)
             self.present(alert, animated: true, completion: nil)
-        }else {
+        } else {
         if selectedMessageToEdit != nil {
                         switch room!.type {
             case .chat:
