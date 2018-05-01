@@ -285,6 +285,7 @@ class IGChatDeleteRequest: IGRequest {
         class func interpret(response responseProtoMessage:IGPChatDeleteResponse) {
             let roomId = responseProtoMessage.igpRoomID
             IGFactory.shared.setDeleteRoom(roomID : roomId)
+            IGFactory.shared.deleteAllMessages(roomId: roomId)
         }
         override class func handlePush(responseProtoMessage: Message) {
             switch responseProtoMessage {

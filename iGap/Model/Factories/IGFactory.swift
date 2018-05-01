@@ -694,6 +694,28 @@ class IGFactory: NSObject {
         self.performNextFactoryTaskIfPossible()
     }
     
+    func deleteAllMessages(roomId: Int64){
+        let task = IGFactoryTask()
+        task.task = {
+            IGDatabaseManager.shared.perfrmOnDatabaseThread {
+                let predicate = NSPredicate(format: "roomId = %lld", roomId)
+                let messages = IGDatabaseManager.shared.realm.objects(IGRoomMessage.self).filter(predicate)
+                try! IGDatabaseManager.shared.realm.write {
+                    IGDatabaseManager.shared.realm.delete(messages)
+                }
+                IGFactory.shared.performInFactoryQueue {
+                    task.success!()
+                }
+            }
+        }
+        task.success {
+            self.removeTaskFromQueueAndPerformNext(task)
+            }.error {
+                self.removeTaskFromQueueAndPerformNext(task)
+            }.addToQueue()
+        self.performNextFactoryTaskIfPossible()
+    }
+    
     func setClearMessageHistory(_ roomID : Int64, clearID: Int64 ) {
         let task = IGFactoryTask()
         task.task = {
@@ -1042,6 +1064,7 @@ class IGFactory: NSObject {
         task.task = {
             IGDatabaseManager.shared.perfrmOnDatabaseThread {
                 if IGAppManager.sharedManager.userID() == memberId {
+                    self.deleteAllMessages(roomId: roomID)
                     let predicate = NSPredicate(format: "id = %lld", roomID)
                     if let roomInDb = try! Realm().objects(IGRoom.self).filter(predicate).first {
                         try! IGDatabaseManager.shared.realm.write {

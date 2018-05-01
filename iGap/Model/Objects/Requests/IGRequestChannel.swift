@@ -144,6 +144,7 @@ class IGChannelDeleteRequest: IGRequest {
         class func interpret(response responseProtoMessage: IGPChannelDeleteResponse) -> Int64 {
             let igpRoomId = responseProtoMessage.igpRoomID
             IGFactory.shared.setDeleteRoom(roomID: igpRoomId)
+            IGFactory.shared.deleteAllMessages(roomId: igpRoomId)
             return igpRoomId
         }
         override class func handlePush(responseProtoMessage: Message) {

@@ -600,6 +600,7 @@ class IGGroupDeleteRequest : IGRequest {
         class func interpret(response responseProtoMessage:IGPGroupDeleteResponse){
             let groupID = responseProtoMessage.igpRoomID
             IGFactory.shared.setDeleteRoom(roomID: groupID)
+            IGFactory.shared.deleteAllMessages(roomId: groupID)
         }
         override class func handlePush(responseProtoMessage: Message) {
             switch responseProtoMessage {
