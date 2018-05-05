@@ -189,6 +189,7 @@ class IGRegistrationStepVerificationCodeViewController: UIViewController, UIGest
         if let code = Int32(codeTextField.text!){
             IGUserVerifyRequest.Generator.generate(usename: self.username!, code: code).success({ (responseProto) in
                 DispatchQueue.main.async {
+                    self.hud.hide(animated: false)
                     switch responseProto {
                     case let userVerifyReponse as IGPUserVerifyResponse:
                         let interpretedResponse = IGUserVerifyRequest.Handler.intrepret(response: userVerifyReponse)
@@ -248,7 +249,8 @@ class IGRegistrationStepVerificationCodeViewController: UIViewController, UIGest
                     case .timeout:
                         errorTitle = "Timeout"
                         errorBody = "Please try again later."
-                        break
+                        self.verifyUser()
+                        return
                     default:
                         errorTitle = "Unknown error"
                         errorBody = "An error occured. Please try again later.\nCode \(errorCode)"

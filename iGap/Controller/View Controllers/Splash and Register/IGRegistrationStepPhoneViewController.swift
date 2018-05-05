@@ -21,6 +21,7 @@ class IGRegistrationStepPhoneViewController: UIViewController {
     @IBOutlet weak var phoneNumberBackgroundView: UIView!
     @IBOutlet weak var countryCodeBackgroundView: UIView!
     @IBOutlet weak var phoneNumberField: AKMaskField!
+    @IBOutlet weak var termWebLink: UILabel!
     @IBOutlet weak var termLabel: UILabel!
     @IBOutlet weak var countryNameLabel: UILabel!
     @IBOutlet weak var countryCodeLabel: UILabel!
@@ -121,7 +122,11 @@ class IGRegistrationStepPhoneViewController: UIViewController {
         termLabel.addGestureRecognizer(tapOnTerms)
         termLabel.isUserInteractionEnabled = true
         
-        
+        let termsWebLink = NSAttributedString(string: "Privacy & Policy", attributes: [NSForegroundColorAttributeName: UIColor.organizationalColor()])
+        termWebLink.attributedText = termsWebLink
+        let tapOnTermsWebLink = UITapGestureRecognizer(target: self, action: #selector(showTermsWebLink))
+        termWebLink.addGestureRecognizer(tapOnTermsWebLink)
+        termWebLink.isUserInteractionEnabled = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -279,6 +284,10 @@ class IGRegistrationStepPhoneViewController: UIViewController {
     
     func showTerms() {
         performSegue(withIdentifier: "presentTerms", sender: self)
+    }
+    
+    func showTermsWebLink() {
+        UIApplication.shared.openURL(NSURL(string: "https://www.igap.net/privacy.html")! as URL)
     }
     
     func getUserCurrentLocation() {
