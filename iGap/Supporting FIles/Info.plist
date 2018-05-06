@@ -15,9 +15,9 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.4.0</string>
+	<string>0.4.1</string>
 	<key>CFBundleVersion</key>
-	<string>455</string>
+	<string>456</string>
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>
@@ -45,8 +45,7 @@
 	<string>iGap needs to access your Camera.
 It has access to take photos and send to others. Note that you can not access this if you do not want to take a photo.</string>
 	<key>NSContactsUsageDescription</key>
-	<string>iGap needs to access your Contact.
-This access is for us to check out your contacts, which one of these programs will use and introduce to you.</string>
+	<string>iGap needs to access your address book and sync your contact list to its servers in order for you to be able to find other iGap users, call and text for free</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>iGap needs to access your Location.
 This access is that perhaps you are sending your position to someone else or using the Nearby to view people around you.</string>
