@@ -347,6 +347,10 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
             
             if isIncommingMessage {
                 
+                if #available(iOS 11.0, *) {
+                    mainBubbleViewAbs.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner, .layerMaxXMinYCorner]
+                }
+                
                 if shouldShowAvatar {
                     leadingAbs = make.leading.equalTo(self.contentView.snp.leading).offset(46).priority(999).constraint
                 } else {
@@ -355,6 +359,11 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
                 trailingAbs = make.trailing.equalTo(self.contentView.snp.trailing).offset(-16).priority(250).constraint
                 
             } else {
+                
+                if #available(iOS 11.0, *) {
+                    mainBubbleViewAbs.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+                }
+                
                 trailingAbs = make.trailing.equalTo(self.contentView.snp.trailing).offset(-16).priority(999).constraint
                 leadingAbs = make.leading.equalTo(self.contentView.snp.leading).offset(46).priority(250).constraint
             }
