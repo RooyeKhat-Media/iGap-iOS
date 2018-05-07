@@ -782,109 +782,111 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
         
         inputTextView.text = inputTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
         
-        if (self.inputTextView.text.isEmpty) {
-            self.inputTextView.text = ""
-        } else if connectionStatus == .waitingForNetwork || connectionStatus == .connecting {
+        if connectionStatus == .waitingForNetwork || connectionStatus == .connecting {
             let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
             let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
             alert.addAction(okAction)
             self.present(alert, animated: true, completion: nil)
         } else {
-        if selectedMessageToEdit != nil {
-                        switch room!.type {
-            case .chat:
-                IGChatEditMessageRequest.Generator.generate(message: selectedMessageToEdit!, newText: inputTextView.text,  room: room!).success({ (protoResponse) in
-                    IGChatEditMessageRequest.Handler.interpret(response: protoResponse)
-                }).error({ (errorCode, waitTime) in
-                    
-                }).send()
-            case .group:
-                IGGroupEditMessageRequest.Generator.generate(message: selectedMessageToEdit!, newText: inputTextView.text, room: room!).success({ (protoResponse) in
-                    switch protoResponse {
-                    case let response as IGPGroupEditMessageResponse:
-                        IGGroupEditMessageRequest.Handler.interpret(response: response)
-                    default:
-                        break
-                    }
-                }).error({ (errorCode, waitTime) in
-                    
-                }).send()
-            case .channel:
-                IGChannelEditMessageRequest.Generator.generate(message: selectedMessageToEdit!, newText: inputTextView.text, room: room!).success({ (protoResponse) in
-                    switch protoResponse {
-                    case let response as IGPChannelEditMessageResponse:
-                        IGChannelEditMessageRequest.Handler.interpret(response: response)
-                    default:
-                        break
-                    }
-                }).error({ (errorCode, waitTime) in
-                    
-                }).send()
+            if selectedMessageToEdit != nil {
+                switch room!.type {
+                case .chat:
+                    IGChatEditMessageRequest.Generator.generate(message: selectedMessageToEdit!, newText: inputTextView.text,  room: room!).success({ (protoResponse) in
+                        IGChatEditMessageRequest.Handler.interpret(response: protoResponse)
+                    }).error({ (errorCode, waitTime) in
+                        
+                    }).send()
+                case .group:
+                    IGGroupEditMessageRequest.Generator.generate(message: selectedMessageToEdit!, newText: inputTextView.text, room: room!).success({ (protoResponse) in
+                        switch protoResponse {
+                        case let response as IGPGroupEditMessageResponse:
+                            IGGroupEditMessageRequest.Handler.interpret(response: response)
+                        default:
+                            break
+                        }
+                    }).error({ (errorCode, waitTime) in
+                        
+                    }).send()
+                case .channel:
+                    IGChannelEditMessageRequest.Generator.generate(message: selectedMessageToEdit!, newText: inputTextView.text, room: room!).success({ (protoResponse) in
+                        switch protoResponse {
+                        case let response as IGPChannelEditMessageResponse:
+                            IGChannelEditMessageRequest.Handler.interpret(response: response)
+                        default:
+                            break
+                        }
+                    }).error({ (errorCode, waitTime) in
+                        
+                    }).send()
+                }
+                
+                selectedMessageToEdit = nil
+                self.inputTextView.text = ""
+                self.setInputBarHeight()
+                self.sendCancelTyping()
+                return
             }
             
-            selectedMessageToEdit = nil
-            self.inputTextView.text = ""
-            self.setInputBarHeight()
-            self.sendCancelTyping()
-            return
-        }
-        
-        let message = IGRoomMessage(body: inputTextView.text)
-        
-        if currentAttachment != nil {
-            currentAttachment?.status = .processingForUpload
-            message.attachment = currentAttachment?.detach()
-            IGAttachmentManager.sharedManager.add(attachment: currentAttachment!)
-            switch currentAttachment!.type {
-            case .image:
-                if inputTextView.text == "" {
-                    message.type = .image
-                } else {
-                    message.type = .imageAndText
+            let message = IGRoomMessage(body: inputTextView.text)
+            
+            if currentAttachment != nil {
+                currentAttachment?.status = .processingForUpload
+                message.attachment = currentAttachment?.detach()
+                IGAttachmentManager.sharedManager.add(attachment: currentAttachment!)
+                switch currentAttachment!.type {
+                case .image:
+                    if inputTextView.text == "" {
+                        message.type = .image
+                    } else {
+                        message.type = .imageAndText
+                    }
+                case .video:
+                    if inputTextView.text == "" {
+                        message.type = .video
+                    } else {
+                        message.type = .videoAndText
+                    }
+                case .audio:
+                    if inputTextView.text == "" {
+                        message.type = .audio
+                    } else {
+                        message.type = .audioAndText
+                    }
+                case .voice:
+                    message.type = .voice
+                case .file:
+                    if inputTextView.text == "" {
+                        message.type = .file
+                    } else {
+                        message.type = .fileAndText
+                    }
+                default:
+                    break
                 }
-            case .video:
-                if inputTextView.text == "" {
-                    message.type = .video
-                } else {
-                    message.type = .videoAndText
+            } else {
+                if (selectedMessageToReply == nil && selectedMessageToForwardToThisRoom == nil && self.inputTextView.text.isEmpty) {
+                    self.inputTextView.text = ""
+                    return
                 }
-            case .audio:
-                if inputTextView.text == "" {
-                    message.type = .audio
-                } else {
-                    message.type = .audioAndText
-                }
-            case .voice:
-                message.type = .voice
-            case .file:
-                if inputTextView.text == "" {
-                    message.type = .file
-                } else {
-                    message.type = .fileAndText
-                }
-            default:
-                break
+                message.type = .text
             }
-        } else {
-            message.type = .text
-        }
-        message.repliedTo = selectedMessageToReply
-        message.forwardedFrom = selectedMessageToForwardToThisRoom
-
-        message.roomId = self.room!.id
-        
-        let detachedMessage = message.detach()
-        
-        IGFactory.shared.saveNewlyWriitenMessageToDatabase(detachedMessage)
-        IGMessageSender.defaultSender.send(message: message, to: room!)
-        
-        self.inputBarSendButton.isHidden = true
-        self.inputBarRecordButton.isHidden = false
-        self.inputTextView.text = ""
-        self.selectedMessageToForwardToThisRoom = nil
-        self.selectedMessageToReply = nil
-        self.currentAttachment = nil
-        self.setInputBarHeight()
+            message.repliedTo = selectedMessageToReply
+            message.forwardedFrom = selectedMessageToForwardToThisRoom
+            
+            message.roomId = self.room!.id
+            
+            let detachedMessage = message.detach()
+            
+            IGFactory.shared.saveNewlyWriitenMessageToDatabase(detachedMessage)
+            IGMessageSender.defaultSender.send(message: message, to: room!)
+            
+            self.inputBarSendButton.isHidden = true
+            self.inputBarRecordButton.isHidden = false
+            self.inputTextView.text = ""
+            self.selectedMessageToForwardToThisRoom = nil
+            self.selectedMessageToReply = nil
+            self.currentAttachment = nil
+            self.setInputBarHeight()
         }
     }
     
