@@ -118,14 +118,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         })
     }
     func showRegistrationSetpProfileInfo() {
-        
-        let storyboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let storyboard : UIStoryboard = UIStoryboard(name: "Register", bundle: nil)
         let setNicknameVC = storyboard.instantiateViewController(withIdentifier: "RegistrationStepProfileInfo")
         let navigationBar = UINavigationController(rootViewController: setNicknameVC)
         self.window?.rootViewController?.present(navigationBar, animated: true, completion: {
             self.isNeedToSetNickname = false
         })
-
     }
     
     func showCallPage(userId: Int64 , isIncommmingCall: Bool = true){

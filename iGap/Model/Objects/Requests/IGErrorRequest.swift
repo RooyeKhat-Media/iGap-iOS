@@ -240,8 +240,7 @@ class IGErrorRequest : IGRequest {
             case .setNickname:
                 let appDelegate = UIApplication.shared.delegate as! AppDelegate
                 if appDelegate.isNeedToSetNickname {
-                appDelegate.showRegistrationSetpProfileInfo()
-                    
+                    appDelegate.showRegistrationSetpProfileInfo()
                 }
             case .loginRequest:
                 let appManager = IGAppManager.sharedManager
@@ -251,7 +250,7 @@ class IGErrorRequest : IGRequest {
             default:
                 break
             }
-
+            
             
             
             

@@ -1181,7 +1181,7 @@ class IGFactory: NSObject {
                     let user = IGRegisteredUser(igpUser: igpRegistredUser)
                     user.isInContacts = true
                     try! IGDatabaseManager.shared.realm.write {
-                    IGDatabaseManager.shared.realm.add(user, update: true)
+                        IGDatabaseManager.shared.realm.add(user, update: true)
                     }
                     let predicate = NSPredicate(format: "id = %lld", user.id)
                     if let userInDb = try! Realm().objects(IGRegisteredUser.self).filter(predicate).first {

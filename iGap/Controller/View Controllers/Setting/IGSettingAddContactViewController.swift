@@ -60,7 +60,7 @@ class IGSettingAddContactViewController: UIViewController, UIGestureRecognizerDe
             return
         }
         
-        let contact = IGContact(phoneNumber: "\(txtCountryCode.text)\(edtPhoneNumber.text!)", firstName: edtFirstName.text, lastName: edtLastName.text)
+        let contact = IGContact(phoneNumber: "\(txtCountryCode.text!)\(edtPhoneNumber.text!)", firstName: edtFirstName.text, lastName: edtLastName.text)
         IGUserContactsImportRequest.Generator.generate(contacts: [contact], force: true).success({ (protoResponse) in
             DispatchQueue.main.async {
                 if let contactImportResponse = protoResponse as? IGPUserContactsImportResponse {

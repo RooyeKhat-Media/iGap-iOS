@@ -89,7 +89,7 @@ class IGContactManager: NSObject {
             }
             self.getContactListFromServer()
         }.error { (errorCode, waitTime) in
-            
+
         }.send()
     }
     
