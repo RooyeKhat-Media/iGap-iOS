@@ -54,13 +54,18 @@ class IGSettingAddContactViewController: UIViewController, UIGestureRecognizerDe
     
     private func addContact(){
         
-        if edtPhoneNumber != nil && !(edtPhoneNumber.text?.isEmpty)! && edtFirstName != nil && !(edtFirstName.text?.isEmpty)! && edtLastName != nil && !(edtLastName.text?.isEmpty)! {
+        if edtPhoneNumber != nil && !(edtPhoneNumber.text?.isEmpty)! && edtFirstName != nil && !(edtFirstName.text?.isEmpty)!  {
             // continue
         } else {
             return
         }
         
-        let contact = IGContact(phoneNumber: "\(txtCountryCode.text!)\(edtPhoneNumber.text!)", firstName: edtFirstName.text, lastName: edtLastName.text)
+        var lastName: String = ""
+        if edtLastName != nil && !(edtLastName.text?.isEmpty)! {
+            lastName = edtLastName.text!
+        }
+        
+        let contact = IGContact(phoneNumber: "\(txtCountryCode.text!)\(edtPhoneNumber.text!)", firstName: edtFirstName.text, lastName: lastName)
         IGUserContactsImportRequest.Generator.generate(contacts: [contact], force: true).success({ (protoResponse) in
             DispatchQueue.main.async {
                 if let contactImportResponse = protoResponse as? IGPUserContactsImportResponse {
