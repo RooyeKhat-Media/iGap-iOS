@@ -60,6 +60,7 @@ class IGClientGetRoomListRequest : IGRequest {
     
     class Handler : IGRequest.Handler{
         class func interpret(response responseProtoMessage:IGPClientGetRoomListResponse) -> Int {
+            IGFactory.shared.removeRoomParticipant(igpRooms: responseProtoMessage.igpRooms)
             let igpRooms: Array<IGPRoom> = responseProtoMessage.igpRooms
             IGFactory.shared.saveRoomsToDatabase(igpRooms, ignoreLastMessage: false)
             return igpRooms.count
