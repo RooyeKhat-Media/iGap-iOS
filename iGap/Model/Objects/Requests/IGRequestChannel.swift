@@ -105,6 +105,9 @@ class IGChannelAddAdminRequest : IGRequest {
             return (roomId: igpRoomID , memberId: igpMemberID)
         }
         override class func handlePush(responseProtoMessage: Message) {
+            if let channelAddAdminResponse = responseProtoMessage as? IGPChannelAddAdminResponse {
+                interpret(response: channelAddAdminResponse, memberRole: .admin)
+            }
         }
     }
     
@@ -128,6 +131,9 @@ class IGChannelAddModeratorRequest : IGRequest {
             return (roomId: roomID , memberId: memberID)
         }
         override class func handlePush(responseProtoMessage: Message) {
+            if let channelAddModeratorResponse = responseProtoMessage as? IGPChannelAddModeratorResponse {
+                interpret(response: channelAddModeratorResponse, memberRole: .moderator)
+            }
         }
     }
 }

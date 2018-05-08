@@ -62,6 +62,11 @@ class IGSignalingOfferRequest : IGRequest {
             IGCall.sendLeaveRequest = true
             switch responseProtoMessage {
             case let offerProtoResponse as IGPSignalingOfferResponse:
+                
+                if offerProtoResponse.igpType != .voiceCalling {
+                    return
+                }
+                
                 RTCClient.getInstance().startConnection()
                 RTCClient.getInstance().sendRinging()
                 RTCClient.getInstance().createAnswerForOfferReceived(withRemoteSDP: offerProtoResponse.igpCallerSdp)
