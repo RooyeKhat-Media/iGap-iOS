@@ -167,7 +167,16 @@ class IGRegistredUserInfoTableViewController: UITableViewController , UIGestureR
             switch indexPath.row {
             case 0:
                 createChat()
+                break
+                
             case 1:
+                
+                if isCloud() {
+                    self.tableView.isUserInteractionEnabled = false
+                    self.performSegue(withIdentifier: "showCreateGroupPage", sender: self)
+                    break
+                }
+                
                 if let selectedUser = user {
                     if selectedUser.isBlocked == true {
                         unblockedContact()
@@ -175,9 +184,12 @@ class IGRegistredUserInfoTableViewController: UITableViewController , UIGestureR
                         blockedContact()
                     }
                 }
+                break
+                
             case 2:
                 self.tableView.isUserInteractionEnabled = false
                 self.performSegue(withIdentifier: "showCreateGroupPage", sender: self)
+                break
                 
             default:
                 break

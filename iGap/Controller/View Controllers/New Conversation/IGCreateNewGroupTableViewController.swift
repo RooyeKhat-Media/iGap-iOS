@@ -315,11 +315,35 @@ class IGCreateNewGroupTableViewController: UITableViewController , UIGestureReco
                     DispatchQueue.main.async {
                         switch protoResponse {
                         case let chatConvertToGroupResponse as IGPChatConvertToGroupResponse:
-                            let convertChatToGroupResponse =  IGChatConvertToGroupRequest.Handler.interpret(response: chatConvertToGroupResponse)
-                            let newRoomId = convertChatToGroupResponse.roomId
-                            if self.navigationController is IGNavigationController {
-                                self.navigationController?.popToRootViewController(animated: true)
-                            }
+                            
+                            IGClientGetRoomRequest.Generator.generate(roomId: self.roomId!).success({ (protoResponse) in
+                                DispatchQueue.main.async {
+                                    switch protoResponse {
+                                    case let clientGetRoomResponse as IGPClientGetRoomResponse:
+                                        IGChatConvertToGroupRequest.Handler.interpret(response: chatConvertToGroupResponse)
+                                        IGClientGetRoomRequest.Handler.interpret(response: clientGetRoomResponse)
+                                        if self.navigationController is IGNavigationController {
+                                            self.navigationController?.popToRootViewController(animated: true)
+                                        }
+                                    default:
+                                        break
+                                    }
+                                }
+                            }).error ({ (errorCode, waitTime) in
+                                switch errorCode {
+                                case .timeout:
+                                    DispatchQueue.main.async {
+                                        let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                                        alert.addAction(okAction)
+                                        self.hud.hide(animated: true)
+                                        self.present(alert, animated: true, completion: nil)
+                                    }
+                                default:
+                                    break
+                                }
+                                
+                            }).send()
                         default:
                             break
                         }
