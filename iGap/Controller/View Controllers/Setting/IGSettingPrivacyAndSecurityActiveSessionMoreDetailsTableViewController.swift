@@ -52,7 +52,7 @@ class IGSettingPrivacyAndSecurityActiveSessionMoreDetailsTableViewController: UI
                 }
    }
     func showConfirmDeleteAlertView(){
-        let deleteConfirmAlertView = UIAlertController(title: "Are you sure you want to terminate this device?", message: nil, preferredStyle: .actionSheet)
+        let deleteConfirmAlertView = UIAlertController(title: "Are you sure you want to terminate this device?", message: nil, preferredStyle: IGGlobal.detectAlertStyle())
         let deleteAction = UIAlertAction(title: "Terminate", style:.default , handler: {
             (alert: UIAlertAction) -> Void in
             if let thisSession = self.selectedSession {

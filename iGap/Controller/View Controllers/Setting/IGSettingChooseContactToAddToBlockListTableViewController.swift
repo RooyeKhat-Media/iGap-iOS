@@ -261,7 +261,7 @@ class IGSettingChooseContactToAddToBlockListTableViewController: UITableViewCont
         }).send()
     }
     func showLogoutActionSheet(userID: Int64){
-        let blockConfirmAlertView = UIAlertController(title: "Are you sure you want to Block this contact?", message: nil, preferredStyle: .actionSheet)
+        let blockConfirmAlertView = UIAlertController(title: "Are you sure you want to Block this contact?", message: nil, preferredStyle: IGGlobal.detectAlertStyle())
         let blockAction = UIAlertAction(title: "Block", style:.default , handler: {
             (alert: UIAlertAction) -> Void in
             self.blockedSelectedContact(blockedUserId : userID )

@@ -132,7 +132,7 @@ class IGChannelsTableViewController: UITableViewController {
                 let room = cell.room!
                 //let room = self.rooms![indexPath.row]
                 let title = room.title != nil ? room.title! : "Delete"
-                let alertC = UIAlertController(title: title, message: "What do you want to do?", preferredStyle: .actionSheet)
+                let alertC = UIAlertController(title: title, message: "What do you want to do?", preferredStyle: IGGlobal.detectAlertStyle())
                 let clear = UIAlertAction(title: "Clear History", style: .default, handler: { (action) in
                     switch room.type{
                     case .chat:
@@ -556,7 +556,7 @@ extension IGChannelsTableViewController {
     func report(room: IGRoom){
         let roomId = room.id
         
-        let alertC = UIAlertController(title: "Report Room Reason", message: nil, preferredStyle: .actionSheet)
+        let alertC = UIAlertController(title: "Report Room Reason", message: nil, preferredStyle: IGGlobal.detectAlertStyle())
         let abuse = UIAlertAction(title: "Abuse", style: .default, handler: { (action) in
             self.reportRoom(roomId: roomId, reason: IGPClientRoomReport.IGPReason.abuse)
         })

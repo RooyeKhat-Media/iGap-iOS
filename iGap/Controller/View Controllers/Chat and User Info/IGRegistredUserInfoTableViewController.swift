@@ -552,7 +552,7 @@ class IGRegistredUserInfoTableViewController: UITableViewController , UIGestureR
     }
     
     func showDeleteActionSheet() {
-        let deleteChatConfirmAlertView = UIAlertController(title: "Are you sure you want to Delete this chat?", message: nil, preferredStyle: .actionSheet)
+        let deleteChatConfirmAlertView = UIAlertController(title: "Are you sure you want to Delete this chat?", message: nil, preferredStyle: IGGlobal.detectAlertStyle())
         let deleteAction = UIAlertAction(title: "Delete", style:.default , handler: { (alert: UIAlertAction) -> Void in
             if let chatRoom = self.room {
                 self.deleteChat(room: chatRoom)
@@ -616,7 +616,7 @@ class IGRegistredUserInfoTableViewController: UITableViewController , UIGestureR
     }
     
     func showClearHistoryActionSheet() {
-        let clearChatConfirmAlertView = UIAlertController(title: "Are you sure you want to clear chat history?", message: nil, preferredStyle: .actionSheet)
+        let clearChatConfirmAlertView = UIAlertController(title: "Are you sure you want to clear chat history?", message: nil, preferredStyle: IGGlobal.detectAlertStyle())
         let deleteAction = UIAlertAction(title: "Clear", style:.default , handler: {
             (alert: UIAlertAction) -> Void in
             if let chatRoom = self.room {

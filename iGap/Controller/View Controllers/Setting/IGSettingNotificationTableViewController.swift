@@ -81,7 +81,7 @@ class IGSettingNotificationTableViewController: UITableViewController {
             }
         }
     func showConfirmDeleteAlertView(){
-        let deleteConfirmAlertView = UIAlertController(title: "Undo all custom notification settings for all your chats, groups and channels", message: nil, preferredStyle: .actionSheet)
+        let deleteConfirmAlertView = UIAlertController(title: "Undo all custom notification settings for all your chats, groups and channels", message: nil, preferredStyle: IGGlobal.detectAlertStyle())
         let deleteAction = UIAlertAction(title: "Reset All Notifications", style:.default , handler: {
             (alert: UIAlertAction) -> Void in
         })

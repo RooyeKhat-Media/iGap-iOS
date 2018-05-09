@@ -155,7 +155,7 @@ class IGAccountTableViewController: UITableViewController , UINavigationControll
         }
     }
         func showLogoutActionSheet(){
-            let logoutConfirmAlertView = UIAlertController(title: "Are you sure you want to Log out?", message: nil, preferredStyle: .actionSheet)
+            let logoutConfirmAlertView = UIAlertController(title: "Are you sure you want to Log out?", message: nil, preferredStyle: IGGlobal.detectAlertStyle())
             let logoutAction = UIAlertAction(title: "Log out", style:.default , handler: {
                 (alert: UIAlertAction) -> Void in
                 self.dismiss(animated: true, completion: {

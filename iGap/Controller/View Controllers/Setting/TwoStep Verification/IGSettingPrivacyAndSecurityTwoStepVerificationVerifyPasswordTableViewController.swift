@@ -93,7 +93,7 @@ class IGSettingPrivacyAndSecurityTwoStepVerificationVerifyPasswordTableViewContr
     }
     
     @IBAction func didTapOnForgotPasswordButton(_ sender: UIButton) {
-        let alertVC = UIAlertController(title: "Forgot Password?", message: "Which option do you want to use to change your password?", preferredStyle: .actionSheet)
+        let alertVC = UIAlertController(title: "Forgot Password?", message: "Which option do you want to use to change your password?", preferredStyle: IGGlobal.detectAlertStyle())
         
         let email = UIAlertAction(title: "Email", style: .default) { (action) in
             self.performSegue(withIdentifier: "showRecoverByEmail", sender: self)

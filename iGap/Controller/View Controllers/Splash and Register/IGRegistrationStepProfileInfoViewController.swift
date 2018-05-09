@@ -110,7 +110,7 @@ class IGRegistrationStepProfileInfoViewController: UITableViewController {
     }
     
     func didTapOnChangeImage() {
-        let optionMenu = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let optionMenu = UIAlertController(title: nil, message: nil, preferredStyle: IGGlobal.detectAlertStyle())
         let cameraOption = UIAlertAction(title: "Take a Photo", style: .default, handler: {
             (alert: UIAlertAction!) -> Void in
             print("Take a Photo")

@@ -103,7 +103,7 @@ class IGSettingChatClearChacheTableViewController: UITableViewController {
         setupEditBtn()
     }
     func showConfirmDeleteAlertView(){
-        let deleteConfirmAlertView = UIAlertController(title: "Are you sure you want to delete the all data?", message: nil, preferredStyle: .actionSheet)
+        let deleteConfirmAlertView = UIAlertController(title: "Are you sure you want to delete the all data?", message: nil, preferredStyle: IGGlobal.detectAlertStyle())
         let deleteAction = UIAlertAction(title: "Delete", style:.default , handler: {
             (alert: UIAlertAction) -> Void in
         })

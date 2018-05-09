@@ -147,7 +147,7 @@ class IGSettingPrivacyAndSecurityActiveSessionsTableViewController: UITableViewC
             self.tableView.isUserInteractionEnabled = false
             performSegue(withIdentifier: "GoToActiveSessionDetailsPage", sender: self)
         } else {
-            let logoutConfirmAlertView = UIAlertController(title: "Are you sure you want to Terminate All Sessions?", message: nil, preferredStyle: .actionSheet)
+            let logoutConfirmAlertView = UIAlertController(title: "Are you sure you want to Terminate All Sessions?", message: nil, preferredStyle: IGGlobal.detectAlertStyle())
             let logoutAction = UIAlertAction(title: "Terminate", style:.default , handler: { _ in
                 self.terminateAllSession()
             })

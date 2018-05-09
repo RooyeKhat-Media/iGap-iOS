@@ -1399,7 +1399,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
         let roomId = room.id
         let messageId = message.id
         
-        let alertC = UIAlertController(title: title, message: nil, preferredStyle: .actionSheet)
+        let alertC = UIAlertController(title: title, message: nil, preferredStyle: IGGlobal.detectAlertStyle())
         let abuse = UIAlertAction(title: "Abuse", style: .default, handler: { (action) in
             self.reportRoom(roomId: roomId, messageId: messageId, reason: IGPClientRoomReport.IGPReason.abuse)
         })
@@ -2045,7 +2045,7 @@ extension IGMessageViewController: AVAudioRecorderDelegate {
 extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
     func didTapAndHoldOnMessage(cellMessage: IGRoomMessage, cell: IGMessageGeneralCollectionViewCell) {
         print(#function)
-        let alertC = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let alertC = UIAlertController(title: nil, message: nil, preferredStyle: IGGlobal.detectAlertStyle())
         let copy = UIAlertAction(title: "Copy", style: .default, handler: { (action) in
             self.copyMessage(cellMessage)
         })

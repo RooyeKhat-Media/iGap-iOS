@@ -86,7 +86,7 @@ class IGSettingChatTableViewController: UITableViewController {
     }
     func showResetAutoDownloadSettingsAlert(){
         
-            let resetAutoDownloadAlert = UIAlertController(title: "Are you sure you want to Reset Auto-Download Settings?", message: nil, preferredStyle: .actionSheet)
+            let resetAutoDownloadAlert = UIAlertController(title: "Are you sure you want to Reset Auto-Download Settings?", message: nil, preferredStyle: IGGlobal.detectAlertStyle())
             let deleteAction = UIAlertAction(title: "Reset", style:.default , handler: {
                 (alert: UIAlertAction) -> Void in
             })
@@ -111,7 +111,7 @@ class IGSettingChatTableViewController: UITableViewController {
             present(resetAutoDownloadAlert, animated: true, completion: nil)
         }
     func showDeleteAllChatsAlert(){
-        let deleteAllChatsAlert = UIAlertController(title: "Are you sure you want to delete all chats?", message: nil, preferredStyle: .actionSheet)
+        let deleteAllChatsAlert = UIAlertController(title: "Are you sure you want to delete all chats?", message: nil, preferredStyle: IGGlobal.detectAlertStyle())
         let deleteAction = UIAlertAction(title: "Delete", style:.default , handler: {
             (alert: UIAlertAction) -> Void in
         })

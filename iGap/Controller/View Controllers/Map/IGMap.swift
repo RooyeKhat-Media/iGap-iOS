@@ -107,7 +107,7 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
     }
     
     func mapOptionsAlert(){
-        let option = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let option = UIAlertController(title: nil, message: nil, preferredStyle: IGGlobal.detectAlertStyle())
         
         let updateMap = UIAlertAction(title: "Manually Update the Map", style: .default, handler: { (action) in
             self.detectUsersCoordinate()

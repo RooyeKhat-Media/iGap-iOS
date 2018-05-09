@@ -43,6 +43,14 @@ class IGGlobal {
         }
         return randomString
     }
+    
+    /* if device is iPad return "alert" style otherwise will be returned "actionSheet" style */
+    public class func detectAlertStyle() -> UIAlertControllerStyle{
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            return .actionSheet
+        }
+        return .alert
+    }
 }
 
 extension UIViewController {

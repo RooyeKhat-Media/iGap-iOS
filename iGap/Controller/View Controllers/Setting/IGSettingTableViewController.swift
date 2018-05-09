@@ -387,7 +387,7 @@ class IGSettingTableViewController: UITableViewController , NVActivityIndicatorV
             self.navigationController!.pushViewController(createGroup, animated: true)
         } else {
             
-            let option = UIAlertController(title: "Notice! Activating Map Status", message: "Will result in making your location visible to others. Please be sure about it before turning on.", preferredStyle: .actionSheet)
+            let option = UIAlertController(title: "Notice! Activating Map Status", message: "Will result in making your location visible to others. Please be sure about it before turning on.", preferredStyle: IGGlobal.detectAlertStyle())
             
             let enable = UIAlertAction(title: "OK", style: .default, handler: { (action) in
                 IGGeoRegister.Generator.generate(enable: true).success({ (protoResponse) in
@@ -435,7 +435,7 @@ class IGSettingTableViewController: UITableViewController , NVActivityIndicatorV
 
 
     func choosePhotoActionSheet(sender : UIButton){
-        let optionMenu = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let optionMenu = UIAlertController(title: nil, message: nil, preferredStyle: IGGlobal.detectAlertStyle())
         let cameraOption = UIAlertAction(title: "Take a Photo", style: .default, handler: {
             (alert: UIAlertAction!) -> Void in
             print("Take a Photo")
@@ -533,7 +533,7 @@ extension IGSettingTableViewController: UIImagePickerControllerDelegate {
     
     
     func showLogoutActionSheet(){
-        let logoutConfirmAlertView = UIAlertController(title: "Are you sure you want to Log out?", message: nil, preferredStyle: .actionSheet)
+        let logoutConfirmAlertView = UIAlertController(title: "Are you sure you want to Log out?", message: nil, preferredStyle: IGGlobal.detectAlertStyle())
         let logoutAction = UIAlertAction(title: "Log out", style:.default , handler: {
             (alert: UIAlertAction) -> Void in
             self.dismiss(animated: true, completion: {

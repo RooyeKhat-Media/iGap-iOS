@@ -60,7 +60,7 @@ class IGRecentsTableViewController: UITableViewController {
 
             if IGTabBarController.currentTabStatic == .Call {
              
-                let alertController = UIAlertController(title: "Clear Call History", message: "Are you sure you want to clear all incoming and outgoing calls?", preferredStyle: .actionSheet)
+                let alertController = UIAlertController(title: "Clear Call History", message: "Are you sure you want to clear all incoming and outgoing calls?", preferredStyle: IGGlobal.detectAlertStyle())
                 let clearCallLog = UIAlertAction(title: "Clear", style: .default, handler: { (action) in
                     if let userId = IGAppManager.sharedManager.userID() {
                         let hud = MBProgressHUD.showAdded(to: self.view, animated: true)
@@ -104,7 +104,7 @@ class IGRecentsTableViewController: UITableViewController {
                 return
             }
             
-            let alertController = UIAlertController(title: "New Message", message: "Which type of conversation would you like to initiate?", preferredStyle: .actionSheet)
+            let alertController = UIAlertController(title: "New Message", message: "Which type of conversation would you like to initiate?", preferredStyle: IGGlobal.detectAlertStyle())
             let myCloud = UIAlertAction(title: "My Cloud", style: .default, handler: { (action) in
                 if let userId = IGAppManager.sharedManager.userID() {
                     let hud = MBProgressHUD.showAdded(to: self.view, animated: true)
@@ -424,7 +424,7 @@ class IGRecentsTableViewController: UITableViewController {
                 let room = cell.room!
                 //let room = self.rooms![indexPath.row]
                 let title = room.title != nil ? room.title! : "Delete"
-                let alertC = UIAlertController(title: title, message: "What do you want to do?", preferredStyle: .actionSheet)
+                let alertC = UIAlertController(title: title, message: "What do you want to do?", preferredStyle: IGGlobal.detectAlertStyle())
                 let clear = UIAlertAction(title: "Clear History", style: .default, handler: { (action) in
                     switch room.type{
                     case .chat:
@@ -982,7 +982,7 @@ extension IGRecentsTableViewController {
             title = "Report Room Reason"
         }
         
-        let alertC = UIAlertController(title: title, message: nil, preferredStyle: .actionSheet)
+        let alertC = UIAlertController(title: title, message: nil, preferredStyle: IGGlobal.detectAlertStyle())
         let abuse = UIAlertAction(title: "Abuse", style: .default, handler: { (action) in
             
             if roomType == .chat {

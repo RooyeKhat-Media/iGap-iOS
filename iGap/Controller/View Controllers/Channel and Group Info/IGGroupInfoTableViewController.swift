@@ -158,7 +158,7 @@ class IGGroupInfoTableViewController: UITableViewController , UIGestureRecognize
     }
     
     @IBAction func didTapOnCameraButton(_ sender: UIButton) {
-        let optionMenu = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let optionMenu = UIAlertController(title: nil, message: nil, preferredStyle: IGGlobal.detectAlertStyle())
         let cameraOption = UIAlertAction(title: "Take a Photo", style: .default, handler: {
             (alert: UIAlertAction!) -> Void in
             print("Take a Photo")
@@ -628,7 +628,7 @@ class IGGroupInfoTableViewController: UITableViewController , UIGestureRecognize
             title = "Are you sure you want to leave this group?"
             actionTitle = "Leave"
         }
-        let deleteConfirmAlertView = UIAlertController(title: title, message: nil, preferredStyle: .actionSheet)
+        let deleteConfirmAlertView = UIAlertController(title: title, message: nil, preferredStyle: IGGlobal.detectAlertStyle())
         let deleteAction = UIAlertAction(title: actionTitle , style:.default , handler: {
             (alert: UIAlertAction) -> Void in
                 if self.myRole == .owner {
