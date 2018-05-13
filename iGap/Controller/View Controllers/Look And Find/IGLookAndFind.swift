@@ -128,7 +128,7 @@ class IGLookAndFind: UIViewController, UITableViewDataSource, UITableViewDelegat
     private func openUserProfile(searchResult: IGRealmClientSearchUsername){
         let user = searchResult.user
         let room = searchResult.room
-        let storyboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let storyboard : UIStoryboard = UIStoryboard(name: "profile", bundle: nil)
         let destinationVC = storyboard.instantiateViewController(withIdentifier: "IGRegistredUserInfoTableViewController") as! IGRegistredUserInfoTableViewController
         destinationVC.user = user
         destinationVC.previousRoomId = 0

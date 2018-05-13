@@ -209,9 +209,8 @@ class IGSettingTableViewController: UITableViewController , NVActivityIndicatorV
             }
 
             }
-
+            self.scheduledTimerWithTimeInterval()
        }
-        scheduledTimerWithTimeInterval()
     }
     func scheduledTimerWithTimeInterval(){
         // Scheduling timer to Call the function **Countdown** with the interval of 1 seconds
