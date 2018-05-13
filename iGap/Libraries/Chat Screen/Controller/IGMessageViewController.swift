@@ -871,13 +871,12 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
                 message.type = .text
             }
             message.repliedTo = selectedMessageToReply
-            message.forwardedFrom = selectedMessageToForwardToThisRoom
-            
             message.roomId = self.room!.id
             
             let detachedMessage = message.detach()
             
             IGFactory.shared.saveNewlyWriitenMessageToDatabase(detachedMessage)
+            message.forwardedFrom = selectedMessageToForwardToThisRoom // Hint: if use this line before "saveNewlyWriitenMessageToDatabase" app will be crashed
             IGMessageSender.defaultSender.send(message: message, to: room!)
             
             self.inputBarSendButton.isHidden = true
