@@ -88,6 +88,11 @@ class IGSettingPrivacy_SecurityTableViewController: UITableViewController, UIGes
     }
     
     func showPrivacyInfo(){
+        
+        if (userPrivacy?.isInvalidated)! {
+            return
+        }
+        
         if let avatarPrivacy = userPrivacy?.avatar {
             avatarUserPrivacy = avatarPrivacy
             switch  avatarPrivacy{
