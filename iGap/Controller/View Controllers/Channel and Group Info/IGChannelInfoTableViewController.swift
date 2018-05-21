@@ -696,6 +696,11 @@ class IGChannelInfoTableViewController: UITableViewController , UIGestureRecogni
     }
     
     func showChannelInfo(){
+        
+        if (room?.isInvalidated)! {
+            return
+        }
+        
         channelNameLabelTitle.text = room?.title
         channelNameLabel.text = room?.title
         ChannelDescriptionLabel.text = room?.channelRoom?.roomDescription
