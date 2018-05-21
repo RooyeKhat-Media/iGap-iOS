@@ -80,20 +80,22 @@ class IGAccountTableViewController: UITableViewController , UINavigationControll
     }
     
     func updateUI() {
-        nicknameEntryLabel.text = currentUser.displayName
-        usernameEntryLabel.text = currentUser.username
-        emailEntryLabel.text = currentUser.email
-        phoneNumberEntryLabel.text = "\(currentUser.phone)"
-        bioEntryLabel.text = currentUser.bio
-        
-        if currentUser.selfRemove == -1 {
-            selfDestructionLabel.text = ""
-        } else if currentUser.selfRemove == 12 {
-            selfDestructionLabel.text = "1 year"
-        } else if currentUser.selfRemove == 1 {
-            selfDestructionLabel.text = "\(currentUser.selfRemove)" + " month"
-        } else {
-            selfDestructionLabel.text = "\(currentUser.selfRemove)" + " months"
+        DispatchQueue.main.async {
+            self.nicknameEntryLabel.text = self.currentUser.displayName
+            self.usernameEntryLabel.text = self.currentUser.username
+            self.emailEntryLabel.text = self.currentUser.email
+            self.phoneNumberEntryLabel.text = "\(self.currentUser.phone)"
+            self.bioEntryLabel.text = self.currentUser.bio
+            
+            if self.currentUser.selfRemove == -1 {
+                self.selfDestructionLabel.text = ""
+            } else if self.currentUser.selfRemove == 12 {
+                self.selfDestructionLabel.text = "1 year"
+            } else if self.currentUser.selfRemove == 1 {
+                self.selfDestructionLabel.text = "\(self.currentUser.selfRemove)" + " month"
+            } else {
+                self.selfDestructionLabel.text = "\(self.currentUser.selfRemove)" + " months"
+            }
         }
     }
     

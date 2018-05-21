@@ -927,7 +927,9 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
                         let randomString = IGGlobal.randomString(length: 16) + "_"
                         let fileNameOnDisk = randomString + selectedFile.fileName!
                         attachment.fileNameOnDisk = fileNameOnDisk
-                        self.saveAttachmentToLocalStorage(data: imgData!, fileNameOnDisk: fileNameOnDisk)
+                        DispatchQueue.main.async {
+                            self.saveAttachmentToLocalStorage(data: imgData!, fileNameOnDisk: fileNameOnDisk)
+                        }
                         
                         attachment.height = Double((scaledImage?.size.height)!)
                         attachment.width = Double((scaledImage?.size.width)!)

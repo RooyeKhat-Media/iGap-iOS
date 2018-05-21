@@ -93,6 +93,11 @@ class IGAvatarView: UIView {
     }
     
     func setRoom(_ room: IGRoom) {
+        
+        if room.isInvalidated {
+            return
+        }
+        
         self.avatarImageView!.image = nil
         self.initialLettersLabel!.text = room.initilas
 
