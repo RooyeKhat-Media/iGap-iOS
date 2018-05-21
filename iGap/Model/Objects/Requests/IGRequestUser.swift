@@ -241,6 +241,26 @@ class IGUserContactsImportRequest : IGRequest {
             contactsImportRequestMessage.igpForce = force
             return IGRequestWrapper(message: contactsImportRequestMessage, actionID: 106)
         }
+        
+        class func generateStruct(contacts: [IGContactManager.ContactsStruct], force: Bool = false) -> IGRequestWrapper {
+            var contactsImportRequestMessage = IGPUserContactsImport()
+            var igpContacts = Array<IGPUserContactsImport.IGPContact>()
+            for contact in contacts {
+                var igpContact = IGPUserContactsImport.IGPContact()
+                if let firstName = contact.firstName {
+                    igpContact.igpFirstName = firstName
+                }
+                if let lastName = contact.lastName {
+                    igpContact.igpLastName = lastName
+                }
+                igpContact.igpPhone = contact.phoneNumber!
+                igpContact.igpClientID = contact.phoneNumber!
+                igpContacts.append(igpContact)
+            }
+            contactsImportRequestMessage.igpContacts = igpContacts
+            contactsImportRequestMessage.igpForce = force
+            return IGRequestWrapper(message: contactsImportRequestMessage, actionID: 106)
+        }
     }
     
     class Handler : IGRequest.Handler{

@@ -16,8 +16,18 @@ class IGContactManager: NSObject {
     static let sharedManager = IGContactManager()
     private var contactStore = CNContactStore()
     private var contacts = [IGContact]()
+    private var contactsStruct = [ContactsStruct]()
+    private var contactsStructChunk = [[ContactsStruct]]()
+    private var contactIndex = 0
+    private var CONTACT_IMPORT_LIMIT = 100
     private override init() {
         super.init()
+    }
+    
+    struct ContactsStruct {
+       var phoneNumber: String?
+       var firstName: String?
+       var lastName: String?
     }
     
     func savePhoneContactsToDatabase() {
@@ -70,29 +80,44 @@ class IGContactManager: NSObject {
         for contact in results {
             for phone in contact.phoneNumbers {
                 contacts.append(IGContact(phoneNumber: phone.value.stringValue, firstName: contact.givenName, lastName: contact.familyName))
+                
+                var structContact = ContactsStruct()
+                structContact.phoneNumber = phone.value.stringValue
+                structContact.firstName = contact.givenName
+                structContact.lastName = contact.familyName
+                contactsStruct.append(structContact)
             }
         }
         
         IGFactory.shared.saveContactsToDatabase(contacts)
     }
     
-    
-    
     func sendContactsToServer() {
-        IGUserContactsImportRequest.Generator.generate(contacts: contacts).success { (protoResponse) in
+        contactIndex = 0
+        contactsStructChunk = contactsStruct.chunks(CONTACT_IMPORT_LIMIT)
+        sendContact(phoneContacts: contactsStructChunk[0])
+        contactIndex += 1
+    }
+    
+    func sendContact(phoneContacts : [ContactsStruct]){
+        IGUserContactsImportRequest.Generator.generateStruct(contacts: phoneContacts).success { (protoResponse) in
             switch protoResponse {
             case let contactImportResponse as IGPUserContactsImportResponse:
                 IGUserContactsImportRequest.Handler.interpret(response: contactImportResponse)
+                if self.contactIndex < self.contactsStructChunk.count {
+                    self.sendContact(phoneContacts: self.contactsStructChunk[self.contactIndex])
+                }
+                self.contactIndex += 1
+                
                 break
             default:
                 break
             }
             self.getContactListFromServer()
-        }.error { (errorCode, waitTime) in
-
-        }.send()
+            }.error { (errorCode, waitTime) in
+                
+            }.send()
     }
-    
     
     
     func getContactListFromServer() {
