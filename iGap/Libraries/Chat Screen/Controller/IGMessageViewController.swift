@@ -1748,16 +1748,18 @@ extension IGMessageViewController: IGMessageCollectionViewDataSource {
             
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionFooter, withReuseIdentifier: IGMessageLogCollectionViewCell.cellReuseIdentifier(), for: indexPath) as! IGMessageLogCollectionViewCell
             
-            if let message = messages?[indexPath.section] {
-                if message.shouldFetchBefore {
-                    header.setText("Loading ...")
-                } else {
-                    
-                    let dayTimePeriodFormatter = DateFormatter()
-                    dayTimePeriodFormatter.dateFormat = "MMMM dd"
-                    dayTimePeriodFormatter.calendar = Calendar.current
-                    let dateString = dayTimePeriodFormatter.string(from: message.creationTime!)
-                    header.setText(dateString)
+            if indexPath.section <= messages.count {
+                if let message = messages?[indexPath.section] {
+                    if message.shouldFetchBefore {
+                        header.setText("Loading ...")
+                    } else {
+                        
+                        let dayTimePeriodFormatter = DateFormatter()
+                        dayTimePeriodFormatter.dateFormat = "MMMM dd"
+                        dayTimePeriodFormatter.calendar = Calendar.current
+                        let dateString = dayTimePeriodFormatter.string(from: message.creationTime!)
+                        header.setText(dateString)
+                    }
                 }
             }
             reusableview = header
