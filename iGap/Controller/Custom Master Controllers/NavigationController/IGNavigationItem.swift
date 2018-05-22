@@ -421,7 +421,7 @@ class IGNavigationItem: UINavigationItem {
         self.centerViewMainLabel!.font = UIFont.igFont(ofSize: 16.0, weight: .bold)//boldSystemFont(ofSize: 16)
         self.centerViewContainer!.addSubview(self.centerViewMainLabel!)
         self.centerViewMainLabel!.snp.makeConstraints { (make) in
-            make.top.equalTo(self.centerViewContainer!.snp.top).offset(0)
+            make.top.equalTo(self.centerViewContainer!.snp.top)
             make.leading.equalTo(self.centerViewContainer!.snp.leading).offset(5).priority(.required)
             make.width.lessThanOrEqualToSuperview().offset(-25)
         }
@@ -432,7 +432,7 @@ class IGNavigationItem: UINavigationItem {
         self.centerViewSubLabel!.font = UIFont.igFont(ofSize: 12.0, weight: .regular)//boldSystemFont(ofSize: 12)
         self.centerViewContainer!.addSubview(self.centerViewSubLabel!)
         self.centerViewSubLabel!.snp.makeConstraints { (make) in
-            make.top.equalTo(self.centerViewMainLabel!.snp.bottom).offset(3)
+            make.top.equalTo(self.centerViewMainLabel!.snp.bottom).offset(-3)
             make.leading.equalTo(self.centerViewContainer!.snp.leading).offset(5)
         }
         
