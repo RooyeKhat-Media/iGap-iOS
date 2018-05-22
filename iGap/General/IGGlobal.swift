@@ -597,6 +597,14 @@ extension String {
         
         return ceil(boundingBox.width)
     }
+    
+    public func getExtension() -> String? {
+        let ext = (self as NSString).pathExtension
+        if ext.isEmpty {
+            return nil
+        }
+        return ext
+    }
 }
 
 extension Array where Element: Hashable {

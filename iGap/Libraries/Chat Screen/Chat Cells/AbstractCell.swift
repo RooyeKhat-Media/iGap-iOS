@@ -564,7 +564,7 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
                     DispatchQueue.main.async {
                         self.updateAttachmentDownloadUploadIndicatorView()
                     }
-                }).addDisposableTo(disposeBag)
+                }).disposed(by: disposeBag)
             }
             /* Rx End */
             

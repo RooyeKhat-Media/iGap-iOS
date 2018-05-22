@@ -315,7 +315,11 @@ class IGFile: Object {
         if let fileNameOnDisk = self.fileNameOnDisk {
             return NSURL(fileURLWithPath: documents).appendingPathComponent(fileNameOnDisk)
         } else if let cacheId = self.cacheID, let name = self.name {
-            return NSURL(fileURLWithPath: documents).appendingPathComponent(cacheId + name)
+            var path = NSURL(fileURLWithPath: documents).appendingPathComponent(cacheId + name)
+            if name.getExtension() == "mp3" || name.getExtension() == "ogg" {
+                path = path?.deletingPathExtension().appendingPathExtension("m4a")
+            }
+            return path
         }
         return nil
     }
