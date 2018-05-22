@@ -391,9 +391,9 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
         txtMessage?.customize { (label) in
             let customInvitedLink = ActiveType.custom(pattern: "((?:http|https)://)?[iGap\\.net]+(\\.\\w{0})?(/(?<=/)(?:[\\join./]+[a-zA-Z0-9]{2,}))") //look for iGap.net/join/
             label.enabledTypes.append(customInvitedLink)
-            label.hashtagColor = UIColor(red:0.23, green:0.65, blue:0.57, alpha:1.00)
+            label.hashtagColor = UIColor.organizationalColor()
             label.mentionColor = UIColor.organizationalColor()
-            label.URLColor = UIColor(red:0.24, green:0.47, blue:0.51, alpha:1.00)
+            label.URLColor = UIColor.organizationalColor()
             label.customColor[customInvitedLink] = UIColor.organizationalColor()
             
             label.handleMentionTap { mention in

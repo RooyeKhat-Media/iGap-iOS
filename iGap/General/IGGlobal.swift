@@ -84,7 +84,7 @@ extension UIColor {
     }
     
     //MARK: General Colors
-    class func organizationalColor() -> UIColor {
+    class func organizationalColor() -> UIColor { // iGap Color
         return UIColor(red:0/255.0, green:176.0/255.0, blue:191.0/255.0, alpha:1.0)
     }
     
