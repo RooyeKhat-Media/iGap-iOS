@@ -83,7 +83,6 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
     @IBOutlet weak var scrollToBottomContainerViewConstraint: NSLayoutConstraint!
     private let disposeBag = DisposeBag()
     var allowForGetHistory: Bool = true
-    var isInMessageViewController : Bool = true
     var recorder: AVAudioRecorder?
     var isRecordingVoice = false
     var voiceRecorderTimer: Timer?
@@ -487,6 +486,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        IGRecentsTableViewController.visibleChat[(room?.id)!] = true
         IGAppManager.sharedManager.currentMessagesNotificationToekn = self.notificationToken
         let navigationItem = self.navigationItem as! IGNavigationItem
 //        _ = Observable.from(object: room!)
@@ -536,10 +536,10 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        IGRecentsTableViewController.visibleChat[(room?.id)!] = false
         IGAppManager.sharedManager.currentMessagesNotificationToekn = nil
         self.room!.saveDraft(inputTextView.text, replyToMessage: selectedMessageToReply)
         self.sendCancelTyping()
-        self.isInMessageViewController = false
         self.sendCancelRecoringVoice()
         if let room = self.room {
             IGFactory.shared.markAllMessagesAsRead(roomId: room.id)
@@ -599,7 +599,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
         }
         switch self.room!.type {
         case .chat:
-            if isInMessageViewController {
+            if IGRecentsTableViewController.visibleChat[(room?.id)!]! {
                 IGChatUpdateStatusRequest.Generator.generate(roomID: self.room!.id, messageID: message.id, status: .seen).success({ (responseProto) in
                     switch responseProto {
                     case let response as IGPChatUpdateStatusResponse:
@@ -612,7 +612,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
                 }).send()
             }
         case .group:
-            if isInMessageViewController {
+            if IGRecentsTableViewController.visibleChat[(room?.id)!]! {
                 IGGroupUpdateStatusRequest.Generator.generate(roomID: self.room!.id, messageID: message.id, status: .seen).success({ (responseProto) in
                     switch responseProto {
                     case let response as IGPGroupUpdateStatusResponse:
@@ -626,7 +626,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
             }
             break
         case .channel:
-            if isInMessageViewController {
+            if IGRecentsTableViewController.visibleChat[(room?.id)!]! {
                 if let message = self.messages?.last {
                     IGChannelGetMessagesStatsRequest.Generator.generate(messages: [message], room: self.room!).success({ (responseProto) in
                         

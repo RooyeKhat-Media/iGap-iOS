@@ -18,8 +18,10 @@ import IGProtoBuff
 import MGSwipeTableCell
 import MBProgressHUD
 
-class IGRecentsTableViewController: UITableViewController {
+class IGRecentsTableViewController: UITableViewController, MessageReceiveObserver {
     
+    static var messageReceiveDelegat: MessageReceiveObserver!
+    static var visibleChat: [Int64 : Bool] = [:]
     var alreadySavedContacts: Bool = false
     var selectedRoomForSegue : IGRoom?
     var cellIdentifer = IGChatRoomListTableViewCell.cellReuseIdentifier()
@@ -179,6 +181,7 @@ class IGRecentsTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        IGRecentsTableViewController.messageReceiveDelegat = self
         
         let sortProperties = [SortDescriptor(keyPath: "pinId", ascending: false), SortDescriptor(keyPath: "sortimgTimestamp", ascending: false)]
         self.rooms = try! Realm().objects(IGRoom.self).filter("isParticipant = 1").sorted(by: sortProperties)
@@ -1190,6 +1193,95 @@ extension IGRecentsTableViewController {
             }
         }).send()
     }
+    
+    /***************** Send Rooms Status *****************/
+    
+    func onMessageRecieve(messages: [IGPRoomMessage]) {
+        
+        let realm = try! Realm()
+        
+        for message in messages {
+            var roomId: Int64 = 0
+            var roomType: IGRoom.IGType = .chat
+            var roomMessageStatus: IGPRoomMessageStatus = .delivered
+            
+            if message.igpAuthor.hasIgpUser { // chat
+                
+                let predicate = NSPredicate(format: "chatRoom.peer.id = %lld", message.igpAuthor.igpUser.igpUserID)
+                if let roomInfo = realm.objects(IGRoom.self).filter(predicate).first {
+                    roomId = roomInfo.id
+                }
+            } else { // group or channel
+                
+                let predicate = NSPredicate(format: "id = %lld", message.igpAuthor.igpRoom.igpRoomID)
+                if let roomInfo = realm.objects(IGRoom.self).filter(predicate).first {
+                    roomId = roomInfo.id
+                    if roomInfo.groupRoom != nil {
+                        roomType = .group
+                    } else {
+                        roomType = .channel
+                    }
+                }
+            }
+            
+            let seenStatus = IGRecentsTableViewController.visibleChat[roomId]
+            
+            if seenStatus != nil && seenStatus! {
+                roomMessageStatus = .seen
+            }
+            
+            sendSeenForReceivedMessage(roomId: roomId, roomType: roomType, message: message, status: roomMessageStatus)
+        }
+    }
+    
+    private func sendSeenForReceivedMessage(roomId: Int64, roomType: IGRoom.IGType, message: IGPRoomMessage, status: IGPRoomMessageStatus) {
+        if message.igpStatus == status || (message.igpStatus == .seen && status == .delivered) {
+            return
+        }
+        
+        var messageStatus: IGRoomMessageStatus = .seen
+        if status == .delivered {
+            messageStatus = .delivered
+        }
+        
+        switch roomType {
+        case .chat:
+            IGChatUpdateStatusRequest.Generator.generate(roomID: roomId, messageID: message.igpMessageID, status: messageStatus).success({ (responseProto) in
+                switch responseProto {
+                case let response as IGPChatUpdateStatusResponse:
+                    IGChatUpdateStatusRequest.Handler.interpret(response: response)
+                default:
+                    break
+                }
+            }).error({ (errorCode, waitTime) in
+                
+            }).send()
+        case .group:
+            IGGroupUpdateStatusRequest.Generator.generate(roomID: roomId, messageID: message.igpMessageID, status: messageStatus).success({ (responseProto) in
+                switch responseProto {
+                case let response as IGPGroupUpdateStatusResponse:
+                    IGGroupUpdateStatusRequest.Handler.interpret(response: response)
+                default:
+                    break
+                }
+            }).error({ (errorCode, waitTime) in
+                
+            }).send()
+            break
+        case .channel:
+            /*
+            if let message = self.messages?.last {
+                IGChannelGetMessagesStatsRequest.Generator.generate(messages: [message], room: self.room!).success({ (responseProto) in
+                    
+                }).error({ (errorCode, waitTime) in
+                    
+                }).send()
+            }
+            */
+            break
+        }
+    }
+    
 }
 
 

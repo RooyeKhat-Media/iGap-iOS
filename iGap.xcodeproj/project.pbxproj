@@ -216,6 +216,7 @@
 		FA8F22581DD89F7C005A90D1 /* IGAvatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8F22571DD89F7C005A90D1 /* IGAvatar.swift */; };
 		FA8F8A682086027100AF03CB /* IGMapNearbyDistanceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8F8A672086027100AF03CB /* IGMapNearbyDistanceCell.swift */; };
 		FA8F8A69208602AB00AF03CB /* IGMapNearbyDistanceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA8F8A66208600AB00AF03CB /* IGMapNearbyDistanceCell.xib */; };
+		FA90B72A20B53EBC00043C89 /* MessageReceiveObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA90B72920B53EBC00043C89 /* MessageReceiveObserver.swift */; };
 		FA927E002028416300DF7145 /* VideoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA927DFF2028416300DF7145 /* VideoCell.swift */; };
 		FA927E02202841C900DF7145 /* VideoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA927E012028418600DF7145 /* VideoCell.xib */; };
 		FA927E0420284D7800DF7145 /* GifCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA927E0320284D7800DF7145 /* GifCell.swift */; };
@@ -537,6 +538,7 @@
 		FA8F22571DD89F7C005A90D1 /* IGAvatar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGAvatar.swift; sourceTree = "<group>"; };
 		FA8F8A66208600AB00AF03CB /* IGMapNearbyDistanceCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = IGMapNearbyDistanceCell.xib; sourceTree = "<group>"; };
 		FA8F8A672086027100AF03CB /* IGMapNearbyDistanceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGMapNearbyDistanceCell.swift; sourceTree = "<group>"; };
+		FA90B72920B53EBC00043C89 /* MessageReceiveObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageReceiveObserver.swift; sourceTree = "<group>"; };
 		FA927DFF2028416300DF7145 /* VideoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCell.swift; sourceTree = "<group>"; };
 		FA927E012028418600DF7145 /* VideoCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VideoCell.xib; sourceTree = "<group>"; };
 		FA927E0320284D7800DF7145 /* GifCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GifCell.swift; sourceTree = "<group>"; };
@@ -1124,6 +1126,14 @@
 			path = Map;
 			sourceTree = "<group>";
 		};
+		FA90B72820B53E5F00043C89 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				FA90B72920B53EBC00043C89 /* MessageReceiveObserver.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
 		FA930D961E5B178F00069EE1 /* ThirdParty Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -1388,6 +1398,7 @@
 		FAF7960B1DAA39660030509B /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				FA90B72820B53E5F00043C89 /* Protocols */,
 				FAD530561E0BD6C300FE6C54 /* Custom Master Controllers */,
 				FA087B2C1DC4A27200E139FA /* View Controllers */,
 			);
@@ -1820,6 +1831,7 @@
 				FA03C1A020429D46008812E3 /* RTCClient.swift in Sources */,
 				FA0CC80B1E5D7D4400556283 /* RegexParser.swift in Sources */,
 				FA09538F1E1B97E20043ED3F /* SSRadioButtonController.swift in Sources */,
+				FA90B72A20B53EBC00043C89 /* MessageReceiveObserver.swift in Sources */,
 				9366D98C1E363C2500998BA3 /* IGSettingAboutWebViewViewController.swift in Sources */,
 				FA0CC8071E5D7D4400556283 /* ActiveBuilder.swift in Sources */,
 				FA42EF0E1E5C224F00CF8A32 /* CGSize.swift in Sources */,
