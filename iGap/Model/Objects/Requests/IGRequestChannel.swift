@@ -731,4 +731,54 @@ class IGChannelDeleteMessageRequest: IGRequest {
     }
 }
 
+class IGChannelUpdateReactionStatusRequest : IGRequest {
+    class Generator : IGRequest.Generator{
+        class func generate(roomId: Int64, reactionStatus: Bool) -> IGRequestWrapper {
+            var channelUpdateReactionStatus = IGPChannelUpdateReactionStatus()
+            channelUpdateReactionStatus.igpRoomID = roomId
+            channelUpdateReactionStatus.igpReactionStatus = reactionStatus
+            return IGRequestWrapper(message: channelUpdateReactionStatus, actionID: 426)
+        }
+    }
+    
+    class Handler : IGRequest.Handler{
+        class func interpret(response: IGPChannelUpdateReactionStatusResponse) {
+            //response.igpRoomID
+            //response.igpReactionStatus
+            //IGFactory.shared.editMessage(response.igpMessageID, roomID: response.igpRoomID, message: response.igpMessage, messageType: IGRoomMessageType.unknown.fromIGP(response.igpMessageType), messageVersion: response.igpMessageVersion)
+        }
+        
+        override class func handlePush(responseProtoMessage: Message) {
+            if let channelUpdateReactionStatus = responseProtoMessage as? IGPChannelUpdateReactionStatusResponse {
+                self.interpret(response: channelUpdateReactionStatus)
+            }
+        }
+    }
+}
+
+class IGChannelPinMessageRequest : IGRequest {
+    class Generator : IGRequest.Generator{
+        class func generate(roomId: Int64, messageId: Int64) -> IGRequestWrapper {
+            var channelPinMessage = IGPChannelPinMessage()
+            channelPinMessage.igpRoomID = roomId
+            channelPinMessage.igpMessageID = messageId
+            return IGRequestWrapper(message: channelPinMessage, actionID: 427)
+        }
+    }
+    
+    class Handler : IGRequest.Handler{
+        class func interpret(response: IGPChannelPinMessageResponse) {
+            //response.igpRoomID
+            //response.igpPinnedMessage
+            //IGFactory.shared.editMessage(response.igpMessageID, roomID: response.igpRoomID, message: response.igpMessage, messageType: IGRoomMessageType.unknown.fromIGP(response.igpMessageType), messageVersion: response.igpMessageVersion)
+        }
+        
+        override class func handlePush(responseProtoMessage: Message) {
+            if let channelPinMessage = responseProtoMessage as? IGPChannelPinMessageResponse {
+                self.interpret(response: channelPinMessage)
+            }
+        }
+    }
+}
+
 

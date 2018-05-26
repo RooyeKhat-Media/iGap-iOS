@@ -199,6 +199,8 @@ let protoClassesLookupTable: [Int: (proto: ResponseMessage.Type, reponseHandler:
             IGGroupRevokLinkRequest.Handler.self            as IGRequest.Handler.Type),
     30325: (IGPGroupEditMessageResponse.self                as ResponseMessage.Type,
             IGGroupEditMessageRequest.Handler.self          as IGRequest.Handler.Type),
+    30326: (IGPGroupPinMessageResponse.self                 as ResponseMessage.Type,
+            IGGroupPinMessageRequest.Handler.self           as IGRequest.Handler.Type),
 
     //Channel: 304xx
     30400: (IGPChannelCreateResponse.self                   as ResponseMessage.Type,
@@ -247,6 +249,10 @@ let protoClassesLookupTable: [Int: (proto: ResponseMessage.Type, reponseHandler:
             IGChannelUpdateSignatureRequest.Handler.self    as IGRequest.Handler.Type),
     30425: (IGPChannelEditMessageResponse.self              as ResponseMessage.Type,
             IGChannelEditMessageRequest.Handler.self        as IGRequest.Handler.Type),
+    30426: (IGPChannelUpdateReactionStatusResponse.self     as ResponseMessage.Type,
+            IGChannelUpdateReactionStatusRequest.Handler.self as IGRequest.Handler.Type),
+    30427: (IGPChannelPinMessageResponse.self               as ResponseMessage.Type,
+            IGChannelPinMessageRequest.Handler.self         as IGRequest.Handler.Type),
 
     //Info: 305xx
     30500: (IGPInfoLocationResponse.self                    as ResponseMessage.Type,
