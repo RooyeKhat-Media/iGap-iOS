@@ -51,6 +51,8 @@ class IGHeader: UICollectionReusableView {
 
 class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIGestureRecognizerDelegate {
 
+    @IBOutlet weak var pinnedMessageView: UIView!
+    @IBOutlet weak var txtPinnedMessage: UILabel!
     @IBOutlet weak var collectionView: IGMessageCollectionView!
     @IBOutlet weak var inputBarContainerView: UIView!
     @IBOutlet weak var joinButton: UIButton!
@@ -255,7 +257,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
         let inputTextViewInitialHeight:CGFloat = 22.0 //initial without reply || forward || attachment || text
         self.inputTextViewHeight = inputTextViewInitialHeight
         self.setInputBarHeight()
-        
+        self.managePinnedMessage()
         
         inputTextView.delegate = self
         inputTextView.placeholder = "Write here ..."
@@ -772,7 +774,124 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
         
     }
     
+    func groupPin(messageId: Int64 = 0){
+        
+        var message = "Are you sure unpin this message?"
+        var title = "Unpin"
+        if messageId != 0 {
+            message = "Are you sure pin this message?"
+            title = "Pin"
+        }
+        
+        let alertC = UIAlertController(title: nil, message: message, preferredStyle: IGGlobal.detectAlertStyle())
+        let unpin = UIAlertAction(title: title, style: .default, handler: { (action) in
+            IGGroupPinMessageRequest.Generator.generate(roomId: (self.room?.id)!, messageId: messageId).success({ (protoResponse) in
+                DispatchQueue.main.async {
+                    if let groupPinMessage = protoResponse as? IGPGroupPinMessageResponse {
+                        if groupPinMessage.hasIgpPinnedMessage {
+                            self.txtPinnedMessage.text = self.detectPinMessageProto(message: groupPinMessage.igpPinnedMessage)
+                            self.pinnedMessageView.isHidden = false
+                        } else {
+                            self.pinnedMessageView.isHidden = true
+                        }
+                        IGGroupPinMessageRequest.Handler.interpret(response: groupPinMessage)
+                    }
+                }
+            }).error({ (errorCode, waitTime) in
+                switch errorCode {
+                case .timeout:
+                    DispatchQueue.main.async {
+                        let alert = UIAlertController(title: "Timeout", message: "Please try again later for unpin message", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                default:
+                    break
+                }
+                
+            }).send()
+        })
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        alertC.addAction(unpin)
+        alertC.addAction(cancel)
+        self.present(alertC, animated: true, completion: nil)
+    }
     
+    func channelPin(messageId: Int64 = 0){
+        
+        var message = "Are you sure unpin this message?"
+        var title = "Unpin"
+        if messageId != 0 {
+            message = "Are you sure pin this message?"
+            title = "Pin"
+        }
+        
+        let alertC = UIAlertController(title: nil, message: message, preferredStyle: IGGlobal.detectAlertStyle())
+        let unpin = UIAlertAction(title: title, style: .default, handler: { (action) in
+            IGChannelPinMessageRequest.Generator.generate(roomId: (self.room?.id)!, messageId: messageId).success({ (protoResponse) in
+                DispatchQueue.main.async {
+                    if let channelPinMessage = protoResponse as? IGPChannelPinMessageResponse {
+                        if channelPinMessage.hasIgpPinnedMessage {
+                            self.txtPinnedMessage.text = self.detectPinMessageProto(message: channelPinMessage.igpPinnedMessage)
+                            self.pinnedMessageView.isHidden = false
+                        } else {
+                            self.pinnedMessageView.isHidden = true
+                        }
+                        IGChannelPinMessageRequest.Handler.interpret(response: channelPinMessage)
+                    }
+                }
+            }).error({ (errorCode, waitTime) in
+                switch errorCode {
+                case .timeout:
+                    DispatchQueue.main.async {
+                        let alert = UIAlertController(title: "Timeout", message: "Please try again later for unpin message", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                default:
+                    break
+                }
+                
+            }).send()
+        })
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        alertC.addAction(unpin)
+        alertC.addAction(cancel)
+        self.present(alertC, animated: true, completion: nil)
+    }
+    
+    func groupPinGranted() -> Bool{
+        if room?.type == .group && room?.groupRoom?.role != .member {
+            return true
+        }
+        return false
+    }
+    
+    func channelPinGranted() -> Bool{
+        if room?.type == .channel && room?.channelRoom?.role != .member {
+            return true
+        }
+        return false
+    }
+    
+    @IBAction func didTapOnPinClose(_ sender: UIButton) {
+        if room?.pinMessage?.authorHash == IGAppManager.sharedManager.authorHash() {
+            if groupPinGranted() {
+                self.groupPin()
+                return
+            } else if channelPinGranted() {
+                self.channelPin()
+                return
+            }
+        }
+        
+        pinnedMessageView.isHidden = true
+        IGFactory.shared.roomPinMessage(roomId: (room?.id)!)
+    }
     
     //MARK: IBActions
     @IBAction func didTapOnSendButton(_ sender: UIButton) {
@@ -2007,6 +2126,71 @@ extension IGMessageViewController: GrowingTextViewDelegate {
             self.setCollectionViewInset()
         })
     }
+    
+    func managePinnedMessage(){
+        if room?.pinMessage != nil && room?.pinMessage?.id != room?.deletedPinMessageId {
+            txtPinnedMessage.text = detectPinMessage()
+            pinnedMessageView.isHidden = false
+        } else {
+            pinnedMessageView.isHidden = true
+        }
+    }
+    
+    func detectPinMessage() -> String{
+        
+        let messageType = room?.pinMessage?.type
+        let pinText = "is pinned"
+
+        if messageType == .text {
+            return (room?.pinMessage?.message)!
+        } else if messageType == .image || messageType == .imageAndText {
+            return "image \(pinText)"
+        } else if messageType == .video || messageType == .videoAndText {
+            return "video \(pinText)"
+        } else if messageType == .gif || messageType == .gifAndText {
+            return "gif \(pinText)"
+        } else if messageType == .audio || messageType == .audioAndText {
+            return "audio \(pinText)"
+        } else if messageType == .file || messageType == .fileAndText {
+            return "file \(pinText)"
+        } else if messageType == .contact {
+            return "contact \(pinText)"
+        } else if messageType == .voice {
+            return "voice \(pinText)"
+        } else if messageType == .location {
+            return "location \(pinText)"
+        }
+        
+        return "unknown pinned message"
+    }
+    
+    func detectPinMessageProto(message: IGPRoomMessage) -> String{
+        
+        let messageType = message.igpMessageType
+        let pinText = "is pinned"
+        
+        if messageType == .text {
+            return message.igpMessage
+        } else if messageType == .image || messageType == .imageText {
+            return "image \(pinText)"
+        } else if messageType == .video || messageType == .videoText {
+            return "video \(pinText)"
+        } else if messageType == .gif || messageType == .gifText {
+            return "gif \(pinText)"
+        } else if messageType == .audio || messageType == .audioText {
+            return "audio \(pinText)"
+        } else if messageType == .file || messageType == .fileText {
+            return "file \(pinText)"
+        } else if messageType == .contact {
+            return "contact \(pinText)"
+        } else if messageType == .voice {
+            return "voice \(pinText)"
+        } else if messageType == .location {
+            return "location \(pinText)"
+        }
+        
+        return "unknown pinned message"
+    }
 }
 
 //MARK: - AVAudioRecorderDelegate
@@ -2047,10 +2231,30 @@ extension IGMessageViewController: AVAudioRecorderDelegate {
 //MARK: - IGMessageGeneralCollectionViewCellDelegate
 extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
     func didTapAndHoldOnMessage(cellMessage: IGRoomMessage, cell: IGMessageGeneralCollectionViewCell) {
-        print(#function)
         let alertC = UIAlertController(title: nil, message: nil, preferredStyle: IGGlobal.detectAlertStyle())
         let copy = UIAlertAction(title: "Copy", style: .default, handler: { (action) in
             self.copyMessage(cellMessage)
+        })
+        
+        var pinTitle = "Pin Message"
+        if self.room?.pinMessage != nil && self.room?.pinMessage?.id == cellMessage.id {
+            pinTitle = "Unpin Message"
+        }
+        
+        let pin = UIAlertAction(title: pinTitle, style: .default, handler: { (action) in
+            if self.groupPinGranted(){
+                if self.room?.pinMessage != nil && self.room?.pinMessage?.id == cellMessage.id {
+                    self.groupPin()
+                } else {
+                    self.groupPin(messageId: cellMessage.id)
+                }
+            } else if self.channelPinGranted() {
+                if self.room?.pinMessage != nil && self.room?.pinMessage?.id == cellMessage.id {
+                    self.channelPin()
+                } else {
+                    self.channelPin(messageId: cellMessage.id)
+                }
+            }
         })
         let reply = UIAlertAction(title: "Reply", style: .default, handler: { (action) in
             self.replyMessage(cellMessage)
@@ -2095,6 +2299,10 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
         
         //Copy
         alertC.addAction(copy)
+        
+        if groupPinGranted() || channelPinGranted() {
+            alertC.addAction(pin)
+        }
         
         //Reply
         if !(room!.isReadOnly){

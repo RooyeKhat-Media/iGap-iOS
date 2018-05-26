@@ -801,7 +801,7 @@ class IGGroupEditMessageRequest : IGRequest {
 
 class IGGroupPinMessageRequest : IGRequest {
     class Generator : IGRequest.Generator{
-        class func generate(roomId: Int64, messageId: Int64) -> IGRequestWrapper {
+        class func generate(roomId: Int64, messageId: Int64 = 0) -> IGRequestWrapper {
             var groupPinMessage = IGPGroupPinMessage()
             groupPinMessage.igpRoomID = roomId
             groupPinMessage.igpMessageID = messageId
@@ -811,9 +811,8 @@ class IGGroupPinMessageRequest : IGRequest {
     
     class Handler : IGRequest.Handler{
         class func interpret(response: IGPGroupPinMessageResponse) {
-            //response.igpRoomID
-            //response.igpPinnedMessage
-            //IGFactory.shared.editMessage(response.igpMessageID, roomID: response.igpRoomID, message: response.igpMessage, messageType: IGRoomMessageType.unknown.fromIGP(response.igpMessageType), messageVersion: response.igpMessageVersion)
+            IGFactory.shared.saveIgpMessagesToDatabase([response.igpPinnedMessage], for: response.igpRoomID, updateLastMessage: false , isFromSharedMedia: false)
+            IGFactory.shared.roomPinMessage(roomId: response.igpRoomID, messageId: response.igpPinnedMessage.igpMessageID)
         }
         
         override class func handlePush(responseProtoMessage: Message) {

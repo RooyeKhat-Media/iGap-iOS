@@ -42,6 +42,8 @@ class IGRoom: Object {
     @objc dynamic var clearIdString:      String?
     @objc dynamic var muteRoom:           IGRoomMute.RawValue     = IGRoomMute.unmute.rawValue
     @objc dynamic var pinId:              Int64                   = 0
+    @objc dynamic var pinMessage:         IGRoomMessage?
+    @objc dynamic var deletedPinMessageId:Int64                   = 0
     
     //ignored properties
     var currenctActionsByUsers = Dictionary<String, (IGRegisteredUser, IGClientAction)>() //actorId, action
@@ -153,6 +155,8 @@ class IGRoom: Object {
         if igpRoom.hasIgpChannelRoomExtra {
             self.channelRoom = IGChannelRoom(igpChannelRoom: igpRoom.igpChannelRoomExtra, id: self.id)
         }
+        
+        self.pinMessage = IGRoomMessage(igpMessage: igpRoom.igpPinnedMessage, roomId: igpRoom.igpID)
     }
     
     
