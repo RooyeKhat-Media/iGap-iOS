@@ -28,6 +28,7 @@ class IGRoomMessageLog: Object {
         case missedVideoCall
         case missedScreenShare
         case missedSecretChat
+        case pinnedMessage
     }
     
     enum ExtraType: Int {
@@ -136,6 +137,8 @@ class IGRoomMessageLog: Object {
             }else {
                 bodyString = "Missed secret chat"
             }
+        case .pinnedMessage:
+            bodyString = IGRoomMessage.detectPinMessage(message: message)
         }
         
         if let target = message.log?.targetUser {
@@ -189,6 +192,8 @@ class IGRoomMessageLog: Object {
             self.type = .missedSecretChat
         case .missedScreenShare:
             self.type = .missedScreenShare
+        case .pinnedMessage:
+            self.type = .pinnedMessage
         default:
             break
         }

@@ -789,7 +789,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
                 DispatchQueue.main.async {
                     if let groupPinMessage = protoResponse as? IGPGroupPinMessageResponse {
                         if groupPinMessage.hasIgpPinnedMessage {
-                            self.txtPinnedMessage.text = self.detectPinMessageProto(message: groupPinMessage.igpPinnedMessage)
+                            self.txtPinnedMessage.text = IGRoomMessage.detectPinMessageProto(message: groupPinMessage.igpPinnedMessage)
                             self.pinnedMessageView.isHidden = false
                         } else {
                             self.pinnedMessageView.isHidden = true
@@ -834,7 +834,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
                 DispatchQueue.main.async {
                     if let channelPinMessage = protoResponse as? IGPChannelPinMessageResponse {
                         if channelPinMessage.hasIgpPinnedMessage {
-                            self.txtPinnedMessage.text = self.detectPinMessageProto(message: channelPinMessage.igpPinnedMessage)
+                            self.txtPinnedMessage.text = IGRoomMessage.detectPinMessageProto(message: channelPinMessage.igpPinnedMessage)
                             self.pinnedMessageView.isHidden = false
                         } else {
                             self.pinnedMessageView.isHidden = true
@@ -2129,67 +2129,11 @@ extension IGMessageViewController: GrowingTextViewDelegate {
     
     func managePinnedMessage(){
         if room?.pinMessage != nil && room?.pinMessage?.id != room?.deletedPinMessageId {
-            txtPinnedMessage.text = detectPinMessage()
+            txtPinnedMessage.text = IGRoomMessage.detectPinMessage(message: (room?.pinMessage)!)
             pinnedMessageView.isHidden = false
         } else {
             pinnedMessageView.isHidden = true
         }
-    }
-    
-    func detectPinMessage() -> String{
-        
-        let messageType = room?.pinMessage?.type
-        let pinText = "is pinned"
-
-        if messageType == .text {
-            return (room?.pinMessage?.message)!
-        } else if messageType == .image || messageType == .imageAndText {
-            return "image \(pinText)"
-        } else if messageType == .video || messageType == .videoAndText {
-            return "video \(pinText)"
-        } else if messageType == .gif || messageType == .gifAndText {
-            return "gif \(pinText)"
-        } else if messageType == .audio || messageType == .audioAndText {
-            return "audio \(pinText)"
-        } else if messageType == .file || messageType == .fileAndText {
-            return "file \(pinText)"
-        } else if messageType == .contact {
-            return "contact \(pinText)"
-        } else if messageType == .voice {
-            return "voice \(pinText)"
-        } else if messageType == .location {
-            return "location \(pinText)"
-        }
-        
-        return "unknown pinned message"
-    }
-    
-    func detectPinMessageProto(message: IGPRoomMessage) -> String{
-        
-        let messageType = message.igpMessageType
-        let pinText = "is pinned"
-        
-        if messageType == .text {
-            return message.igpMessage
-        } else if messageType == .image || messageType == .imageText {
-            return "image \(pinText)"
-        } else if messageType == .video || messageType == .videoText {
-            return "video \(pinText)"
-        } else if messageType == .gif || messageType == .gifText {
-            return "gif \(pinText)"
-        } else if messageType == .audio || messageType == .audioText {
-            return "audio \(pinText)"
-        } else if messageType == .file || messageType == .fileText {
-            return "file \(pinText)"
-        } else if messageType == .contact {
-            return "contact \(pinText)"
-        } else if messageType == .voice {
-            return "voice \(pinText)"
-        } else if messageType == .location {
-            return "location \(pinText)"
-        }
-        
-        return "unknown pinned message"
     }
 }
 

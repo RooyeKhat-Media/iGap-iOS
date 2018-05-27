@@ -47,13 +47,12 @@ class IGMessageLogCollectionViewCell: IGMessageGeneralCollectionViewCell {
     
     
     override func setMessage(_ message: IGRoomMessage, isIncommingMessage: Bool, shouldShowAvatar: Bool, messageSizes: RoomMessageCalculatedSize, isPreviousMessageFromSameSender: Bool, isNextMessageFromSameSender: Bool) {
-        
         self.logLabel.textColor = UIColor.white
-        
-        self.logLabel.text = IGRoomMessageLog.textForLogMessage(message)
-        
-        //self.logLabel.text = IGRoomMessageLog. //bodyString
-        
+        if message.log?.type == .pinnedMessage {
+            self.logLabel.text = IGRoomMessage.detectPinMessage(message: message)
+        } else {
+            self.logLabel.text = IGRoomMessageLog.textForLogMessage(message)
+        }
         self.labelBackgrondView.layer.cornerRadius = 12.0
     }
     
