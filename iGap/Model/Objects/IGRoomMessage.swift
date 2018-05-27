@@ -47,6 +47,7 @@ class IGRoomMessage: Object {
     @objc dynamic var typeRaw:            IGRoomMessageType.RawValue      = IGRoomMessageType.unknown.rawValue
     @objc dynamic var statusRaw:          IGRoomMessageStatus.RawValue    = IGRoomMessageStatus.unknown.rawValue
     @objc dynamic var temporaryId:        String?
+    @objc dynamic var randomId:           Int64                           = -1
 
     var status: IGRoomMessageStatus {
         get {
@@ -209,6 +210,8 @@ class IGRoomMessage: Object {
         if igpMessage.igpPreviousMessageID != 0 {
             self.previuosMessageUID = igpMessage.igpPreviousMessageID
         }
+        
+        self.randomId = igpMessage.igpRandomID
     }
     
     //used when sending a message
@@ -224,6 +227,7 @@ class IGRoomMessage: Object {
         self.status = IGRoomMessageStatus.sending
         self.temporaryId = IGGlobal.randomString(length: 64)
         self.primaryKeyId = IGGlobal.randomString(length: 64)
+        self.randomId = IGGlobal.randomId()
         let predicate = NSPredicate(format: "id = %lld", IGAppManager.sharedManager.userID()!)
         let realm = try! Realm()
         if let userInDb = realm.objects(IGRegisteredUser.self).filter(predicate).first {

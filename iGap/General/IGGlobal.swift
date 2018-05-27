@@ -44,6 +44,10 @@ class IGGlobal {
         return randomString
     }
     
+    public class func randomId() -> Int64 {
+        return Int64(arc4random()) + (Int64(arc4random()) << 32)
+    }
+    
     /* if device is iPad return "alert" style otherwise will be returned "actionSheet" style */
     public class func detectAlertStyle() -> UIAlertControllerStyle{
         if UIDevice.current.userInterfaceIdiom == .phone {
