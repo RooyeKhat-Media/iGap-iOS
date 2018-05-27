@@ -162,12 +162,13 @@ class IGRegistrationStepPhoneViewController: UIViewController {
             let phone = phoneNumberField.text
             if phone != nil && phone != "" {
                 phoneSpaceLess = phone?.replacingOccurrences(of: " ", with: "")
+                phoneSpaceLess = phoneSpaceLess?.replacingOccurrences(of: "_", with: "")
             }
 
             if phoneSpaceLess != nil && phoneSpaceLess != "" && Int64(phoneSpaceLess!) != nil{
                 if IGGlobal.matches(for: (selectedCountry?.codeRegex)!, in: phoneSpaceLess!) {
                     let countryCode = String(Int((self.selectedCountry?.countryCode)!))
-                    let fullPhone = "+" + countryCode + " " + phone!
+                    let fullPhone = "+" + countryCode + " " + (phone?.replacingOccurrences(of: "_", with: ""))!
                     let alertVC = UIAlertController(title: "Is this correct",message: "Is this phone correct:\n"+fullPhone,preferredStyle: .alert)
                     let yes = UIAlertAction(title: "Yes", style: .cancel, handler: { (action) in
                         self.hud = MBProgressHUD.showAdded(to: self.view, animated: true)
@@ -189,15 +190,8 @@ class IGRegistrationStepPhoneViewController: UIViewController {
                 }
             }
             let alertVC = UIAlertController(title: "Invalid Phone", message: "Please enter a valid phone number", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) in
-                
-            })
-            
-            alertVC.addAction(ok)
-            self.present(alertVC, animated: true, completion: {
-                
-            })
-            //self.performSegue(withIdentifier: "showRegistration", sender: self)
+            alertVC.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alertVC, animated: true, completion: nil)
         }
     }
     
@@ -336,9 +330,9 @@ class IGRegistrationStepPhoneViewController: UIViewController {
             destination.delayBeforeSendingAgaing = self.registrationResponse?.resendDelay
             destination.username = self.registrationResponse?.username
             destination.verificationMethod = self.registrationResponse?.verificationMethod
-            destination.phone = phoneNumberField.text
+            destination.phone = phoneNumberField.text?.replacingOccurrences(of: "_", with: "")
             destination.selectedCountry = self.selectedCountry
-            let fullPhone = "+"+String(Int((self.selectedCountry?.countryCode)!))+" "+phoneNumberField.text!
+            let fullPhone = "+"+String(Int((self.selectedCountry?.countryCode)!))+" "+phoneNumberField.text!.replacingOccurrences(of: "_", with: "")
             destination.phoneNumber = fullPhone
         }
     }
