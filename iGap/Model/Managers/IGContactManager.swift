@@ -93,6 +93,9 @@ class IGContactManager: NSObject {
     }
     
     func sendContactsToServer() {
+        if contactsStructChunk.count == 0 {
+            return
+        }
         contactIndex = 0
         contactsStructChunk = contactsStruct.chunks(CONTACT_IMPORT_LIMIT)
         sendContact(phoneContacts: contactsStructChunk[0])

@@ -411,7 +411,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
             }
         }
         
-        let predicate = NSPredicate(format: "roomId = %lld AND id >= %lld AND isDeleted == false", self.room!.id, lastId)
+        let predicate = NSPredicate(format: "roomId = %lld AND id >= %lld AND isDeleted == false AND id != %lld", self.room!.id, lastId, 0)
         let messages = try! Realm().objects(IGRoomMessage.self).filter(predicate).sorted(by: sortProperties)
         
         DispatchQueue.main.async {
