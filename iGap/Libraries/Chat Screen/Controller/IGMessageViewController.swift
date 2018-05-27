@@ -596,7 +596,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
     }
     
     private func sendSeenForMessage(_ message: IGRoomMessage) {
-        if message.status == .seen {
+        if message.authorHash == IGAppManager.sharedManager.authorHash() || message.status == .seen {
             return
         }
         switch self.room!.type {

@@ -1235,7 +1235,7 @@ extension IGRecentsTableViewController {
     }
     
     private func sendSeenForReceivedMessage(roomId: Int64, roomType: IGRoom.IGType, message: IGPRoomMessage, status: IGPRoomMessageStatus) {
-        if message.igpStatus == status || (message.igpStatus == .seen && status == .delivered) {
+        if message.igpAuthor.igpHash == IGAppManager.sharedManager.authorHash() || message.igpStatus == status || (message.igpStatus == .seen && status == .delivered) {
             return
         }
         
