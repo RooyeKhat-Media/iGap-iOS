@@ -41,6 +41,8 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>$(PRODUCT_NAME) needs to access your gallery for save this photo</string>
 	<key>NSCameraUsageDescription</key>
 	<string>iGap needs to access your Camera.
 It has access to take photos and send to others. Note that you can not access this if you do not want to take a photo.</string>
