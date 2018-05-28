@@ -777,7 +777,8 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
     func groupPin(messageId: Int64 = 0){
         
         var message = "Are you sure unpin this message?"
-        var title = "Unpin"
+        var title = "Unpin For All Users"
+        var titleMe = "Unpin Just For Me"
         if messageId != 0 {
             message = "Are you sure pin this message?"
             title = "Pin"
@@ -812,9 +813,18 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
                 
             }).send()
         })
+        
+        let unpinJustForMe = UIAlertAction(title: titleMe, style: .default, handler: { (action) in
+            self.pinnedMessageView.isHidden = true
+            IGFactory.shared.roomPinMessage(roomId: (self.room?.id)!)
+        })
+        
         let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
         alertC.addAction(unpin)
+        if messageId == 0 {
+            alertC.addAction(unpinJustForMe)
+        }
         alertC.addAction(cancel)
         self.present(alertC, animated: true, completion: nil)
     }
@@ -823,6 +833,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
         
         var message = "Are you sure unpin this message?"
         var title = "Unpin"
+        var titleMe = "Unpin Just For Me"
         if messageId != 0 {
             message = "Are you sure pin this message?"
             title = "Pin"
@@ -857,9 +868,18 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
                 
             }).send()
         })
+        
+        let unpinJustForMe = UIAlertAction(title: titleMe, style: .default, handler: { (action) in
+            self.pinnedMessageView.isHidden = true
+            IGFactory.shared.roomPinMessage(roomId: (self.room?.id)!)
+        })
+        
         let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
         alertC.addAction(unpin)
+        if messageId == 0 {
+            alertC.addAction(unpinJustForMe)
+        }
         alertC.addAction(cancel)
         self.present(alertC, animated: true, completion: nil)
     }
@@ -879,18 +899,13 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
     }
     
     @IBAction func didTapOnPinClose(_ sender: UIButton) {
-        if room?.pinMessage?.authorHash == IGAppManager.sharedManager.authorHash() {
-            if groupPinGranted() {
-                self.groupPin()
-                return
-            } else if channelPinGranted() {
-                self.channelPin()
-                return
-            }
+        if groupPinGranted() {
+            self.groupPin()
+            return
+        } else if channelPinGranted() {
+            self.channelPin()
+            return
         }
-        
-        pinnedMessageView.isHidden = true
-        IGFactory.shared.roomPinMessage(roomId: (room?.id)!)
     }
     
     //MARK: IBActions
