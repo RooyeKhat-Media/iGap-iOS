@@ -21,7 +21,7 @@
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>
-		<string>a8bb9474c4f59357347dbd3fd5707ca541e2a740</string>
+		<string>a8bb9474c4f59357347dbd3fd5707ca541e2a749</string>
 		<key>Kits</key>
 		<array>
 			<dict>
@@ -41,8 +41,6 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>$(PRODUCT_NAME) needs to access your gallery for save this photo</string>
 	<key>NSCameraUsageDescription</key>
 	<string>iGap needs to access your Camera.
 It has access to take photos and send to others. Note that you can not access this if you do not want to take a photo.</string>
@@ -54,6 +52,8 @@ This access is that perhaps you are sending your position to someone else or usi
 	<key>NSMicrophoneUsageDescription</key>
 	<string>iGap needs to access your Microphone.
 It has access to record your voice, you want to record your voice and send it to another.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>$(PRODUCT_NAME) needs to access your gallery for save this photo</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>iGap needs to access your Photo-Library.
 This is the option to choose a photo from your gallery and send it to someone else.</string>

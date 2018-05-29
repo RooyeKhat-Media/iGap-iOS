@@ -130,6 +130,7 @@
 		FA11E28A1DE8A8A900A2F87C /* IGAttachmentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA11E2891DE8A8A900A2F87C /* IGAttachmentManager.swift */; };
 		FA11E28D1DE99BF400A2F87C /* IGFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA11E28C1DE99BF400A2F87C /* IGFactory.swift */; };
 		FA1C449C1DC716A20016C346 /* IGCountry.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1C449B1DC716A20016C346 /* IGCountry.swift */; };
+		FA27F74020BD77ED00EC6A97 /* api.key in Sources */ = {isa = PBXBuildFile; fileRef = FA27F73F20BD77ED00EC6A97 /* api.key */; };
 		FA3306361F445A570096031A /* IRANSans.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FA3306351F445A570096031A /* IRANSans.ttf */; };
 		FA33063B1F445AE80096031A /* IRANSans_Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FA3306371F445AE80096031A /* IRANSans_Bold.ttf */; };
 		FA33063C1F445AE80096031A /* IRANSans_Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FA3306381F445AE80096031A /* IRANSans_Light.ttf */; };
@@ -449,6 +450,8 @@
 		FA11E2891DE8A8A900A2F87C /* IGAttachmentManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGAttachmentManager.swift; sourceTree = "<group>"; };
 		FA11E28C1DE99BF400A2F87C /* IGFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGFactory.swift; sourceTree = "<group>"; };
 		FA1C449B1DC716A20016C346 /* IGCountry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGCountry.swift; sourceTree = "<group>"; };
+		FA27F73F20BD77ED00EC6A97 /* api.key */ = {isa = PBXFileReference; lastKnownFileType = text; path = api.key; sourceTree = "<group>"; };
+		FA27F74120BD780300EC6A97 /* secret.key */ = {isa = PBXFileReference; lastKnownFileType = text; path = secret.key; sourceTree = "<group>"; };
 		FA3306351F445A570096031A /* IRANSans.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = IRANSans.ttf; sourceTree = "<group>"; };
 		FA3306371F445AE80096031A /* IRANSans_Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = IRANSans_Bold.ttf; sourceTree = "<group>"; };
 		FA3306381F445AE80096031A /* IRANSans_Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = IRANSans_Light.ttf; sourceTree = "<group>"; };
@@ -1363,7 +1366,7 @@
 				FAF7960C1DAA39660030509B /* Model */,
 				FAF795FF1DAA392F0030509B /* VIew */,
 				FAF7960B1DAA39660030509B /* Controller */,
-				FAF796081DAA39460030509B /* Supporting FIles */,
+				FAF796081DAA39460030509B /* SupportingFiles */,
 			);
 			path = iGap;
 			sourceTree = "<group>";
@@ -1384,15 +1387,17 @@
 			path = VIew;
 			sourceTree = "<group>";
 		};
-		FAF796081DAA39460030509B /* Supporting FIles */ = {
+		FAF796081DAA39460030509B /* SupportingFiles */ = {
 			isa = PBXGroup;
 			children = (
 				FA752C321E1EC571008694C6 /* iGap.entitlements */,
 				FAF796091DAA39460030509B /* Info.plist */,
 				FA5097D21DEDA18000A44699 /* iGap-Bridging-Header.h */,
 				FAF8BFE91E34AF00002AF525 /* GoogleService-Info.plist */,
+				FA27F74120BD780300EC6A97 /* secret.key */,
+				FA27F73F20BD77ED00EC6A97 /* api.key */,
 			);
-			path = "Supporting FIles";
+			path = SupportingFiles;
 			sourceTree = "<group>";
 		};
 		FAF7960B1DAA39660030509B /* Controller */ = {
@@ -1589,7 +1594,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "./Fabric.framework/run a8bb9474c4f59357347dbd3fd5707ca541e2a740 73c66be76fb6cd1becc07ca6b9a77d9dd134ff35089fe7aa02dbfa33ad57b654";
+			shellScript = "apiKey=$(sed -n '1p' < ./iGap/SupportingFiles/api.key)\nsecretKey=$(sed -n '2p' < ./iGap/SupportingFiles/secret.key)\n\n/usr/libexec/PlistBuddy -c \"Set :Fabric:APIKey $apiKey\" ./iGap/SupportingFiles/Info.plist\n\n\"./Fabric.framework/run\" $apiKey $secretKey";
 		};
 		FADF684C1DB2607B00DC5038 /* [RS] Set Build Number */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1810,6 +1815,7 @@
 				FA8D056D20739C96007861E7 /* IGSettingAddContactViewController.swift in Sources */,
 				FAD580941DDC5C4E00A242DE /* IGMessageCollectionViewCell.swift in Sources */,
 				FA8204382025C97300A795D5 /* ImageCell.swift in Sources */,
+				FA27F74020BD77ED00EC6A97 /* api.key in Sources */,
 				FA927E002028416300DF7145 /* VideoCell.swift in Sources */,
 				FA0953561E1B97700043ED3F /* IGSettingChatTableViewController.swift in Sources */,
 				FAD5808F1DDC5C1900A242DE /* IGMessageGeneralCollectionViewCell.swift in Sources */,
@@ -2037,7 +2043,7 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 					"$(PROJECT_DIR)",
 				);
-				INFOPLIST_FILE = "iGap/Supporting FIles/Info.plist";
+				INFOPLIST_FILE = iGap/SupportingFiles/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				ONLY_ACTIVE_ARCH = NO;
@@ -2045,7 +2051,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "iGap/Supporting FIles/iGap-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "iGap/SupportingFiles/iGap-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -2065,7 +2071,7 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 					"$(PROJECT_DIR)",
 				);
-				INFOPLIST_FILE = "iGap/Supporting FIles/Info.plist";
+				INFOPLIST_FILE = iGap/SupportingFiles/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
@@ -2073,7 +2079,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "iGap/Supporting FIles/iGap-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "iGap/SupportingFiles/iGap-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
