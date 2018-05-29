@@ -752,7 +752,6 @@ class IGFactory: NSObject {
         let task = IGFactoryTask()
         task.task = {
             IGDatabaseManager.shared.perfrmOnDatabaseThread {
-                print("    ======> setting needs to fetch before message")
                 let predicate = NSPredicate(format: "id = %lld AND roomId = %lld", messageId, roomId)
                 if let messageInDb = IGDatabaseManager.shared.realm.objects(IGRoomMessage.self).filter(predicate).first {
                     try! IGDatabaseManager.shared.realm.write {

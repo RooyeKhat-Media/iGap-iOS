@@ -374,7 +374,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
     func findAllMessages(isHistory: Bool = false) -> Results<IGRoomMessage>!{
         
         if lastId == 0 {
-            let predicate = NSPredicate(format: "roomId = %lld AND isDeleted == false", self.room!.id)
+            let predicate = NSPredicate(format: "roomId = %lld AND isDeleted == false AND id != %lld", self.room!.id, 0)
             allMessages = try! Realm().objects(IGRoomMessage.self).filter(predicate).sorted(by: sortProperties)
             
             let messageCount = allMessages.count
@@ -1937,7 +1937,7 @@ extension IGMessageViewController: UICollectionViewDelegateFlowLayout {
         if (messages!.count < 20 && lowerAllow) { // HINT: this number(20) should set lower than getMessageLimit(25) for work correct
             lowerAllow = false
             
-            let predicate = NSPredicate(format: "roomId = %lld AND isDeleted == false", self.room!.id)
+            let predicate = NSPredicate(format: "roomId = %lld AND isDeleted == false AND id != %lld", self.room!.id, 0)
             messages = try! Realm().objects(IGRoomMessage.self).filter(predicate).sorted(by: sortProperties)
             updateObserver()
             
@@ -1974,7 +1974,7 @@ extension IGMessageViewController: UICollectionViewDelegateFlowLayout {
                 let predicate = NSPredicate(format: "roomId = %lld", self.room!.id)
                 if let message = try! Realm().objects(IGRoomMessage.self).filter(predicate).sorted(by: sortProperties).last {
                     if isFirstHistory {
-                        let predicate = NSPredicate(format: "roomId = %lld AND isDeleted == false", self.room!.id)
+                        let predicate = NSPredicate(format: "roomId = %lld AND isDeleted == false AND id != %lld", self.room!.id, 0)
                         messages = try! Realm().objects(IGRoomMessage.self).filter(predicate).sorted(by: sortProperties)
                         updateObserver()
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
