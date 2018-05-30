@@ -1,5 +1,5 @@
 
-![Release 0.4.8](https://img.shields.io/badge/release-v0.4.4-blue.svg)
+![Release 0.4.8](https://img.shields.io/badge/release-v0.4.8-blue.svg)
 ![Build: Passing](https://img.shields.io/badge/build-passing-brightgreen.svg)
 ![Swift 3.2.x](https://img.shields.io/badge/swift-3.2.x-orange.svg)
 ![Platform iOS](https://img.shields.io/badge/platform-ios-lightgrey.svg)
