@@ -102,6 +102,7 @@ class IGChannelRoom: Object {
     @objc dynamic  var privateExtra:               IGChannelPrivateExtra?
     @objc dynamic  var publicExtra:                IGChannelPublicExtra?
     @objc dynamic  var isSignature:                Bool                            = false
+    @objc dynamic  var isVerified:                 Bool                            = false
     //MARK: ignored properties
     var type: IGType {
         get {
@@ -173,6 +174,8 @@ class IGChannelRoom: Object {
         if igpChannelRoom.hasIgpPublicExtra{
             self.publicExtra = IGChannelPublicExtra(igpPublicExtra: igpChannelRoom.igpPublicExtra, id: id)
         }
+        
+        self.isVerified = igpChannelRoom.igpVerified
     }
     
     

@@ -45,7 +45,8 @@ class IGChannelInfoTableViewController: UITableViewController , UIGestureRecogni
     @IBOutlet weak var allMemberCell: UITableViewCell!
     @IBOutlet weak var channelLinkCell: UITableViewCell!
     @IBOutlet weak var adminAndModeratorCell: UITableViewCell!
-
+    @IBOutlet weak var imgVerified: UIImageView!
+    
     var selectedChannel : IGChannelRoom?
     private let disposeBag = DisposeBag()
     var room : IGRoom?
@@ -699,6 +700,12 @@ class IGChannelInfoTableViewController: UITableViewController , UIGestureRecogni
         
         if (room?.isInvalidated)! {
             return
+        }
+        
+        if (room?.channelRoom?.isVerified)! {
+            imgVerified.isHidden = false
+        } else {
+            imgVerified.isHidden = true
         }
         
         channelNameLabelTitle.text = room?.title

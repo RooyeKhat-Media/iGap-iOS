@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
-    <customFonts key="customFonts">
-        <array key="HelveticaNeue.ttc">
-            <string>HelveticaNeue</string>
-        </array>
-    </customFonts>
     <scenes>
         <!--Title-->
         <scene sceneID="I6a-fZ-o3y">
@@ -380,15 +375,24 @@
                                         <action selector="didTapOnCameraBtn:" destination="oUf-1Q-84T" eventType="touchUpInside" id="Uen-nM-Whd"/>
                                     </connections>
                                 </button>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tGL-LC-Isg" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
-                                    <rect key="frame" x="188" y="164.5" width="0.0" height="0.0"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="channel name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tGL-LC-Isg" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
+                                    <rect key="frame" x="134.5" y="164.5" width="106.5" height="20"/>
                                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
+                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IG_Verify" translatesAutoresizingMaskIntoConstraints="NO" id="Mfl-Mw-Lf0">
+                                    <rect key="frame" x="245" y="165.5" width="18" height="18"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="18" id="OfV-lA-k9L"/>
+                                        <constraint firstAttribute="height" constant="18" id="d9i-Hc-BUO"/>
+                                    </constraints>
+                                </imageView>
                             </subviews>
                             <constraints>
+                                <constraint firstItem="Mfl-Mw-Lf0" firstAttribute="leading" secondItem="tGL-LC-Isg" secondAttribute="trailing" constant="4" id="GQo-Y9-7Ue"/>
                                 <constraint firstItem="tGL-LC-Isg" firstAttribute="top" secondItem="d9K-Md-0nA" secondAttribute="bottom" constant="8" id="Jc0-6c-TBq"/>
+                                <constraint firstItem="Mfl-Mw-Lf0" firstAttribute="centerY" secondItem="tGL-LC-Isg" secondAttribute="centerY" id="QVQ-er-d0E"/>
                                 <constraint firstItem="d9K-Md-0nA" firstAttribute="centerY" secondItem="tms-ya-Pag" secondAttribute="centerY" constant="-10" id="RFv-sf-lsG"/>
                                 <constraint firstItem="tGL-LC-Isg" firstAttribute="centerX" secondItem="tms-ya-Pag" secondAttribute="centerX" id="XjQ-nV-29d"/>
                                 <constraint firstItem="sMr-Rz-A60" firstAttribute="leading" secondItem="d9K-Md-0nA" secondAttribute="trailing" constant="-26" id="cSy-V5-BGy"/>
@@ -714,6 +718,7 @@
                         <outlet property="channelTypeLabel" destination="TMm-2X-sQi" id="DAk-YI-iF3"/>
                         <outlet property="channelTypeTrailingConstraint" destination="muX-lY-jpQ" id="Owe-MP-I1Y"/>
                         <outlet property="deleteChannelLabel" destination="LYE-tO-Gsy" id="q95-Dv-sj0"/>
+                        <outlet property="imgVerified" destination="Mfl-Mw-Lf0" id="shn-Bi-xou"/>
                         <outlet property="notificationCell" destination="ATT-Hu-k0p" id="dwS-qt-dwy"/>
                         <outlet property="numberOfMemberJoinedThisChannelLabel" destination="De2-Gn-QXv" id="niS-IZ-9PD"/>
                         <outlet property="sharedMediaCell" destination="VdX-BV-nyx" id="OTh-Vr-R24"/>
@@ -728,7 +733,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yJ5-gl-baK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2353" y="-6119"/>
+            <point key="canvasLocation" x="2352.8000000000002" y="-6119.6401799100458"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="scI-kh-crv">
@@ -1490,9 +1495,7 @@
                         <outlet property="groupModeratorsCell" destination="HV3-Mu-Qcr" id="ngk-35-6n8"/>
                         <outlet property="groupModeratorsCountLabel" destination="kIg-Hq-yvn" id="ALw-6Y-6cD"/>
                         <outlet property="moderatorIndicator" destination="T8W-Ri-qqe" id="QXw-8Q-UMX"/>
-                        <segue destination="L7a-nT-GCt" kind="show" identifier="showGroupAdminsDetails" id="AcJ-1q-d7c">
-                            <nil key="action"/>
-                        </segue>
+                        <segue destination="L7a-nT-GCt" kind="show" identifier="showGroupAdminsDetails" id="AcJ-1q-d7c"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jf4-sq-V0Z" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1979,12 +1982,8 @@
                         <outlet property="sizeOfSharedLinksLabel" destination="YQC-MO-SY1" id="0DY-MU-b7t"/>
                         <outlet property="sizeOfSharedVideos" destination="w64-fA-Sej" id="94f-oS-fMk"/>
                         <outlet property="sizeOfSharedVoice" destination="1JF-iq-ggG" id="1KN-cf-X3g"/>
-                        <segue destination="887-0H-PEI" kind="show" identifier="showImagesAndVideoSharedMediaCollection" id="cQq-Kf-WRT">
-                            <nil key="action"/>
-                        </segue>
-                        <segue destination="rgg-Hn-CMG" kind="show" identifier="showLinksAndAudioSharedMediaTableview" id="0yF-KV-2Q7">
-                            <nil key="action"/>
-                        </segue>
+                        <segue destination="887-0H-PEI" kind="show" identifier="showImagesAndVideoSharedMediaCollection" id="cQq-Kf-WRT"/>
+                        <segue destination="rgg-Hn-CMG" kind="show" identifier="showLinksAndAudioSharedMediaTableview" id="0yF-KV-2Q7"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uKE-yL-gWR" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2977,10 +2976,11 @@
         <image name="IG_Message_Cell_Player_Voice_Play" width="15" height="15"/>
         <image name="IG_New_Group_Deselect_User" width="20" height="20"/>
         <image name="IG_Settings_Camera" width="25" height="25"/>
+        <image name="IG_Verify" width="20" height="20"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="d5a-Qk-dJn"/>
-        <segue reference="I2x-SF-7r6"/>
+        <segue reference="xkS-cS-Kl8"/>
         <segue reference="bmD-BY-NeI"/>
     </inferredMetricsTieBreakers>
 </document>

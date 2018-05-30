@@ -46,7 +46,9 @@ class IGRegisteredUser: Object {
     @objc dynamic var isMutual:           Bool                        = false //current user have this user in his/her contacts
     @objc dynamic var isInContacts:       Bool                        = false
     @objc dynamic var isBlocked:          Bool                        = false
+    @objc dynamic var isVerified:         Bool                        = false
     @objc dynamic var lastSeenStatusRaw:  IGLastSeenStatus.RawValue   = IGLastSeenStatus.longTimeAgo.rawValue
+    
     //ignored properties
     var lastSeenStatus: IGLastSeenStatus {
         get {
@@ -133,6 +135,8 @@ class IGRegisteredUser: Object {
         if igpUser.hasIgpAvatar{
             self.avatar = IGAvatar(igpAvatar: igpUser.igpAvatar)//.detach()
         }
+        
+        self.isVerified = igpUser.igpVerified
     }
     
     //detach from current realm

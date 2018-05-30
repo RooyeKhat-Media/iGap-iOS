@@ -39,6 +39,7 @@ class IGChatRoomListTableViewCell: MGSwipeTableCell {
     @IBOutlet weak var roomTypeIndicatorImageView: UIImageView!
     @IBOutlet weak var roomTitleLabelLeftConstraint: NSLayoutConstraint!
     @IBOutlet weak var imgMute: UIImageView!
+    @IBOutlet weak var imgVerified: UIImageView!
     
     let currentLoggedInUserID = IGAppManager.sharedManager.userID()
     
@@ -146,12 +147,29 @@ class IGChatRoomListTableViewCell: MGSwipeTableCell {
         case .chat:
             roomTypeIndicatorImageView.image = nil
             roomTitleLabelLeftConstraint.constant = 16
+            
+            if let user = room.chatRoom?.peer {
+                if user.isVerified {
+                    imgVerified.isHidden = false
+                } else {
+                    imgVerified.isHidden = true
+                }
+            }
+            
         case .group:
             roomTypeIndicatorImageView.image = UIImage(named: "IG_Chat_List_Type_Group")
             roomTitleLabelLeftConstraint.constant = 36
+            imgVerified.isHidden = true
+            
         case .channel:
             roomTypeIndicatorImageView.image = UIImage(named: "IG_Chat_List_Type_Channel")
             roomTitleLabelLeftConstraint.constant = 36
+            
+            if (room.channelRoom?.isVerified)! {
+                imgVerified.isHidden = false
+            } else {
+                imgVerified.isHidden = true
+            }
         }
 
         if room.mute == IGRoom.IGRoomMute.mute {
