@@ -48,6 +48,7 @@ class IGChatRoomListTableViewCell: MGSwipeTableCell {
     var roomVariableFromRoomManagerCache: Variable<IGRoom>?
     var users = try! Realm().objects(IGRegisteredUser.self)
     let disposeBag = DisposeBag()
+    var leadingVerify: Constraint!
     
     //MARK: - Class Methods
     class func nib() -> UINib {
@@ -150,25 +151,25 @@ class IGChatRoomListTableViewCell: MGSwipeTableCell {
             
             if let user = room.chatRoom?.peer {
                 if user.isVerified {
-                    imgVerified.isHidden = false
+                    verifyHidden(mute: room.mute)
                 } else {
-                    imgVerified.isHidden = true
+                    verifyHidden(isHidden: true, mute: room.mute)
                 }
             }
             
         case .group:
             roomTypeIndicatorImageView.image = UIImage(named: "IG_Chat_List_Type_Group")
             roomTitleLabelLeftConstraint.constant = 36
-            imgVerified.isHidden = true
+            verifyHidden(isHidden: true, mute: room.mute)
             
         case .channel:
             roomTypeIndicatorImageView.image = UIImage(named: "IG_Chat_List_Type_Channel")
             roomTitleLabelLeftConstraint.constant = 36
             
             if (room.channelRoom?.isVerified)! {
-                imgVerified.isHidden = false
+                verifyHidden(mute: room.mute)
             } else {
-                imgVerified.isHidden = true
+                verifyHidden(isHidden: true, mute: room.mute)
             }
         }
 
@@ -297,6 +298,25 @@ class IGChatRoomListTableViewCell: MGSwipeTableCell {
                     }
                 }
             }
+        }
+    }
+    
+    private func verifyHidden(isHidden: Bool = false, mute: IGRoom.IGRoomMute = IGRoom.IGRoomMute.unmute){
+        if isHidden {
+            imgVerified.isHidden = true
+        } else {
+            imgVerified.isHidden = false
+            if leadingVerify != nil { leadingVerify?.deactivate() }
+            
+            imgVerified.snp.makeConstraints { (make) in
+                if mute == IGRoom.IGRoomMute.mute {
+                    make.trailing.equalTo(imgMute.snp.leading).offset(-8)
+                } else {
+                    make.trailing.equalTo(timeLabel.snp.leading)
+                }
+            }
+            
+            if leadingVerify != nil { leadingVerify?.activate() }
         }
     }
     
