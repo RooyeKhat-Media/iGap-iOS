@@ -28,7 +28,7 @@
                         </constraints>
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Labelqg" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wtp-vX-p7f" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
-                        <rect key="frame" x="82" y="53.5" width="181" height="15"/>
+                        <rect key="frame" x="82" y="53.5" width="166" height="15"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="15" id="ChZ-Vc-9MD"/>
                         </constraints>
@@ -71,31 +71,31 @@
                         </constraints>
                     </imageView>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="pyp-q7-jR9">
-                        <rect key="frame" x="297" y="18" width="18" height="18"/>
+                        <rect key="frame" x="282" y="18" width="18" height="18"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="18" id="eWm-TX-PRi"/>
                             <constraint firstAttribute="width" constant="18" id="zid-6x-hn5"/>
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2b6-Og-2B6" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
-                        <rect key="frame" x="315" y="19" width="40" height="16"/>
+                        <rect key="frame" x="305" y="19" width="50" height="16"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="16" id="CFO-tI-vqX"/>
-                            <constraint firstAttribute="width" constant="40" id="umu-qc-1Bc"/>
+                            <constraint firstAttribute="width" relation="lessThanOrEqual" constant="50" id="umu-qc-1Bc"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IG_Verify" translatesAutoresizingMaskIntoConstraints="NO" id="wkw-rV-l3F">
-                        <rect key="frame" x="271" y="18" width="18" height="18"/>
+                        <rect key="frame" x="256" y="18" width="18" height="18"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="18" id="5IU-aW-mBY"/>
                             <constraint firstAttribute="width" constant="18" id="yTq-FF-UP4"/>
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label1qj" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ojI-a5-iIf" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
-                        <rect key="frame" x="106" y="20" width="157" height="20"/>
+                        <rect key="frame" x="106" y="20" width="142" height="20"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="20" id="syr-jV-AZB"/>
                         </constraints>
@@ -111,7 +111,7 @@
                     <constraint firstItem="wkw-rV-l3F" firstAttribute="centerY" secondItem="pyp-q7-jR9" secondAttribute="centerY" id="FwV-WV-96P"/>
                     <constraint firstAttribute="bottom" secondItem="wtp-vX-p7f" secondAttribute="bottom" constant="10" id="Le2-um-Yz0"/>
                     <constraint firstItem="D8d-pT-dyD" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="12" id="MOt-eW-lhH"/>
-                    <constraint firstItem="2b6-Og-2B6" firstAttribute="leading" secondItem="pyp-q7-jR9" secondAttribute="trailing" id="Wh2-7E-Bsb"/>
+                    <constraint firstItem="2b6-Og-2B6" firstAttribute="leading" secondItem="pyp-q7-jR9" secondAttribute="trailing" constant="5" id="Wh2-7E-Bsb"/>
                     <constraint firstItem="ojI-a5-iIf" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="20" id="YBc-x6-aXr"/>
                     <constraint firstItem="2b6-Og-2B6" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="19" id="YGR-YU-lO1"/>
                     <constraint firstItem="pyp-q7-jR9" firstAttribute="leading" secondItem="wkw-rV-l3F" secondAttribute="trailing" constant="8" id="agQ-O5-Lhv"/>

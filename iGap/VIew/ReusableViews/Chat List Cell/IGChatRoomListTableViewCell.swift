@@ -310,9 +310,9 @@ class IGChatRoomListTableViewCell: MGSwipeTableCell {
             
             imgVerified.snp.makeConstraints { (make) in
                 if mute == IGRoom.IGRoomMute.mute {
-                    make.trailing.equalTo(imgMute.snp.leading).offset(-8)
+                  leadingVerify = make.trailing.equalTo(imgMute.snp.leading).offset(-5).constraint
                 } else {
-                    make.trailing.equalTo(timeLabel.snp.leading)
+                  leadingVerify = make.trailing.equalTo(timeLabel.snp.leading).offset(-5).constraint
                 }
             }
             
