@@ -49,7 +49,7 @@ class IGHeader: UICollectionReusableView {
     
 }
 
-class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIGestureRecognizerDelegate {
+class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIGestureRecognizerDelegate, UIDocumentInteractionControllerDelegate {
 
     @IBOutlet weak var pinnedMessageView: UIView!
     @IBOutlet weak var txtPinnedMessage: UILabel!
@@ -2308,6 +2308,11 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
         })
     }
     
+    /******* overrided method for show file attachment (use from UIDocumentInteractionControllerDelegate) *******/
+    func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
+        return self
+    }
+    
     func didTapOnAttachment(cellMessage: IGRoomMessage, cell: IGMessageGeneralCollectionViewCell) {
         
         var finalMessage = cellMessage
@@ -2347,6 +2352,15 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
             musicPlayer.attachment = finalMessage.attachment
             self.present(musicPlayer, animated: true, completion: {
             })
+            return
+            
+        case .file , .fileAndText:
+            if let path = attachment.path() {
+                let controller = UIDocumentInteractionController()
+                controller.delegate = self
+                controller.url = path
+                controller.presentPreview(animated: true)
+            }
             return
         default:
             return
