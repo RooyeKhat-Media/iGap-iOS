@@ -32,6 +32,7 @@ class IGSettingContactsTableViewController: UITableViewController,UISearchResult
         }
     }
     @IBOutlet weak var AddContactButton: UIBarButtonItem!
+    @IBOutlet weak var searchBar: UISearchBar!
     var blockedUsers = try! Realm().objects(IGRegisteredUser.self).filter("isBlocked == 1" )
     var contacts = try! Realm().objects(IGRegisteredUser.self).filter("isInContacts == 1" )
     var notificationToken: NotificationToken?
@@ -48,9 +49,10 @@ class IGSettingContactsTableViewController: UITableViewController,UISearchResult
         
         IGSettingContactsTableViewController.callDelegate = self
         
-        setupSearchBar()
+        //setupSearchBar()
         self.tableView.sectionIndexBackgroundColor = UIColor.clear
         resultSearchController.searchBar.delegate = self
+        searchBar.delegate = self
         let navigationItem = self.navigationItem as! IGNavigationItem
         navigationItem.addNavigationViewItems(rightItemText: "Add", title: "Contacts")
         navigationItem.navigationController = self.navigationController as? IGNavigationController
@@ -90,7 +92,9 @@ class IGSettingContactsTableViewController: UITableViewController,UISearchResult
             selector: #selector(addressBookDidChange),
             name: NSNotification.Name.CNContactStoreDidChange,
             object: nil)
-
+        
+        
+        sections = fillContacts()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -141,10 +145,21 @@ class IGSettingContactsTableViewController: UITableViewController,UISearchResult
         performSegue(withIdentifier: "GoToAddNewContactPage", sender: self)
     }
     
-    var sections : [Section]{
-        if self.contactSections != nil {
+    var sections : [Section]!
+    
+    func fillContacts(filterContact: Bool = false , searchText : String = "") -> [IGSettingContactsTableViewController.Section] {
+        if self.contactSections != nil && !filterContact {
             return self.contactSections!
         }
+        
+        if !searchText.isEmpty {
+            let predicate = NSPredicate(format: "((displayName BEGINSWITH[c] %@) OR (displayName CONTAINS[c] %@)) AND (isInContacts = 1)", searchText , searchText)
+            contacts = try! Realm().objects(IGRegisteredUser.self).filter(predicate)
+        } else if filterContact {
+            let predicate = NSPredicate(format: "isInContacts = 1")
+            contacts = try! Realm().objects(IGRegisteredUser.self).filter(predicate)
+        }
+        
         let users :[User] = contacts.map{ (registeredUser) -> User in
             let user = User(registredUser: registeredUser )
             
@@ -303,13 +318,13 @@ class IGSettingContactsTableViewController: UITableViewController,UISearchResult
     }
 }
 extension IGSettingContactsTableViewController : UISearchBarDelegate {
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        searchBar.setShowsCancelButton(true, animated: true)
-        for ob: UIView in ((searchBar.subviews[0] )).subviews {
-            if let z = ob as? UIButton {
-                let btn: UIButton = z
-                btn.setTitleColor(UIColor.organizationalColor(), for: .normal)
-            }
-        }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        self.view.endEditing(true)
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        sections = fillContacts(filterContact: true, searchText: searchText)
+        self.tableView.reloadData()
     }
 }
