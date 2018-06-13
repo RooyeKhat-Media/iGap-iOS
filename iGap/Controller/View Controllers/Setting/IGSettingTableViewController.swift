@@ -255,40 +255,51 @@ class IGSettingTableViewController: UITableViewController , NVActivityIndicatorV
     }
 
     
-    func didTapOnTrashButton() {
-        timer.invalidate()
-        let thisPhoto = galleryPhotos?.accessCurrentPhotoDetail()
-        if let index =  self.avatarPhotos?.index(where: {$0 === thisPhoto}) {
-            let thisAvatarId = self.avatars[index].id
-            IGUserAvatarDeleteRequest.Generator.generate(avatarID: thisAvatarId).success({ (protoResponse) in
-                DispatchQueue.main.async {
-                    switch protoResponse {
-                    case let userAvatarDeleteResponse as IGPUserAvatarDeleteResponse :
-                        IGUserAvatarDeleteRequest.Handler.interpret(response: userAvatarDeleteResponse)
-                        self.avatarPhotos?.remove(at: index)
-                        self.scheduledTimerWithTimeInterval()
-                    default:
-                        break
-                    }
-                }
-            }).error ({ (errorCode, waitTime) in
-                self.scheduledTimerWithTimeInterval()
-                switch errorCode {
-                case .timeout:
-                    DispatchQueue.main.async {
-                        let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
-                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                        alert.addAction(okAction)
-                        self.present(alert, animated: true, completion: nil)
-                    }
+    func deleteAvatar() {
+        let avatar = self.avatars[0]
+        IGUserAvatarDeleteRequest.Generator.generate(avatarID: avatar.id).success({ (protoResponse) in
+            DispatchQueue.main.async {
+                switch protoResponse {
+                case let userAvatarDeleteResponse as IGPUserAvatarDeleteResponse :
+                    IGUserAvatarDeleteRequest.Handler.interpret(response: userAvatarDeleteResponse)
+                    self.avatarPhotos?.remove(at: 0)
+                    self.avatars.remove(at: 0)
+                    self.getUserInfo() // TODO - now for update show avatars in room list and chat cloud i use from getUserInfo. HINT: remove this state and change avatar list for this user
                 default:
                     break
                 }
-                
-            }).send()
+            }
+        }).error ({ (errorCode, waitTime) in
+            switch errorCode {
+            case .timeout:
+                DispatchQueue.main.async {
+                    let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: nil)
+                }
+            default:
+                break
+            }
             
-         }
-        }
+        }).send()
+        
+        //        timer.invalidate()
+        //        let thisPhoto = galleryPhotos?.accessCurrentPhotoDetail()
+        //        if let index =  self.avatarPhotos?.index(where: {$0 === thisPhoto}) {
+        //            let thisAvatarId = self.avatars[index].id
+        //        }
+    }
+    
+    func getUserInfo(){
+        IGUserInfoRequest.Generator.generate(userID: (self.user?.id)!).success({ (protoResponse) in
+            DispatchQueue.main.async {
+                if let userInfoResponse = protoResponse as? IGPUserInfoResponse {
+                    IGFactory.shared.saveRegistredUsers([userInfoResponse.igpUser])
+                }
+            }
+        }).error({ (errorCode, waitTime) in }).send()
+    }
     
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -437,7 +448,6 @@ class IGSettingTableViewController: UITableViewController , NVActivityIndicatorV
         let optionMenu = UIAlertController(title: nil, message: nil, preferredStyle: IGGlobal.detectAlertStyle())
         let cameraOption = UIAlertAction(title: "Take a Photo", style: .default, handler: {
             (alert: UIAlertAction!) -> Void in
-            print("Take a Photo")
             if UIImagePickerController.availableCaptureModes(for: .rear) != nil{
                 self.imagePicker.delegate = self
                 self.imagePicker.allowsEditing = true
@@ -454,9 +464,14 @@ class IGSettingTableViewController: UITableViewController , NVActivityIndicatorV
                 }
             }
         })
+        
+        let deleteAction = UIAlertAction(title: "Delete Main Avatar", style: .destructive, handler: {
+            (alert: UIAlertAction!) -> Void in
+            self.deleteAvatar()
+        })
+        
         let ChoosePhoto = UIAlertAction(title: "Choose Photo", style: .default, handler: {
             (alert: UIAlertAction!) -> Void in
-            print("Choose Photo")
             self.imagePicker.delegate = self
             self.imagePicker.allowsEditing = true
             self.imagePicker.sourceType = .photoLibrary
@@ -472,8 +487,11 @@ class IGSettingTableViewController: UITableViewController , NVActivityIndicatorV
         })
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
             (alert: UIAlertAction!) -> Void in
-            print("Cancelled")
         })
+        
+        if self.avatars.count > 0 {
+            optionMenu.addAction(deleteAction)
+        }
         optionMenu.addAction(ChoosePhoto)
         optionMenu.addAction(cancelAction)
         if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) == true {
