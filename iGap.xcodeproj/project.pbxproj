@@ -140,6 +140,8 @@
 		FA358D201E0A6F6A001D0935 /* IGGroupsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA358D1F1E0A6F6A001D0935 /* IGGroupsTableViewController.swift */; };
 		FA358D221E0A6F76001D0935 /* IGChannelsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA358D211E0A6F76001D0935 /* IGChannelsTableViewController.swift */; };
 		FA35DA171DE0245600F171EE /* IGDatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA35DA161DE0245600F171EE /* IGDatabaseManager.swift */; };
+		FA39EAA320D7BF7B001CFF77 /* Protobuf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA39EAA220D7BF7A001CFF77 /* Protobuf.framework */; };
+		FA39EAA920D7CCC9001CFF77 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FA39EAA820D7CCC9001CFF77 /* GoogleService-Info.plist */; };
 		FA3B1C871E302CD500F194C4 /* IGProtoBuff.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA3B1C861E302CD500F194C4 /* IGProtoBuff.framework */; };
 		FA3C8E041E6D785800D94FBB /* IGClientActionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA3C8E031E6D785800D94FBB /* IGClientActionManager.swift */; };
 		FA3D947C1E6AA9580087D368 /* IGRoomManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA3D947B1E6AA9580087D368 /* IGRoomManager.swift */; };
@@ -194,6 +196,9 @@
 		FA6A22761F41D0210063DF07 /* iGap-Fontico.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FA6A22751F41CB0B0063DF07 /* iGap-Fontico.ttf */; };
 		FA6A22781F41D73E0063DF07 /* IGRequestQrCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6A22771F41D73E0063DF07 /* IGRequestQrCode.swift */; };
 		FA6B602E201E0483008460CF /* CellSizeCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6B602D201E0483008460CF /* CellSizeCalculator.swift */; };
+		FA73837320D7BA4B0094312D /* FirebaseCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA73836B20D798230094312D /* FirebaseCore.framework */; };
+		FA73837520D7BA4B0094312D /* FirebaseMessaging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA73836C20D798230094312D /* FirebaseMessaging.framework */; };
+		FA73837620D7BA730094312D /* FirebaseInstanceID.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA73836D20D798230094312D /* FirebaseInstanceID.framework */; };
 		FA77C2A71E2B85E4001B2152 /* IGRegistredUserInfoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA77C2A61E2B85E4001B2152 /* IGRegistredUserInfoTableViewController.swift */; };
 		FA786D58206A575300608A2D /* profile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAA51753206A254200471EA0 /* profile.storyboard */; };
 		FA786D5A206A746700608A2D /* CreateRoom.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA786D59206A746700608A2D /* CreateRoom.storyboard */; };
@@ -303,7 +308,6 @@
 		FAF796071DAA392F0030509B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAF796031DAA392F0030509B /* Main.storyboard */; };
 		FAF7960A1DAA39460030509B /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FAF796091DAA39460030509B /* Info.plist */; };
 		FAF7960F1DAA39660030509B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF7960E1DAA39660030509B /* AppDelegate.swift */; };
-		FAF8BFEA1E34AF00002AF525 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FAF8BFE91E34AF00002AF525 /* GoogleService-Info.plist */; };
 		FAF985A01E2E10EC00B26940 /* AKMaskField.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAF985891E2E10EC00B26940 /* AKMaskField.framework */; };
 		FAF985A11E2E10EC00B26940 /* CameraViewController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAF9858A1E2E10EC00B26940 /* CameraViewController.framework */; };
 		FAF985A21E2E10EC00B26940 /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAF9858B1E2E10EC00B26940 /* CryptoSwift.framework */; };
@@ -461,6 +465,8 @@
 		FA358D1F1E0A6F6A001D0935 /* IGGroupsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGGroupsTableViewController.swift; sourceTree = "<group>"; };
 		FA358D211E0A6F76001D0935 /* IGChannelsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGChannelsTableViewController.swift; sourceTree = "<group>"; };
 		FA35DA161DE0245600F171EE /* IGDatabaseManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGDatabaseManager.swift; sourceTree = "<group>"; };
+		FA39EAA220D7BF7A001CFF77 /* Protobuf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Protobuf.framework; sourceTree = "<group>"; };
+		FA39EAA820D7CCC9001CFF77 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Desktop/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FA3B1C861E302CD500F194C4 /* IGProtoBuff.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IGProtoBuff.framework; path = Carthage/Build/iOS/IGProtoBuff.framework; sourceTree = "<group>"; };
 		FA3C8E031E6D785800D94FBB /* IGClientActionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGClientActionManager.swift; sourceTree = "<group>"; };
 		FA3D947B1E6AA9580087D368 /* IGRoomManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGRoomManager.swift; sourceTree = "<group>"; };
@@ -518,6 +524,9 @@
 		FA6A22751F41CB0B0063DF07 /* iGap-Fontico.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iGap-Fontico.ttf"; sourceTree = "<group>"; };
 		FA6A22771F41D73E0063DF07 /* IGRequestQrCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGRequestQrCode.swift; sourceTree = "<group>"; };
 		FA6B602D201E0483008460CF /* CellSizeCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellSizeCalculator.swift; sourceTree = "<group>"; };
+		FA73836B20D798230094312D /* FirebaseCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FirebaseCore.framework; sourceTree = "<group>"; };
+		FA73836C20D798230094312D /* FirebaseMessaging.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FirebaseMessaging.framework; sourceTree = "<group>"; };
+		FA73836D20D798230094312D /* FirebaseInstanceID.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FirebaseInstanceID.framework; sourceTree = "<group>"; };
 		FA752C321E1EC571008694C6 /* iGap.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = iGap.entitlements; path = ../iGap.entitlements; sourceTree = "<group>"; };
 		FA77C2A61E2B85E4001B2152 /* IGRegistredUserInfoTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGRegistredUserInfoTableViewController.swift; sourceTree = "<group>"; };
 		FA786D59206A746700608A2D /* CreateRoom.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = CreateRoom.storyboard; sourceTree = "<group>"; };
@@ -586,6 +595,8 @@
 		FAB09D9A1DB76F81001A27C4 /* IGRequestManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IGRequestManager.swift; path = "Request Manager/IGRequestManager.swift"; sourceTree = "<group>"; };
 		FAB0F9451FE956D1008F23EB /* Splash.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = Splash.gif; sourceTree = "<group>"; };
 		FAB2C2DE1DF7F6E8001F30B5 /* IGSessionInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGSessionInfo.swift; sourceTree = "<group>"; };
+		FAB8210D20D7D583003938BB /* Firebase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Firebase.h; sourceTree = "<group>"; };
+		FAB8210E20D7D589003938BB /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		FABB9B051DB25E5E00D794A4 /* IGSecurityManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IGSecurityManager.swift; path = "Security Manager/IGSecurityManager.swift"; sourceTree = "<group>"; };
 		FAC34DB31E1A3F7E00BB9823 /* IGRealm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGRealm.swift; sourceTree = "<group>"; };
 		FAC34DB51E1A651200BB9823 /* IGContactInMessageCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IGContactInMessageCellView.swift; path = iGap/VIew/ReusableViews/IGContactInMessageCellView.swift; sourceTree = SOURCE_ROOT; };
@@ -632,7 +643,6 @@
 		FAF796041DAA392F0030509B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		FAF796091DAA39460030509B /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FAF7960E1DAA39660030509B /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		FAF8BFE91E34AF00002AF525 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FAF985891E2E10EC00B26940 /* AKMaskField.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AKMaskField.framework; path = Carthage/Build/iOS/AKMaskField.framework; sourceTree = "<group>"; };
 		FAF9858A1E2E10EC00B26940 /* CameraViewController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CameraViewController.framework; path = Carthage/Build/iOS/CameraViewController.framework; sourceTree = "<group>"; };
 		FAF9858B1E2E10EC00B26940 /* CryptoSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CryptoSwift.framework; path = Carthage/Build/iOS/CryptoSwift.framework; sourceTree = "<group>"; };
@@ -660,6 +670,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA39EAA320D7BF7B001CFF77 /* Protobuf.framework in Frameworks */,
+				FA73837620D7BA730094312D /* FirebaseInstanceID.framework in Frameworks */,
+				FA73837320D7BA4B0094312D /* FirebaseCore.framework in Frameworks */,
+				FA73837520D7BA4B0094312D /* FirebaseMessaging.framework in Frameworks */,
 				FA865C7220789C2600B9D585 /* MapKit.framework in Frameworks */,
 				FA98F83A204D41AB0070424E /* Cosmos.framework in Frameworks */,
 				FA9402AC2042D49D00D1A35C /* WebRTC.framework in Frameworks */,
@@ -1391,9 +1405,11 @@
 			isa = PBXGroup;
 			children = (
 				FA752C321E1EC571008694C6 /* iGap.entitlements */,
-				FAF796091DAA39460030509B /* Info.plist */,
 				FA5097D21DEDA18000A44699 /* iGap-Bridging-Header.h */,
-				FAF8BFE91E34AF00002AF525 /* GoogleService-Info.plist */,
+				FAB8210D20D7D583003938BB /* Firebase.h */,
+				FA39EAA820D7CCC9001CFF77 /* GoogleService-Info.plist */,
+				FAF796091DAA39460030509B /* Info.plist */,
+				FAB8210E20D7D589003938BB /* module.modulemap */,
 				FA27F74120BD780300EC6A97 /* secret.key */,
 				FA27F73F20BD77ED00EC6A97 /* api.key */,
 			);
@@ -1432,6 +1448,10 @@
 		FAF985881E2E10EC00B26940 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FA39EAA220D7BF7A001CFF77 /* Protobuf.framework */,
+				FA73836B20D798230094312D /* FirebaseCore.framework */,
+				FA73836D20D798230094312D /* FirebaseInstanceID.framework */,
+				FA73836C20D798230094312D /* FirebaseMessaging.framework */,
 				FA865C7120789C2600B9D585 /* MapKit.framework */,
 				FA98F839204D41AA0070424E /* Cosmos.framework */,
 				FA9402AB2042D49C00D1A35C /* WebRTC.framework */,
@@ -1505,7 +1525,7 @@
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Push = {
-								enabled = 0;
+								enabled = 1;
 							};
 							com.apple.iCloud = {
 								enabled = 1;
@@ -1563,11 +1583,11 @@
 				FAF7960A1DAA39460030509B /* Info.plist in Resources */,
 				FA4BD8A41DF2A53400CCB239 /* IGMusicViewController.xib in Resources */,
 				FA93EE2A2029A41200DD1521 /* VoiceCell.xib in Resources */,
+				FA39EAA920D7CCC9001CFF77 /* GoogleService-Info.plist in Resources */,
 				FA927E0E20288AEE00DF7145 /* FileCell.xib in Resources */,
 				FA8F8A69208602AB00AF03CB /* IGMapNearbyDistanceCell.xib in Resources */,
 				FA0CC80A1E5D7D4400556283 /* Info.plist in Resources */,
 				FA5656BE204AB18F00DB46F0 /* igap_signaling.mp3 in Resources */,
-				FAF8BFEA1E34AF00002AF525 /* GoogleService-Info.plist in Resources */,
 				FA786D58206A575300608A2D /* profile.storyboard in Resources */,
 				FA786D5A206A746700608A2D /* CreateRoom.storyboard in Resources */,
 				FA93EE2E2029DBE300DD1521 /* AudioCell.xib in Resources */,
@@ -2047,12 +2067,20 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = (
+					"$(OTHER_LDFLAGS)",
+					"-ObjC",
+					"$(inherited)",
+				);
+				OTHER_LIBTOOLFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = net.iGap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "iGap/SupportingFiles/iGap-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
+				"USER_HEADER_SEARCH_PATHS[arch=*]" = ./iGap/SupportingFiles/;
+				VALID_ARCHS = "arm64 armv7 armv7s";
 			};
 			name = Debug;
 		};
@@ -2075,12 +2103,20 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				OTHER_LDFLAGS = (
+					"$(OTHER_LDFLAGS)",
+					"-ObjC",
+					"$(inherited)",
+				);
+				OTHER_LIBTOOLFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = net.iGap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "iGap/SupportingFiles/iGap-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
+				"USER_HEADER_SEARCH_PATHS[arch=*]" = ./iGap/SupportingFiles/;
+				VALID_ARCHS = "arm64 armv7 armv7s";
 			};
 			name = Release;
 		};
