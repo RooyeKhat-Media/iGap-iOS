@@ -295,6 +295,9 @@ let protoClassesLookupTable: [Int: (proto: ResponseMessage.Type, reponseHandler:
             IGClientPinRoomRequest.Handler.self             as IGRequest.Handler.Type),
     30616: (IGPClientRoomReportResponse.self                as ResponseMessage.Type,
             IGClientRoomReportRequest.Handler.self          as IGRequest.Handler.Type),
+    30617: (IGPClientRegisterDeviceResponse.self            as ResponseMessage.Type,
+            IGClientRegisterDeviceRequest.Handler.self      as IGRequest.Handler.Type),
+    
 
     //File: 307xx
     30700: (IGPFileUploadOptionResponse.self                as ResponseMessage.Type,

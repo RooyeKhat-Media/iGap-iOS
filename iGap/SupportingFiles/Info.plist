@@ -32,6 +32,8 @@
 			</dict>
 		</array>
 	</dict>
+	<key>FirebaseMessagingAutoInitEnabled</key>
+	<true/>
 	<key>LSApplicationCategoryType</key>
 	<dict/>
 	<key>LSRequiresIPhoneOS</key>
@@ -65,6 +67,11 @@ This is the option to choose a photo from your gallery and send it to someone el
 		<string>IRANSans_Medium.ttf</string>
 		<string>IRANSans_UltraLight.ttf</string>
 		<string>IRANSans.ttf</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+		<string>voip</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

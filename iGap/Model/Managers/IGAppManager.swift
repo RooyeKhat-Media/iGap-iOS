@@ -15,6 +15,7 @@ import SwiftProtobuf
 import RealmSwift
 import RxSwift
 import WebRTC
+import FirebaseInstanceID
 
 class IGAppManager: NSObject {
     static let sharedManager = IGAppManager()
@@ -292,6 +293,7 @@ class IGAppManager: NSObject {
             self.isTryingToLoginUser = true
             if let token = _loginToken, let hash = _authorHash {
                 IGUserLoginRequest.Generator.generate(token: token).success({ (responseProto) in
+                    self.getToken()
                     DispatchQueue.main.async {
                         self.isTryingToLoginUser = false
                         switch responseProto {
@@ -326,6 +328,22 @@ class IGAppManager: NSObject {
             
         }
         
+    }
+    
+    func getToken(){
+        InstanceID.instanceID().instanceID { (result, error) in
+            if let error = error {
+                print("XXX Error fetching remote instange ID: \(error)")
+            } else if let result = result {
+                self.sendAPNToken(token: result.token)
+            }
+        }
+    }
+    
+    func sendAPNToken(token: String){
+        IGClientRegisterDeviceRequest.Generator.generate(token: token).success({ (protoResponse) in
+        }).error({ (errorCode , waitTime) in
+        }).send()
     }
     
     public func getGeoRegisterStatus(){
