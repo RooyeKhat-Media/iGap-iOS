@@ -1,0 +1,9 @@
+/*
+ Localizable.strings
+ iGap
+ 
+ Created by MacBook Pro on 6/25/18.
+ Copyright © 2018 RooyeKhat Media. All rights reserved.
+ */
+
+"MESSAGE_TEXT" = "%1$@ send message %2$@";

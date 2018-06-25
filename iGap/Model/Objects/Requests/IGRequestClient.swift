@@ -411,6 +411,7 @@ class IGClientRegisterDeviceRequest: IGRequest {
         class func generate(token: String) -> IGRequestWrapper {
             var clientRegisterDevice = IGPClientRegisterDevice()
             clientRegisterDevice.igpToken = token
+            clientRegisterDevice.igpType = IGPClientRegisterDevice.IGPType.ios
             return IGRequestWrapper(message: clientRegisterDevice, actionID: 617)
         }
     }

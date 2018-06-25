@@ -609,6 +609,10 @@ extension String {
         }
         return ext
     }
+    
+    var localized: String {
+        return NSLocalizedString(self, tableName: nil, bundle: Bundle.main, value: "", comment: "")
+    }
 }
 
 extension Array where Element: Hashable {

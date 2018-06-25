@@ -1,0 +1,147 @@
+
+/* Class = "UILabel"; text = "00:00"; ObjectID = "0xP-Py-NoP"; */
+"0xP-Py-NoP.text" = "00:00";
+
+/* Class = "UILabel"; text = "..."; ObjectID = "1s0-8u-bJd"; */
+"1s0-8u-bJd.text" = "...";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "2ka-Ow-SOq"; */
+"2ka-Ow-SOq.text" = "Label";
+
+/* Class = "UILabel"; text = "iGap Call Quality"; ObjectID = "3Ts-7H-7ep"; */
+"3Ts-7H-7ep.text" = "iGap Call Quality";
+
+/* Class = "UILabel"; text = "00:00"; ObjectID = "9Qi-La-Dbk"; */
+"9Qi-La-Dbk.text" = "00:00";
+
+/* Class = "UIButton"; normalTitle = ""; ObjectID = "B2M-WZ-eh7"; */
+"B2M-WZ-eh7.normalTitle" = "";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "GOW-He-PNQ"; */
+"GOW-He-PNQ.text" = "Label";
+
+/* Class = "UIButton"; normalTitle = ""; ObjectID = "HVS-4z-ILw"; */
+"HVS-4z-ILw.normalTitle" = "";
+
+/* Class = "UIButton"; normalTitle = "Submit"; ObjectID = "IKl-b8-enQ"; */
+"IKl-b8-enQ.normalTitle" = "Submit";
+
+/* Class = "UIButton"; normalTitle = "X"; ObjectID = "IvY-L2-6Iw"; */
+"IvY-L2-6Iw.normalTitle" = "X";
+
+/* Class = "UIButton"; normalTitle = "Cancel"; ObjectID = "N9Z-S5-niI"; */
+"N9Z-S5-niI.normalTitle" = "Cancel";
+
+/* Class = "UITextField"; placeholder = "Please enter your reason..."; ObjectID = "Nem-UB-8Cx"; */
+"Nem-UB-8Cx.placeholder" = "Please enter your reason...";
+
+/* Class = "UINavigationItem"; title = "Chats"; ObjectID = "O9t-Iy-ktM"; */
+"O9t-Iy-ktM.title" = "Chats";
+
+/* Class = "UILabel"; text = "Pinned message test text"; ObjectID = "OfO-SB-YDv"; */
+"OfO-SB-YDv.text" = "Pinned message test text";
+
+/* Class = "UINavigationItem"; title = "Channel"; ObjectID = "PXt-DS-2oY"; */
+"PXt-DS-2oY.title" = "Channel";
+
+/* Class = "UITabBarItem"; title = "Group Chat"; ObjectID = "Q4u-T1-NQz"; */
+"Q4u-T1-NQz.title" = "Group Chat";
+
+/* Class = "UILabel"; text = "Last seen recently"; ObjectID = "QQW-dI-uLJ"; */
+"QQW-dI-uLJ.text" = "Last seen recently";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "Rbu-e1-khD"; */
+"Rbu-e1-khD.text" = "Label";
+
+/* Class = "UIButton"; normalTitle = "ok"; ObjectID = "TNo-OT-S8V"; */
+"TNo-OT-S8V.normalTitle" = "ok";
+
+/* Class = "UITabBarItem"; title = "Chat"; ObjectID = "XT3-ee-7Kk"; */
+"XT3-ee-7Kk.title" = "Chat";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "Xsv-Pt-35f"; */
+"Xsv-Pt-35f.text" = "Label";
+
+/* Class = "UITableViewSection"; headerTitle = "Report Description"; ObjectID = "ZFU-FT-tMn"; */
+"ZFU-FT-tMn.headerTitle" = "Report Description";
+
+/* Class = "UITabBarItem"; title = "Channel"; ObjectID = "ZvZ-OM-omQ"; */
+"ZvZ-OM-omQ.title" = "Channel";
+
+/* Class = "UILabel"; text = "989 Mb"; ObjectID = "ajG-7M-bRf"; */
+"ajG-7M-bRf.text" = "989 Mb";
+
+/* Class = "UINavigationItem"; title = "Call"; ObjectID = "ata-Zx-iH3"; */
+"ata-Zx-iH3.title" = "Call";
+
+/* Class = "UINavigationItem"; title = "Map"; ObjectID = "cMV-mk-Mj0"; */
+"cMV-mk-Mj0.title" = "Map";
+
+/* Class = "UIButton"; normalTitle = ""; ObjectID = "cOE-9I-nlw"; */
+"cOE-9I-nlw.normalTitle" = "";
+
+/* Class = "UINavigationItem"; title = "Title"; ObjectID = "czR-fN-gJW"; */
+"czR-fN-gJW.title" = "Title";
+
+/* Class = "UITextField"; placeholder = "Your Status"; ObjectID = "e0D-HW-VKn"; */
+"e0D-HW-VKn.placeholder" = "Your Status";
+
+/* Class = "UILabel"; text = "iGap Voice Call"; ObjectID = "fFu-Of-z9o"; */
+"fFu-Of-z9o.text" = "iGap Voice Call";
+
+/* Class = "UILabel"; text = "pinned message"; ObjectID = "fMi-wX-rBo"; */
+"fMi-wX-rBo.text" = "pinned message";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "fh1-j5-GnE"; */
+"fh1-j5-GnE.text" = "Label";
+
+/* Class = "UILabel"; text = "< Slide to cancel"; ObjectID = "fry-mj-7Oz"; */
+"fry-mj-7Oz.text" = "< Slide to cancel";
+
+/* Class = "UISegmentedControl"; g9p-gW-O2Z.segmentTitles[0] = "Chat"; ObjectID = "g9p-gW-O2Z"; */
+"g9p-gW-O2Z.segmentTitles[0]" = "Chat";
+
+/* Class = "UISegmentedControl"; g9p-gW-O2Z.segmentTitles[1] = "Contact"; ObjectID = "g9p-gW-O2Z"; */
+"g9p-gW-O2Z.segmentTitles[1]" = "Contact";
+
+/* Class = "UIButton"; normalTitle = "X"; ObjectID = "grH-pt-p4x"; */
+"grH-pt-p4x.normalTitle" = "X";
+
+/* Class = "UINavigationItem"; title = "Groups"; ObjectID = "lxH-uI-Dp1"; */
+"lxH-uI-Dp1.title" = "Groups";
+
+/* Class = "UITabBarItem"; title = "Call"; ObjectID = "oqI-zk-FQV"; */
+"oqI-zk-FQV.title" = "Call";
+
+/* Class = "UIButton"; normalTitle = ""; ObjectID = "p1s-Tl-xih"; */
+"p1s-Tl-xih.normalTitle" = "";
+
+/* Class = "UIButton"; normalTitle = "X"; ObjectID = "pFr-44-9aA"; */
+"pFr-44-9aA.normalTitle" = "X";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "rUv-eg-9V4"; */
+"rUv-eg-9V4.text" = "Label";
+
+/* Class = "UILabel"; text = "Caller Name"; ObjectID = "u14-h2-GtB"; */
+"u14-h2-GtB.text" = "Caller Name";
+
+/* Class = "UIButton"; normalTitle = ""; ObjectID = "u6D-Vd-Lv8"; */
+"u6D-Vd-Lv8.normalTitle" = "";
+
+/* Class = "UIButton"; normalTitle = ""; ObjectID = "uIr-0Q-6G0"; */
+"uIr-0Q-6G0.normalTitle" = "";
+
+/* Class = "UIButton"; normalTitle = "JOIN"; ObjectID = "uLc-FX-WjP"; */
+"uLc-FX-WjP.normalTitle" = "JOIN";
+
+/* Class = "UINavigationItem"; title = "Recents"; ObjectID = "uni-kb-OpQ"; */
+"uni-kb-OpQ.title" = "Recents";
+
+/* Class = "UITabBarItem"; title = "Recents"; ObjectID = "vth-sK-lcp"; */
+"vth-sK-lcp.title" = "Recents";
+
+/* Class = "UINavigationItem"; title = "Title"; ObjectID = "yRi-nN-wYI"; */
+"yRi-nN-wYI.title" = "Title";
+
+/* Class = "UILabel"; text = "Send this Location"; ObjectID = "z4Q-eZ-Ji4"; */
+"z4Q-eZ-Ji4.text" = "Send this Location";
