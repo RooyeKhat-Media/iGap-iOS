@@ -12,6 +12,7 @@ import Foundation
 import UIKit
 import IGProtoBuff
 import SwiftProtobuf
+import FirebaseInstanceID
 
 enum IGVerificationCodeSendMethod {
     case sms
@@ -126,6 +127,25 @@ class IGUserLoginRequest : IGRequest {
     }
     
     class Handler : IGRequest.Handler{
+        
+        class func intrepret() {
+            getToken()
+        }
+        
+        class func getToken(){
+            InstanceID.instanceID().instanceID { (result, error) in
+                if let error = error {
+                    print("XXX Error fetching remote instange ID: \(error)")
+                } else if let result = result {
+                    self.sendAPNToken(token: result.token)
+                }
+            }
+        }
+        
+        class func sendAPNToken(token: String){
+            IGClientRegisterDeviceRequest.Generator.generate(token: token).success({ (protoResponse) in }).error({ (errorCode , waitTime) in }).send()
+        }
+        
         override class func handlePush(responseProtoMessage: Message) {}
     }
 }

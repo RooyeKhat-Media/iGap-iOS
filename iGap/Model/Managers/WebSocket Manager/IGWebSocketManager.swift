@@ -9,7 +9,6 @@
  */
 
 import UIKit
-//import Starscream
 import SwiftProtobuf
 import Reachability.Swift
 
@@ -21,7 +20,6 @@ class IGWebSocketManager: NSObject {
     
     private let reachability = Reachability()!
     private let socket = WebSocket(url: URL(string: "wss://secure.igap.net/test/")!)
-//    private let socket = WebSocket(url: URL(string: "ws://10.10.10.102:6708")!)
     fileprivate var isConnectionSecured : Bool = false
     fileprivate var websocketSendQueue = DispatchQueue(label: "im.igap.ios.queue.ws.send")
     fileprivate var websocketReceiveQueue = DispatchQueue(label: "im.igap.ios.queue.ws.receive")

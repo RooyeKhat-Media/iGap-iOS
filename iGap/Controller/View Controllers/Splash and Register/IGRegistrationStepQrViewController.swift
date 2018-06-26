@@ -116,6 +116,7 @@ class IGRegistrationStepQrViewController: UIViewController, UIGestureRecognizerD
             DispatchQueue.main.async {
                 switch protoResponse {
                 case _ as IGPUserLoginResponse:
+                    IGUserLoginRequest.Handler.intrepret()
                     IGAppManager.sharedManager.setUserLoginSuccessful()
                     IGUserInfoRequest.Generator.generate(userID: IGAppManager.sharedManager.userID()!).success({ (protoResponse) in
                         DispatchQueue.main.async {

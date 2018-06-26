@@ -293,11 +293,11 @@ class IGAppManager: NSObject {
             self.isTryingToLoginUser = true
             if let token = _loginToken, let hash = _authorHash {
                 IGUserLoginRequest.Generator.generate(token: token).success({ (responseProto) in
-                    self.getToken()
                     DispatchQueue.main.async {
                         self.isTryingToLoginUser = false
                         switch responseProto {
                         case _ as IGPUserLoginResponse:
+                            IGUserLoginRequest.Handler.intrepret()
                             self.setUserLoginSuccessful()
                             self.setUserUpdateStatus(status: .online)
                             self.getSignalingConfiguration(force: true)
@@ -328,22 +328,6 @@ class IGAppManager: NSObject {
             
         }
         
-    }
-    
-    func getToken(){
-        InstanceID.instanceID().instanceID { (result, error) in
-            if let error = error {
-                print("XXX Error fetching remote instange ID: \(error)")
-            } else if let result = result {
-                self.sendAPNToken(token: result.token)
-            }
-        }
-    }
-    
-    func sendAPNToken(token: String){
-        IGClientRegisterDeviceRequest.Generator.generate(token: token).success({ (protoResponse) in
-        }).error({ (errorCode , waitTime) in
-        }).send()
     }
     
     public func getGeoRegisterStatus(){
