@@ -159,8 +159,6 @@
 		FA42EF101E5C224F00CF8A32 /* UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA42EF041E5C224F00CF8A32 /* UIImageView.swift */; };
 		FA42EF111E5C224F00CF8A32 /* ImageSourceHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA42EF071E5C224F00CF8A32 /* ImageSourceHelpers.swift */; };
 		FA42EF151E5C593500CF8A32 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = FA42EF141E5C593500CF8A32 /* TTTAttributedLabel.m */; };
-		FA45F2F020DE6BB200A95234 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA45F2EF20DE6BB200A95234 /* NotificationService.swift */; };
-		FA45F2F420DE6BB200A95234 /* Notification.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = FA45F2ED20DE6BB200A95234 /* Notification.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		FA4BD8A31DF2A53400CCB239 /* IGMusicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4BD8A11DF2A53400CCB239 /* IGMusicViewController.swift */; };
 		FA4BD8A41DF2A53400CCB239 /* IGMusicViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4BD8A21DF2A53400CCB239 /* IGMusicViewController.xib */; };
 		FA50A8C41DD35E8500C6D2EA /* IGAppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA50A8C31DD35E8500C6D2EA /* IGAppManager.swift */; };
@@ -332,30 +330,6 @@
 		FAFDB3B6204EBCCA0022D183 /* IGCallListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FAE11246204E982D009F402B /* IGCallListTableViewCell.xib */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		FA45F2F220DE6BB200A95234 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = FAF795E21DAA330C0030509B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = FA45F2EC20DE6BB200A95234;
-			remoteInfo = Notification;
-		};
-/* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		FA45F2F820DE6BB200A95234 /* Embed App Extensions */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 13;
-			files = (
-				FA45F2F420DE6BB200A95234 /* Notification.appex in Embed App Extensions */,
-			);
-			name = "Embed App Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
 		4F9386F71EAE335200397C3B /* IGChannelAndGroupSharedMediaImagesAndVideosCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGChannelAndGroupSharedMediaImagesAndVideosCollectionViewController.swift; sourceTree = "<group>"; };
 		4F9F3E691EBA0D91008E05C1 /* IGPushResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGPushResponse.swift; sourceTree = "<group>"; };
@@ -513,10 +487,6 @@
 		FA42EF071E5C224F00CF8A32 /* ImageSourceHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageSourceHelpers.swift; sourceTree = "<group>"; };
 		FA42EF131E5C593500CF8A32 /* TTTAttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTAttributedLabel.h; sourceTree = "<group>"; };
 		FA42EF141E5C593500CF8A32 /* TTTAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTAttributedLabel.m; sourceTree = "<group>"; };
-		FA45F2DB20DE681600A95234 /* PushNotification.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = PushNotification.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		FA45F2ED20DE6BB200A95234 /* Notification.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Notification.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		FA45F2EF20DE6BB200A95234 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
-		FA45F2F120DE6BB200A95234 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FA4BD8A11DF2A53400CCB239 /* IGMusicViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGMusicViewController.swift; sourceTree = "<group>"; };
 		FA4BD8A21DF2A53400CCB239 /* IGMusicViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IGMusicViewController.xib; sourceTree = "<group>"; };
 		FA5097D21DEDA18000A44699 /* iGap-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iGap-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -702,20 +672,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		FA45F2D820DE681600A95234 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		FA45F2EA20DE6BB200A95234 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		FAF795E71DAA330C0030509B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -1019,15 +975,6 @@
 				FA42EF141E5C593500CF8A32 /* TTTAttributedLabel.m */,
 			);
 			path = TTTAttributedLabel;
-			sourceTree = "<group>";
-		};
-		FA45F2EE20DE6BB200A95234 /* Notification */ = {
-			isa = PBXGroup;
-			children = (
-				FA45F2EF20DE6BB200A95234 /* NotificationService.swift */,
-				FA45F2F120DE6BB200A95234 /* Info.plist */,
-			);
-			path = Notification;
 			sourceTree = "<group>";
 		};
 		FA4BD8A01DF2A52300CCB239 /* Music Player */ = {
@@ -1419,7 +1366,6 @@
 			isa = PBXGroup;
 			children = (
 				FAF795EC1DAA330C0030509B /* iGap */,
-				FA45F2EE20DE6BB200A95234 /* Notification */,
 				FAF795EB1DAA330C0030509B /* Products */,
 				FAF985881E2E10EC00B26940 /* Frameworks */,
 			);
@@ -1429,8 +1375,6 @@
 			isa = PBXGroup;
 			children = (
 				FAF795EA1DAA330C0030509B /* iGap.app */,
-				FA45F2DB20DE681600A95234 /* PushNotification.appex */,
-				FA45F2ED20DE6BB200A95234 /* Notification.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1552,40 +1496,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		FA45F2DA20DE681600A95234 /* PushNotification */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = FA45F2E520DE681600A95234 /* Build configuration list for PBXNativeTarget "PushNotification" */;
-			buildPhases = (
-				FA45F2D720DE681600A95234 /* Sources */,
-				FA45F2D820DE681600A95234 /* Frameworks */,
-				FA45F2D920DE681600A95234 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = PushNotification;
-			productName = PushNotification;
-			productReference = FA45F2DB20DE681600A95234 /* PushNotification.appex */;
-			productType = "com.apple.product-type.app-extension";
-		};
-		FA45F2EC20DE6BB200A95234 /* Notification */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = FA45F2F520DE6BB200A95234 /* Build configuration list for PBXNativeTarget "Notification" */;
-			buildPhases = (
-				FA45F2E920DE6BB200A95234 /* Sources */,
-				FA45F2EA20DE6BB200A95234 /* Frameworks */,
-				FA45F2EB20DE6BB200A95234 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = Notification;
-			productName = Notification;
-			productReference = FA45F2ED20DE6BB200A95234 /* Notification.appex */;
-			productType = "com.apple.product-type.app-extension";
-		};
 		FAF795E91DAA330C0030509B /* iGap */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = FAF795FC1DAA330C0030509B /* Build configuration list for PBXNativeTarget "iGap" */;
@@ -1596,12 +1506,10 @@
 				FADF684C1DB2607B00DC5038 /* [RS] Set Build Number */,
 				FAF985B71E2E110900B26940 /* [RS] Copy Carthage Frameworks */,
 				FAC42C821E36262D00F2CB5C /* [RS] Fabric.io */,
-				FA45F2F820DE6BB200A95234 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				FA45F2F320DE6BB200A95234 /* PBXTargetDependency */,
 			);
 			name = iGap;
 			productName = iGap;
@@ -1618,15 +1526,6 @@
 				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "RooyeKhat Media";
 				TargetAttributes = {
-					FA45F2DA20DE681600A95234 = {
-						CreatedOnToolsVersion = 9.4;
-						ProvisioningStyle = Automatic;
-					};
-					FA45F2EC20DE6BB200A95234 = {
-						CreatedOnToolsVersion = 9.4;
-						DevelopmentTeam = MZ7XTDD264;
-						ProvisioningStyle = Automatic;
-					};
 					FAF795E91DAA330C0030509B = {
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = MZ7XTDD264;
@@ -1660,27 +1559,11 @@
 			projectRoot = "";
 			targets = (
 				FAF795E91DAA330C0030509B /* iGap */,
-				FA45F2DA20DE681600A95234 /* PushNotification */,
-				FA45F2EC20DE6BB200A95234 /* Notification */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		FA45F2D920DE681600A95234 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		FA45F2EB20DE6BB200A95234 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		FAF795E81DAA330C0030509B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1800,21 +1683,6 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		FA45F2D720DE681600A95234 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		FA45F2E920DE6BB200A95234 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				FA45F2F020DE6BB200A95234 /* NotificationService.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		FAF795E61DAA330C0030509B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2074,14 +1942,6 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		FA45F2F320DE6BB200A95234 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = FA45F2EC20DE6BB200A95234 /* Notification */;
-			targetProxy = FA45F2F220DE6BB200A95234 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin PBXVariantGroup section */
 		FAAEAC5720E0EAEF00A1EAE5 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
@@ -2114,134 +1974,6 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		FA45F2E320DE681600A95234 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: RooyeKhat Media (MZ7XTDD264)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = PushNotification/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = net.iGap.PushNotification;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		FA45F2E420DE681600A95234 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: RooyeKhat Media (MZ7XTDD264)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = PushNotification/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = net.iGap.PushNotification;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		FA45F2F620DE6BB200A95234 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: RooyeKhat Media (MZ7XTDD264)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = MZ7XTDD264;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = Notification/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = net.iGap.Notification;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		FA45F2F720DE6BB200A95234 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: RooyeKhat Media (MZ7XTDD264)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = MZ7XTDD264;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = Notification/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = net.iGap.Notification;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 		FAF795FA1DAA330C0030509B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2344,14 +2076,13 @@
 		FAF795FD1DAA330C0030509B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = iGap/iGap.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: RooyeKhat Media (MZ7XTDD264)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = MZ7XTDD264;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2382,13 +2113,12 @@
 		FAF795FE1DAA330C0030509B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = iGap/iGap.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: RooyeKhat Media (MZ7XTDD264)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = MZ7XTDD264;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2419,24 +2149,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		FA45F2E520DE681600A95234 /* Build configuration list for PBXNativeTarget "PushNotification" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				FA45F2E320DE681600A95234 /* Debug */,
-				FA45F2E420DE681600A95234 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		FA45F2F520DE6BB200A95234 /* Build configuration list for PBXNativeTarget "Notification" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				FA45F2F620DE6BB200A95234 /* Debug */,
-				FA45F2F720DE6BB200A95234 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		FAF795E51DAA330C0030509B /* Build configuration list for PBXProject "iGap" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
