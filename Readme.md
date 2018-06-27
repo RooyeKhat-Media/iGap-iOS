@@ -1,9 +1,9 @@
 
-![Release 0.4.4](https://img.shields.io/badge/release-v0.4.4-blue.svg)
-![Build: Passing](https://img.shields.io/badge/build-passing-brightgreen.svg)
-![Swift 3.2.x](https://img.shields.io/badge/swift-3.2.x-orange.svg)
-![Platform iOS](https://img.shields.io/badge/platform-ios-lightgrey.svg)
-![AGPL 3.0](https://img.shields.io/badge/license-AGPL%203.0-blue.svg)
+![Release 0.4.8](https://img.shields.io/badge/Release-v0.4.8-blue.svg)
+![Build: Passing](https://img.shields.io/badge/Build-Passing-brightgreen.svg)
+![Swift 4.1.x](https://img.shields.io/badge/Swift-4.1.x-orange.svg)
+![Platform iOS](https://img.shields.io/badge/Platform-iOS-lightgrey.svg)
+![AGPL 3.0](https://img.shields.io/badge/License-AGPL%203.0-blue.svg)
 
 ## iGap messenger for iOS
 iGap is a messaging application and has been created using all latest modern technologies. iGap allows all users and programmers to use all its features, possibilities and potentials.
