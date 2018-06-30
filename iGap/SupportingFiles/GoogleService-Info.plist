@@ -4,23 +4,39 @@
 <dict>
 	<key>TRACKING_ID</key>
 	<string>UA-89789834-5</string>
+	<key>AD_UNIT_ID_FOR_BANNER_TEST</key>
+	<string>ca-app-pub-3940256099942544/2934735716</string>
+	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
+	<string>ca-app-pub-3940256099942544/4411468910</string>
+	<key>CLIENT_ID</key>
+	<string>780057141561-da4q8mdjnktgrcvvpsph4s1l3e0ve75h.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.780057141561-da4q8mdjnktgrcvvpsph4s1l3e0ve75h</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDGgMr-G-Q2nuGrGD13_Fft4aitVaH0qoM</string>
+	<key>GCM_SENDER_ID</key>
+	<string>780057141561</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>net.iGap</string>
 	<key>PROJECT_ID</key>
-	<string>igap-messenger</string>
+	<string>igap-im</string>
+	<key>STORAGE_BUCKET</key>
+	<string>igap-im.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
-	<false/>
+	<true/>
 	<key>IS_ANALYTICS_ENABLED</key>
 	<true/>
 	<key>IS_APPINVITE_ENABLED</key>
 	<false/>
 	<key>IS_GCM_ENABLED</key>
-	<false/>
+	<true/>
 	<key>IS_SIGNIN_ENABLED</key>
-	<false/>
+	<true/>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:132364457498:ios:69c59b7595e50096</string>
+	<string>1:780057141561:ios:69c59b7595e50096</string>
+	<key>DATABASE_URL</key>
+	<string>https://igap-im.firebaseio.com</string>
 </dict>
 </plist>

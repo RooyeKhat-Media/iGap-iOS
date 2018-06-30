@@ -145,7 +145,6 @@
 		FA3C8E041E6D785800D94FBB /* IGClientActionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA3C8E031E6D785800D94FBB /* IGClientActionManager.swift */; };
 		FA3D947C1E6AA9580087D368 /* IGRoomManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA3D947B1E6AA9580087D368 /* IGRoomManager.swift */; };
 		FA401FA41E10F80500A50C5A /* IGLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA401FA31E10F80500A50C5A /* IGLabel.swift */; };
-		FA416B9420D904AE0013DB17 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FA416B9320D904AE0013DB17 /* GoogleService-Info.plist */; };
 		FA41C6F01DC9DFD600598383 /* IGGlobal.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA41C6EF1DC9DFD600598383 /* IGGlobal.swift */; };
 		FA42EEF81E5C205D00CF8A32 /* IGImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA42EEF71E5C205D00CF8A32 /* IGImageView.swift */; };
 		FA42EF081E5C224F00CF8A32 /* AnimatedFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA42EEFB1E5C224F00CF8A32 /* AnimatedFrame.swift */; };
@@ -293,6 +292,7 @@
 		FAD959071F48D4EF00FBD306 /* IGSettingQrScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD959061F48D4EF00FBD306 /* IGSettingQrScannerViewController.swift */; };
 		FADE97B31DF2DBF100FF714A /* IGMusicPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADE97B21DF2DBF100FF714A /* IGMusicPlayer.swift */; };
 		FAE11243204E96FA009F402B /* IGCallsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE11242204E96FA009F402B /* IGCallsTableViewController.swift */; };
+		FAE1698F20E746DC008FE881 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FAE1698E20E746DC008FE881 /* GoogleService-Info.plist */; };
 		FAE6BAB2207B537B00E54ECE /* MKHipsterTileOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE6BAB1207B537B00E54ECE /* MKHipsterTileOverlay.swift */; };
 		FAEA75D91DDAFFA200C387F1 /* IGRoomMessageLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAEA75D81DDAFFA200C387F1 /* IGRoomMessageLocation.swift */; };
 		FAEA75DB1DDB012800C387F1 /* IGRoomMessageLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAEA75DA1DDB012800C387F1 /* IGRoomMessageLog.swift */; };
@@ -471,7 +471,6 @@
 		FA3C8E031E6D785800D94FBB /* IGClientActionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGClientActionManager.swift; sourceTree = "<group>"; };
 		FA3D947B1E6AA9580087D368 /* IGRoomManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGRoomManager.swift; sourceTree = "<group>"; };
 		FA401FA31E10F80500A50C5A /* IGLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGLabel.swift; sourceTree = "<group>"; };
-		FA416B9320D904AE0013DB17 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Desktop/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FA41C6EF1DC9DFD600598383 /* IGGlobal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGGlobal.swift; sourceTree = "<group>"; };
 		FA42EEF71E5C205D00CF8A32 /* IGImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGImageView.swift; sourceTree = "<group>"; };
 		FA42EEFB1E5C224F00CF8A32 /* AnimatedFrame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatedFrame.swift; sourceTree = "<group>"; };
@@ -632,6 +631,7 @@
 		FAE11242204E96FA009F402B /* IGCallsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGCallsTableViewController.swift; sourceTree = "<group>"; };
 		FAE11244204E9813009F402B /* IGCallListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGCallListTableViewCell.swift; sourceTree = "<group>"; };
 		FAE11246204E982D009F402B /* IGCallListTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = IGCallListTableViewCell.xib; sourceTree = "<group>"; };
+		FAE1698E20E746DC008FE881 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FAE6BAB1207B537B00E54ECE /* MKHipsterTileOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MKHipsterTileOverlay.swift; sourceTree = "<group>"; };
 		FAEA75D81DDAFFA200C387F1 /* IGRoomMessageLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGRoomMessageLocation.swift; sourceTree = "<group>"; };
 		FAEA75DA1DDB012800C387F1 /* IGRoomMessageLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGRoomMessageLog.swift; sourceTree = "<group>"; };
@@ -1413,9 +1413,9 @@
 			children = (
 				FA752C321E1EC571008694C6 /* iGap.entitlements */,
 				FA5097D21DEDA18000A44699 /* iGap-Bridging-Header.h */,
+				FAE1698E20E746DC008FE881 /* GoogleService-Info.plist */,
 				FAB8210D20D7D583003938BB /* Firebase.h */,
 				FAF796091DAA39460030509B /* Info.plist */,
-				FA416B9320D904AE0013DB17 /* GoogleService-Info.plist */,
 				FAB8210E20D7D589003938BB /* module.modulemap */,
 				FA27F74120BD780300EC6A97 /* secret.key */,
 				FA27F73F20BD77ED00EC6A97 /* api.key */,
@@ -1595,7 +1595,6 @@
 				FAF7960A1DAA39460030509B /* Info.plist in Resources */,
 				FA4BD8A41DF2A53400CCB239 /* IGMusicViewController.xib in Resources */,
 				FA93EE2A2029A41200DD1521 /* VoiceCell.xib in Resources */,
-				FA416B9420D904AE0013DB17 /* GoogleService-Info.plist in Resources */,
 				FA927E0E20288AEE00DF7145 /* FileCell.xib in Resources */,
 				FA8F8A69208602AB00AF03CB /* IGMapNearbyDistanceCell.xib in Resources */,
 				FA0CC80A1E5D7D4400556283 /* Info.plist in Resources */,
@@ -1607,6 +1606,7 @@
 				FAF796061DAA392F0030509B /* LaunchScreen.storyboard in Resources */,
 				FA97D444201716270087BBD0 /* TextCell.xib in Resources */,
 				FAB0F9461FE956D1008F23EB /* Splash.gif in Resources */,
+				FAE1698F20E746DC008FE881 /* GoogleService-Info.plist in Resources */,
 				FAF796051DAA392F0030509B /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
