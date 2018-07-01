@@ -79,9 +79,18 @@ class IGChannelsTableViewController: UITableViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        if AppDelegate.isFirstEnterToApp {
+            DispatchQueue.main.async {
+                self.tabBarController?.selectedIndex = 2
+            }
+        } else {
+            if let navigationItem = self.tabBarController?.navigationItem as? IGNavigationItem {
+                navigationItem.addiGapLogo()
+            }
+        }
+        
         super.viewWillAppear(animated)
         self.tableView.isUserInteractionEnabled = true
-        //self.setTabbarHidden(false, animated: true)
     }
     
     override func viewWillDisappear(_ animated: Bool) {

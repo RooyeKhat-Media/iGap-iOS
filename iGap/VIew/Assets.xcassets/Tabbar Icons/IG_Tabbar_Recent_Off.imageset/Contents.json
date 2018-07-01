@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "IG_Tabbar_Recent_Off.png",
+      "filename" : "Asset 74ldpi.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "IG_Tabbar_Recent_Off@2x.png",
+      "filename" : "Asset 60ldpi.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "IG_Tabbar_Recent_Off@3x.png",
+      "filename" : "Asset 50ldpi.png",
       "scale" : "3x"
     }
   ],

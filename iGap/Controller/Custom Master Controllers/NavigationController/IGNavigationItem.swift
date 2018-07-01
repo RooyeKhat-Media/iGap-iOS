@@ -257,7 +257,7 @@ class IGNavigationItem: UINavigationItem {
         leftViewContainer!.backgroundColor = UIColor.clear
         let leftBarButton = UIBarButtonItem(customView: leftViewContainer!)
         self.leftBarButtonItem = leftBarButton
-        let settingViewFrame = CGRect(x: 3, y: 4.5, width: 31, height:31)
+        let settingViewFrame = CGRect(x: 3, y: 6.5, width: 25, height:25)
         let settingButtonImageView = UIImageView(frame: settingViewFrame)
         settingButtonImageView.image = UIImage(named:"IG_Nav_Bar_Menu")
         settingButtonImageView.tintColor = UIColor.organizationalColor()
@@ -265,26 +265,60 @@ class IGNavigationItem: UINavigationItem {
     }
     
     private func addComopseButton() {
-        let composeButtonFrame = CGRect(x: 10, y: 7.5, width: 25, height: 25)
+        let composeButtonFrame = CGRect(x: 10, y: 7.5, width: 21, height: 21)
         let composeButtonImageView = UIImageView(frame: composeButtonFrame)
         composeButtonImageView.image = UIImage(named:"IG_Nav_Bar_Plus")
         composeButtonImageView.tintColor = UIColor.organizationalColor()
         rightViewContainer!.addSubview(composeButtonImageView)
     }
     
-    private func addiGapLogo() {
+    func addiGapLogo() {
         
         if IGCall.callPageIsEnable {
             return
         }
         
-        let titleView = UIView(frame: CGRect(x: 0, y: 0, width: 67, height: 40))
-        let logoImageView = UIImageView(frame: CGRect(x: 0, y: 8, width: 67, height: 23))
-        logoImageView.image = UIImage(named: "IG_Nav_Bar_Logo")
-        logoImageView.contentMode = .scaleAspectFit
+        if IGAppManager.connectionStatusStatic == IGAppManager.ConnectionStatus.waitingForNetwork || IGAppManager.connectionStatusStatic == IGAppManager.ConnectionStatus.connecting {
+            return
+        }
         
-        titleView.addSubview(logoImageView)
-        self.titleView = titleView
+        if IGTabBarController.currentTabStatic == .Recent || AppDelegate.isFirstEnterToApp {
+            AppDelegate.isFirstEnterToApp = false
+            let titleView = UIView(frame: CGRect(x: 0, y: 0, width: 67, height: 40))
+            let logoImageView = UIImageView(frame: CGRect(x: 0, y: 8, width: 67, height: 23))
+            logoImageView.image = UIImage(named: "IG_Nav_Bar_Logo")
+            logoImageView.contentMode = .scaleAspectFit
+            titleView.addSubview(logoImageView)
+            
+            self.titleView = titleView
+        } else {
+            
+            var title = ""
+            var width: Double!
+            
+            if IGTabBarController.currentTabStatic == .Chat {
+                title = "Chats"
+                width = 60
+            } else if IGTabBarController.currentTabStatic == .Group {
+                title = "Groups"
+                width = 65
+            } else if IGTabBarController.currentTabStatic == .Channel {
+                title = "Channels"
+                width = 80
+            } else if IGTabBarController.currentTabStatic == .Call {
+                title = "Calls History"
+                width = 110
+            }
+            
+            let titleView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 40))
+            let lableView = UILabel(frame: CGRect(x: 0, y: 8, width: width, height: 23))
+            lableView.text = title
+            lableView.textColor = UIColor.white
+            lableView.font = UIFont.systemFont(ofSize: 17.0, weight: UIFontWeightBold)
+            
+            titleView.addSubview(lableView)
+            self.titleView = titleView
+        }
     }
     
     //MARK: - Messages View

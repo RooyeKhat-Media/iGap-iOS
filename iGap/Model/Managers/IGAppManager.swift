@@ -29,6 +29,7 @@ class IGAppManager: NSObject {
     
     var realm = try! Realm()
     var connectionStatus: Variable<ConnectionStatus>
+    static var connectionStatusStatic: IGAppManager.ConnectionStatus?
     var isUserLoggedIn:   Variable<Bool>
     var isTryingToLoginUser: Bool = false
     var currentMessagesNotificationToekn: NotificationToken?

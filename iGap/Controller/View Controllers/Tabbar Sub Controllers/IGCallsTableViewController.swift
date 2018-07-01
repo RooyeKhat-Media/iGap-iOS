@@ -76,6 +76,9 @@ class IGCallsTableViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        if let navigationItem = self.tabBarController?.navigationItem as? IGNavigationItem {
+            navigationItem.addiGapLogo()
+        }
         self.tableView.isUserInteractionEnabled = true
     }
     

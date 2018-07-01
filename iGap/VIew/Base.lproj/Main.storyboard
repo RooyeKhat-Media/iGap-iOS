@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="QWV-7y-MRV">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="QWV-7y-MRV">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -145,7 +145,8 @@
                             <outlet property="delegate" destination="o0F-fe-2yc" id="2yW-Zi-QR1"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" title="Recents" image="IG_Tabbar_Recent_Off" selectedImage="IG_Tabbar_Recent_On" id="vth-sK-lcp">
+                    <tabBarItem key="tabBarItem" title="" image="IG_Tabbar_Recent_Off" selectedImage="IG_Tabbar_Recent_On" id="vth-sK-lcp">
+                        <inset key="imageInsets" minX="0.0" minY="60" maxX="0.0" maxY="45"/>
                         <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="-4"/>
                     </tabBarItem>
                     <navigationItem key="navigationItem" title="Recents" id="uni-kb-OpQ" customClass="IGNavigationItem" customModule="iGap" customModuleProvider="target"/>
@@ -942,11 +943,11 @@
                         <color key="barTintColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
                     </tabBar>
                     <connections>
-                        <segue destination="o0F-fe-2yc" kind="relationship" relationship="viewControllers" id="Sxn-0i-l9f"/>
-                        <segue destination="lnn-LO-l7t" kind="relationship" relationship="viewControllers" id="CKs-ZR-Hfw"/>
-                        <segue destination="XTU-9B-zWi" kind="relationship" relationship="viewControllers" id="4mB-0X-6CE"/>
-                        <segue destination="ZlR-QV-eEC" kind="relationship" relationship="viewControllers" id="CPP-s5-buA"/>
-                        <segue destination="A1t-3N-bJQ" kind="relationship" relationship="viewControllers" id="Xcb-xq-sDT"/>
+                        <segue destination="ZlR-QV-eEC" kind="relationship" relationship="viewControllers" id="XTH-Hc-wGO"/>
+                        <segue destination="XTU-9B-zWi" kind="relationship" relationship="viewControllers" id="Dxv-eH-nJp"/>
+                        <segue destination="o0F-fe-2yc" kind="relationship" relationship="viewControllers" id="Tgr-QN-Ayr"/>
+                        <segue destination="lnn-LO-l7t" kind="relationship" relationship="viewControllers" id="kaU-E8-kZj"/>
+                        <segue destination="A1t-3N-bJQ" kind="relationship" relationship="viewControllers" id="DM2-A2-xep"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lET-3R-lG0" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -981,7 +982,8 @@
                             <outlet property="delegate" destination="lnn-LO-l7t" id="FYQ-bx-fPF"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" tag="1" title="Chat" image="IG_Tabbar_Chat_Off" selectedImage="IG_Tabbar_Chat_On" id="XT3-ee-7Kk">
+                    <tabBarItem key="tabBarItem" tag="1" title="" image="IG_Tabbar_Chat_Off" selectedImage="IG_Tabbar_Chat_On" id="XT3-ee-7Kk">
+                        <inset key="imageInsets" minX="0.0" minY="60" maxX="0.0" maxY="45"/>
                         <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="-4"/>
                     </tabBarItem>
                     <navigationItem key="navigationItem" title="Chats" id="O9t-Iy-ktM"/>
@@ -1041,7 +1043,8 @@
                             <outlet property="delegate" destination="XTU-9B-zWi" id="4bf-Rf-bJE"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" tag="2" title="Group Chat" image="IG_Tabbar_Group_Off" selectedImage="IG_Tabbar_Group_On" id="Q4u-T1-NQz">
+                    <tabBarItem key="tabBarItem" tag="2" title="" image="IG_Tabbar_Group_Off" selectedImage="IG_Tabbar_Group_On" id="Q4u-T1-NQz">
+                        <inset key="imageInsets" minX="0.0" minY="60" maxX="0.0" maxY="45"/>
                         <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="-4"/>
                     </tabBarItem>
                     <navigationItem key="navigationItem" title="Groups" id="lxH-uI-Dp1"/>
@@ -1082,7 +1085,8 @@
                             <outlet property="delegate" destination="ZlR-QV-eEC" id="KCK-y5-chT"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" tag="3" title="Channel" image="IG_Tabbar_Channel_Off" selectedImage="IG_Tabbar_Channel_On" id="ZvZ-OM-omQ">
+                    <tabBarItem key="tabBarItem" tag="3" title="" image="IG_Tabbar_Channel_Off" selectedImage="IG_Tabbar_Channel_On" id="ZvZ-OM-omQ">
+                        <inset key="imageInsets" minX="0.0" minY="60" maxX="0.0" maxY="45"/>
                         <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="-4"/>
                     </tabBarItem>
                     <navigationItem key="navigationItem" title="Channel" id="PXt-DS-2oY"/>
@@ -1118,7 +1122,8 @@
                             <outlet property="delegate" destination="A1t-3N-bJQ" id="aVG-Q6-WUL"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" tag="4" title="Call" image="IG_Tabbar_Call_Off" selectedImage="IG_Tabbar_Call_On" id="oqI-zk-FQV">
+                    <tabBarItem key="tabBarItem" tag="4" title="" image="IG_Tabbar_Call_Off" selectedImage="IG_Tabbar_Call_On" id="oqI-zk-FQV">
+                        <inset key="imageInsets" minX="0.0" minY="60" maxX="0.0" maxY="45"/>
                         <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="-4"/>
                     </tabBarItem>
                     <navigationItem key="navigationItem" title="Call" id="ata-Zx-iH3"/>
@@ -1454,21 +1459,21 @@
         <image name="IG_Location_arrow" width="32" height="32"/>
         <image name="IG_Settings_About" width="32" height="32"/>
         <image name="IG_Splash_Cute_5" width="162" height="125"/>
-        <image name="IG_Tabbar_Call_Off" width="25" height="25"/>
-        <image name="IG_Tabbar_Call_On" width="25" height="25"/>
-        <image name="IG_Tabbar_Channel_Off" width="25" height="25"/>
-        <image name="IG_Tabbar_Channel_On" width="25" height="25"/>
-        <image name="IG_Tabbar_Chat_Off" width="25" height="25"/>
-        <image name="IG_Tabbar_Chat_On" width="25" height="25"/>
-        <image name="IG_Tabbar_Group_Off" width="25" height="25"/>
-        <image name="IG_Tabbar_Group_On" width="25" height="25"/>
-        <image name="IG_Tabbar_Recent_Off" width="25" height="25"/>
-        <image name="IG_Tabbar_Recent_On" width="25" height="25"/>
+        <image name="IG_Tabbar_Call_Off" width="37" height="37"/>
+        <image name="IG_Tabbar_Call_On" width="37" height="37"/>
+        <image name="IG_Tabbar_Channel_Off" width="37" height="37"/>
+        <image name="IG_Tabbar_Channel_On" width="37" height="37"/>
+        <image name="IG_Tabbar_Chat_Off" width="37" height="37"/>
+        <image name="IG_Tabbar_Chat_On" width="37" height="37"/>
+        <image name="IG_Tabbar_Group_Off" width="37" height="37"/>
+        <image name="IG_Tabbar_Group_On" width="37" height="37"/>
+        <image name="IG_Tabbar_Recent_Off" width="37" height="37"/>
+        <image name="IG_Tabbar_Recent_On" width="37" height="37"/>
         <image name="back1" width="450" height="800"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="k9M-cr-cw2"/>
-        <segue reference="R4P-x7-LEg"/>
+        <segue reference="skX-lt-yXs"/>
+        <segue reference="4Pl-n5-pIH"/>
         <segue reference="QJB-pO-R8A"/>
     </inferredMetricsTieBreakers>
 </document>
