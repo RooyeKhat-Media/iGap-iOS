@@ -131,6 +131,8 @@
 		FA11E28D1DE99BF400A2F87C /* IGFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA11E28C1DE99BF400A2F87C /* IGFactory.swift */; };
 		FA1C449C1DC716A20016C346 /* IGCountry.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1C449B1DC716A20016C346 /* IGCountry.swift */; };
 		FA27F74020BD77ED00EC6A97 /* api.key in Sources */ = {isa = PBXBuildFile; fileRef = FA27F73F20BD77ED00EC6A97 /* api.key */; };
+		FA2A506720ECABD9002C5322 /* IGFinancialServiceCharge.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2A506620ECABD9002C5322 /* IGFinancialServiceCharge.swift */; };
+		FA2A506920ECAC02002C5322 /* IGFinancialServiceBill.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2A506820ECAC02002C5322 /* IGFinancialServiceBill.swift */; };
 		FA3306361F445A570096031A /* IRANSans.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FA3306351F445A570096031A /* IRANSans.ttf */; };
 		FA33063B1F445AE80096031A /* IRANSans_Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FA3306371F445AE80096031A /* IRANSans_Bold.ttf */; };
 		FA33063C1F445AE80096031A /* IRANSans_Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FA3306381F445AE80096031A /* IRANSans_Light.ttf */; };
@@ -457,6 +459,8 @@
 		FA1C449B1DC716A20016C346 /* IGCountry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGCountry.swift; sourceTree = "<group>"; };
 		FA27F73F20BD77ED00EC6A97 /* api.key */ = {isa = PBXFileReference; lastKnownFileType = text; path = api.key; sourceTree = "<group>"; };
 		FA27F74120BD780300EC6A97 /* secret.key */ = {isa = PBXFileReference; lastKnownFileType = text; path = secret.key; sourceTree = "<group>"; };
+		FA2A506620ECABD9002C5322 /* IGFinancialServiceCharge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGFinancialServiceCharge.swift; sourceTree = "<group>"; };
+		FA2A506820ECAC02002C5322 /* IGFinancialServiceBill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGFinancialServiceBill.swift; sourceTree = "<group>"; };
 		FA3306351F445A570096031A /* IRANSans.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = IRANSans.ttf; sourceTree = "<group>"; };
 		FA3306371F445AE80096031A /* IRANSans_Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = IRANSans_Bold.ttf; sourceTree = "<group>"; };
 		FA3306381F445AE80096031A /* IRANSans_Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = IRANSans_Light.ttf; sourceTree = "<group>"; };
@@ -766,15 +770,16 @@
 		FA087B2C1DC4A27200E139FA /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				FA865C732078A2D700B9D585 /* Map */,
 				FA03C19A20429437008812E3 /* Call */,
 				93AA67B81E4F03290053380C /* Channel and Group Info */,
+				FA77C2A51E2B85D2001B2152 /* Chat and User Info */,
+				FA2A506520ECAAE7002C5322 /* Financial Services */,
+				FA96A8162053FC0C004369C7 /* Look And Find */,
+				FA865C732078A2D700B9D585 /* Map */,
+				FA09530D1E1B97590043ED3F /* New Conversation */,
+				FA0953081E1B88660043ED3F /* Setting */,
 				FA50A8C61DD35EFD00C6D2EA /* Splash and Register */,
 				FA68A20F1DD9B0CD003A6651 /* Tabbar Sub Controllers */,
-				FA77C2A51E2B85D2001B2152 /* Chat and User Info */,
-				FA09530D1E1B97590043ED3F /* New Conversation */,
-				FA96A8162053FC0C004369C7 /* Look And Find */,
-				FA0953081E1B88660043ED3F /* Setting */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -895,6 +900,15 @@
 				FA11E28C1DE99BF400A2F87C /* IGFactory.swift */,
 			);
 			path = Factories;
+			sourceTree = "<group>";
+		};
+		FA2A506520ECAAE7002C5322 /* Financial Services */ = {
+			isa = PBXGroup;
+			children = (
+				FA2A506820ECAC02002C5322 /* IGFinancialServiceBill.swift */,
+				FA2A506620ECABD9002C5322 /* IGFinancialServiceCharge.swift */,
+			);
+			path = "Financial Services";
 			sourceTree = "<group>";
 		};
 		FA2EBB911E2F44BD00BD8E9F /* Assets */ = {
@@ -1769,6 +1783,7 @@
 				FA03C1A220429DB5008812E3 /* AVCaptureState.swift in Sources */,
 				FA42EF091E5C224F00CF8A32 /* Animator.swift in Sources */,
 				FAD580971DDC61DD00A242DE /* IGMessageCollectionView.swift in Sources */,
+				FA2A506720ECABD9002C5322 /* IGFinancialServiceCharge.swift in Sources */,
 				FAB2C2DF1DF7F6E8001F30B5 /* IGSessionInfo.swift in Sources */,
 				931585151E6D567000F4C04B /* IGUserPrivacy.swift in Sources */,
 				FA0953831E1B97E20043ED3F /* IGChooseMemberFromContactsToCreateGroup.swift in Sources */,
@@ -1851,6 +1866,7 @@
 				FA927E002028416300DF7145 /* VideoCell.swift in Sources */,
 				FA0953561E1B97700043ED3F /* IGSettingChatTableViewController.swift in Sources */,
 				FAD5808F1DDC5C1900A242DE /* IGMessageGeneralCollectionViewCell.swift in Sources */,
+				FA2A506920ECAC02002C5322 /* IGFinancialServiceBill.swift in Sources */,
 				FA5E159F1E0FFFD800EC19A1 /* IGTappableView.swift in Sources */,
 				FA0953701E1B97700043ED3F /* IGSettingsChatStickersModalView.swift in Sources */,
 				FA5EC5DA1E06728C006E2850 /* IGChatRoomListTableViewCell.swift in Sources */,

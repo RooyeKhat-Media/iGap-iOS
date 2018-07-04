@@ -334,21 +334,23 @@ class IGSettingTableViewController: UITableViewController , NVActivityIndicatorV
                 self.tableView.isUserInteractionEnabled = false
                 performSegue(withIdentifier: "showLookAndFind", sender: self)
             } else if indexPath.row == 4 {
+                manageFinancialServiceChoose()
+            } else if indexPath.row == 5 {
                 self.tableView.isUserInteractionEnabled = false
                 performSegue(withIdentifier: "GoToPrivacyAndPolicySettingsPage", sender: self)
-            } else if indexPath.row == 5 {
+            } else if indexPath.row == 6 {
                 shareContent = "Hey Join iGap and start new connection with friends and family for free, no matter what device they are on!\niGap Limitless Connection\nwww.iGap.net"
                 let activityViewController = UIActivityViewController(activityItems: [shareContent as NSString], applicationActivities: nil)
                 present(activityViewController, animated: true, completion: {})
-            } else if indexPath.row == 6 {
+            } else if indexPath.row == 7 {
                 self.tableView.isUserInteractionEnabled = false
                 performSegue(withIdentifier: "GoToAboutSettingPage", sender: self)
-            } else if indexPath.row == 7 {
-                showLogoutActionSheet()
             } else if indexPath.row == 8 {
+                showLogoutActionSheet()
+            } else if indexPath.row == 9 {
                 self.tableView.isUserInteractionEnabled = false
                 performSegue(withIdentifier: "GoToChatSettingPage", sender: self)
-            } else if indexPath.row == 9 {
+            } else if indexPath.row == 10 {
                 self.tableView.isUserInteractionEnabled = false
                 performSegue(withIdentifier: "GoToNotificationSettingsPage", sender: self)
             }
@@ -383,6 +385,26 @@ class IGSettingTableViewController: UITableViewController , NVActivityIndicatorV
         } else if status == .authorizedWhenInUse || status == .authorizedAlways {
             openMap()
         }
+    }
+    
+    func manageFinancialServiceChoose(){
+        let option = UIAlertController(title: "Financial Services", message: "Please choose your financial services", preferredStyle: IGGlobal.detectAlertStyle())
+        
+        let mobileCharge = UIAlertAction(title: "Mobile Charge", style: .default, handler: { (action) in
+            self.performSegue(withIdentifier: "showFinancialServiceCharge", sender: self)
+        })
+        
+        let payBills = UIAlertAction(title: "Pay Bill", style: .default, handler: { (action) in
+            self.performSegue(withIdentifier: "showFinancialServiceBill", sender: self)
+        })
+        
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        option.addAction(mobileCharge)
+        option.addAction(payBills)
+        option.addAction(cancel)
+        
+        self.present(option, animated: true, completion: {})
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {

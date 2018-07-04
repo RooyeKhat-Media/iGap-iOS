@@ -45,11 +45,11 @@ class IGSettingAddContactViewController: UIViewController, UIGestureRecognizerDe
     private func makeView(){
         btnChooseCountry.layer.cornerRadius = 5
         btnChooseCountry.layer.borderWidth = 1
-        btnChooseCountry.layer.borderColor = UIColor.black.cgColor
+        btnChooseCountry.layer.borderColor = UIColor.iGapColor().cgColor
         
         txtCountryCode.layer.cornerRadius = 5
         txtCountryCode.layer.borderWidth = 1
-        txtCountryCode.layer.borderColor = UIColor.black.cgColor
+        txtCountryCode.layer.borderColor = UIColor.iGapColor().cgColor
     }
     
     private func addContact(){
