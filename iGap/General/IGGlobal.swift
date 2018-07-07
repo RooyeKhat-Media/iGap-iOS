@@ -614,7 +614,7 @@ extension String {
         return NSLocalizedString(self, tableName: nil, bundle: Bundle.main, value: "", comment: "")
     }
     
-    func sunbstring(offset: Int) -> String{
+    func substring(offset: Int) -> String{
         let index = self.index(self.startIndex, offsetBy: offset)
         return String(self.prefix(upTo: index))
     }

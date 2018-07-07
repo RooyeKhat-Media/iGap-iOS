@@ -10,12 +10,13 @@
 
 import UIKit
 import IGProtoBuff
+import PecPayment
 
 protocol AlertClouser {
     func onActionClick(title: String)
 }
 
-class IGFinancialServiceCharge: UIViewController, UIGestureRecognizerDelegate, UITextFieldDelegate {
+class IGFinancialServiceCharge: UIViewController, UIGestureRecognizerDelegate, UITextFieldDelegate, MerchantResultObserver, TopupMerchantResultObserver {
 
     @IBOutlet weak var edtPhoneNubmer: UITextField!
     @IBOutlet weak var txtOperatorTransport: UILabel!
@@ -37,11 +38,11 @@ class IGFinancialServiceCharge: UIViewController, UIGestureRecognizerDelegate, U
     let wimaxCharge = "Wimax"
     let permanently = "Permanently SIM Card"
     
-    let P1000 = 10000
-    let P2000 = 20000
-    let P5000 = 50000
-    let P10000 = 100000
-    let P20000 = 200000
+    let P1000: Int64 = 10000
+    let P2000: Int64 = 20000
+    let P5000: Int64 = 50000
+    let P10000: Int64 = 100000
+    let P20000: Int64 = 200000
     let rials = "Rials"
     
     var operatorDictionary: [String:IGOperator] =
@@ -167,6 +168,18 @@ class IGFinancialServiceCharge: UIViewController, UIGestureRecognizerDelegate, U
         option.addAction(ok)
         self.present(option, animated: true, completion: {})
     }
+
+    private func initPaymanet(token: String){
+        var initpayment = InitPayment()
+        initpayment.registerPay(merchant : self)
+        initpayment.initPay(Token: token, MerchantVCArg: self, TSPEnabled: 0)
+    }
+    
+    private func registerTopup(token: String){
+        let initpayment = InitPayment()
+        initpayment.registerTopup(merchant: self)
+        initpayment.initTopupPayment(Token: token, MerchantVCArg: self, TSPEnabled: 0)
+    }
     
     /*********************************************************/
     /********************* User Actions **********************/
@@ -264,14 +277,19 @@ class IGFinancialServiceCharge: UIViewController, UIGestureRecognizerDelegate, U
         showAlertView(title: "Charge Price", message: nil, subtitles: chargePrice, alertClouser: { (title) -> Void in
             switch title {
             case "\(self.P1000) \(self.rials)":
+                self.chargeAmount = self.P1000
                 break
             case "\(self.P2000) \(self.rials)":
+                self.chargeAmount = self.P2000
                 break
             case "\(self.P5000) \(self.rials)":
+                self.chargeAmount = self.P5000
                 break
             case "\(self.P10000) \(self.rials)":
+                self.chargeAmount = self.P10000
                 break
             case "\(self.P20000) \(self.rials)":
+                self.chargeAmount = self.P20000
                 break
             default:
                 break
@@ -287,19 +305,25 @@ class IGFinancialServiceCharge: UIViewController, UIGestureRecognizerDelegate, U
             return
         }
         
-        if (phoneNumber.characters.count) < 11 || (operatorDictionary[(phoneNumber!.sunbstring(offset: 4))] != nil) {
+        if (phoneNumber.characters.count) < 11 || (operatorDictionary[(phoneNumber!.substring(offset: 4))] == nil) {
             showErrorAlertView(title: "Error", message: "phone number is wrong!")
             return
         }
         
         if operatorChargeType == nil || chargeAmount == nil {
             showErrorAlertView(title: "Error", message: "Please complete all options!")
+            return
         }
         
         
         IGMplGetTopupToken.Generator.generate(number: Int64(phoneNumber!)!, amount: chargeAmount, type: operatorChargeType).success({ (protoResponse) in
             if let getTokenResponse = protoResponse as? IGPMplGetTopupTokenResponse {
-                
+                print("Status: \(getTokenResponse.igpStatus)")
+                if getTokenResponse.igpStatus == 0 { //success
+                    self.registerTopup(token: getTokenResponse.igpToken)
+                } else {
+                    self.showErrorAlertView(title: "خطا", message: getTokenResponse.igpMessage)
+                }
             }
         }).error ({ (errorCode, waitTime) in
             switch errorCode {
@@ -317,6 +341,29 @@ class IGFinancialServiceCharge: UIViewController, UIGestureRecognizerDelegate, U
         }).send()
     }
     
+    
+    /*********************************************************/
+    /*************** Overrided Payment Mehtods ***************/
+    /*********************************************************/
+    
+    func TopupMerchantUpdate(encData: String, message: String, status: Int) {
+        
+    }
+    
+    func TopupMerchantError(errorType: Int) {
+        showErrorAlertView(title: "Payment Error", message: "Payment error occurred!")
+    }
+    
+    
+    
+    func update(encData: String, message: String, status: Int) {
+        
+    }
+    
+    func error(errorType: Int, orderID: Int) {
+        
+    }
+    
     /*********************************************************/
     /******************* Overrided Method ********************/
     /*********************************************************/
@@ -331,8 +378,7 @@ class IGFinancialServiceCharge: UIViewController, UIGestureRecognizerDelegate, U
         if let text = edtPhoneNubmer.text {
             let newLength = text.characters.count + string.characters.count - range.length
             if (newLength == PHONE_LENGTH) {
-                operatorTypeBackup = operatorDictionary[text.sunbstring(offset: 4)]
-                print("Operator \(operatorTypeBackup)")
+                operatorTypeBackup = operatorDictionary[text.substring(offset: 4)]
                 if !operatorTransport {
                     operatorType = operatorTypeBackup
                 }
