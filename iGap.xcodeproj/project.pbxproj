@@ -264,6 +264,7 @@
 		FAA9DFBE1F4B23390076A22F /* IGTwoStepVerification.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA9DFBD1F4B23380076A22F /* IGTwoStepVerification.swift */; };
 		FAAC57D31DE2CE9F00A28058 /* IGDownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAAC57D21DE2CE9F00A28058 /* IGDownloadManager.swift */; };
 		FAAEAC5520E0EAEF00A1EAE5 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FAAEAC5720E0EAEF00A1EAE5 /* Localizable.strings */; };
+		FAAFB63E20F099F3004D8CCD /* IGMplRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAAFB63D20F099F3004D8CCD /* IGMplRequest.swift */; };
 		FAAFD434208375AA003470B3 /* IGGeoRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAAFD433208375AA003470B3 /* IGGeoRequest.swift */; };
 		FAB09D9B1DB76F81001A27C4 /* IGRequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB09D9A1DB76F81001A27C4 /* IGRequestManager.swift */; };
 		FAB0F9461FE956D1008F23EB /* Splash.gif in Resources */ = {isa = PBXBuildFile; fileRef = FAB0F9451FE956D1008F23EB /* Splash.gif */; };
@@ -600,6 +601,7 @@
 		FAAEAC5620E0EAEF00A1EAE5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		FAAEAC5820E0EAF100A1EAE5 /* fa-IR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "fa-IR"; path = "fa-IR.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		FAAEAC5A20E0EEFB00A1EAE5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
+		FAAFB63D20F099F3004D8CCD /* IGMplRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGMplRequest.swift; sourceTree = "<group>"; };
 		FAAFD433208375AA003470B3 /* IGGeoRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGGeoRequest.swift; sourceTree = "<group>"; };
 		FAB09D9A1DB76F81001A27C4 /* IGRequestManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IGRequestManager.swift; path = "Request Manager/IGRequestManager.swift"; sourceTree = "<group>"; };
 		FAB0F9451FE956D1008F23EB /* Splash.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = Splash.gif; sourceTree = "<group>"; };
@@ -1093,6 +1095,7 @@
 				FA6A22771F41D73E0063DF07 /* IGRequestQrCode.swift */,
 				DF3336180FA238BCCE8F3FB9 /* IGRequestSignaling.swift */,
 				4F9F3E691EBA0D91008E05C1 /* IGPushResponse.swift */,
+				FAAFB63D20F099F3004D8CCD /* IGMplRequest.swift */,
 				FAAFD433208375AA003470B3 /* IGGeoRequest.swift */,
 			);
 			path = Requests;
@@ -1913,6 +1916,7 @@
 				FA0953691E1B97700043ED3F /* IGSettingPrivacyAndScurityAutoLockAfterTableViewController.swift in Sources */,
 				FA930D9A1E5B178F00069EE1 /* SSLSecurity.swift in Sources */,
 				FA9CE15B2068DF4F0056C866 /* IGSelectCountryCell.swift in Sources */,
+				FAAFB63E20F099F3004D8CCD /* IGMplRequest.swift in Sources */,
 				FA63BA9B1DD6DF32000B60AD /* IGUploadManager.swift in Sources */,
 				FA0953531E1B97700043ED3F /* IGSettingChatStickerModalCollectionViewCell.swift in Sources */,
 				FA8F224C1DD89910005A90D1 /* IGRoom.swift in Sources */,

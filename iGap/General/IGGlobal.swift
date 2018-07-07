@@ -613,6 +613,11 @@ extension String {
     var localized: String {
         return NSLocalizedString(self, tableName: nil, bundle: Bundle.main, value: "", comment: "")
     }
+    
+    func sunbstring(offset: Int) -> String{
+        let index = self.index(self.startIndex, offsetBy: offset)
+        return String(self.prefix(upTo: index))
+    }
 }
 
 extension Array where Element: Hashable {
