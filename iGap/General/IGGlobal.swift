@@ -618,6 +618,12 @@ extension String {
         let index = self.index(self.startIndex, offsetBy: offset)
         return String(self.prefix(upTo: index))
     }
+    
+    subscript(_ range: CountableRange<Int>) -> String {
+        let idx1 = index(startIndex, offsetBy: max(0, range.lowerBound))
+        let idx2 = index(startIndex, offsetBy: min(self.count, range.upperBound))
+        return String(self[idx1..<idx2])
+    }
 }
 
 extension Array where Element: Hashable {

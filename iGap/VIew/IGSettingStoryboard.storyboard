@@ -4028,17 +4028,106 @@ Please wait 0:59</string>
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Financial Services Bill" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I2b-fV-jHe">
-                                <rect key="frame" x="125" y="358" width="164" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wH2-zL-2Br">
+                                <rect key="frame" x="36" y="84" width="342" height="40"/>
+                                <color key="backgroundColor" red="0.2058030589" green="0.74759840899999996" blue="0.79368454219999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="tIl-5n-cRA"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <state key="normal" title="Barcode Scanner ">
+                                    <color key="titleColor" red="0.98179232750000001" green="0.98184645459999997" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="btnQrScanner:" destination="bfj-3q-FFV" eventType="touchUpInside" id="QmW-1U-wcg"/>
+                                </connections>
+                            </button>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Billing ID" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="kgY-ll-9Qn">
+                                <rect key="frame" x="36" y="149" width="342" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="U8g-li-uET"/>
+                                </constraints>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                                <connections>
+                                    <action selector="edtBillingID:" destination="bfj-3q-FFV" eventType="editingChanged" id="vYJ-FU-sLR"/>
+                                </connections>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Payment Code" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="BZQ-QK-MtP">
+                                <rect key="frame" x="36" y="197" width="342" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="8Ps-C4-yfu"/>
+                                </constraints>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                                <connections>
+                                    <action selector="edtPaymentCode:" destination="bfj-3q-FFV" eventType="editingChanged" id="ogw-GR-Gh4"/>
+                                </connections>
+                            </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Amount (Rials)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9I4-Rf-Ta0">
+                                <rect key="frame" x="36" y="245" width="342" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="nFI-qW-zwk"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h2X-ES-mU3">
+                                <rect key="frame" x="36" y="410" width="342" height="40"/>
+                                <color key="backgroundColor" red="0.2058030589" green="0.74759840899999996" blue="0.79368454219999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="LXf-BG-kZy"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                                <state key="normal" title="Payment">
+                                    <color key="titleColor" red="0.98179232750000001" green="0.98184645459999997" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="btnPayment:" destination="bfj-3q-FFV" eventType="touchUpInside" id="4LK-Fw-JDo"/>
+                                </connections>
+                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="JfV-9P-nDa">
+                                <rect key="frame" x="169.66666666666666" y="310" width="75" height="75"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="75" id="4HL-eW-Rmj"/>
+                                    <constraint firstAttribute="width" constant="75" id="7vn-tf-eqA"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="wH2-zL-2Br" firstAttribute="top" secondItem="YvY-bB-9Fm" secondAttribute="bottom" constant="20" id="2Hv-D4-qXr"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="kgY-ll-9Qn" secondAttribute="trailing" constant="16" id="ETr-Nu-ZXT"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="BZQ-QK-MtP" secondAttribute="trailing" constant="16" id="GvV-kI-q3h"/>
+                            <constraint firstItem="JfV-9P-nDa" firstAttribute="top" secondItem="9I4-Rf-Ta0" secondAttribute="bottom" constant="25" id="KC9-6s-J4h"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="9I4-Rf-Ta0" secondAttribute="trailing" constant="16" id="Mmq-fm-jlg"/>
+                            <constraint firstItem="9I4-Rf-Ta0" firstAttribute="leading" secondItem="je1-K1-Lob" secondAttribute="leadingMargin" constant="16" id="NZL-62-xGa"/>
+                            <constraint firstItem="9I4-Rf-Ta0" firstAttribute="top" secondItem="BZQ-QK-MtP" secondAttribute="bottom" constant="8" id="PaY-Ez-1hj"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="h2X-ES-mU3" secondAttribute="trailing" constant="16" id="RFp-Ha-oyJ"/>
+                            <constraint firstItem="BZQ-QK-MtP" firstAttribute="leading" secondItem="je1-K1-Lob" secondAttribute="leadingMargin" constant="16" id="b6z-mt-Nrd"/>
+                            <constraint firstItem="kgY-ll-9Qn" firstAttribute="top" secondItem="wH2-zL-2Br" secondAttribute="bottom" constant="25" id="fJu-0e-jTQ"/>
+                            <constraint firstItem="wH2-zL-2Br" firstAttribute="leading" secondItem="je1-K1-Lob" secondAttribute="leadingMargin" constant="16" id="i46-GA-C0f"/>
+                            <constraint firstItem="h2X-ES-mU3" firstAttribute="top" secondItem="JfV-9P-nDa" secondAttribute="bottom" constant="25" id="lH6-qg-ee3"/>
+                            <constraint firstItem="JfV-9P-nDa" firstAttribute="centerX" secondItem="9I4-Rf-Ta0" secondAttribute="centerX" id="lzM-G1-xig"/>
+                            <constraint firstItem="h2X-ES-mU3" firstAttribute="leading" secondItem="je1-K1-Lob" secondAttribute="leadingMargin" constant="16" id="mEF-te-qr6"/>
+                            <constraint firstItem="kgY-ll-9Qn" firstAttribute="leading" secondItem="je1-K1-Lob" secondAttribute="leadingMargin" constant="16" id="nEu-mp-dnc"/>
+                            <constraint firstItem="BZQ-QK-MtP" firstAttribute="top" secondItem="kgY-ll-9Qn" secondAttribute="bottom" constant="8" id="oof-WU-7FV"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="wH2-zL-2Br" secondAttribute="trailing" constant="16" id="x9f-SU-vSf"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Title" id="DXp-AP-KmN" customClass="IGNavigationItem" customModule="iGap" customModuleProvider="target"/>
+                    <connections>
+                        <outlet property="btnPayment" destination="h2X-ES-mU3" id="qEp-su-GtY"/>
+                        <outlet property="btnQRScanner" destination="wH2-zL-2Br" id="DHt-sR-whE"/>
+                        <outlet property="edtBillingID" destination="kgY-ll-9Qn" id="N0E-Au-GUA"/>
+                        <outlet property="edtPaymentCode" destination="BZQ-QK-MtP" id="lMz-0N-1rL"/>
+                        <outlet property="imgCompany" destination="JfV-9P-nDa" id="77G-UM-e1r"/>
+                        <outlet property="txtAmount" destination="9I4-Rf-Ta0" id="lWx-qr-wrm"/>
+                        <segue destination="o6C-Kw-gwv" kind="show" identifier="showFinancialServiceBillQrScanner" id="KvL-w2-vQI"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HPk-3M-C11" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -4166,7 +4255,29 @@ Please wait 0:59</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9Xi-wy-OpB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="963.76811594202911" y="-2032.3369565217392"/>
+            <point key="canvasLocation" x="1929" y="-2032"/>
+        </scene>
+        <!--Title-->
+        <scene sceneID="hD6-6v-Xms">
+            <objects>
+                <viewController id="o6C-Kw-gwv" customClass="IGFinancialServiceBillQrScanner" customModule="iGap" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="ebY-zp-QoR"/>
+                        <viewControllerLayoutGuide type="bottom" id="AfH-l7-oEG"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="LcZ-Ey-Yz8">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Title" id="goz-zd-aEI" customClass="IGNavigationItem" customModule="iGap" customModuleProvider="target"/>
+                    <connections>
+                        <outlet property="mainView" destination="LcZ-Ey-Yz8" id="LaO-Hu-2eB"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="TOv-Yk-TFX" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1014" y="-2032"/>
         </scene>
         <!--Choose Contact-->
         <scene sceneID="eS3-vH-glp">

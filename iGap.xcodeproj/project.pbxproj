@@ -272,6 +272,7 @@
 		FABB9B061DB25E5E00D794A4 /* IGSecurityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABB9B051DB25E5E00D794A4 /* IGSecurityManager.swift */; };
 		FAC0F08420F0AF4900182758 /* PecPayment.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC0F08320F0AF4900182758 /* PecPayment.framework */; };
 		FAC0F08520F0AF4900182758 /* PecPayment.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FAC0F08320F0AF4900182758 /* PecPayment.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		FAC0F08920F0C8C700182758 /* IGFinancialServiceBillQrScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC0F08820F0C8C700182758 /* IGFinancialServiceBillQrScanner.swift */; };
 		FAC34DB41E1A3F7E00BB9823 /* IGRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC34DB31E1A3F7E00BB9823 /* IGRealm.swift */; };
 		FAC34DB61E1A651200BB9823 /* IGContactInMessageCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC34DB51E1A651200BB9823 /* IGContactInMessageCellView.swift */; };
 		FAC42C851E36267400F2CB5C /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC42C831E36267400F2CB5C /* Fabric.framework */; };
@@ -626,6 +627,7 @@
 		FAB8210E20D7D589003938BB /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		FABB9B051DB25E5E00D794A4 /* IGSecurityManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IGSecurityManager.swift; path = "Security Manager/IGSecurityManager.swift"; sourceTree = "<group>"; };
 		FAC0F08320F0AF4900182758 /* PecPayment.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PecPayment.framework; sourceTree = "<group>"; };
+		FAC0F08820F0C8C700182758 /* IGFinancialServiceBillQrScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGFinancialServiceBillQrScanner.swift; sourceTree = "<group>"; };
 		FAC34DB31E1A3F7E00BB9823 /* IGRealm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGRealm.swift; sourceTree = "<group>"; };
 		FAC34DB51E1A651200BB9823 /* IGContactInMessageCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IGContactInMessageCellView.swift; path = iGap/VIew/ReusableViews/IGContactInMessageCellView.swift; sourceTree = SOURCE_ROOT; };
 		FAC42C831E36267400F2CB5C /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
@@ -927,6 +929,7 @@
 			children = (
 				FA2A506820ECAC02002C5322 /* IGFinancialServiceBill.swift */,
 				FA2A506620ECABD9002C5322 /* IGFinancialServiceCharge.swift */,
+				FAC0F08820F0C8C700182758 /* IGFinancialServiceBillQrScanner.swift */,
 			);
 			path = "Financial Services";
 			sourceTree = "<group>";
@@ -1792,6 +1795,7 @@
 				FA8F22561DD89C88005A90D1 /* IGChannelRoom.swift in Sources */,
 				FAA3604D201614B600736F95 /* TextCell.swift in Sources */,
 				FA0953821E1B97E20043ED3F /* IGChooseContactToAddNewGroupTableViewCell.swift in Sources */,
+				FAC0F08920F0C8C700182758 /* IGFinancialServiceBillQrScanner.swift in Sources */,
 				932D1ABA1E741C18000F0D97 /* IGChannelAndGroupSharedMediaAudioAndLinkTableViewController.swift in Sources */,
 				FA09534D1E1B97700043ED3F /* IGSettingAddContactTableViewController.swift in Sources */,
 				FAF7960F1DAA39660030509B /* AppDelegate.swift in Sources */,

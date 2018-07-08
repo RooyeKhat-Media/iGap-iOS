@@ -169,12 +169,6 @@ class IGFinancialServiceCharge: UIViewController, UIGestureRecognizerDelegate, U
         self.present(option, animated: true, completion: {})
     }
 
-    private func initPaymanet(token: String){
-        var initpayment = InitPayment()
-        initpayment.registerPay(merchant : self)
-        initpayment.initPay(Token: token, MerchantVCArg: self, TSPEnabled: 0)
-    }
-    
     private func registerTopup(token: String){
         let initpayment = InitPayment()
         initpayment.registerTopup(merchant: self)
@@ -318,7 +312,6 @@ class IGFinancialServiceCharge: UIViewController, UIGestureRecognizerDelegate, U
         
         IGMplGetTopupToken.Generator.generate(number: Int64(phoneNumber!)!, amount: chargeAmount, type: operatorChargeType).success({ (protoResponse) in
             if let getTokenResponse = protoResponse as? IGPMplGetTopupTokenResponse {
-                print("Status: \(getTokenResponse.igpStatus)")
                 if getTokenResponse.igpStatus == 0 { //success
                     self.registerTopup(token: getTokenResponse.igpToken)
                 } else {

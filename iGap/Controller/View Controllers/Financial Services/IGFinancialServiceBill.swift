@@ -9,13 +9,42 @@
  */
 
 import UIKit
+import IGProtoBuff
+import PecPayment
 
-class IGFinancialServiceBill: UIViewController, UIGestureRecognizerDelegate {
+class IGFinancialServiceBill: UIViewController, UIGestureRecognizerDelegate, UITextFieldDelegate , BillMerchantResultObserver {
 
+    @IBOutlet weak var btnQRScanner: UIButton!
+    @IBOutlet weak var btnPayment: UIButton!
+    @IBOutlet weak var edtBillingID: UITextField!
+    @IBOutlet weak var edtPaymentCode: UITextField!
+    @IBOutlet weak var txtAmount: UILabel!
+    @IBOutlet weak var imgCompany: UIImageView!
+    
+    var billId: String! = ""
+    var payId: String! = ""
+    
+    internal static var BillInfo: String?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        edtBillingID.delegate = self
+        edtPaymentCode.delegate = self
+        
         initNavigationBar()
+        manageButtonsView(buttons: [btnQRScanner,btnPayment])
+        manageEditTextsView(editTexts: [edtBillingID,edtPaymentCode])
+        manageTextsView(labels: [txtAmount])
+        manageImageViews(images: [imgCompany])
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if let billInfo = IGFinancialServiceBill.BillInfo {
+            fetchBillInfo(billInfo: billInfo)
+        }
     }
     
     func initNavigationBar(){
@@ -24,5 +53,177 @@ class IGFinancialServiceBill: UIViewController, UIGestureRecognizerDelegate {
         navigationItem.navigationController = self.navigationController as? IGNavigationController
         let navigationController = self.navigationController as! IGNavigationController
         navigationController.interactivePopGestureRecognizer?.delegate = self
+        
+        navigationItem.addModalViewRightItem(title: "", iGapFont: true, fontSize: 25.0, xPosition: 5.0)
+        navigationItem.rightViewContainer?.addAction {
+            self.performSegue(withIdentifier: "showFinancialServiceBillQrScanner", sender: self)
+        }
+    }
+    
+    private func manageButtonsView(buttons: [UIButton]){
+        for btn in buttons {
+            btn.layer.cornerRadius = 5
+            btn.layer.borderWidth = 1
+            btn.layer.borderColor = UIColor.iGapColor().cgColor
+        }
+    }
+    
+    private func manageEditTextsView(editTexts: [UITextField]){
+        for edt in editTexts {
+            edt.layer.cornerRadius = 5
+            edt.layer.borderWidth = 1
+            edt.layer.borderColor = UIColor.iGapColor().cgColor
+        }
+    }
+    
+    private func manageTextsView(labels: [UILabel]){
+        for txt in labels {
+            txt.layer.cornerRadius = 5
+            txt.layer.borderWidth = 1
+            txt.layer.borderColor = UIColor.iGapColor().cgColor
+        }
+    }
+    
+    private func manageImageViews(images: [UIImageView]){
+        for img in images {
+            img.layer.cornerRadius = 5
+            img.layer.borderWidth = 1
+            img.layer.borderColor = UIColor.iGapColor().cgColor
+        }
+    }
+    
+    private func fetchBillInfo(billInfo: String, setText: Bool = true){
+        billId = billInfo[0..<13]
+        payId = billInfo[13..<30]
+        let companyType = billInfo[11..<12]
+        let price = billInfo[13..<21]
+        
+        if setText {
+            edtBillingID.text = billId
+            edtPaymentCode.text = payId
+        }
+        if !price.isEmpty {
+            txtAmount.text = "\(Int(price)! * 1000) Rials"
+        }
+        
+        switch Int(companyType) {
+        case 1:
+            imgCompany.image = UIImage(named: "bill_water_pec")
+            break
+            
+        case 2:
+            imgCompany.image = UIImage(named: "bill_elc_pec")
+            break
+            
+        case 3:
+            imgCompany.image = UIImage(named: "bill_gaz_pec")
+            break
+            
+        case 4:
+            imgCompany.image = UIImage(named: "bill_telecom_pec")
+            break
+            
+        case 5:
+            imgCompany.image = UIImage(named: "bill_mci_pec")
+            break
+            
+        case 6:
+            imgCompany.image = UIImage(named: "bill_shahrdari_pec")
+            break
+            
+        default:
+            imgCompany.image = nil
+            break
+        }
+    }
+    
+    private func showErrorAlertView(title: String, message: String?){
+        let option = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let ok = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
+        option.addAction(ok)
+        self.present(option, animated: true, completion: {})
+    }
+    
+    private func initBillPaymanet(token: String){
+        let initpayment = InitPayment()
+        initpayment.registerBill(merchant: self)
+        initpayment.initBillPayment(Token: token, MerchantVCArg: self, TSPEnabled: 0)
+    }
+    
+    /********************************************/
+    /*************** User Actions ***************/
+    /********************************************/
+    
+    @IBAction func edtBillingID(_ sender: UITextField) {
+        if let billId = edtBillingID.text , let payId = edtPaymentCode.text {
+            if billId.characters.count > 3 && payId.characters.count > 3 {
+                fetchBillInfo(billInfo: "\(billId)\(payId)" , setText: false)
+            }
+        }
+    }
+    
+    @IBAction func edtPaymentCode(_ sender: UITextField) {
+        if let billId = edtBillingID.text, let payId = edtPaymentCode.text {
+            if billId.characters.count > 3 && payId.characters.count > 3 {
+                fetchBillInfo(billInfo: "\(billId)\(payId)", setText: false)
+            }
+        }
+    }
+    
+    @IBAction func btnQrScanner(_ sender: UIButton) {
+        performSegue(withIdentifier: "showFinancialServiceBillQrScanner", sender: self)
+    }
+    
+    @IBAction func btnPayment(_ sender: UIButton) {
+        
+        if billId == nil || payId == nil {
+            return
+        }
+        
+        IGMplGetBillToken.Generator.generate(billId: Int64(billId)!, payId: Int64(payId)!).success({ (protoResponse) in
+            
+            if let mplGetBillTokenResponse = protoResponse as? IGPMplGetBillTokenResponse {
+                if mplGetBillTokenResponse.igpStatus == 0 { //success
+                    self.initBillPaymanet(token: mplGetBillTokenResponse.igpToken)
+                } else {
+                    self.showErrorAlertView(title: "خطا", message: mplGetBillTokenResponse.igpMessage)
+                }
+            }
+            
+        }).error ({ (errorCode, waitTime) in
+            switch errorCode {
+            case .timeout:
+                DispatchQueue.main.async {
+                    let alert = UIAlertController(title: "Timeout", message: "Please try again later!", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: nil)
+                }
+            default:
+                break
+            }
+            
+        }).send()
+    }
+    
+    /*********************************************************/
+    /*************** Overrided Payment Mehtods ***************/
+    /*********************************************************/
+    
+    func BillMerchantUpdate(encData: String, message: String, status: Int) {
+        
+    }
+    
+    func BillMerchantError(errorType: Int) {
+        showErrorAlertView(title: "Bill Payment Error", message: "Bill payment error occurred!")
+    }
+    
+    /********************************************/
+    /************* Overrided Methods ************/
+    /********************************************/
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
     }
 }

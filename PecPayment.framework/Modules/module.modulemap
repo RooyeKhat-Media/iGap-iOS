@@ -1,0 +1,11 @@
+framework module PecPayment {
+  umbrella header "PecPayment.h"
+
+  export *
+  module * { export * }
+}
+
+module PecPayment.Swift {
+    header "PecPayment-Swift.h"
+    requires objc
+}
