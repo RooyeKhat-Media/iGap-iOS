@@ -21,6 +21,7 @@ class IGFinancialServiceBill: UIViewController, UIGestureRecognizerDelegate, UIT
     @IBOutlet weak var txtAmount: UILabel!
     @IBOutlet weak var imgCompany: UIImageView!
     
+    internal static var isTrafficOffenses = false
     var billId: String! = ""
     var payId: String! = ""
     
@@ -37,6 +38,10 @@ class IGFinancialServiceBill: UIViewController, UIGestureRecognizerDelegate, UIT
         manageEditTextsView(editTexts: [edtBillingID,edtPaymentCode])
         manageTextsView(labels: [txtAmount])
         manageImageViews(images: [imgCompany])
+        
+        if IGFinancialServiceBill.isTrafficOffenses {
+            imgCompany.image = UIImage(named: "bill_jarime_pec")
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -48,8 +53,13 @@ class IGFinancialServiceBill: UIViewController, UIGestureRecognizerDelegate, UIT
     }
     
     func initNavigationBar(){
+        
+        var title = "Pay Bills"
+        if IGFinancialServiceBill.isTrafficOffenses {
+            title = "Traffic Offenses"
+        }
         let navigationItem = self.navigationItem as! IGNavigationItem
-        navigationItem.addNavigationViewItems(rightItemText: nil, title: "Pay Bills")
+        navigationItem.addNavigationViewItems(rightItemText: nil, title: title)
         navigationItem.navigationController = self.navigationController as? IGNavigationController
         let navigationController = self.navigationController as! IGNavigationController
         navigationController.interactivePopGestureRecognizer?.delegate = self
@@ -106,34 +116,36 @@ class IGFinancialServiceBill: UIViewController, UIGestureRecognizerDelegate, UIT
             txtAmount.text = "\(Int(price)! * 1000) Rials"
         }
         
-        switch Int(companyType) {
-        case 1:
-            imgCompany.image = UIImage(named: "bill_water_pec")
-            break
-            
-        case 2:
-            imgCompany.image = UIImage(named: "bill_elc_pec")
-            break
-            
-        case 3:
-            imgCompany.image = UIImage(named: "bill_gaz_pec")
-            break
-            
-        case 4:
-            imgCompany.image = UIImage(named: "bill_telecom_pec")
-            break
-            
-        case 5:
-            imgCompany.image = UIImage(named: "bill_mci_pec")
-            break
-            
-        case 6:
-            imgCompany.image = UIImage(named: "bill_shahrdari_pec")
-            break
-            
-        default:
-            imgCompany.image = nil
-            break
+        if !IGFinancialServiceBill.isTrafficOffenses {
+            switch Int(companyType) {
+            case 1:
+                imgCompany.image = UIImage(named: "bill_water_pec")
+                break
+                
+            case 2:
+                imgCompany.image = UIImage(named: "bill_elc_pec")
+                break
+                
+            case 3:
+                imgCompany.image = UIImage(named: "bill_gaz_pec")
+                break
+                
+            case 4:
+                imgCompany.image = UIImage(named: "bill_telecom_pec")
+                break
+                
+            case 5:
+                imgCompany.image = UIImage(named: "bill_mci_pec")
+                break
+                
+            case 6:
+                imgCompany.image = UIImage(named: "bill_shahrdari_pec")
+                break
+                
+            default:
+                imgCompany.image = nil
+                break
+            }
         }
     }
     

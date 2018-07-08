@@ -395,6 +395,14 @@ class IGSettingTableViewController: UITableViewController , NVActivityIndicatorV
         })
         
         let payBills = UIAlertAction(title: "Pay Bill", style: .default, handler: { (action) in
+            IGFinancialServiceBill.BillInfo = nil
+            IGFinancialServiceBill.isTrafficOffenses = false
+            self.performSegue(withIdentifier: "showFinancialServiceBill", sender: self)
+        })
+        
+        let trafficOffenses = UIAlertAction(title: "Traffic Offenses", style: .default, handler: { (action) in
+            IGFinancialServiceBill.BillInfo = nil
+            IGFinancialServiceBill.isTrafficOffenses = true
             self.performSegue(withIdentifier: "showFinancialServiceBill", sender: self)
         })
         
@@ -402,6 +410,7 @@ class IGSettingTableViewController: UITableViewController , NVActivityIndicatorV
         
         option.addAction(mobileCharge)
         option.addAction(payBills)
+        option.addAction(trafficOffenses)
         option.addAction(cancel)
         
         self.present(option, animated: true, completion: {})
@@ -602,6 +611,7 @@ extension IGSettingTableViewController: UIImagePickerControllerDelegate {
         }
         present(logoutConfirmAlertView, animated: true, completion: nil)
     }
+    
 }
 
 extension IGSettingTableViewController: UINavigationControllerDelegate {
