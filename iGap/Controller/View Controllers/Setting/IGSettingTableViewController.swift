@@ -388,13 +388,13 @@ class IGSettingTableViewController: UITableViewController , NVActivityIndicatorV
     }
     
     func manageFinancialServiceChoose(){
-        let option = UIAlertController(title: "Financial Services", message: "Please choose your financial services", preferredStyle: IGGlobal.detectAlertStyle())
+        let option = UIAlertController(title: "Financial Services", message: "Please choose your financial service", preferredStyle: IGGlobal.detectAlertStyle())
         
         let mobileCharge = UIAlertAction(title: "Mobile Charge", style: .default, handler: { (action) in
             self.performSegue(withIdentifier: "showFinancialServiceCharge", sender: self)
         })
         
-        let payBills = UIAlertAction(title: "Pay Bill", style: .default, handler: { (action) in
+        let payBills = UIAlertAction(title: "Pay Bills", style: .default, handler: { (action) in
             IGFinancialServiceBill.BillInfo = nil
             IGFinancialServiceBill.isTrafficOffenses = false
             self.performSegue(withIdentifier: "showFinancialServiceBill", sender: self)
@@ -406,11 +406,23 @@ class IGSettingTableViewController: UITableViewController , NVActivityIndicatorV
             self.performSegue(withIdentifier: "showFinancialServiceBill", sender: self)
         })
         
+        let mobileBillingInquiry = UIAlertAction(title: "Mobile Billing Inquiry", style: .default, handler: { (action) in
+            IGFinancialServiceBillingInquiry.isMobile = true
+            self.performSegue(withIdentifier: "showFinancialServiceBillingInquiry", sender: self)
+        })
+        
+        let phoneBillingInquiry = UIAlertAction(title: "Phone Billing Inquiry", style: .default, handler: { (action) in
+            IGFinancialServiceBillingInquiry.isMobile = false
+            self.performSegue(withIdentifier: "showFinancialServiceBillingInquiry", sender: self)
+        })
+        
         let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
         option.addAction(mobileCharge)
         option.addAction(payBills)
         option.addAction(trafficOffenses)
+        option.addAction(mobileBillingInquiry)
+        option.addAction(phoneBillingInquiry)
         option.addAction(cancel)
         
         self.present(option, animated: true, completion: {})

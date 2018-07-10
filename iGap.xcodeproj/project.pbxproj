@@ -263,6 +263,7 @@
 		FAA9DFBC1F4B1CD60076A22F /* IGSettingPrivacyAndSecurityTwoStepVerificationChangeSecurityQuestionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA9DFBB1F4B1CD60076A22F /* IGSettingPrivacyAndSecurityTwoStepVerificationChangeSecurityQuestionsTableViewController.swift */; };
 		FAA9DFBE1F4B23390076A22F /* IGTwoStepVerification.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA9DFBD1F4B23380076A22F /* IGTwoStepVerification.swift */; };
 		FAAC57D31DE2CE9F00A28058 /* IGDownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAAC57D21DE2CE9F00A28058 /* IGDownloadManager.swift */; };
+		FAACE76D20F22F1200DDEBCB /* IGFinancialServiceBillingInquiry.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAACE76C20F22F1200DDEBCB /* IGFinancialServiceBillingInquiry.swift */; };
 		FAAEAC5520E0EAEF00A1EAE5 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FAAEAC5720E0EAEF00A1EAE5 /* Localizable.strings */; };
 		FAAFB63E20F099F3004D8CCD /* IGMplRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAAFB63D20F099F3004D8CCD /* IGMplRequest.swift */; };
 		FAAFD434208375AA003470B3 /* IGGeoRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAAFD433208375AA003470B3 /* IGGeoRequest.swift */; };
@@ -613,6 +614,7 @@
 		FAA9DFBB1F4B1CD60076A22F /* IGSettingPrivacyAndSecurityTwoStepVerificationChangeSecurityQuestionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGSettingPrivacyAndSecurityTwoStepVerificationChangeSecurityQuestionsTableViewController.swift; sourceTree = "<group>"; };
 		FAA9DFBD1F4B23380076A22F /* IGTwoStepVerification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGTwoStepVerification.swift; sourceTree = "<group>"; };
 		FAAC57D21DE2CE9F00A28058 /* IGDownloadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGDownloadManager.swift; sourceTree = "<group>"; };
+		FAACE76C20F22F1200DDEBCB /* IGFinancialServiceBillingInquiry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGFinancialServiceBillingInquiry.swift; sourceTree = "<group>"; };
 		FAAEAC5120E0EA1D00A1EAE5 /* fa-IR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "fa-IR"; path = "fa-IR.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		FAAEAC5220E0EA1D00A1EAE5 /* fa-IR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "fa-IR"; path = "fa-IR.lproj/Main.strings"; sourceTree = "<group>"; };
 		FAAEAC5620E0EAEF00A1EAE5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -930,6 +932,7 @@
 				FA2A506820ECAC02002C5322 /* IGFinancialServiceBill.swift */,
 				FA2A506620ECABD9002C5322 /* IGFinancialServiceCharge.swift */,
 				FAC0F08820F0C8C700182758 /* IGFinancialServiceBillQrScanner.swift */,
+				FAACE76C20F22F1200DDEBCB /* IGFinancialServiceBillingInquiry.swift */,
 			);
 			path = "Financial Services";
 			sourceTree = "<group>";
@@ -1887,6 +1890,7 @@
 				FAA932F51DF45748002CC631 /* IGEnums.swift in Sources */,
 				FAA9DFB61F4B1CB50076A22F /* IGSettingPrivacyAndSecurityTwoStepVerificationChangePasswordTableViewController.swift in Sources */,
 				FA8D056D20739C96007861E7 /* IGSettingAddContactViewController.swift in Sources */,
+				FAACE76D20F22F1200DDEBCB /* IGFinancialServiceBillingInquiry.swift in Sources */,
 				FAD580941DDC5C4E00A242DE /* IGMessageCollectionViewCell.swift in Sources */,
 				FA8204382025C97300A795D5 /* ImageCell.swift in Sources */,
 				FA27F74020BD77ED00EC6A97 /* api.key in Sources */,

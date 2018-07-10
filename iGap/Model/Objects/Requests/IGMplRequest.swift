@@ -27,15 +27,7 @@ class IGMplGetBillToken : IGRequest {
     
     class Handler : IGRequest.Handler{
         class func interpret(response reponseProtoMessage:IGPMplGetBillTokenResponse) {}
-        
-        override class func handlePush(responseProtoMessage: Message) {
-            if let mplGetBillToken = responseProtoMessage as? IGPMplGetBillTokenResponse {
-                mplGetBillToken.igpStatus
-                mplGetBillToken.igpToken
-                mplGetBillToken.igpExpireTime
-                mplGetBillToken.igpMessage
-            }
-        }
+        override class func handlePush(responseProtoMessage: Message) {}
     }
 }
 
@@ -52,15 +44,38 @@ class IGMplGetTopupToken : IGRequest {
     
     class Handler : IGRequest.Handler{
         class func interpret(response reponseProtoMessage:IGPMplGetTopupTokenResponse) {}
-        
-        override class func handlePush(responseProtoMessage: Message) {
-            if let mplGetTopupToken = responseProtoMessage as? IGPMplGetTopupTokenResponse {
-                mplGetTopupToken.igpStatus
-                mplGetTopupToken.igpToken
-                mplGetTopupToken.igpExpireTime
-                mplGetTopupToken.igpMessage
-            }
+        override class func handlePush(responseProtoMessage: Message) {}
+    }
+}
+
+class IGBillInquiryMci : IGRequest {
+    class Generator : IGRequest.Generator{
+        class func generate(mobileNumber: Int64) -> IGRequestWrapper {
+            var billInquiryMci = IGPBillInquiryMci()
+            billInquiryMci.igpMobileNumber = mobileNumber
+            return IGRequestWrapper(message: billInquiryMci, actionID: 9200)
         }
+    }
+    
+    class Handler : IGRequest.Handler{
+        class func interpret(response reponseProtoMessage:IGPBillInquiryMciResponse) {}
+        override class func handlePush(responseProtoMessage: Message) {}
+    }
+}
+
+class IGBillInquiryTelecom : IGRequest {
+    class Generator : IGRequest.Generator{
+        class func generate(provinceCode: Int32, telephoneNumber: Int64) -> IGRequestWrapper {
+            var billInquiryTelecom = IGPBillInquiryTelecom()
+            billInquiryTelecom.igpProvinceCode = provinceCode
+            billInquiryTelecom.igpTelephoneNumber = telephoneNumber
+            return IGRequestWrapper(message: billInquiryTelecom, actionID: 9201)
+        }
+    }
+    
+    class Handler : IGRequest.Handler{
+        class func interpret(response reponseProtoMessage:IGPBillInquiryMciResponse) {}
+        override class func handlePush(responseProtoMessage: Message) {}
     }
 }
 

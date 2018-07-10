@@ -134,9 +134,9 @@ class IGNavigationItem: UINavigationItem {
     
     
     //MARK: - Navigation VCs
-    func addNavigationViewItems(rightItemText: String?, title: String?) {
+    func addNavigationViewItems(rightItemText: String?, title: String?, width: CGFloat = 150) {
         if title != nil {
-            addTitleLabel(title: title!)
+            addTitleLabel(title: title!, width: width)
         }
         if rightItemText != nil {
             addModalViewRightItem(title: rightItemText!)
@@ -189,15 +189,15 @@ class IGNavigationItem: UINavigationItem {
         callViewContainer!.addSubview(composeButtonImageView)
     }
     
-    private func addTitleLabel(title: String) {
+    private func addTitleLabel(title: String , width: CGFloat = 150) {
         
         if IGCall.callPageIsEnable {
             return
         }
         
         let height = self.navigationController?.navigationBar.frame.height
-        let titleView = UIView(frame: CGRect(x: 0, y: 0, width: 150, height: 40))
-        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 150, height: 40))
+        let titleView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 40))
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: 40))
         label.font = UIFont.systemFont(ofSize: 17.0, weight: UIFontWeightBold)
         label.textAlignment = .center
         label.text = title

@@ -11,10 +11,10 @@
 import UIKit
 import IGProtoBuff
 import PecPayment
+import SnapKit
 
 class IGFinancialServiceBill: UIViewController, UIGestureRecognizerDelegate, UITextFieldDelegate , BillMerchantResultObserver {
 
-    @IBOutlet weak var btnQRScanner: UIButton!
     @IBOutlet weak var btnPayment: UIButton!
     @IBOutlet weak var edtBillingID: UITextField!
     @IBOutlet weak var edtPaymentCode: UITextField!
@@ -34,10 +34,10 @@ class IGFinancialServiceBill: UIViewController, UIGestureRecognizerDelegate, UIT
         edtPaymentCode.delegate = self
         
         initNavigationBar()
-        manageButtonsView(buttons: [btnQRScanner,btnPayment])
+        manageButtonsView(buttons: [btnPayment])
         manageEditTextsView(editTexts: [edtBillingID,edtPaymentCode])
         manageTextsView(labels: [txtAmount])
-        manageImageViews(images: [imgCompany])
+        //manageImageViews(images: [imgCompany])
         
         if IGFinancialServiceBill.isTrafficOffenses {
             imgCompany.image = UIImage(named: "bill_jarime_pec")
@@ -64,9 +64,18 @@ class IGFinancialServiceBill: UIViewController, UIGestureRecognizerDelegate, UIT
         let navigationController = self.navigationController as! IGNavigationController
         navigationController.interactivePopGestureRecognizer?.delegate = self
         
-        navigationItem.addModalViewRightItem(title: "", iGapFont: true, fontSize: 25.0, xPosition: 5.0)
-        navigationItem.rightViewContainer?.addAction {
-            self.performSegue(withIdentifier: "showFinancialServiceBillQrScanner", sender: self)
+        if IGFinancialServiceBill.isTrafficOffenses {
+            txtAmount.isHidden = true
+            
+            btnPayment.snp.makeConstraints { (make) in
+                make.top.equalTo(edtPaymentCode.snp.bottom).offset(20)
+            }
+            
+        } else {
+            navigationItem.addModalViewRightItem(title: "", iGapFont: true, fontSize: 25.0, xPosition: 5.0)
+            navigationItem.rightViewContainer?.addAction {
+                self.performSegue(withIdentifier: "showFinancialServiceBillQrScanner", sender: self)
+            }
         }
     }
     
@@ -103,6 +112,11 @@ class IGFinancialServiceBill: UIViewController, UIGestureRecognizerDelegate, UIT
     }
     
     private func fetchBillInfo(billInfo: String, setText: Bool = true){
+        
+        if IGFinancialServiceBill.isTrafficOffenses {
+            return
+        }
+        
         billId = billInfo[0..<13]
         payId = billInfo[13..<30]
         let companyType = billInfo[11..<12]
@@ -169,6 +183,8 @@ class IGFinancialServiceBill: UIViewController, UIGestureRecognizerDelegate, UIT
     @IBAction func edtBillingID(_ sender: UITextField) {
         if let billId = edtBillingID.text , let payId = edtPaymentCode.text {
             if billId.characters.count > 3 && payId.characters.count > 3 {
+                self.billId = billId
+                self.payId = payId
                 fetchBillInfo(billInfo: "\(billId)\(payId)" , setText: false)
             }
         }
@@ -177,13 +193,11 @@ class IGFinancialServiceBill: UIViewController, UIGestureRecognizerDelegate, UIT
     @IBAction func edtPaymentCode(_ sender: UITextField) {
         if let billId = edtBillingID.text, let payId = edtPaymentCode.text {
             if billId.characters.count > 3 && payId.characters.count > 3 {
+                self.billId = billId
+                self.payId = payId
                 fetchBillInfo(billInfo: "\(billId)\(payId)", setText: false)
             }
         }
-    }
-    
-    @IBAction func btnQrScanner(_ sender: UIButton) {
-        performSegue(withIdentifier: "showFinancialServiceBillQrScanner", sender: self)
     }
     
     @IBAction func btnPayment(_ sender: UIButton) {
