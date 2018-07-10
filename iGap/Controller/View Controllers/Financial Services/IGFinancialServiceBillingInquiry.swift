@@ -63,9 +63,9 @@ class IGFinancialServiceBillingInquiry: UIViewController, UIGestureRecognizerDel
     }
     
     func initNavigationBar(){
-        var title = "Phone Billing Inquiry"
+        var title = "Phone Bills Inquiry"
         if IGFinancialServiceBillingInquiry.isMobile {
-            title = "Mobile Billing Inquiry"
+            title = "Mobile Bills Inquiry"
         }
         let navigationItem = self.navigationItem as! IGNavigationItem
         navigationItem.addNavigationViewItems(rightItemText: nil, title: title, width: 200)
