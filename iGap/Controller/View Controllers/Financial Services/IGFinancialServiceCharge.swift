@@ -92,7 +92,7 @@ class IGFinancialServiceCharge: UIViewController, UIGestureRecognizerDelegate, U
     
     func initNavigationBar(){
         let navigationItem = self.navigationItem as! IGNavigationItem
-        navigationItem.addNavigationViewItems(rightItemText: nil, title: "Charge Service")
+        navigationItem.addNavigationViewItems(rightItemText: nil, title: "Top Up SIM Card")
         navigationItem.navigationController = self.navigationController as? IGNavigationController
         let navigationController = self.navigationController as! IGNavigationController
         navigationController.interactivePopGestureRecognizer?.delegate = self
@@ -182,11 +182,11 @@ class IGFinancialServiceCharge: UIViewController, UIGestureRecognizerDelegate, U
     @IBAction func switchToggle(_ sender: UISwitch) {
         if sender.isOn {
             operatorTransport = true
-            txtOperatorTransport.text = "Operator Transport Enable"
+            txtOperatorTransport.text = "Ported Subscriber Enable"
             txtOperatorTransport.textColor = UIColor.iGapColor()
         } else {
             operatorTransport = false
-            txtOperatorTransport.text = "Operator Transport Disable"
+            txtOperatorTransport.text = "Ported Subscriber Disable"
             txtOperatorTransport.textColor = UIColor.gray
             
             if operatorTypeBackup != nil {
@@ -299,7 +299,7 @@ class IGFinancialServiceCharge: UIViewController, UIGestureRecognizerDelegate, U
             return
         }
         
-        if (phoneNumber.characters.count) < 11 || (operatorDictionary[(phoneNumber!.substring(offset: 4))] == nil) {
+        if (phoneNumber.characters.count) < 11 || !phoneNumber.isNumber ||  (operatorDictionary[(phoneNumber!.substring(offset: 4))] == nil) {
             showErrorAlertView(title: "Error", message: "phone number is wrong!")
             return
         }
@@ -308,7 +308,6 @@ class IGFinancialServiceCharge: UIViewController, UIGestureRecognizerDelegate, U
             showErrorAlertView(title: "Error", message: "Please complete all options!")
             return
         }
-        
         
         IGMplGetTopupToken.Generator.generate(number: Int64(phoneNumber!)!, amount: chargeAmount, type: operatorChargeType).success({ (protoResponse) in
             if let getTokenResponse = protoResponse as? IGPMplGetTopupTokenResponse {

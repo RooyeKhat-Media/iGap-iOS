@@ -4060,7 +4060,7 @@ Please wait 0:59</string>
                                     <constraint firstAttribute="height" constant="40" id="i1s-db-XR3"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
-                                <state key="normal" title="Payment">
+                                <state key="normal" title="Pay">
                                     <color key="titleColor" red="0.98179232750000001" green="0.98184645459999997" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
@@ -4143,8 +4143,8 @@ Please wait 0:59</string>
                                     <action selector="switchToggle:" destination="RfO-fU-tzU" eventType="valueChanged" id="hFg-hX-kvM"/>
                                 </connections>
                             </switch>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Operator Transport Disable" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O61-fS-jjK">
-                                <rect key="frame" x="93.000000000000014" y="139.33333333333334" width="180.33333333333337" height="17"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ported Subscriber Disable" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O61-fS-jjK">
+                                <rect key="frame" x="93.000000000000014" y="139.33333333333334" width="173.33333333333337" height="17"/>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -4155,7 +4155,7 @@ Please wait 0:59</string>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="H4K-ZK-4sr"/>
                                 </constraints>
-                                <state key="normal" title="Choose Charge Type">
+                                <state key="normal" title="Choose Credit Type">
                                     <color key="titleColor" red="0.25962049190000003" green="0.2621909918" blue="0.2621909918" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
@@ -4182,7 +4182,7 @@ Please wait 0:59</string>
                                     <constraint firstAttribute="height" constant="40" id="jFO-2O-RmU"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <state key="normal" title="Buy Charge">
+                                <state key="normal" title="Pay">
                                     <color key="titleColor" red="0.98179232750000001" green="0.98184645459999997" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
@@ -4338,7 +4338,7 @@ Please wait 0:59</string>
                                                             <constraint firstAttribute="height" constant="40" id="GMA-ZQ-YkC"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                                        <state key="normal" title="Not Exist Bill">
+                                                        <state key="normal" title="Pay">
                                                             <color key="titleColor" red="0.98179232750000001" green="0.98184645459999997" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         </state>
                                                         <connections>
@@ -4369,7 +4369,7 @@ Please wait 0:59</string>
                                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fPg-zK-87K">
                                                 <rect key="frame" x="16" y="148" width="382" height="272"/>
                                                 <subviews>
-                                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Inter-Term Bill" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xKm-mV-tKm">
+                                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mid-Term Bill" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xKm-mV-tKm">
                                                         <rect key="frame" x="8" y="8" width="366" height="40"/>
                                                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                                         <constraints>
@@ -4413,7 +4413,7 @@ Please wait 0:59</string>
                                                             <constraint firstAttribute="height" constant="40" id="xSu-1f-BZd"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                                        <state key="normal" title="Not Exist Bill">
+                                                        <state key="normal" title="Pay">
                                                             <color key="titleColor" red="0.98179232750000001" green="0.98184645459999997" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         </state>
                                                         <connections>

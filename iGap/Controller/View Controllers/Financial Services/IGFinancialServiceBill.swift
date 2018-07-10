@@ -56,10 +56,10 @@ class IGFinancialServiceBill: UIViewController, UIGestureRecognizerDelegate, UIT
         
         var title = "Pay Bills"
         if IGFinancialServiceBill.isTrafficOffenses {
-            title = "Traffic Offenses"
+            title = "Pay Traffic Tickets"
         }
         let navigationItem = self.navigationItem as! IGNavigationItem
-        navigationItem.addNavigationViewItems(rightItemText: nil, title: title)
+        navigationItem.addNavigationViewItems(rightItemText: nil, title: title, width: 200)
         navigationItem.navigationController = self.navigationController as? IGNavigationController
         let navigationController = self.navigationController as! IGNavigationController
         navigationController.interactivePopGestureRecognizer?.delegate = self
@@ -202,9 +202,10 @@ class IGFinancialServiceBill: UIViewController, UIGestureRecognizerDelegate, UIT
     
     @IBAction func btnPayment(_ sender: UIButton) {
         
-        if billId == nil || payId == nil {
+        if billId == nil || !billId.isNumber || payId == nil || !payId.isNumber{
             return
         }
+        
         
         IGMplGetBillToken.Generator.generate(billId: Int64(billId)!, payId: Int64(payId)!).success({ (protoResponse) in
             

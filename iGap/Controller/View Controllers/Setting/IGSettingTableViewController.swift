@@ -388,9 +388,9 @@ class IGSettingTableViewController: UITableViewController , NVActivityIndicatorV
     }
     
     func manageFinancialServiceChoose(){
-        let option = UIAlertController(title: "Financial Services", message: "Please choose your financial service", preferredStyle: IGGlobal.detectAlertStyle())
+        let option = UIAlertController(title: "Financial Services", message: "Responsible for all financial services Parsian e-commerce company (top). \n Customer Support Center: 021-2318", preferredStyle: IGGlobal.detectAlertStyle())
         
-        let mobileCharge = UIAlertAction(title: "Mobile Charge", style: .default, handler: { (action) in
+        let mobileCharge = UIAlertAction(title: "Top Up SIM Card", style: .default, handler: { (action) in
             self.performSegue(withIdentifier: "showFinancialServiceCharge", sender: self)
         })
         
@@ -400,18 +400,18 @@ class IGSettingTableViewController: UITableViewController , NVActivityIndicatorV
             self.performSegue(withIdentifier: "showFinancialServiceBill", sender: self)
         })
         
-        let trafficOffenses = UIAlertAction(title: "Traffic Offenses", style: .default, handler: { (action) in
+        let trafficOffenses = UIAlertAction(title: "Pay Traffic Tickets", style: .default, handler: { (action) in
             IGFinancialServiceBill.BillInfo = nil
             IGFinancialServiceBill.isTrafficOffenses = true
             self.performSegue(withIdentifier: "showFinancialServiceBill", sender: self)
         })
         
-        let mobileBillingInquiry = UIAlertAction(title: "Mobile Billing Inquiry", style: .default, handler: { (action) in
+        let mobileBillingInquiry = UIAlertAction(title: "Mobile Bills Inquiry", style: .default, handler: { (action) in
             IGFinancialServiceBillingInquiry.isMobile = true
             self.performSegue(withIdentifier: "showFinancialServiceBillingInquiry", sender: self)
         })
         
-        let phoneBillingInquiry = UIAlertAction(title: "Phone Billing Inquiry", style: .default, handler: { (action) in
+        let phoneBillingInquiry = UIAlertAction(title: "Phone Bills Inquiry", style: .default, handler: { (action) in
             IGFinancialServiceBillingInquiry.isMobile = false
             self.performSegue(withIdentifier: "showFinancialServiceBillingInquiry", sender: self)
         })
