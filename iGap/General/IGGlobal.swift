@@ -10,6 +10,7 @@
 
 import UIKit
 import SwiftProtobuf
+import MBProgressHUD
 
 let kIGUserLoggedInNotificationName = "im.igap.ios.user.logged.in"
 let kIGNotificationNameDidCreateARoom = "im.igap.ios.room.created"
@@ -21,6 +22,21 @@ let IGNotificationPushTwoStepVerification = Notification(name: Notification.Name
 
 
 class IGGlobal {
+    
+    private static var progressHUD = MBProgressHUD()
+    
+    internal static func prgShow(_ view: UIView){
+        DispatchQueue.main.async {
+            IGGlobal.progressHUD = MBProgressHUD.showAdded(to: view.superview!, animated: true)
+            IGGlobal.progressHUD.mode = .indeterminate
+        }
+    }
+    internal static func prgHide(){
+        DispatchQueue.main.async {
+            IGGlobal.progressHUD.hide(animated: true)
+        }
+    }
+    
     //MARK: RegEx
     public class func matches(for regex: String, in text: String) -> Bool {
         do {

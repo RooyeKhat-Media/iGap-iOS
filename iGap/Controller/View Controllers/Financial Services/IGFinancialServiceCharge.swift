@@ -162,9 +162,13 @@ class IGFinancialServiceCharge: UIViewController, UIGestureRecognizerDelegate, U
         self.present(option, animated: true, completion: {})
     }
     
-    private func showErrorAlertView(title: String, message: String?){
+    private func showErrorAlertView(title: String, message: String?, dismiss: Bool = false){
         let option = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let ok = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
+        let ok = UIAlertAction(title: "Ok", style: .cancel, handler: { (action) in
+            if dismiss {
+                self.navigationController?.popViewController(animated: true)
+            }
+        })
         option.addAction(ok)
         self.present(option, animated: true, completion: {})
     }
@@ -309,7 +313,9 @@ class IGFinancialServiceCharge: UIViewController, UIGestureRecognizerDelegate, U
             return
         }
         
+        IGGlobal.prgShow(self.view)
         IGMplGetTopupToken.Generator.generate(number: Int64(phoneNumber!)!, amount: chargeAmount, type: operatorChargeType).success({ (protoResponse) in
+            IGGlobal.prgHide()
             if let getTokenResponse = protoResponse as? IGPMplGetTopupTokenResponse {
                 if getTokenResponse.igpStatus == 0 { //success
                     self.registerTopup(token: getTokenResponse.igpToken)
@@ -318,6 +324,7 @@ class IGFinancialServiceCharge: UIViewController, UIGestureRecognizerDelegate, U
                 }
             }
         }).error ({ (errorCode, waitTime) in
+            IGGlobal.prgHide()
             switch errorCode {
             case .timeout:
                 DispatchQueue.main.async {
@@ -339,21 +346,21 @@ class IGFinancialServiceCharge: UIViewController, UIGestureRecognizerDelegate, U
     /*********************************************************/
     
     func TopupMerchantUpdate(encData: String, message: String, status: Int) {
-        
+        self.navigationController?.popViewController(animated: true)
     }
     
     func TopupMerchantError(errorType: Int) {
-        showErrorAlertView(title: "Payment Error", message: "Payment error occurred!")
+        showErrorAlertView(title: "Payment Error", message: "Payment error occurred!", dismiss: true)
     }
     
     
     
     func update(encData: String, message: String, status: Int) {
-        
+        self.navigationController?.popViewController(animated: true)
     }
     
     func error(errorType: Int, orderID: Int) {
-        
+        self.navigationController?.popViewController(animated: true)
     }
     
     /*********************************************************/

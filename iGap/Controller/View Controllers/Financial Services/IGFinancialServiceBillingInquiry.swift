@@ -130,9 +130,13 @@ class IGFinancialServiceBillingInquiry: UIViewController, UIGestureRecognizerDel
         }
     }
     
-    private func showErrorAlertView(title: String, message: String?){
+    private func showErrorAlertView(title: String, message: String?, dismiss: Bool = false){
         let option = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let ok = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
+        let ok = UIAlertAction(title: "Ok", style: .cancel, handler: { (action) in
+            if dismiss {
+                self.navigationController?.popViewController(animated: true)
+            }
+        })
         option.addAction(ok)
         self.present(option, animated: true, completion: {})
     }
@@ -262,11 +266,14 @@ class IGFinancialServiceBillingInquiry: UIViewController, UIGestureRecognizerDel
                 return
             }
             
+            IGGlobal.prgShow(self.view)
             IGBillInquiryMci.Generator.generate(mobileNumber: Int64(phoneNumber)!).success({ (protoResponse) in
+                IGGlobal.prgHide()
                 if let billInquiryMciResponse = protoResponse as? IGPBillInquiryMciResponse {
                     self.manageInquiryMci(lastTerm: billInquiryMciResponse.igpLastTerm, midTerm: billInquiryMciResponse.igpMidTerm)
                 }
             }).error ({ (errorCode, waitTime) in
+                IGGlobal.prgHide()
                 switch errorCode {
                 case .timeout:
                     DispatchQueue.main.async {
@@ -301,11 +308,14 @@ class IGFinancialServiceBillingInquiry: UIViewController, UIGestureRecognizerDel
                 return
             }
             
+            IGGlobal.prgShow(self.view)
             IGBillInquiryTelecom.Generator.generate(provinceCode: Int32(provisionCode)!, telephoneNumber: Int64(phoneNumber)!).success({ (protoResponse) in
+                IGGlobal.prgHide()
                 if let billInquiryMciResponse = protoResponse as? IGPBillInquiryTelecomResponse {
                     self.manageInquiryTelecom(lastTerm: billInquiryMciResponse.igpLastTerm, midTerm: billInquiryMciResponse.igpMidTerm)
                 }
             }).error ({ (errorCode, waitTime) in
+                IGGlobal.prgHide()
                 switch errorCode {
                 case .timeout:
                     DispatchQueue.main.async {
@@ -335,11 +345,11 @@ class IGFinancialServiceBillingInquiry: UIViewController, UIGestureRecognizerDel
     /*********************************************************/
     
     func BillMerchantUpdate(encData: String, message: String, status: Int) {
-        
+        self.navigationController?.popViewController(animated: true)
     }
     
     func BillMerchantError(errorType: Int) {
-        showErrorAlertView(title: "Bill Payment Error", message: "Bill payment error occurred!")
+        showErrorAlertView(title: "Bill Payment Error", message: "Bill payment error occurred!", dismiss: true)
     }
     
     /*********************************************************/

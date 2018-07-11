@@ -21,10 +21,10 @@ class IGFinancialServiceBill: UIViewController, UIGestureRecognizerDelegate, UIT
     @IBOutlet weak var txtAmount: UILabel!
     @IBOutlet weak var imgCompany: UIImageView!
     
-    internal static var isTrafficOffenses = false
     var billId: String! = ""
     var payId: String! = ""
     
+    internal static var isTrafficOffenses = false
     internal static var BillInfo: String?
     
     override func viewDidLoad() {
@@ -163,9 +163,13 @@ class IGFinancialServiceBill: UIViewController, UIGestureRecognizerDelegate, UIT
         }
     }
     
-    private func showErrorAlertView(title: String, message: String?){
+    private func showErrorAlertView(title: String, message: String?, dismiss: Bool = false){
         let option = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let ok = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
+        let ok = UIAlertAction(title: "Ok", style: .cancel, handler: { (action) in
+            if dismiss {
+                self.navigationController?.popViewController(animated: true)
+            }
+        })
         option.addAction(ok)
         self.present(option, animated: true, completion: {})
     }
@@ -206,9 +210,9 @@ class IGFinancialServiceBill: UIViewController, UIGestureRecognizerDelegate, UIT
             return
         }
         
-        
+        IGGlobal.prgShow(self.view)
         IGMplGetBillToken.Generator.generate(billId: Int64(billId)!, payId: Int64(payId)!).success({ (protoResponse) in
-            
+            IGGlobal.prgHide()
             if let mplGetBillTokenResponse = protoResponse as? IGPMplGetBillTokenResponse {
                 if mplGetBillTokenResponse.igpStatus == 0 { //success
                     self.initBillPaymanet(token: mplGetBillTokenResponse.igpToken)
@@ -218,6 +222,7 @@ class IGFinancialServiceBill: UIViewController, UIGestureRecognizerDelegate, UIT
             }
             
         }).error ({ (errorCode, waitTime) in
+            IGGlobal.prgHide()
             switch errorCode {
             case .timeout:
                 DispatchQueue.main.async {
@@ -226,10 +231,10 @@ class IGFinancialServiceBill: UIViewController, UIGestureRecognizerDelegate, UIT
                     alert.addAction(okAction)
                     self.present(alert, animated: true, completion: nil)
                 }
+                break
             default:
                 break
             }
-            
         }).send()
     }
     
@@ -238,11 +243,11 @@ class IGFinancialServiceBill: UIViewController, UIGestureRecognizerDelegate, UIT
     /*********************************************************/
     
     func BillMerchantUpdate(encData: String, message: String, status: Int) {
-        
+        self.navigationController?.popViewController(animated: true)
     }
     
     func BillMerchantError(errorType: Int) {
-        showErrorAlertView(title: "Bill Payment Error", message: "Bill payment error occurred!")
+        showErrorAlertView(title: "Bill Payment Error", message: "Bill payment error occurred!", dismiss: true)
     }
     
     /********************************************/

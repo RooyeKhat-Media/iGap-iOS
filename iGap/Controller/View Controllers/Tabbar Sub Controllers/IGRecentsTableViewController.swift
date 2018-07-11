@@ -177,8 +177,10 @@ class IGRecentsTableViewController: UITableViewController, MessageReceiveObserve
             self.present(alertController, animated: true, completion: nil)
             
         }
-        navigationItem.leftViewContainer?.addAction {
-            self.performSegue(withIdentifier: "showSettings", sender: self)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            navigationItem.leftViewContainer?.addAction {
+                self.performSegue(withIdentifier: "showSettings", sender: self)
+            }
         }
     }
     
