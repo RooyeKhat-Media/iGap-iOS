@@ -264,6 +264,23 @@ class IGFile: Object {
         return detachedFile
     }
     
+    internal static func convertFileTypeToString(fileType: IGFile.FileType) -> String{
+        if fileType == .image {
+            return "image"
+        } else if fileType == .video {
+            return "video"
+        } else if fileType == .gif {
+            return "gif"
+        } else if fileType == .audio {
+            return "audio"
+        } else if fileType == .file {
+            return "file"
+        } else if fileType == .voice {
+            return "voice"
+        }
+        return ""
+    }
+    
     
     //other fuctions
     public func loadData() {

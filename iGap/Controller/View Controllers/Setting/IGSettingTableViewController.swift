@@ -337,7 +337,7 @@ class IGSettingTableViewController: UITableViewController , NVActivityIndicatorV
         if indexPath.section == 0 {
             
             var rowIndex = indexPath.row
-            if indexPath.row >= 4 {
+            if !IGAppManager.sharedManager.mplActive() && indexPath.row >= 4 {
                 rowIndex = rowIndex + 1
             }
             

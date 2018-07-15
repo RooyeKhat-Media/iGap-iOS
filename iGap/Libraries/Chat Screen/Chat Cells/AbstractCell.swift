@@ -491,14 +491,18 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
             
             if let user = repliedMessage.authorUser {
                 txtReplyDisplayNameAbs.text = user.displayName
+            } else if let room = repliedMessage.authorRoom {
+                txtReplyDisplayNameAbs.text = room.title
             }
             
+            let body = repliedMessage.message
+            
             if repliedMessage.type == .contact {
-                txtReplyMessageAbs.text = "Contact"
-            }else if let body = repliedMessage.message {
+                txtReplyMessageAbs.text = "contact message"
+            } else if body != nil && !(body?.isEmpty)! {
                 txtReplyMessageAbs.text = body
             } else if let media = repliedMessage.attachment {
-                txtReplyMessageAbs.text = media.name
+                txtReplyMessageAbs.text = "\(IGFile.convertFileTypeToString(fileType: media.type)) message"
             } else {
                 txtReplyMessageAbs.text = ""
             }

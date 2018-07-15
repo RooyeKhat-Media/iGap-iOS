@@ -1011,7 +1011,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
             
             IGFactory.shared.saveNewlyWriitenMessageToDatabase(detachedMessage)
             message.forwardedFrom = selectedMessageToForwardToThisRoom // Hint: if use this line before "saveNewlyWriitenMessageToDatabase" app will be crashed
-            message.repliedTo = selectedMessageToReply
+            message.repliedTo = selectedMessageToReply // Hint: if use this line before "saveNewlyWriitenMessageToDatabase" app will be crashed
             IGMessageSender.defaultSender.send(message: message, to: room!)
             
             self.inputBarSendButton.isHidden = true
@@ -1468,8 +1468,23 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
         self.selectedMessageToEdit = nil
         self.selectedMessageToReply = message
         self.selectedMessageToForwardToThisRoom = nil
-        self.inputBarOriginalMessageViewSenderNameLabel.text = message.authorUser?.displayName
-        self.inputBarOriginalMessageViewBodyTextLabel.text = message.message
+        
+        
+        if let user = message.authorUser {
+            self.inputBarOriginalMessageViewSenderNameLabel.text = user.displayName
+        } else if let room = message.authorRoom {
+            self.inputBarOriginalMessageViewSenderNameLabel.text = room.title
+        }
+        
+        let textMessage = message.message
+        if textMessage != nil && !(textMessage?.isEmpty)! {
+            self.inputBarOriginalMessageViewBodyTextLabel.text = textMessage
+        } else if message.contact != nil {
+            self.inputBarOriginalMessageViewBodyTextLabel.text = "reply contact message"
+        } else if let file = message.attachment {
+            self.inputBarOriginalMessageViewBodyTextLabel.text = "reply '\(IGFile.convertFileTypeToString(fileType: file.type))' message"
+        }
+        
         self.setInputBarHeight()
     }
     
