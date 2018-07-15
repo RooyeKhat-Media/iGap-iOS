@@ -276,7 +276,7 @@ class IGRegistrationStepVerificationCodeViewController: UIViewController, UIGest
             DispatchQueue.main.async {
                 switch protoResponse {
                 case _ as IGPUserLoginResponse:
-                    IGUserLoginRequest.Handler.intrepret()
+                    IGUserLoginRequest.Handler.intrepret(response: (protoResponse as? IGPUserLoginResponse)!)
                     IGAppManager.sharedManager.setUserLoginSuccessful()
                     if self.isUserNew! {
                         self.hud.hide(animated: true)

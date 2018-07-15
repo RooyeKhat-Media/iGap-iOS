@@ -40,6 +40,7 @@ class IGAppManager: NSObject {
     private var _authorHash: String?
     private var _nickname: String?
     private var _mapEnable: Bool = false
+    private var _mplActive: Bool = false
     
     private override init() {
         connectionStatus = Variable(.waitingForNetwork)
@@ -289,6 +290,14 @@ class IGAppManager: NSObject {
         _mapEnable = enable
     }
     
+    public func mplActive() -> Bool {
+        return _mplActive
+    }
+    
+    public func setMplActive(enable: Bool) {
+        _mplActive = enable
+    }
+    
     public func login() {
         if !self.isTryingToLoginUser {
             self.isTryingToLoginUser = true
@@ -298,7 +307,7 @@ class IGAppManager: NSObject {
                         self.isTryingToLoginUser = false
                         switch responseProto {
                         case _ as IGPUserLoginResponse:
-                            IGUserLoginRequest.Handler.intrepret()
+                            IGUserLoginRequest.Handler.intrepret(response: (responseProto as? IGPUserLoginResponse)!)
                             self.setUserLoginSuccessful()
                             self.setUserUpdateStatus(status: .online)
                             self.getSignalingConfiguration(force: true)
