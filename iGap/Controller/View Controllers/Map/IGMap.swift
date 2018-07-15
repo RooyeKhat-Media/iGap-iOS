@@ -31,7 +31,7 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
     
     var tileRenderer: MKTileOverlayRenderer!
     var currentLocation: CLLocation!
-    let locationManager = CLLocationManager()
+    private static let locationManager = CLLocationManager()
     
     var latestComment: String? // changed comment before send to server
     var latestMainComment: String? // server comment
@@ -182,7 +182,7 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
     func checkLocationPermission(){
         let status  = CLLocationManager.authorizationStatus()
         if status == .notDetermined {
-            locationManager.requestWhenInUseAuthorization()
+            IGMap.locationManager.requestWhenInUseAuthorization()
             return
         }
         if status == .denied || status == .restricted {
@@ -194,9 +194,9 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
             present(alert, animated: true, completion: nil)
             return
         }
-        locationManager.requestAlwaysAuthorization()
-        locationManager.startUpdatingLocation()
-        locationManager.delegate = self
+        IGMap.locationManager.requestAlwaysAuthorization()
+        IGMap.locationManager.startUpdatingLocation()
+        IGMap.locationManager.delegate = self
     }
     
     func manageCommentView(){
@@ -319,6 +319,7 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
     
     func geoRegister(enable: Bool = false){
         IGGeoRegister.Generator.generate(enable: enable).success({ (protoResponse) in
+            IGMap.locationManager.delegate = nil
             DispatchQueue.main.async {
                 if let registerResponse = protoResponse as? IGPGeoRegisterResponse {
                     IGGeoRegister.Handler.interpret(response: registerResponse)
@@ -390,6 +391,11 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
     }
     
     func detectUsersCoordinate(delay: Double = 0){
+        
+        if self.currentLocation == nil {
+            return
+        }
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
             IGGeoGetCoordinateDistance.Generator.generate(lat: self.currentLocation.coordinate.latitude, lon: self.currentLocation.coordinate.longitude).success({ (protoResponse) in
                 DispatchQueue.main.async {
