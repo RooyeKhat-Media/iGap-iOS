@@ -238,7 +238,7 @@ class IGRecentsTableViewController: UITableViewController, MessageReceiveObserve
         DispatchQueue.main.async {
             if let navigationItem = self.tabBarController?.navigationItem as? IGNavigationItem {
                 IGTabBarController.currentTabStatic = .Recent
-                navigationItem.setChatListsNavigationItems()
+                navigationItem.addiGapLogo()
             }
         }
         self.tableView.isUserInteractionEnabled = true
