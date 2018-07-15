@@ -1987,10 +1987,10 @@ extension IGMessageViewController: UICollectionViewDelegateFlowLayout {
                     }
                 }
             } else {
-                let predicate = NSPredicate(format: "roomId = %lld", self.room!.id)
+                let predicate = NSPredicate(format: "roomId = %lld AND isDeleted == false AND id != %lld", self.room!.id, 0)
                 if let message = try! Realm().objects(IGRoomMessage.self).filter(predicate).sorted(by: sortProperties).last {
                     if isFirstHistory {
-                        let predicate = NSPredicate(format: "roomId = %lld AND isDeleted == false AND id != %lld", self.room!.id, 0)
+                        isFirstHistory = false
                         messages = try! Realm().objects(IGRoomMessage.self).filter(predicate).sorted(by: sortProperties)
                         updateObserver()
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
