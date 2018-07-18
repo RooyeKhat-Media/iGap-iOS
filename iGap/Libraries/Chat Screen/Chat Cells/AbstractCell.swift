@@ -566,6 +566,7 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
                 attachment = variableInCache.value
                 variableInCache.asObservable().subscribe({ (event) in
                     DispatchQueue.main.async {
+                        print("XXX update")
                         self.updateAttachmentDownloadUploadIndicatorView()
                     }
                 }).disposed(by: disposeBag)
@@ -624,6 +625,7 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
                 indicatorViewAbs.setState(attachment.status)
                 if attachment.status == .downloading ||  attachment.status == .uploading {
                     indicatorViewAbs.setPercentage(attachment.downloadUploadPercent)
+                    print("XXX image percent \(attachment.downloadUploadPercent)")
                 }
                 break
             case .audio, .voice, .file:
@@ -635,6 +637,7 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
                 indicatorViewAbs.setState(attachment.status)
                 if attachment.status == .downloading ||  attachment.status == .uploading {
                     indicatorViewAbs.setPercentage(self.attachment!.downloadUploadPercent)
+                    print("XXX file percent \(attachment.downloadUploadPercent)")
                 }
                 break
             }
@@ -984,11 +987,22 @@ extension AbstractCell: IGDownloadUploadIndicatorViewDelegate {
         }
         
         if let attachment = self.attachment {
-            IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: { (attachment) -> Void in
+            
+            if attachment.publicUrl != nil && !(attachment.publicUrl?.isEmpty)! {
                 
-            }, failure: {
-                
-            })
+                let downloadFile = IGDownloadManager()
+                downloadFile.download(file: attachment, previewType: .originalFile, completion: { (attachment) -> Void in
+                    
+                }, failure: {
+                    
+                })
+            } else {
+                IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: { (attachment) -> Void in
+                    
+                }, failure: {
+                    
+                })
+            }
         }
         if let forwardAttachment = self.forwardedAttachment {
             IGDownloadManager.sharedManager.download(file: forwardAttachment, previewType: .originalFile, completion: { (attachment) -> Void in

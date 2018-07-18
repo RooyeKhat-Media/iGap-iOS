@@ -271,6 +271,7 @@
 		FAB0F9461FE956D1008F23EB /* Splash.gif in Resources */ = {isa = PBXBuildFile; fileRef = FAB0F9451FE956D1008F23EB /* Splash.gif */; };
 		FAB2C2DF1DF7F6E8001F30B5 /* IGSessionInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB2C2DE1DF7F6E8001F30B5 /* IGSessionInfo.swift */; };
 		FABB9B061DB25E5E00D794A4 /* IGSecurityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABB9B051DB25E5E00D794A4 /* IGSecurityManager.swift */; };
+		FABE83AB20FDB43E00D94F01 /* Digger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FABE83AA20FDB43E00D94F01 /* Digger.framework */; };
 		FAC0F08420F0AF4900182758 /* PecPayment.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC0F08320F0AF4900182758 /* PecPayment.framework */; };
 		FAC0F08520F0AF4900182758 /* PecPayment.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FAC0F08320F0AF4900182758 /* PecPayment.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FAC0F08920F0C8C700182758 /* IGFinancialServiceBillQrScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC0F08820F0C8C700182758 /* IGFinancialServiceBillQrScanner.swift */; };
@@ -628,6 +629,7 @@
 		FAB8210D20D7D583003938BB /* Firebase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Firebase.h; sourceTree = "<group>"; };
 		FAB8210E20D7D589003938BB /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		FABB9B051DB25E5E00D794A4 /* IGSecurityManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IGSecurityManager.swift; path = "Security Manager/IGSecurityManager.swift"; sourceTree = "<group>"; };
+		FABE83AA20FDB43E00D94F01 /* Digger.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Digger.framework; path = Carthage/Build/iOS/Digger.framework; sourceTree = "<group>"; };
 		FAC0F08320F0AF4900182758 /* PecPayment.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PecPayment.framework; sourceTree = "<group>"; };
 		FAC0F08820F0C8C700182758 /* IGFinancialServiceBillQrScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGFinancialServiceBillQrScanner.swift; sourceTree = "<group>"; };
 		FAC34DB31E1A3F7E00BB9823 /* IGRealm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGRealm.swift; sourceTree = "<group>"; };
@@ -703,6 +705,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FABE83AB20FDB43E00D94F01 /* Digger.framework in Frameworks */,
 				FA39EAA320D7BF7B001CFF77 /* Protobuf.framework in Frameworks */,
 				FA73837620D7BA730094312D /* FirebaseInstanceID.framework in Frameworks */,
 				FA73837320D7BA4B0094312D /* FirebaseCore.framework in Frameworks */,
@@ -1496,6 +1499,7 @@
 		FAF985881E2E10EC00B26940 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FABE83AA20FDB43E00D94F01 /* Digger.framework */,
 				FAC0F08320F0AF4900182758 /* PecPayment.framework */,
 				FA39EAA220D7BF7A001CFF77 /* Protobuf.framework */,
 				FA73836B20D798230094312D /* FirebaseCore.framework */,
@@ -1715,6 +1719,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/SwiftProtobuf.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/WebRTC.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Cosmos.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Digger.framework",
 			);
 			name = "[RS] Copy Carthage Frameworks";
 			outputPaths = (

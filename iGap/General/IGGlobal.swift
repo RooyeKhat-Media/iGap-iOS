@@ -530,6 +530,8 @@ extension UIImage {
     
     class func originalImage(for attachment: IGFile) -> UIImage? {
         if let path = attachment.path() {
+            print("\n\n DDDXX original image path is : \(path) \n\n")
+            print("TTT load image path : \(path)")
             if FileManager.default.fileExists(atPath: path.path) {
                 if let image = UIImage(contentsOfFile: path.path) {
                     return image
