@@ -80,11 +80,8 @@ class IGAttachmentManager: NSObject {
     func setProgress(_ progress: Double, for attachment:IGFile) {
         if let variableInCache = variablesCache.object(forKey: attachment.primaryKeyId! as NSString) {
             let attachment = variableInCache.value
-            print("XXX ONE set progress \(progress)")
             attachment.downloadUploadPercent = progress
-            print("XXX TWO set progress \(progress)")
             variableInCache.value = attachment
-            print("XXX THREE set progress \(progress)")
         }
     }
     
