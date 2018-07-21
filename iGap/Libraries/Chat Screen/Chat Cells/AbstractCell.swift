@@ -603,8 +603,8 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
     func updateAttachmentDownloadUploadIndicatorView() {
         if let attachment = self.attachment {
             
-            if attachment.status == .ready {
-                indicatorViewAbs.setState(attachment.status)
+            if attachment.status == .ready || IGGlobal.isFileExist(path: attachment.path()){
+                indicatorViewAbs.setState(.ready)
                 if attachment.type == .gif {
                     attachment.loadData()
                     if let data = attachment.data {

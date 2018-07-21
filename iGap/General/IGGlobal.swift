@@ -37,6 +37,20 @@ class IGGlobal {
         }
     }
     
+    internal static func isFileExist(path: String?) -> Bool{
+        if path != nil {
+            return FileManager.default.fileExists(atPath: path!)
+        }
+        return false
+    }
+    internal static func isFileExist(path: URL?) -> Bool{
+        if path != nil {
+            return FileManager.default.fileExists(atPath: path!.path)
+        }
+        return false
+    }
+    
+    
     //MARK: RegEx
     public class func matches(for regex: String, in text: String) -> Bool {
         do {
@@ -380,7 +394,7 @@ extension UIImageView {
     func setThumbnail(for attachment:IGFile) {
         //NOTE: temporary commented due to performance problems
 //        if let path = attachment.path() {
-//            if FileManager.default.fileExists(atPath: path.path) {
+//            if IGGlobal.isFileExist(path: path) {
 //                if let image = UIImage(contentsOfFile: path.path) {
 //                    self.image = image
 //                    return
@@ -427,7 +441,7 @@ extension UIImageView {
                     } else {
                         var image: UIImage?
                         path = thumbnail.path()
-                        if FileManager.default.fileExists(atPath: path!.path) {
+                        if IGGlobal.isFileExist(path: path) {
                             image = UIImage(contentsOfFile: path!.path)
                         }
                         
@@ -489,7 +503,7 @@ extension UIImageView {
                 } else {
                     var image: UIImage?
                     let path = smallThumbnail.path()
-                    if FileManager.default.fileExists(atPath: path!.path) {
+                    if IGGlobal.isFileExist(path: path) {
                         image = UIImage(contentsOfFile: path!.path)
                     }
                     
@@ -530,7 +544,7 @@ extension UIImage {
     
     class func originalImage(for attachment: IGFile) -> UIImage? {
         if let path = attachment.path() {
-            if FileManager.default.fileExists(atPath: path.path) {
+            if IGGlobal.isFileExist(path: path) {
                 if let image = UIImage(contentsOfFile: path.path) {
                     return image
                 }
