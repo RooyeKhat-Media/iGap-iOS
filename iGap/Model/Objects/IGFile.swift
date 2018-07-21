@@ -72,6 +72,7 @@ class IGFile: Object {
     @objc dynamic var primaryKeyId:       String?   //if incomming { primaryKeyId = cacheId } else { primaryKeyId = rand}
     @objc dynamic var cacheID:            String?   //set by server
     @objc dynamic var token:              String?
+    @objc dynamic var publicUrl:          String?
     @objc dynamic var fileNameOnDisk:     String?
     @objc dynamic var name:               String?
     @objc dynamic var smallThumbnail:     IGFile?
@@ -171,6 +172,7 @@ class IGFile: Object {
     convenience init(igpFile : IGPFile, type: IGFile.FileType) {
         self.init()
         self.token = igpFile.igpToken
+        self.publicUrl = igpFile.igpPublicURL
         self.name = igpFile.igpName
         self.size = Int(igpFile.igpSize)
         self.cacheID = igpFile.igpCacheID

@@ -298,7 +298,7 @@ class IGAppManager: NSObject {
                         self.isTryingToLoginUser = false
                         switch responseProto {
                         case _ as IGPUserLoginResponse:
-                            IGUserLoginRequest.Handler.intrepret()
+                            IGUserLoginRequest.Handler.intrepret(response: (responseProto as? IGPUserLoginResponse)!)
                             self.setUserLoginSuccessful()
                             self.setUserUpdateStatus(status: .online)
                             self.getSignalingConfiguration(force: true)

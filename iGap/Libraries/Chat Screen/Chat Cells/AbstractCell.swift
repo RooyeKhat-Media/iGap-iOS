@@ -603,8 +603,8 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
     func updateAttachmentDownloadUploadIndicatorView() {
         if let attachment = self.attachment {
             
-            if attachment.status == .ready {
-                indicatorViewAbs.setState(attachment.status)
+            if attachment.status == .ready || IGGlobal.isFileExist(path: attachment.path()){
+                indicatorViewAbs.setState(.ready)
                 if attachment.type == .gif {
                     attachment.loadData()
                     if let data = attachment.data {
@@ -979,18 +979,40 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
 
 extension AbstractCell: IGDownloadUploadIndicatorViewDelegate {
     func downloadUploadIndicatorDidTapOnStart(_ indicator: IGDownloadUploadIndicatorView) {
-        if self.attachment?.status == .downloading {
-            return
-        }
         
         if let attachment = self.attachment {
-            IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: { (attachment) -> Void in
+            
+            if attachment.publicUrl != nil && !(attachment.publicUrl?.isEmpty)! {
                 
-            }, failure: {
+                if IGDownloadManager.downloadMap[attachment.token!] != nil {
+                    IGDownloadManager.pauseCDN(token: attachment.token!)
+                    return //before started download
+                }
                 
-            })
+                IGDownloadManager.downloadMap[attachment.token!] = attachment
+                IGDownloadManager().download(file: attachment, previewType: .originalFile, completion: { (attachment) -> Void in
+                    
+                }, failure: {
+                    
+                })
+                
+            } else {
+                
+                if self.attachment?.status == .downloading {
+                    return
+                }
+                
+                IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: { (attachment) -> Void in
+                    
+                }, failure: {
+                    
+                })
+            }
         }
         if let forwardAttachment = self.forwardedAttachment {
+            if self.attachment?.status == .downloading {
+                return
+            }
             IGDownloadManager.sharedManager.download(file: forwardAttachment, previewType: .originalFile, completion: { (attachment) -> Void in
                 
             }, failure: {

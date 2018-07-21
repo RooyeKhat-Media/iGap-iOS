@@ -13,6 +13,7 @@ github "krzyzanowskim/CryptoSwift" "0.7.2"
 github "ninjaprox/NVActivityIndicatorView"
 github "Anakros/WebRTC"
 github "evgenyneu/Cosmos" ~> 15.0
+github "cornerAnt/Digger"
 
 github "RooyeKhat-Media/Gifu" "v3.0.0-a"
 github "RooyeKhat-Media/ALCameraViewController" "3.0.3"

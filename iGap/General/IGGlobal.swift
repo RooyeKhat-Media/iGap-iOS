@@ -10,6 +10,7 @@
 
 import UIKit
 import SwiftProtobuf
+import MBProgressHUD
 
 let kIGUserLoggedInNotificationName = "im.igap.ios.user.logged.in"
 let kIGNotificationNameDidCreateARoom = "im.igap.ios.room.created"
@@ -21,6 +22,34 @@ let IGNotificationPushTwoStepVerification = Notification(name: Notification.Name
 
 
 class IGGlobal {
+    
+    private static var progressHUD = MBProgressHUD()
+    
+    internal static func prgShow(_ view: UIView){
+        DispatchQueue.main.async {
+            IGGlobal.progressHUD = MBProgressHUD.showAdded(to: view.superview!, animated: true)
+            IGGlobal.progressHUD.mode = .indeterminate
+        }
+    }
+    internal static func prgHide(){
+        DispatchQueue.main.async {
+            IGGlobal.progressHUD.hide(animated: true)
+        }
+    }
+    
+    internal static func isFileExist(path: String?) -> Bool{
+        if path != nil {
+            return FileManager.default.fileExists(atPath: path!)
+        }
+        return false
+    }
+    internal static func isFileExist(path: URL?) -> Bool{
+        if path != nil {
+            return FileManager.default.fileExists(atPath: path!.path)
+        }
+        return false
+    }
+    
     //MARK: RegEx
     public class func matches(for regex: String, in text: String) -> Bool {
         do {
@@ -612,6 +641,23 @@ extension String {
     
     var localized: String {
         return NSLocalizedString(self, tableName: nil, bundle: Bundle.main, value: "", comment: "")
+    }
+    
+    func substring(offset: Int) -> String{
+        let index = self.index(self.startIndex, offsetBy: offset)
+        return String(self.prefix(upTo: index))
+    }
+    
+    
+    subscript(_ range: CountableRange<Int>) -> String {
+        let idx1 = index(startIndex, offsetBy: max(0, range.lowerBound))
+        let idx2 = index(startIndex, offsetBy: min(self.count, range.upperBound))
+        return String(self[idx1..<idx2])
+    }
+    
+    
+    var isNumber: Bool {
+        return !isEmpty && rangeOfCharacter(from: CharacterSet.decimalDigits.inverted) == nil
     }
 }
 

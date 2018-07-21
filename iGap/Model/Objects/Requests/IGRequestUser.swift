@@ -128,7 +128,7 @@ class IGUserLoginRequest : IGRequest {
     
     class Handler : IGRequest.Handler{
         
-        class func intrepret() {
+        class func intrepret(response responseProtoMessage: IGPUserLoginResponse) {
             getToken()
         }
         
