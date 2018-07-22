@@ -140,6 +140,7 @@
 		FA358D201E0A6F6A001D0935 /* IGGroupsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA358D1F1E0A6F6A001D0935 /* IGGroupsTableViewController.swift */; };
 		FA358D221E0A6F76001D0935 /* IGChannelsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA358D211E0A6F76001D0935 /* IGChannelsTableViewController.swift */; };
 		FA35DA171DE0245600F171EE /* IGDatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA35DA161DE0245600F171EE /* IGDatabaseManager.swift */; };
+		FA367E7E210459E900FA5A91 /* Digger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA367E7D210459E900FA5A91 /* Digger.framework */; };
 		FA39EAA320D7BF7B001CFF77 /* Protobuf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA39EAA220D7BF7A001CFF77 /* Protobuf.framework */; };
 		FA3B1C871E302CD500F194C4 /* IGProtoBuff.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA3B1C861E302CD500F194C4 /* IGProtoBuff.framework */; };
 		FA3C8E041E6D785800D94FBB /* IGClientActionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA3C8E031E6D785800D94FBB /* IGClientActionManager.swift */; };
@@ -466,6 +467,7 @@
 		FA358D1F1E0A6F6A001D0935 /* IGGroupsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGGroupsTableViewController.swift; sourceTree = "<group>"; };
 		FA358D211E0A6F76001D0935 /* IGChannelsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGChannelsTableViewController.swift; sourceTree = "<group>"; };
 		FA35DA161DE0245600F171EE /* IGDatabaseManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGDatabaseManager.swift; sourceTree = "<group>"; };
+		FA367E7D210459E900FA5A91 /* Digger.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Digger.framework; path = Carthage/Build/iOS/Digger.framework; sourceTree = "<group>"; };
 		FA39EAA220D7BF7A001CFF77 /* Protobuf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Protobuf.framework; sourceTree = "<group>"; };
 		FA3B1C861E302CD500F194C4 /* IGProtoBuff.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IGProtoBuff.framework; path = Carthage/Build/iOS/IGProtoBuff.framework; sourceTree = "<group>"; };
 		FA3C8E031E6D785800D94FBB /* IGClientActionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGClientActionManager.swift; sourceTree = "<group>"; };
@@ -676,6 +678,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA367E7E210459E900FA5A91 /* Digger.framework in Frameworks */,
 				FA39EAA320D7BF7B001CFF77 /* Protobuf.framework in Frameworks */,
 				FA73837620D7BA730094312D /* FirebaseInstanceID.framework in Frameworks */,
 				FA73837320D7BA4B0094312D /* FirebaseCore.framework in Frameworks */,
@@ -1455,6 +1458,7 @@
 		FAF985881E2E10EC00B26940 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FA367E7D210459E900FA5A91 /* Digger.framework */,
 				FA39EAA220D7BF7A001CFF77 /* Protobuf.framework */,
 				FA73836B20D798230094312D /* FirebaseCore.framework */,
 				FA73836D20D798230094312D /* FirebaseInstanceID.framework */,
@@ -1672,6 +1676,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/SwiftProtobuf.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/WebRTC.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Cosmos.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Digger.framework",
 			);
 			name = "[RS] Copy Carthage Frameworks";
 			outputPaths = (
