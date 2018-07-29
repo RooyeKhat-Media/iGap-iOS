@@ -23,6 +23,8 @@ let IGNotificationPushTwoStepVerification = Notification(name: Notification.Name
 
 class IGGlobal {
     
+    /**********************************************/
+    /****************** Progress ******************/
     private static var progressHUD = MBProgressHUD()
     
     internal static func prgShow(_ view: UIView){
@@ -31,24 +33,54 @@ class IGGlobal {
             IGGlobal.progressHUD.mode = .indeterminate
         }
     }
+    
     internal static func prgHide(){
         DispatchQueue.main.async {
             IGGlobal.progressHUD.hide(animated: true)
         }
     }
+    /****************** Progress ******************/
+    /**********************************************/
     
+    
+    /**********************************************/
+    /******************** File ********************/
     internal static func isFileExist(path: String?) -> Bool{
         if path != nil {
             return FileManager.default.fileExists(atPath: path!)
         }
         return false
     }
+    
     internal static func isFileExist(path: URL?) -> Bool{
         if path != nil {
             return FileManager.default.fileExists(atPath: path!.path)
         }
         return false
     }
+    
+    internal static func removeFile(path: String?) {
+        do {
+            if path != nil {
+                try FileManager.default.removeItem(atPath: path!)
+            }
+        } catch {
+            print("file not removed")
+        }
+    }
+    
+    internal static func removeFile(path: URL?) {
+        do {
+            if path != nil {
+                try FileManager.default.removeItem(at: path!)
+            }
+        } catch {
+            print("file not removed")
+        }
+    }
+    /******************** File ********************/
+    /**********************************************/
+    
     
     //MARK: RegEx
     public class func matches(for regex: String, in text: String) -> Bool {

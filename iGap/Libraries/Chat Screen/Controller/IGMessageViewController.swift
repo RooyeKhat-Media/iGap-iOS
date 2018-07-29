@@ -2347,7 +2347,7 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
         }
         
         let attachment = attachmetVariableInCache!.value
-        if attachment.status != .ready {
+        if attachment.status != .ready && !IGGlobal.isFileExist(path: finalMessage.attachment?.path()) {
             return
         }
         
