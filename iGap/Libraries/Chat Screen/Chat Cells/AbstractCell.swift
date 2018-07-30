@@ -984,7 +984,7 @@ extension AbstractCell: IGDownloadUploadIndicatorViewDelegate {
             if attachment.publicUrl != nil && !(attachment.publicUrl?.isEmpty)! {
                 
                 if IGDownloadManager.sharedManager.isDownloading(token: attachment.token!) {
-                    IGDownloadManager.sharedManager.pauseCDN(token: attachment.token!)
+                    IGDownloadManager.sharedManager.pauseDownload(attachment: attachment)  
                     return //before started download
                 }
 

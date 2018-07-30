@@ -303,6 +303,7 @@ class IGAppManager: NSObject {
                             self.setUserUpdateStatus(status: .online)
                             self.getSignalingConfiguration(force: true)
                             self.getGeoRegisterStatus()
+                            IGDownloadManager.sharedManager.manageDownloadAfterLogin()
                             break
                         default:
                             break

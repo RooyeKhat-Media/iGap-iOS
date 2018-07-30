@@ -1625,6 +1625,10 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
                 
             }).send()
         }
+
+        if let attachment = message.attachment {
+            IGDownloadManager.sharedManager.pauseDownload(attachment: attachment)
+        }
     }
     
     
