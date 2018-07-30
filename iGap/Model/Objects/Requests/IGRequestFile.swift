@@ -160,7 +160,7 @@ class IGFileDownloadRequest: IGRequest {
             case .waveformThumbnail:
                 downloadRequestMessage.igpSelector = .waveformThumbnail
             }
-            return IGRequestWrapper(message: downloadRequestMessage, actionID: 705)
+            return IGRequestWrapper(message: downloadRequestMessage, actionID: 705, identity: token)
         }
     }
     

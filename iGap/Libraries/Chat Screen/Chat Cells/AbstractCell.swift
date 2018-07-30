@@ -985,7 +985,7 @@ extension AbstractCell: IGDownloadUploadIndicatorViewDelegate {
                 
                 if IGDownloadManager.sharedManager.isDownloading(token: attachment.token!) {
                     IGDownloadManager.sharedManager.pauseDownload(attachment: attachment)  
-                    return //before started download
+                    return
                 }
 
                 IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: { (attachment) -> Void in
@@ -996,7 +996,8 @@ extension AbstractCell: IGDownloadUploadIndicatorViewDelegate {
                 
             } else {
                 
-                if self.attachment?.status == .downloading {
+                if IGDownloadManager.sharedManager.isDownloading(token: attachment.token!) {
+                    IGDownloadManager.sharedManager.pauseDownload(attachment: attachment)
                     return
                 }
                 

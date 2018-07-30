@@ -252,26 +252,27 @@ class IGDownloadManager {
         
         downloadTask.state = .downloading
         
-        let reqW = IGFileDownloadRequest.Generator.generate(token: downloadTask.file.token!,
-                                                            offset: Int64((downloadTask.file.data?.count)!),
-                                                            maxChunkSize: IGDownloadManager.defaultChunkSizeForDownload,
-                                                            type: downloadTask.type)
+        let downloadRequest = IGFileDownloadRequest.Generator.generate(token: downloadTask.file.token!,offset: Int64((downloadTask.file.data?.count)!),maxChunkSize: IGDownloadManager.defaultChunkSizeForDownload,type: downloadTask.type)
         
-        reqW.success { (responseProto) in
-            switch responseProto {
-            case let fileDownloadReponse as IGPFileDownloadResponse:
+        downloadRequest.successPowerful { (responseProto, requestWrapper) in
+            
+            if let fileDownloadReponse = responseProto as? IGPFileDownloadResponse {
                 let data = IGFileDownloadRequest.Handler.interpret(response: fileDownloadReponse)
                 downloadTask.file.data!.append(data)
                 
                 if downloadTask.file.data?.count != downloadTask.file.size { // downloading
+                    
                     let progress = Progress()
                     progress.totalUnitCount = Int64(downloadTask.file.size)
                     progress.completedUnitCount =  Int64((downloadTask.file.data?.count)!)
                     IGAttachmentManager.sharedManager.setProgress(progress.fractionCompleted, for: downloadTask.file)
                     IGDownloadManager.sharedManager.downloadProto(task: downloadTask)
+                    
                 } else { // finished download
+                    
                     IGAttachmentManager.sharedManager.setProgress(1.0, for: downloadTask.file)
                     if let fileNameOnDisk = IGAttachmentManager.sharedManager.saveDataToDisk(attachment: downloadTask.file) {
+                        
                         IGAttachmentManager.sharedManager.setStatus(.ready, for: downloadTask.file)
                         IGFactory.shared.addNameOnDiskToFile(downloadTask.file, name: fileNameOnDisk)
                         downloadTask.state = .finished
@@ -284,18 +285,18 @@ class IGDownloadManager {
                         case .smallThumbnail, .largeThumbnail, .waveformThumbnail:
                             self.startNextThumbnailTaskIfPossible()
                         }
+                        
                     } else {
+                        
                         //failed saving to disk
-                        reqW.error!(.unknownError, nil)
+                        downloadRequest.error!(.unknownError, nil)
                         IGAttachmentManager.sharedManager.setProgress(0.0, for: downloadTask.file)
                         IGAttachmentManager.sharedManager.setStatus(.readyToDownload, for: downloadTask.file)
+                        
                     }
+                    
                 }
-                break
-            default:
-                break
-            }
-            }.error({ (errorCode, waitTime) in
+            }}.error({ (errorCode, waitTime) in
                 IGAttachmentManager.sharedManager.setProgress(0.0, for: downloadTask.file)
                 IGAttachmentManager.sharedManager.setStatus(.readyToDownload, for: downloadTask.file)
                 switch downloadTask.type {
@@ -311,7 +312,7 @@ class IGDownloadManager {
         if attachment.publicUrl != nil && !(attachment.publicUrl?.isEmpty)! {
             pauseCDN(token: attachment.token!)
         } else {
-            pauseProto()
+            pauseProto(token: attachment.token!)
         }
     }
     
@@ -338,8 +339,27 @@ class IGDownloadManager {
         IGAttachmentManager.sharedManager.setStatus(.downloadPause, for: task.file)
     }
     
-    private func pauseProto(){
+    private func pauseProto(token: String) {
+        var task : IGDownloadTask! = dictionaryDownloadTaskMain[token]
+        if task != nil {
+            
+            IGRequestManager.sharedManager.cancelRequest(identity: token)
+            dictionaryPauseTask[token] = task // go to pause dictionary
+            dictionaryDownloadTaskMain.removeValue(forKey: token) // remove from main download queue
+            
+            startNextDownloadTaskIfPossible()
+            
+        } else {
+            task = dictionaryDownloadTaskQueue[token]
+            if task == nil {
+                return
+            }
+            
+            removeFromWaitingQueue(token: token)
+        }
         
+        IGAttachmentManager.sharedManager.setProgress(0.0, for: task.file)
+        IGAttachmentManager.sharedManager.setStatus(.downloadPause, for: task.file)
     }
 }
 
