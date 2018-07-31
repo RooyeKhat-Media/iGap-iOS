@@ -2351,7 +2351,7 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
         }
         
         let attachment = attachmetVariableInCache!.value
-        if attachment.status != .ready && !IGGlobal.isFileExist(path: finalMessage.attachment?.path()) {
+        if attachment.status != .ready && !IGGlobal.isFileExist(path: finalMessage.attachment?.path(), fileSize: (finalMessage.attachment?.size)!) {
             return
         }
         
