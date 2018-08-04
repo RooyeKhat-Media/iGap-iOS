@@ -48,27 +48,27 @@ class IGDownloadManager {
         return dictionaryDownloadTaskMain.count > 0
     }
     
-    func manageDownloadAfterLogin() {
+    func manageDownloadAfterLogin(autoRetry: Bool = false) {
         
-        // Auto Retry Downloads
-//        dictionaryPauseTask.removeAll()
-//        for downloadTask in dictionaryDownloadTaskMain.values {
-//            dictionaryDownloadTaskMain.removeValue(forKey: downloadTask.file.token!)
-//            manageDownloadQueue(downloadTask)
-//        }
-        
-        
-        // Fiale All Downloads
-        // Hint : Detect when internet lost, then failed all download tasks
-        for downloadTask in dictionaryDownloadTaskMain.values {
-            pauseDownload(attachment: downloadTask.file)
+        if autoRetry { //*** Auto Retry Downloads ***//
+            
+            dictionaryPauseTask.removeAll()
+            for downloadTask in dictionaryDownloadTaskMain.values {
+                dictionaryDownloadTaskMain.removeValue(forKey: downloadTask.file.token!)
+                manageDownloadQueue(downloadTask)
+            }
+            
+        } else { //*** Auto Fial Downloads ***//
+            
+            for downloadTask in dictionaryDownloadTaskMain.values {
+                pauseDownload(attachment: downloadTask.file)
+            }
+            for downloadTask in dictionaryDownloadTaskQueue.values {
+                pauseDownload(attachment: downloadTask.file)
+            }
+            dictionaryPauseTask.removeAll()
+            
         }
-
-        for downloadTask in dictionaryDownloadTaskQueue.values {
-            pauseDownload(attachment: downloadTask.file)
-        }
-
-        dictionaryPauseTask.removeAll()
     }
     
     func download(file: IGFile, previewType: IGFile.PreviewType, completion:DownloadCompleteHandler, failure:DownloadFailedHander) {
@@ -380,6 +380,23 @@ class IGDownloadManager {
         progress.totalUnitCount = total
         progress.completedUnitCount = complete
         return progress.fractionCompleted
+    }
+    
+    func pauseAllDownloads(internetConnectionLost: Bool = false) {
+        for downloadTask in dictionaryDownloadTaskMain.values {
+            pauseDownload(attachment: downloadTask.file)
+        }
+        for downloadTask in dictionaryDownloadTaskQueue.values {
+            pauseDownload(attachment: downloadTask.file)
+        }
+        
+        /* if internet connection lost remove CDN from pauseDownload list (Because now we have to start download NOT start task)
+         * BUT
+         * if just socket connection losted don't remove pauseDownload list (Because now we have to start task NOT start download)
+         */
+        if internetConnectionLost {
+            dictionaryPauseTask.removeAll()
+        }
     }
     
     func pauseDownload(attachment: IGFile) {
