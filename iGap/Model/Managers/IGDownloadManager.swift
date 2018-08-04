@@ -58,7 +58,7 @@ class IGDownloadManager {
                 manageDownloadQueue(downloadTask)
             }
             
-        } else { //*** Auto Fial Downloads ***//
+        } else { //*** Auto Fail Downloads ***//
             
             for downloadTask in dictionaryDownloadTaskMain.values {
                 pauseDownload(attachment: downloadTask.file)
@@ -72,6 +72,11 @@ class IGDownloadManager {
     }
     
     func download(file: IGFile, previewType: IGFile.PreviewType, completion:DownloadCompleteHandler, failure:DownloadFailedHander) {
+        
+        if !IGAppManager.sharedManager.isUserLoggiedIn() { // if isn't login don't start download
+            return
+        }
+        
         print("XXXS || Manage Download ;) || Main List Size : \(self.dictionaryDownloadTaskMain.count) || Queue List Size : \(self.dictionaryDownloadTaskQueue.count) || Token Array Size : \(self.taskQueueTokenArray.count)")
         let downloadTask = IGDownloadTask(file: file, previewType:previewType, completion:completion, failure:failure)
         

@@ -981,43 +981,29 @@ extension AbstractCell: IGDownloadUploadIndicatorViewDelegate {
         
         if let attachment = self.attachment {
             
-            if attachment.publicUrl != nil && !(attachment.publicUrl?.isEmpty)! {
-                
-                if IGDownloadManager.sharedManager.isDownloading(token: attachment.token!) {
-                    IGDownloadManager.sharedManager.pauseDownload(attachment: attachment)  
-                    return
-                }
-
-                IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: { (attachment) -> Void in
-
-                }, failure: {
-
-                })
-                
-            } else {
-                
-                if IGDownloadManager.sharedManager.isDownloading(token: attachment.token!) {
-                    IGDownloadManager.sharedManager.pauseDownload(attachment: attachment)
-                    return
-                }
-                
-                IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: { (attachment) -> Void in
-                    
-                }, failure: {
-                    
-                })
-            }
-        }
-        if let forwardAttachment = self.forwardedAttachment {
-            if self.attachment?.status == .downloading {
+            if IGDownloadManager.sharedManager.isDownloading(token: attachment.token!) {
+                IGDownloadManager.sharedManager.pauseDownload(attachment: attachment)
                 return
             }
+            
+            IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: { (attachment) -> Void in
+                
+            }, failure: {
+                
+            })
+        }
+        if let forwardAttachment = self.forwardedAttachment {
+            
+            if IGDownloadManager.sharedManager.isDownloading(token: forwardAttachment.token!) {
+                IGDownloadManager.sharedManager.pauseDownload(attachment: forwardAttachment)
+                return
+            }
+            
             IGDownloadManager.sharedManager.download(file: forwardAttachment, previewType: .originalFile, completion: { (attachment) -> Void in
                 
             }, failure: {
                 
             })
-            
         }
     }
     
