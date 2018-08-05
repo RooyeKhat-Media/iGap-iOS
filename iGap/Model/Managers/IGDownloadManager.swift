@@ -268,7 +268,9 @@ class IGDownloadManager {
                     nextOffsetDownload = previousOffset + Int64(fileDownloadReponse.igpBytes.count)
                 }
                 
-                IGAttachmentManager.sharedManager.appendDataToDisk(attachment: downloadTask.file, data: fileDownloadReponse.igpBytes)
+                DispatchQueue.main.async {
+                    IGAttachmentManager.sharedManager.appendDataToDisk(attachment: downloadTask.file, data: fileDownloadReponse.igpBytes)
+                }
                 
                 if nextOffsetDownload != downloadTask.file.size { // downloading
                     
