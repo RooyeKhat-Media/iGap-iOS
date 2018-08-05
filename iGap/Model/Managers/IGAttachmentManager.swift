@@ -106,4 +106,17 @@ class IGAttachmentManager: NSObject {
         }
         return nil
     }
+    
+    func appendDataToDisk(attachment: IGFile, data: Data) {
+        if let outputStream = OutputStream(url: attachment.path()!, append: true) {
+            outputStream.open()
+            let bytesWritten = outputStream.write(data.bytes, maxLength: data.count)
+            if bytesWritten < 0 {
+                print("write failure")
+            }
+            outputStream.close()
+        } else {
+            print("unable to open file")
+        }
+    }
 }

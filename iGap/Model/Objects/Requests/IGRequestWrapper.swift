@@ -40,10 +40,10 @@ class IGRequestWrapper :NSObject {
         self.actionId = actionID
     }
     
-    init(message: RequestMessage!, identity:String, actionID:Int) {
+    init(message: RequestMessage!, actionID:Int, identity:String) {
         self.message = message
-        self.identity = identity
         self.actionId = actionID
+        self.identity = identity
     }
     
     @discardableResult

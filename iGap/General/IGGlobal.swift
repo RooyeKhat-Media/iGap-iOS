@@ -23,6 +23,8 @@ let IGNotificationPushTwoStepVerification = Notification(name: Notification.Name
 
 class IGGlobal {
     
+    /**********************************************/
+    /****************** Progress ******************/
     private static var progressHUD = MBProgressHUD()
     
     internal static func prgShow(_ view: UIView){
@@ -31,21 +33,37 @@ class IGGlobal {
             IGGlobal.progressHUD.mode = .indeterminate
         }
     }
+    
     internal static func prgHide(){
         DispatchQueue.main.async {
             IGGlobal.progressHUD.hide(animated: true)
         }
     }
+    /****************** Progress ******************/
+    /**********************************************/
     
-    internal static func isFileExist(path: String?) -> Bool{
-        if path != nil {
-            return FileManager.default.fileExists(atPath: path!)
+    
+    /**********************************************/
+    /******************** File ********************/
+
+    /*
+     * check file exist in path or no. also if 'fileSize' is set to the input of the method,
+     * size of file that exist in path and 'fileSize' which is set, will be compared.
+     * finally if there are two equal values,the output is true otherwise the output will be false.
+     */
+    
+    internal static func isFileExist(path: String?, fileSize: Int = -1) -> Bool {
+        if path != nil && FileManager.default.fileExists(atPath: path!) {
+            if fileSize == -1 || fileSize == FileManager.default.contents(atPath: path!)?.count {
+                return true
+            }
         }
         return false
     }
-    internal static func isFileExist(path: URL?) -> Bool{
+    
+    internal static func isFileExist(path: URL?, fileSize: Int = -1) -> Bool {
         if path != nil {
-            return FileManager.default.fileExists(atPath: path!.path)
+            return isFileExist(path: path?.path, fileSize: fileSize)
         }
         return false
     }

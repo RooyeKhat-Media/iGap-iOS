@@ -1625,6 +1625,10 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
                 
             }).send()
         }
+
+        if let attachment = message.attachment {
+            IGDownloadManager.sharedManager.pauseDownload(attachment: attachment)
+        }
     }
     
     
@@ -2347,7 +2351,7 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
         }
         
         let attachment = attachmetVariableInCache!.value
-        if attachment.status != .ready {
+        if attachment.status != .ready && !IGGlobal.isFileExist(path: finalMessage.attachment?.path(), fileSize: (finalMessage.attachment?.size)!) {
             return
         }
         

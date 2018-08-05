@@ -99,7 +99,7 @@ class IGGeoGetComment : IGRequest {
                 return IGRequestWrapper(message: getComment, actionID: 1003)
             }
             
-            return IGRequestWrapper(message: getComment, identity: identity, actionID: 1003)
+            return IGRequestWrapper(message: getComment, actionID: 1003, identity: identity)
             
         }
     }

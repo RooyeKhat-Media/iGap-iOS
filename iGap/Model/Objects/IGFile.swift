@@ -25,11 +25,13 @@ class IGFile: Object {
         case downloading
         case processingAfterDownload
         case downloadFailed
+        case downloadPause
         
         case processingForUpload
         case uploading
         case waitingForServerProcess
         case uploadFailed
+        case uploadPause
         
         case ready
     }

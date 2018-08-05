@@ -148,6 +148,15 @@ class IGDownloadUploadIndicatorView: UIView {
             break
         case .processingAfterDownload:
             break
+            
+        case .downloadPause:
+            self.addDownloadButtonIfNeeded()
+            self.addSizeLabelIfNeeded()
+            self.downloadUploadView?.removeFromSuperview()
+            self.downloadUploadView = nil
+            self.isHidden = false
+            self.downloadUploadText = "Download Paused"
+            break
         case .downloadFailed:
             break
             
@@ -169,6 +178,9 @@ class IGDownloadUploadIndicatorView: UIView {
             self.downloadUploadText = "Uploading"
             break
         case .waitingForServerProcess:
+            break
+            
+        case .uploadPause:
             break
         case .uploadFailed:
             break

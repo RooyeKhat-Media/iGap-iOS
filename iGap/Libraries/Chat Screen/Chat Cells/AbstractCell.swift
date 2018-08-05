@@ -601,9 +601,9 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
     }
     
     func updateAttachmentDownloadUploadIndicatorView() {
+        
         if let attachment = self.attachment {
-            
-            if attachment.status == .ready || IGGlobal.isFileExist(path: attachment.path()){
+            if IGGlobal.isFileExist(path: attachment.path(), fileSize: attachment.size) { // attachment.status == .ready ||
                 indicatorViewAbs.setState(.ready)
                 if attachment.type == .gif {
                     attachment.loadData()
@@ -616,7 +616,6 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
                 }
                 return
             }
-            
             
             switch attachment.type {
             case .video, .image, .gif:
@@ -982,43 +981,29 @@ extension AbstractCell: IGDownloadUploadIndicatorViewDelegate {
         
         if let attachment = self.attachment {
             
-            if attachment.publicUrl != nil && !(attachment.publicUrl?.isEmpty)! {
-                
-                if IGDownloadManager.downloadMap[attachment.token!] != nil {
-                    IGDownloadManager.pauseCDN(token: attachment.token!)
-                    return //before started download
-                }
-                
-                IGDownloadManager.downloadMap[attachment.token!] = attachment
-                IGDownloadManager().download(file: attachment, previewType: .originalFile, completion: { (attachment) -> Void in
-                    
-                }, failure: {
-                    
-                })
-                
-            } else {
-                
-                if self.attachment?.status == .downloading {
-                    return
-                }
-                
-                IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: { (attachment) -> Void in
-                    
-                }, failure: {
-                    
-                })
-            }
-        }
-        if let forwardAttachment = self.forwardedAttachment {
-            if self.attachment?.status == .downloading {
+            if IGDownloadManager.sharedManager.isDownloading(token: attachment.token!) {
+                IGDownloadManager.sharedManager.pauseDownload(attachment: attachment)
                 return
             }
+            
+            IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: { (attachment) -> Void in
+                
+            }, failure: {
+                
+            })
+        }
+        if let forwardAttachment = self.forwardedAttachment {
+            
+            if IGDownloadManager.sharedManager.isDownloading(token: forwardAttachment.token!) {
+                IGDownloadManager.sharedManager.pauseDownload(attachment: forwardAttachment)
+                return
+            }
+            
             IGDownloadManager.sharedManager.download(file: forwardAttachment, previewType: .originalFile, completion: { (attachment) -> Void in
                 
             }, failure: {
                 
             })
-            
         }
     }
     

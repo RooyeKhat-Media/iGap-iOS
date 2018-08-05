@@ -541,7 +541,7 @@ class IGRequestManager {
                     resolvedRequests[response.igpID] = correspondingRequestWrapper
                     pendingRequests[response.igpID]  = nil
                 } else if resolvedRequests[response.igpID] != nil {
-                    print ("✦ \(NSDate.timeIntervalSinceReferenceDate) ----- Response is already resolved")
+                    print ("✦ \(NSDate.timeIntervalSinceReferenceDate) -----XXX Response is already resolved")
                 } else {
                     //this is a `pushed` message
                     //call its corresponding handler class to handle push
@@ -568,6 +568,15 @@ class IGRequestManager {
             pendingRequests[requestWrapper.id]  = nil
             if let error = requestWrapper.error {
                 error(.timeout, nil)
+            }
+        }
+    }
+    
+    func cancelRequest(identity: String) {
+        for requestWrapper in pendingRequests.values {
+            if requestWrapper.identity == identity {
+                resolvedRequests[requestWrapper.id] = requestWrapper
+                pendingRequests[requestWrapper.id] = nil
             }
         }
     }
