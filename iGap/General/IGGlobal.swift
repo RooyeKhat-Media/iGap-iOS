@@ -68,6 +68,36 @@ class IGGlobal {
         return false
     }
     
+    internal static func removeFile(path: String?) {
+        do {
+            if path != nil {
+                try FileManager.default.removeItem(atPath: path!)
+            }
+        } catch {
+            print("file not removed")
+        }
+    }
+    
+    internal static func removeFile(path: URL?) {
+        do {
+            if path != nil {
+                try FileManager.default.removeItem(at: path!)
+            }
+        } catch {
+            print("file not removed")
+        }
+    }
+    
+    internal static func getFileSize(path: URL?) -> Int64{
+        if path == nil || path?.path == nil || !isFileExist(path: path) {
+            return 0
+        }
+        
+        return Int64(FileManager.default.contents(atPath: (path?.path)!)!.count)
+    }
+    /******************** File ********************/
+    /**********************************************/
+    
     
     //MARK: RegEx
     public class func matches(for regex: String, in text: String) -> Bool {
@@ -667,11 +697,13 @@ extension String {
         return String(self.prefix(upTo: index))
     }
     
+    
     subscript(_ range: CountableRange<Int>) -> String {
         let idx1 = index(startIndex, offsetBy: max(0, range.lowerBound))
         let idx2 = index(startIndex, offsetBy: min(self.count, range.upperBound))
         return String(self[idx1..<idx2])
     }
+    
     
     var isNumber: Bool {
         return !isEmpty && rangeOfCharacter(from: CharacterSet.decimalDigits.inverted) == nil
