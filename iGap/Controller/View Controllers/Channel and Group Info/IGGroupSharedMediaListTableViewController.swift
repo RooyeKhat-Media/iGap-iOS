@@ -192,6 +192,7 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
                                 self.sharedMediaImageFile.append(msg)
                             }
                         }
+                        break
                     default:
                         break
                     }

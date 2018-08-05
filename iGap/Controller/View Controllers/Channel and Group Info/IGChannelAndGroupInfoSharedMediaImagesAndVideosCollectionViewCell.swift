@@ -51,8 +51,8 @@ class IGChannelAndGroupInfoSharedMediaImagesAndVideosCollectionViewCell: UIColle
                 self.attachment = messageAttachmentVariableInCache.value
             } else {
                 self.attachment = msgAttachment.detach()
-                let attachmentRef = ThreadSafeReference(to: msgAttachment)
-                IGAttachmentManager.sharedManager.add(attachmentRef: attachmentRef)
+                //let attachmentRef = ThreadSafeReference(to: msgAttachment)
+                IGAttachmentManager.sharedManager.add(attachment: attachment!)
                 self.attachment = IGAttachmentManager.sharedManager.getRxVariable(attachmentPrimaryKeyId: msgAttachment.primaryKeyId!)?.value
             }
             
@@ -97,7 +97,6 @@ class IGChannelAndGroupInfoSharedMediaImagesAndVideosCollectionViewCell: UIColle
             
             if attachment.status == .ready {
                 self.mediaDownloadIndicator.setState(attachment.status)
-                setThumbnailForAttachments()
                   if attachment.type == .image {
                     self.sharedMediaImageView.setThumbnail(for: attachment)
                 }
@@ -118,32 +117,9 @@ class IGChannelAndGroupInfoSharedMediaImagesAndVideosCollectionViewCell: UIColle
         }
         
     }
-    
-    func setThumbnailForAttachments() {
-        if let attachment = self.attachment {
-            self.sharedMediaImageView.isHidden = false
-            if attachment.type == .voice {
-                self.sharedMediaImageView.image = UIImage(named: "IG_Message_Cell_Voice")
-            } else {
-                switch attachment.fileTypeBasedOnNameExtension {
-                case .docx:
-                    self.sharedMediaImageView.image = UIImage(named: "IG_Message_Cell_File_Doc")
-                default:
-                    self.sharedMediaImageView.image = UIImage(named: "IG_Message_Cell_File_Generic")
-                }
-            }
-        }
-    }
-
-
-
 }
 extension IGChannelAndGroupInfoSharedMediaImagesAndVideosCollectionViewCell: IGDownloadUploadIndicatorViewDelegate {
     func downloadUploadIndicatorDidTapOnStart(_ indicator: IGDownloadUploadIndicatorView) {
-        if self.attachment?.status == .downloading {
-            return
-        }
-        
         if let attachment = self.attachment {
             IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: { (attachment) -> Void in
                 
@@ -151,7 +127,6 @@ extension IGChannelAndGroupInfoSharedMediaImagesAndVideosCollectionViewCell: IGD
                 
             })
         }
-        
     }
     
     func downloadUploadIndicatorDidTapOnCancel(_ indicator: IGDownloadUploadIndicatorView) {

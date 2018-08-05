@@ -981,11 +981,6 @@ extension AbstractCell: IGDownloadUploadIndicatorViewDelegate {
         
         if let attachment = self.attachment {
             
-            if IGDownloadManager.sharedManager.isDownloading(token: attachment.token!) {
-                IGDownloadManager.sharedManager.pauseDownload(attachment: attachment)
-                return
-            }
-            
             IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: { (attachment) -> Void in
                 
             }, failure: {
@@ -993,11 +988,6 @@ extension AbstractCell: IGDownloadUploadIndicatorViewDelegate {
             })
         }
         if let forwardAttachment = self.forwardedAttachment {
-            
-            if IGDownloadManager.sharedManager.isDownloading(token: forwardAttachment.token!) {
-                IGDownloadManager.sharedManager.pauseDownload(attachment: forwardAttachment)
-                return
-            }
             
             IGDownloadManager.sharedManager.download(file: forwardAttachment, previewType: .originalFile, completion: { (attachment) -> Void in
                 

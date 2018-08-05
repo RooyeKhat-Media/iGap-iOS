@@ -159,7 +159,7 @@ class IGClientSearchRoomHistoryRequest : IGRequest {
             let totalCount = responseProtoMessage.igpTotalCount
             let notDeletedCount = responseProtoMessage.igpNotDeletedCount
             let igpMessages = responseProtoMessage.igpResult
-            IGFactory.shared.saveIgpMessagesToDatabase(igpMessages, for: roomId, updateLastMessage: false, isFromSharedMedia: true)
+            //IGFactory.shared.saveIgpMessagesToDatabase(igpMessages, for: roomId, updateLastMessage: false, isFromSharedMedia: true)
             return (totlaCount: totalCount , NotDeletedCount: notDeletedCount , messages: igpMessages)
             
         }

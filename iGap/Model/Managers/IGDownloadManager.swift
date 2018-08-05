@@ -73,6 +73,11 @@ class IGDownloadManager {
     
     func download(file: IGFile, previewType: IGFile.PreviewType, completion:DownloadCompleteHandler, failure:DownloadFailedHander) {
         
+        if IGDownloadManager.sharedManager.isDownloading(token: file.token!) {
+            IGDownloadManager.sharedManager.pauseDownload(attachment: file)
+            return
+        }
+        
         if !IGAppManager.sharedManager.isUserLoggiedIn() { // if isn't login don't start download
             return
         }
@@ -227,6 +232,8 @@ class IGDownloadManager {
                     
                 case .failure(let error):
                     print("error download file : \(error)")
+                    DiggerCache.cleanDownloadFiles()
+                    
                     switch downloadTask.type {
                     case .originalFile:
                         self.startNextDownloadTaskIfPossible()
