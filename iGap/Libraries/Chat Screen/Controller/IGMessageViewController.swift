@@ -1904,7 +1904,7 @@ extension IGMessageViewController: IGMessageCollectionViewDataSource {
             
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionFooter, withReuseIdentifier: IGMessageLogCollectionViewCell.cellReuseIdentifier(), for: indexPath) as! IGMessageLogCollectionViewCell
             
-            if indexPath.section <= messages.count {
+            if indexPath.section < messages.count {
                 if let message = messages?[indexPath.section] {
                     if message.shouldFetchBefore {
                         header.setText("Loading ...")

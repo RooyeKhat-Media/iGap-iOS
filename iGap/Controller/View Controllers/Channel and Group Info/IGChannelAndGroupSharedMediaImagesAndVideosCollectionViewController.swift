@@ -149,7 +149,7 @@ class IGChannelAndGroupSharedMediaImagesAndVideosCollectionViewController: UICol
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if sharedMedia[indexPath.row].type == .image {
+        if sharedMedia[indexPath.row].type == .image || sharedMedia[indexPath.row].type == .imageAndText {
             var photos: [INSPhotoViewable] = Array(self.sharedMedia.map { (message) -> IGMedia in
                 return IGMedia(message: message, forwardedMedia: false)
             })
@@ -157,7 +157,7 @@ class IGChannelAndGroupSharedMediaImagesAndVideosCollectionViewController: UICol
             let currentPhoto = photos[indexPath.row]
             let galleryPreview = INSPhotosViewController(photos: photos, initialPhoto: currentPhoto, referenceView: nil)
             present(galleryPreview, animated: true, completion: nil)
-        } else if sharedMedia[indexPath.row].type == .video {
+        } else if sharedMedia[indexPath.row].type == .video || sharedMedia[indexPath.row].type == .videoAndText {
             if let path = sharedMedia[indexPath.row].attachment?.path() {
                 let player = AVPlayer(url: path)
                 let avController = AVPlayerViewController()
@@ -190,7 +190,7 @@ class IGChannelAndGroupSharedMediaImagesAndVideosCollectionViewController: UICol
                     case let clientSearchRoomHistoryResponse as IGPClientSearchRoomHistoryResponse:
                         let response =  IGClientSearchRoomHistoryRequest.Handler.interpret(response: clientSearchRoomHistoryResponse , roomId: selectedRoom.id)
                         if let messagesResponse: [IGPRoomMessage] = response.messages {
-                            for message in messagesResponse {
+                            for message in messagesResponse.reversed() {
                                 let msg = IGRoomMessage(igpMessage: message, roomId: selectedRoom.id)
                                 self.sharedMedia.append(msg)
                             }

@@ -187,7 +187,7 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
                     case let clientSearchRoomHistoryResponse as IGPClientSearchRoomHistoryResponse:
                         let response =  IGClientSearchRoomHistoryRequest.Handler.interpret(response: clientSearchRoomHistoryResponse , roomId: selectedRoom.id)
                         if let messagesResponse: [IGPRoomMessage] = response.messages {
-                            for message in messagesResponse {
+                            for message in messagesResponse.reversed() {
                                 let msg = IGRoomMessage(igpMessage: message, roomId: selectedRoom.id)
                                 self.sharedMediaImageFile.append(msg)
                             }
@@ -228,7 +228,7 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
                     case let clientSearchRoomHistoryResponse as IGPClientSearchRoomHistoryResponse:
                         let response =  IGClientSearchRoomHistoryRequest.Handler.interpret(response: clientSearchRoomHistoryResponse , roomId: selectedRoom.id)
                         if let messagesResponse: [IGPRoomMessage] = response.messages {
-                            for message in messagesResponse {
+                            for message in messagesResponse.reversed() {
                                 let msg = IGRoomMessage(igpMessage: message, roomId: selectedRoom.id)
                                 self.sharedMediaAudioFile.append(msg)
                             }
@@ -270,7 +270,7 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
                     case let clientSearchRoomHistoryResponse as IGPClientSearchRoomHistoryResponse:
                         let response =  IGClientSearchRoomHistoryRequest.Handler.interpret(response: clientSearchRoomHistoryResponse , roomId: selectedRoom.id)
                         if let messagesResponse: [IGPRoomMessage] = response.messages {
-                            for message in messagesResponse {
+                            for message in messagesResponse.reversed() {
                                 let msg = IGRoomMessage(igpMessage: message, roomId: selectedRoom.id)
                                 self.sharedMediaVideoFile.append(msg)
                             }
@@ -313,7 +313,7 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
                     case let clientSearchRoomHistoryResponse as IGPClientSearchRoomHistoryResponse:
                         let response =  IGClientSearchRoomHistoryRequest.Handler.interpret(response: clientSearchRoomHistoryResponse , roomId: selectedRoom.id)
                         if let messagesResponse: [IGPRoomMessage] = response.messages {
-                            for message in messagesResponse {
+                            for message in messagesResponse.reversed() {
                                 let msg = IGRoomMessage(igpMessage: message, roomId: selectedRoom.id)
                                 self.sharedMediaFile.append(msg)
                             }
@@ -356,7 +356,7 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
                     case let clientSearchRoomHistoryResponse as IGPClientSearchRoomHistoryResponse:
                         let response =  IGClientSearchRoomHistoryRequest.Handler.interpret(response: clientSearchRoomHistoryResponse , roomId: selectedRoom.id)
                         if let messagesResponse: [IGPRoomMessage] = response.messages {
-                            for message in messagesResponse {
+                            for message in messagesResponse.reversed() {
                                 let msg = IGRoomMessage(igpMessage: message, roomId: selectedRoom.id)
                                 self.sharedMediaVoiceFile.append(msg)
                             }
@@ -398,7 +398,7 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
                     case let clientSearchRoomHistoryResponse as IGPClientSearchRoomHistoryResponse:
                         let response =  IGClientSearchRoomHistoryRequest.Handler.interpret(response: clientSearchRoomHistoryResponse , roomId: selectedRoom.id)
                         if let messagesResponse: [IGPRoomMessage] = response.messages {
-                            for message in messagesResponse {
+                            for message in messagesResponse.reversed() {
                                 let msg = IGRoomMessage(igpMessage: message, roomId: selectedRoom.id)
                                 self.sharedMediaLinkFile.append(msg)
                             }
