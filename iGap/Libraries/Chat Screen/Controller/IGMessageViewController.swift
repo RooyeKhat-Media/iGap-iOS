@@ -2367,11 +2367,10 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
                 present(avController, animated: true, completion: nil)
             }
             return
-        case .voice , .audio :
+        case .voice , .audio, .audioAndText :
             let musicPlayer = IGMusicViewController()
             musicPlayer.attachment = finalMessage.attachment
-            self.present(musicPlayer, animated: true, completion: {
-            })
+            self.present(musicPlayer, animated: true, completion: nil)
             return
             
         case .file , .fileAndText:

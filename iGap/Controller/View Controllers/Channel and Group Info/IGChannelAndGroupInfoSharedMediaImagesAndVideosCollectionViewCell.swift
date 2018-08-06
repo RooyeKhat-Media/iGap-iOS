@@ -20,21 +20,17 @@ class IGChannelAndGroupInfoSharedMediaImagesAndVideosCollectionViewCell: UIColle
     @IBOutlet weak var videoSizeLabel: UILabel!
     @IBOutlet weak var mediaDownloadIndicator: IGDownloadUploadIndicatorView!
     let disposeBag = DisposeBag()
-
+    
     var attachment: IGFile?
     override init(frame: CGRect) {
         super.init(frame: frame)
         
     }
     
-    override func awakeFromNib() {
-       // self.mediaDownloadIndicator.shouldShowSize = true
-
-    }
+    override func awakeFromNib() {}
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        //fatalError("init(coder:) has not been implemented")
     }
     
     override func prepareForReuse() {
@@ -43,8 +39,8 @@ class IGChannelAndGroupInfoSharedMediaImagesAndVideosCollectionViewCell: UIColle
         self.mediaDownloadIndicator.prepareForReuse()
         self.mediaDownloadIndicator.isHidden = true
         self.sharedMediaImageView.isHidden = true
-        //self.mediaDownloadIndicator.prepareForReuse()
     }
+    
     func setMediaIndicator(message: IGRoomMessage) {
         if let msgAttachment = message.attachment {
             if let messageAttachmentVariableInCache = IGAttachmentManager.sharedManager.getRxVariable(attachmentPrimaryKeyId: msgAttachment.primaryKeyId!) {
@@ -56,53 +52,45 @@ class IGChannelAndGroupInfoSharedMediaImagesAndVideosCollectionViewCell: UIColle
                 self.attachment = IGAttachmentManager.sharedManager.getRxVariable(attachmentPrimaryKeyId: msgAttachment.primaryKeyId!)?.value
             }
             
-        
-        if let variableInCache = IGAttachmentManager.sharedManager.getRxVariable(attachmentPrimaryKeyId: msgAttachment.primaryKeyId!) {
-            attachment = variableInCache.value
-            variableInCache.asObservable().subscribe({ (event) in
-                DispatchQueue.main.async {
-                    self.updateAttachmentDownloadUploadIndicatorView()
+            
+            if let variableInCache = IGAttachmentManager.sharedManager.getRxVariable(attachmentPrimaryKeyId: msgAttachment.primaryKeyId!) {
+                attachment = variableInCache.value
+                variableInCache.asObservable().subscribe({ (event) in
+                    DispatchQueue.main.async {
+                        self.updateAttachmentDownloadUploadIndicatorView()
+                    }
+                }).disposed(by: disposeBag)
+            }
+            
+            //MARK: ▶︎ Rx End
+            switch (message.type) {
+            case .image, .imageAndText, .video, .videoAndText:
+                self.sharedMediaImageView.isHidden = false
+                self.mediaDownloadIndicator.isHidden = false
+                let progress = Progress(totalUnitCount: 100)
+                progress.completedUnitCount = 0
+                
+                self.sharedMediaImageView.setThumbnail(for: msgAttachment)
+                
+                if msgAttachment.status != .ready {
+                    self.mediaDownloadIndicator.size = msgAttachment.sizeToString()
+                    self.mediaDownloadIndicator.delegate = self
                 }
-            }).addDisposableTo(disposeBag)
-        } else {
-            
-        }
-        
-        //MARK: ▶︎ Rx End
-        switch (message.type) {
-        case .image, .imageAndText, .video, .videoAndText:
-            //self.forwardedMessageAudioAndVoiceViewHeightConstraint.constant = 0
-            self.sharedMediaImageView.isHidden = false
-            self.mediaDownloadIndicator.isHidden = false
-            let progress = Progress(totalUnitCount: 100)
-            progress.completedUnitCount = 0
-            
-            self.sharedMediaImageView.setThumbnail(for: msgAttachment)
-           // self.forwardedMessageMediaContainerViewHeightConstraint.constant = messageSizes.forwardedMessageAttachmentHeight //+ 20
-            
-            if msgAttachment.status != .ready {
-                self.mediaDownloadIndicator.size = msgAttachment.sizeToString()
-                self.mediaDownloadIndicator.delegate = self
-            }
-        default:
-            break
+            default:
+                break
             }
         }
-        
     }
-    
     
     func updateAttachmentDownloadUploadIndicatorView() {
         if let attachment = self.attachment {
-            
             if attachment.status == .ready {
                 self.mediaDownloadIndicator.setState(attachment.status)
-                  if attachment.type == .image {
+                if attachment.type == .image {
                     self.sharedMediaImageView.setThumbnail(for: attachment)
                 }
                 return
             }
-            
             
             switch attachment.type {
             case .video, .image:
@@ -115,21 +103,14 @@ class IGChannelAndGroupInfoSharedMediaImagesAndVideosCollectionViewCell: UIColle
                 break
             }
         }
-        
     }
 }
 extension IGChannelAndGroupInfoSharedMediaImagesAndVideosCollectionViewCell: IGDownloadUploadIndicatorViewDelegate {
     func downloadUploadIndicatorDidTapOnStart(_ indicator: IGDownloadUploadIndicatorView) {
         if let attachment = self.attachment {
-            IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: { (attachment) -> Void in
-                
-            }, failure: {
-                
-            })
+            IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: { (attachment) -> Void in }, failure: {})
         }
     }
     
-    func downloadUploadIndicatorDidTapOnCancel(_ indicator: IGDownloadUploadIndicatorView) {
-        
-    }
+    func downloadUploadIndicatorDidTapOnCancel(_ indicator: IGDownloadUploadIndicatorView) {}
 }

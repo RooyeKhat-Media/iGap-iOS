@@ -15,8 +15,8 @@ import MBProgressHUD
 import IGProtoBuff
 import INSPhotoGalleryFramework
 
-class IGChannelAndGroupSharedMediaAudioAndLinkTableViewController: UITableViewController , UIGestureRecognizerDelegate {
-
+class IGChannelAndGroupSharedMediaAudioAndLinkTableViewController: UITableViewController , UIGestureRecognizerDelegate, UIDocumentInteractionControllerDelegate {
+    
     var sharedMedia = [IGRoomMessage]()
     var room: IGRoom?
     var hud = MBProgressHUD()
@@ -28,10 +28,10 @@ class IGChannelAndGroupSharedMediaAudioAndLinkTableViewController: UITableViewCo
     private var player = IGMusicPlayer.sharedPlayer
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(sharedMedia.count)
+        
         let navigationItem = self.navigationItem as! IGNavigationItem
         navigationItem.addNavigationViewItems(rightItemText: nil, title: navigationTitle )
-        navigationItem.navigationController = self.navigationController as! IGNavigationController
+        navigationItem.navigationController = self.navigationController as? IGNavigationController
         let navigationController = self.navigationController as! IGNavigationController
         navigationController.interactivePopGestureRecognizer?.delegate = self
         
@@ -39,24 +39,19 @@ class IGChannelAndGroupSharedMediaAudioAndLinkTableViewController: UITableViewCo
     override func viewDidAppear(_ animated: Bool) {
         self.tableView.isUserInteractionEnabled = true
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
-
-    // MARK: - Table view data source
-
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return sharedMedia.count
     }
-
+    
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
@@ -72,63 +67,45 @@ class IGChannelAndGroupSharedMediaAudioAndLinkTableViewController: UITableViewCo
                     } else  if  sharedAttachment.type == .voice {
                         sharedMediaFilter = .voice
                     }
-                        return audioCell
-                        
-                } else {
-                    
+                    return audioCell
                 }
             }
         }
         
-        if sharedMedia[indexPath.row].type == .file || sharedMedia[indexPath.row].type == .fileAndText{
+        if sharedMedia[indexPath.row].type == .file || sharedMedia[indexPath.row].type == .fileAndText {
             
-            let fileCell = tableView.dequeueReusableCell(withIdentifier: "SharedFileCell", for: indexPath) as!
-            IGChannelAndGroupInfoSharedMediaFileTableViewCell
+            let fileCell = tableView.dequeueReusableCell(withIdentifier: "SharedFileCell", for: indexPath) as! IGChannelAndGroupInfoSharedMediaFileTableViewCell
             let sharedFile = sharedMedia[indexPath.row]
             if let sharedAttachment = sharedFile.attachment {
                 if sharedAttachment.type == .file {
-                    fileCell.setFileDetails(attachment: sharedAttachment , messsage: sharedFile)
+                    fileCell.setFileDetails(attachment: sharedAttachment , message: sharedFile)
                     sharedMediaFilter = .file
                     return fileCell
                 }
             }
-
-        } else if sharedMedia[indexPath.row].type == .file || sharedMedia[indexPath.row].type == .fileAndText {
-            let fileCell = tableView.dequeueReusableCell(withIdentifier: "SharedFileCell", for: indexPath) as! IGChannelAndGroupInfoSharedMediaFileTableViewCell
-            let sharedFile = sharedMedia[indexPath.row]
-            if let sharedFileAttachment = sharedFile.attachment {
-                if sharedFileAttachment.type == .file {
-                    fileCell.setFileDetails(attachment: sharedFileAttachment, messsage: sharedFile)
-                    sharedMediaFilter = .file
-                    return fileCell
-
-                } else {
-                    print (sharedFileAttachment.type)
-                }
-            }
+            
         } else if sharedMedia[indexPath.row].type == .text {
             let linkCell = tableView.dequeueReusableCell(withIdentifier: "SharedLinkCell", for: indexPath) as! IGGroupInfoShareMediaLinkTableViewCell
             let sharedLink = sharedMedia[indexPath.row]
-            print(sharedLink.message)
             linkCell.setLinkDetails(message: sharedLink)
             sharedMediaFilter = .url
             return linkCell
-            
-            
         }
-        
         
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.tableView.isUserInteractionEnabled = false
-        if sharedMedia[indexPath.row].type == .voice {
+        if sharedMedia[indexPath.row].type == .voice || sharedMedia[indexPath.row].type == .audio || sharedMedia[indexPath.row].type == .audioAndText {
             let musicPlayer = IGMusicViewController()
             musicPlayer.attachment = sharedMedia[indexPath.row].attachment
-            self.present(musicPlayer, animated: true, completion: {
-            })
-
+            self.present(musicPlayer, animated: true, completion: {})
+        } else if let path = sharedMedia[indexPath.row].attachment?.path() {
+            let controller = UIDocumentInteractionController()
+            controller.delegate = self
+            controller.url = path
+            controller.presentPreview(animated: true)
         }
     }
     
@@ -142,7 +119,6 @@ class IGChannelAndGroupSharedMediaAudioAndLinkTableViewController: UITableViewCo
         if offsetY > contentHeight - scrollView.frame.size.height {
             if isFetchingFiles == false {
                 loadMoreDataFromServer()
-                
             }
         }
     }
@@ -183,18 +159,11 @@ class IGChannelAndGroupSharedMediaAudioAndLinkTableViewController: UITableViewCo
                 }
                 
             }).send()
-            
         }
-        
-    }
-
-        // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
     }
     
-
+    /******* overrided method for show file attachment (use from UIDocumentInteractionControllerDelegate) *******/
+    func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
+        return self
+    }
 }

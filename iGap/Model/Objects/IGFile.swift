@@ -331,13 +331,14 @@ class IGFile: Object {
         }
     }
     
-    public func path() -> URL? {
+    public func path(fileType: FileType? = nil) -> URL? {
         let documents = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
         if let fileNameOnDisk = self.fileNameOnDisk {
             return NSURL(fileURLWithPath: documents).appendingPathComponent(fileNameOnDisk)
         } else if let cacheId = self.cacheID, let name = self.name {
             var path = NSURL(fileURLWithPath: documents).appendingPathComponent(cacheId + name)
-            if name.getExtension() == "mp3" || name.getExtension() == "ogg" {
+            
+            if (fileType != nil && fileType == .voice) && (name.getExtension() == "mp3" || name.getExtension() == "ogg") {
                 path = path?.deletingPathExtension().appendingPathExtension("m4a")
             }
             return path
