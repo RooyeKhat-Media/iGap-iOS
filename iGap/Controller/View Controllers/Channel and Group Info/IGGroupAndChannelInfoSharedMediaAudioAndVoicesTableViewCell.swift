@@ -59,7 +59,7 @@ class IGGroupAndChannelInfoSharedMediaAudioAndVoicesTableViewCell: UITableViewCe
         self.mediaSizeLabel.text = IGAttachmentManager.sharedManager.convertFileSize(sizeInByte: attachment.size)
         
         if let creationtime = message.creationTime {
-            creationDateLabel.text = "\(creationtime)"
+            creationDateLabel.text = "\(creationtime.completeHumanReadableTime())"
         }
         
         if attachment.type == .voice {

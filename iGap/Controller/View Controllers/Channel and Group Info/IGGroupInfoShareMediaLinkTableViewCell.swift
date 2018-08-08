@@ -30,7 +30,7 @@ class IGGroupInfoShareMediaLinkTableViewCell: UITableViewCell {
     func setLinkDetails(message: IGRoomMessage) {
         linkAddressLabel.text = message.message
         if let creationtime = message.creationTime {
-            creationDateLabel.text = "\(creationtime)"
+            creationDateLabel.text = "\(creationtime.completeHumanReadableTime())"
             linkDescriptionLabel.text = message.message
             
         }

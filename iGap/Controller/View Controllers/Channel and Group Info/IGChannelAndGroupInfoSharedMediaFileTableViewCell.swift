@@ -48,7 +48,7 @@ class IGChannelAndGroupInfoSharedMediaFileTableViewCell: UITableViewCell {
         let fileImage = UIImage(named: "IG_Message_Cell_File_Generic")
         fileImageView.image = fileImage
         if let creationDate = message.creationTime {
-            creationDateLabel.text = "\(creationDate)"
+            creationDateLabel.text = "\(creationDate.completeHumanReadableTime())"
         }
         self.fileSizeLabel.text = IGAttachmentManager.sharedManager.convertFileSize(sizeInByte: attachment.size)
         fileImageView.setThumbnail(for: attachment)
