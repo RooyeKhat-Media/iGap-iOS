@@ -15,7 +15,12 @@ import MBProgressHUD
 import IGProtoBuff
 import INSPhotoGalleryFramework
 
-class IGChannelAndGroupSharedMediaAudioAndLinkTableViewController: UITableViewController , UIGestureRecognizerDelegate, UIDocumentInteractionControllerDelegate {
+protocol IGUrlClickDelegate {
+    func didTapOnURl(url: URL)
+    func didTapOnRoomLink(link: String)
+}
+
+class IGChannelAndGroupSharedMediaAudioAndLinkTableViewController: UITableViewController, UIGestureRecognizerDelegate, UIDocumentInteractionControllerDelegate, IGUrlClickDelegate {
     
     var sharedMedia = [IGRoomMessage]()
     var room: IGRoom?
@@ -77,17 +82,22 @@ class IGChannelAndGroupSharedMediaAudioAndLinkTableViewController: UITableViewCo
             let fileCell = tableView.dequeueReusableCell(withIdentifier: "SharedFileCell", for: indexPath) as! IGChannelAndGroupInfoSharedMediaFileTableViewCell
             let sharedFile = sharedMedia[indexPath.row]
             if let sharedAttachment = sharedFile.attachment {
-                if sharedAttachment.type == .file {
-                    fileCell.setFileDetails(attachment: sharedAttachment , message: sharedFile)
-                    sharedMediaFilter = .file
-                    return fileCell
-                }
+                fileCell.setFileDetails(attachment: sharedAttachment , message: sharedFile)
+                sharedMediaFilter = .file
+                return fileCell
             }
             
-        } else if sharedMedia[indexPath.row].type == .text {
+        } else if sharedMedia[indexPath.row].type == .text ||
+            sharedMedia[indexPath.row].type == .audioAndText ||
+            sharedMedia[indexPath.row].type == .fileAndText ||
+            sharedMedia[indexPath.row].type == .gifAndText ||
+            sharedMedia[indexPath.row].type == .imageAndText ||
+            sharedMedia[indexPath.row].type == .videoAndText {
+            
             let linkCell = tableView.dequeueReusableCell(withIdentifier: "SharedLinkCell", for: indexPath) as! IGGroupInfoShareMediaLinkTableViewCell
             let sharedLink = sharedMedia[indexPath.row]
             linkCell.setLinkDetails(message: sharedLink)
+            linkCell.urlClickDelegate = self
             sharedMediaFilter = .url
             return linkCell
         }
@@ -96,7 +106,6 @@ class IGChannelAndGroupSharedMediaAudioAndLinkTableViewController: UITableViewCo
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.tableView.isUserInteractionEnabled = false
         if sharedMedia[indexPath.row].type == .voice || sharedMedia[indexPath.row].type == .audio || sharedMedia[indexPath.row].type == .audioAndText {
             let musicPlayer = IGMusicViewController()
             musicPlayer.attachment = sharedMedia[indexPath.row].attachment
@@ -165,5 +174,130 @@ class IGChannelAndGroupSharedMediaAudioAndLinkTableViewController: UITableViewCo
     /******* overrided method for show file attachment (use from UIDocumentInteractionControllerDelegate) *******/
     func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
         return self
+    }
+    
+    
+    /************************ link click ************************/
+    
+    func didTapOnURl(url: URL) {
+        var urlString = url.absoluteString
+        
+        if urlString.contains("https://iGap.net/join") || urlString.contains("http://iGap.net/join") {
+            didTapOnRoomLink(link: urlString)
+            return
+        }
+        
+        urlString = urlString.lowercased()
+        
+        if !(urlString.contains("https://")) && !(urlString.contains("http://")) {
+            urlString = "http://" + urlString
+        }
+        if let urlToOpen = URL(string: urlString) {
+            UIApplication.shared.openURL(urlToOpen)
+        }
+        //TODO: handle "igap.net/join"
+    }
+    func didTapOnRoomLink(link: String) {
+        let token = link.chopPrefix(22)
+        self.requestToCheckInvitedLink(invitedLink: token)
+    }
+    
+    func joinRoombyInvitedLink(room:IGPRoom, invitedToken: String) {
+        self.hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+        self.hud.mode = .indeterminate
+        IGClientJoinByInviteLinkRequest.Generator.generate(invitedToken: invitedToken).success({ (protoResponse) in
+            DispatchQueue.main.async {
+                if let _ = protoResponse as? IGPClientJoinByInviteLinkResponse {
+                    IGFactory.shared.updateRoomParticipant(roomId: room.igpID, isParticipant: true)
+                    let predicate = NSPredicate(format: "id = %lld", room.igpID)
+                    if let roomInfo = try! Realm().objects(IGRoom.self).filter(predicate).first {
+                        self.openChatAfterJoin(room: roomInfo)
+                    }
+                }
+                self.hud.hide(animated: true)
+            }
+        }).error ({ (errorCode, waitTime) in
+            DispatchQueue.main.async {
+                switch errorCode {
+                case .timeout:
+                    let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: nil)
+                    
+                case .clientJoinByInviteLinkForbidden:
+                    let alert = UIAlertController(title: "Error", message: "Sorry,this group does not seem to exist.", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    self.hud.hide(animated: true)
+                    self.present(alert, animated: true, completion: nil)
+                    
+                case .clientJoinByInviteLinkAlreadyJoined:
+                    self.openChatAfterJoin(room: IGRoom(igpRoom: room), before: true)
+                default:
+                    break
+                }
+                self.hud.hide(animated: true)
+            }
+        }).send()
+        
+    }
+    func requestToCheckInvitedLink(invitedLink: String) {
+        self.hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+        self.hud.mode = .indeterminate
+        IGClinetCheckInviteLinkRequest.Generator.generate(invitedToken: invitedLink).success({ (protoResponse) in
+            DispatchQueue.main.async {
+                self.hud.hide(animated: true)
+                if let clinetCheckInvitedlink = protoResponse as? IGPClientCheckInviteLinkResponse {
+                    let alert = UIAlertController(title: "iGap", message: "Are you sure want to join \(clinetCheckInvitedlink.igpRoom.igpTitle)?", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: { (action) in
+                        self.joinRoombyInvitedLink(room:clinetCheckInvitedlink.igpRoom, invitedToken: invitedLink)
+                    })
+                    let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                    
+                    alert.addAction(okAction)
+                    alert.addAction(cancelAction)
+                    self.present(alert, animated: true, completion: nil)
+                }
+            }
+        }).error ({ (errorCode, waitTime) in
+            DispatchQueue.main.async {
+                switch errorCode {
+                case .timeout:
+                    
+                    let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    
+                    self.present(alert, animated: true, completion: nil)
+                default:
+                    break
+                }
+                self.hud.hide(animated: true)
+            }
+            
+        }).send()
+    }
+    
+    private func openChatAfterJoin(room: IGRoom, before:Bool = false){
+        
+        var beforeString = ""
+        if before {
+            beforeString = "before "
+        }
+        
+        DispatchQueue.main.async {
+            let alert = UIAlertController(title: "Success", message: "You joined \(beforeString)to \(room.title!)!", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+            let openNow = UIAlertAction(title: "Open Now", style: .default, handler: { (action) in
+                let storyboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+                let chatPage = storyboard.instantiateViewController(withIdentifier: "messageViewController") as! IGMessageViewController
+                chatPage.room = room
+                self.navigationController!.pushViewController(chatPage, animated: true)
+            })
+            alert.addAction(okAction)
+            alert.addAction(openNow)
+            self.present(alert, animated: true, completion: nil)
+        }
     }
 }

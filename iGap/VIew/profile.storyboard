@@ -357,7 +357,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d9K-Md-0nA" customClass="IGAvatarView" customModule="iGap" customModuleProvider="target">
-                                    <rect key="frame" x="137" y="153.5" width="100" height="100"/>
+                                    <rect key="frame" x="137" y="56.5" width="100" height="100"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="100" id="0Hz-NU-jsH"/>
@@ -365,7 +365,7 @@
                                     </constraints>
                                 </view>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sMr-Rz-A60">
-                                    <rect key="frame" x="211" y="220.5" width="24" height="26"/>
+                                    <rect key="frame" x="211" y="123.5" width="24" height="26"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="24" id="dUx-Xp-uN1"/>
                                         <constraint firstAttribute="height" constant="26" id="hic-iD-QRb"/>
@@ -376,13 +376,13 @@
                                     </connections>
                                 </button>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="channel name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tGL-LC-Isg" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
-                                    <rect key="frame" x="134.5" y="261.5" width="106.5" height="20"/>
+                                    <rect key="frame" x="134.5" y="164.5" width="106.5" height="20"/>
                                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IG_Verify" translatesAutoresizingMaskIntoConstraints="NO" id="Mfl-Mw-Lf0">
-                                    <rect key="frame" x="245" y="262.5" width="18" height="18"/>
+                                    <rect key="frame" x="245" y="165.5" width="18" height="18"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="18" id="OfV-lA-k9L"/>
                                         <constraint firstAttribute="height" constant="18" id="d9i-Hc-BUO"/>
@@ -764,7 +764,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Mfq-PH-sLT" customClass="IGAvatarView" customModule="iGap" customModuleProvider="target">
-                                    <rect key="frame" x="137" y="153.5" width="100" height="100"/>
+                                    <rect key="frame" x="137" y="56.5" width="100" height="100"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="100" id="cDw-Na-XDk"/>
@@ -772,7 +772,7 @@
                                     </constraints>
                                 </view>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P04-jX-zeQ">
-                                    <rect key="frame" x="211" y="220.5" width="24" height="26"/>
+                                    <rect key="frame" x="211" y="123.5" width="24" height="26"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="24" id="N0U-l4-HGU"/>
                                         <constraint firstAttribute="height" constant="26" id="YY8-VA-PsX"/>
@@ -784,7 +784,7 @@
                                     </connections>
                                 </button>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fac-NN-VWc" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
-                                    <rect key="frame" x="188" y="261.5" width="0.0" height="0.0"/>
+                                    <rect key="frame" x="188" y="164.5" width="0.0" height="0.0"/>
                                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
@@ -2075,49 +2075,32 @@
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SharedLinkCell" rowHeight="117" id="cuh-xg-YBf" customClass="IGGroupInfoShareMediaLinkTableViewCell" customModule="iGap" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="375" height="117"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" tableViewCell="cuh-xg-YBf" id="0H4-a4-qI7">
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cuh-xg-YBf" id="0H4-a4-qI7">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="116.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bjs-j3-VZf">
-                                            <rect key="frame" x="16" y="21" width="40" height="40"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="link address" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MV9-fM-xwQ" customClass="ActiveLabel" customModule="iGap" customModuleProvider="target">
+                                            <rect key="frame" x="20" y="15" width="335" height="21"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="40" id="aDP-nF-wLg"/>
-                                                <constraint firstAttribute="width" constant="40" id="lCD-cK-vYE"/>
+                                                <constraint firstAttribute="height" constant="21" id="c77-hg-589"/>
                                             </constraints>
-                                        </imageView>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MV9-fM-xwQ" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
-                                            <rect key="frame" x="64" y="8" width="42" height="21"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="21" id="9I0-Rc-fEc"/>
-                                            </constraints>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <nil key="textColor"/>
+                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                            <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Link Content" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y7I-y6-dic" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
-                                            <rect key="frame" x="64" y="31" width="264" height="30"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Link Content" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y7I-y6-dic" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
+                                            <rect key="frame" x="20" y="48.5" width="335" height="21"/>
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="264" id="UTd-P0-MPk"/>
-                                                <constraint firstAttribute="height" constant="30" id="vv7-Cj-e2w"/>
+                                                <constraint firstAttribute="height" constant="21" id="zSe-Gs-Nnm"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Link Address" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UJF-eg-WfL" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
-                                            <rect key="frame" x="64" y="69" width="99" height="21"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Li-gO-bGt" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
+                                            <rect key="frame" x="20" y="90" width="26.5" height="20"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="21" id="cMs-2n-wiS"/>
-                                            </constraints>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" red="0.0" green="0.69019607839999997" blue="0.74901960779999999" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Li-gO-bGt" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
-                                            <rect key="frame" x="299" y="96" width="26.5" height="12"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="12" id="ZwO-IX-17X"/>
+                                                <constraint firstAttribute="height" constant="20" id="z2o-V0-HwA"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                             <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="calibratedWhite"/>
@@ -2125,24 +2108,19 @@
                                         </label>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="Y7I-y6-dic" firstAttribute="leading" secondItem="bjs-j3-VZf" secondAttribute="trailing" constant="8" id="2GC-pY-hE3"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="bjs-j3-VZf" secondAttribute="bottom" constant="47" id="4Xo-EM-1gL"/>
-                                        <constraint firstItem="UJF-eg-WfL" firstAttribute="top" secondItem="Y7I-y6-dic" secondAttribute="bottom" constant="8" id="CP4-RX-mqU"/>
-                                        <constraint firstItem="MV9-fM-xwQ" firstAttribute="top" secondItem="0H4-a4-qI7" secondAttribute="topMargin" id="CU5-cU-f1N"/>
-                                        <constraint firstItem="8Li-gO-bGt" firstAttribute="leading" secondItem="UJF-eg-WfL" secondAttribute="trailing" constant="136" id="IfS-kE-DcM"/>
-                                        <constraint firstItem="UJF-eg-WfL" firstAttribute="leading" secondItem="bjs-j3-VZf" secondAttribute="trailing" constant="8" id="R6x-Yo-y9s"/>
-                                        <constraint firstItem="bjs-j3-VZf" firstAttribute="top" secondItem="0H4-a4-qI7" secondAttribute="topMargin" constant="13" id="V2m-Jm-KYq"/>
-                                        <constraint firstItem="8Li-gO-bGt" firstAttribute="bottom" secondItem="0H4-a4-qI7" secondAttribute="bottomMargin" id="iWQ-28-2qN"/>
-                                        <constraint firstItem="Y7I-y6-dic" firstAttribute="top" secondItem="MV9-fM-xwQ" secondAttribute="bottom" constant="2" id="kzf-wz-Alw"/>
-                                        <constraint firstItem="bjs-j3-VZf" firstAttribute="leading" secondItem="0H4-a4-qI7" secondAttribute="leadingMargin" id="n6g-9M-rIv"/>
-                                        <constraint firstItem="MV9-fM-xwQ" firstAttribute="leading" secondItem="bjs-j3-VZf" secondAttribute="trailing" constant="8" id="p6A-6t-T7e"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="Y7I-y6-dic" secondAttribute="trailing" constant="4" id="01C-2m-1m7"/>
+                                        <constraint firstItem="8Li-gO-bGt" firstAttribute="leading" secondItem="0H4-a4-qI7" secondAttribute="leadingMargin" constant="4" id="APa-xX-C8X"/>
+                                        <constraint firstItem="MV9-fM-xwQ" firstAttribute="leading" secondItem="0H4-a4-qI7" secondAttribute="leadingMargin" constant="4" id="ESn-2l-R7X"/>
+                                        <constraint firstItem="Y7I-y6-dic" firstAttribute="leading" secondItem="0H4-a4-qI7" secondAttribute="leadingMargin" constant="4" id="H8M-yF-oNg"/>
+                                        <constraint firstItem="MV9-fM-xwQ" firstAttribute="top" secondItem="0H4-a4-qI7" secondAttribute="topMargin" constant="4" id="Lg3-zI-im6"/>
+                                        <constraint firstItem="Y7I-y6-dic" firstAttribute="centerY" secondItem="0H4-a4-qI7" secondAttribute="centerY" id="ncf-GQ-cyV"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="MV9-fM-xwQ" secondAttribute="trailing" constant="4" id="vVa-eF-nJa"/>
+                                        <constraint firstItem="8Li-gO-bGt" firstAttribute="bottom" secondItem="0H4-a4-qI7" secondAttribute="bottomMargin" constant="4" id="zh5-Lc-9OG"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="creationDateLabel" destination="8Li-gO-bGt" id="KUN-x3-2l8"/>
-                                    <outlet property="linkAddressLabel" destination="UJF-eg-WfL" id="aI7-DB-whP"/>
                                     <outlet property="linkDescriptionLabel" destination="Y7I-y6-dic" id="i20-CW-2Mi"/>
-                                    <outlet property="linkImageView" destination="bjs-j3-VZf" id="cbk-fI-Me5"/>
                                     <outlet property="linkTitleLabel" destination="MV9-fM-xwQ" id="zNR-39-4h0"/>
                                 </connections>
                             </tableViewCell>

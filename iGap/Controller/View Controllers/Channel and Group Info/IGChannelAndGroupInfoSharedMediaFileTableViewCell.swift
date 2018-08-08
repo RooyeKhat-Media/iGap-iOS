@@ -93,9 +93,7 @@ class IGChannelAndGroupInfoSharedMediaFileTableViewCell: UITableViewCell {
         if let attachment = self.attachment {
             if IGGlobal.isFileExist(path: attachment.path(), fileSize: attachment.size) {
                 self.indicatorView.setState(.ready)
-                if attachment.type == .file {
-                    self.fileImageView.setThumbnail(for: attachment)
-                }
+                self.fileImageView.setThumbnail(for: attachment)
                 return
             }
             
