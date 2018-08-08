@@ -84,9 +84,9 @@ class IGChannelAndGroupInfoSharedMediaImagesAndVideosCollectionViewCell: UIColle
     
     func updateAttachmentDownloadUploadIndicatorView() {
         if let attachment = self.attachment {
-            if attachment.status == .ready {
-                self.mediaDownloadIndicator.setState(attachment.status)
-                if attachment.type == .image {
+            if IGGlobal.isFileExist(path: attachment.path(), fileSize: attachment.size) {
+                self.mediaDownloadIndicator.setState(.ready)
+                if attachment.type == .image || attachment.type == .video {
                     self.sharedMediaImageView.setThumbnail(for: attachment)
                 }
                 return

@@ -129,8 +129,8 @@ class IGDownloadManager {
     }
     
     private func addToThumbnailQueue(_ task: IGDownloadTask) {
-        IGAttachmentManager.sharedManager.setProgress(0.0, for: task.file)
-        IGAttachmentManager.sharedManager.setStatus(.downloading, for: task.file)
+        //IGAttachmentManager.sharedManager.setProgress(0.0, for: task.file)
+        //IGAttachmentManager.sharedManager.setStatus(.downloading, for: task.file)
         thumbnailTasks.append(task)
         startNextThumbnailTaskIfPossible()
     }
@@ -332,7 +332,7 @@ class IGDownloadManager {
                     progress.totalUnitCount = Int64(downloadTask.file.size)
                     progress.completedUnitCount =  Int64((downloadTask.file.data?.count)!)
                     IGAttachmentManager.sharedManager.setProgress(progress.fractionCompleted, for: downloadTask.file)
-                    IGDownloadManager.sharedManager.downloadProto(task: downloadTask)
+                    IGDownloadManager.sharedManager.downloadProtoThumbnail(task: downloadTask)
                     
                 } else { // finished download
                     
@@ -456,6 +456,7 @@ class IGDownloadTask {
         self.file.publicUrl = file.publicUrl
         self.file.size = file.size
         self.file.name = file.name
+        self.file.type = file.type
         self.file.data = Data()
         
         self.completionHandler = completion
