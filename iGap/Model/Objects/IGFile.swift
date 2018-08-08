@@ -312,23 +312,9 @@ class IGFile: Object {
         }
         return Data(bytes: hash)
     }
-    
+
     public func sizeToString() -> String {
-        let sizeInByte = self.size
-        if sizeInByte == 0 {
-            return ""
-        } else if sizeInByte < 1024 {
-            return "\(sizeInByte) B"
-        } else if sizeInByte < 1048576 {
-            let size: Double = Double(sizeInByte) / 1024.0
-            return String(format: "%.2f KB", size)
-        } else if sizeInByte < 1073741824 {
-            let size: Double = Double(sizeInByte) / 1048576.0
-            return String(format: "%.2f MB", size)
-        } else {
-            let size: Double = Double(sizeInByte) / 1073741824.0
-            return String(format: "%.2f GB", size)
-        }
+        return IGAttachmentManager.sharedManager.convertFileSize(sizeInByte: self.size)
     }
     
     public func path(fileType: FileType? = nil) -> URL? {

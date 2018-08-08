@@ -1420,22 +1420,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
         self.inputBarSendButton.isHidden = false
         self.inputBarRecordButton.isHidden = true
         self.inputBarAttachmentViewFileNameLabel.text  = currentAttachment?.name
-        let sizeInByte = currentAttachment!.size
-        var sizeSting = ""
-        if sizeInByte < 1024 {
-            //byte
-            sizeSting = "\(sizeInByte) B"
-        } else if sizeInByte < 1048576 {
-            //kilobytes
-            sizeSting = "\(sizeInByte/1024) KB"
-        } else if sizeInByte < 1073741824 {
-            //megabytes
-            sizeSting = "\(sizeInByte/1048576) MB"
-        } else { //if sizeInByte < 1099511627776 {
-            //gigabytes
-            sizeSting = "\(sizeInByte/1073741824) GB"
-        }
-        self.inputBarAttachmentViewFileSizeLabel.text = sizeSting
+        self.inputBarAttachmentViewFileSizeLabel.text = IGAttachmentManager.sharedManager.convertFileSize(sizeInByte: currentAttachment!.size)
     }
 
     func saveAttachmentToLocalStorage(data: Data, fileNameOnDisk: String) {

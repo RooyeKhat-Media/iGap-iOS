@@ -50,22 +50,7 @@ class IGChannelAndGroupInfoSharedMediaFileTableViewCell: UITableViewCell {
         if let creationDate = message.creationTime {
             creationDateLabel.text = "\(creationDate)"
         }
-        let sizeInByte = attachment.size
-        var sizeSting = ""
-        if sizeInByte < 1024 {
-            //byte
-            sizeSting = "\(sizeInByte) B"
-        } else if sizeInByte < 1048576 {
-            //kilobytes
-            sizeSting = "\(sizeInByte/1024) KB"
-        } else if sizeInByte < 1073741824 {
-            //megabytes
-            sizeSting = "\(sizeInByte/1048576) MB"
-        } else { //if sizeInByte < 1099511627776 {
-            //gigabytes
-            sizeSting = "\(sizeInByte/1073741824) GB"
-        }
-        self.fileSizeLabel.text = sizeSting
+        self.fileSizeLabel.text = IGAttachmentManager.sharedManager.convertFileSize(sizeInByte: attachment.size)
         fileImageView.setThumbnail(for: attachment)
         fileNameLabel.text = attachment.name
         

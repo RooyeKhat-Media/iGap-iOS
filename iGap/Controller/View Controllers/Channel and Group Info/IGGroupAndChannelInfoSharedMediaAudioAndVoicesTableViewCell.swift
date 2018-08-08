@@ -56,22 +56,7 @@ class IGGroupAndChannelInfoSharedMediaAudioAndVoicesTableViewCell: UITableViewCe
         self.playingSlider.setThumbImage(UIImage(named: "IG_Message_Cell_Player_Slider_Thumb"), for: .normal)
         playingSlider.value = 0.0
         durationTimeLabel.text = "\(playingSlider.value)"
-        let sizeInByte = attachment.size
-        var sizeSting = ""
-        if sizeInByte < 1024 {
-            //byte
-            sizeSting = "\(sizeInByte) B"
-        } else if sizeInByte < 1048576 {
-            //kilobytes
-            sizeSting = "\(sizeInByte/1024) KB"
-        } else if sizeInByte < 1073741824 {
-            //megabytes
-            sizeSting = "\(sizeInByte/1048576) MB"
-        } else { //if sizeInByte < 1099511627776 {
-            //gigabytes
-            sizeSting = "\(sizeInByte/1073741824) GB"
-        }
-        self.mediaSizeLabel.text = sizeSting
+        self.mediaSizeLabel.text = IGAttachmentManager.sharedManager.convertFileSize(sizeInByte: attachment.size)
         
         if let creationtime = message.creationTime {
             creationDateLabel.text = "\(creationtime)"

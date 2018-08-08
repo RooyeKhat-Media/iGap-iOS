@@ -121,26 +121,10 @@ class IGChannelAndGroupSharedMediaImagesAndVideosCollectionViewController: UICol
                 if let sharedAttachment = sharedImage.attachment {
                     if sharedAttachment.type == .video {
                         cell.sharedMediaImageView.setThumbnail(for: sharedAttachment)
-                        let sizeInByte = sharedAttachment.size
-                        var sizeSting = ""
-                        if sizeInByte < 1024 {
-                            //byte
-                            sizeSting = "\(sizeInByte) B"
-                        } else if sizeInByte < 1048576 {
-                            //kilobytes
-                            sizeSting = "\(sizeInByte/1024) KB"
-                        } else if sizeInByte < 1073741824 {
-                            //megabytes
-                            sizeSting = "\(sizeInByte/1048576) MB"
-                        } else { //if sizeInByte < 1099511627776 {
-                            //gigabytes
-                            sizeSting = "\(sizeInByte/1073741824) GB"
-                        }
-                        cell.videoSizeLabel.text = sizeSting
+                        cell.videoSizeLabel.text = IGAttachmentManager.sharedManager.convertFileSize(sizeInByte: sharedAttachment.size)
                         cell.videoSizeLabel.isHidden = false
                         sharedMediaFilter = .video
                         cell.setMediaIndicator(message: sharedImage)
-                        // cell.attachment = sharedAttachment
                     }
                 }
             }
