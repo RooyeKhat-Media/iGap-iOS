@@ -267,6 +267,8 @@
 		FAB09D9B1DB76F81001A27C4 /* IGRequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB09D9A1DB76F81001A27C4 /* IGRequestManager.swift */; };
 		FAB0F9461FE956D1008F23EB /* Splash.gif in Resources */ = {isa = PBXBuildFile; fileRef = FAB0F9451FE956D1008F23EB /* Splash.gif */; };
 		FAB2C2DF1DF7F6E8001F30B5 /* IGSessionInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB2C2DE1DF7F6E8001F30B5 /* IGSessionInfo.swift */; };
+		FAB75D68211EBE0400F0B550 /* LocationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB75D66211EBE0400F0B550 /* LocationCell.swift */; };
+		FAB75D6C211ED56F00F0B550 /* LocationCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FAB75D6B211EBE4200F0B550 /* LocationCell.xib */; };
 		FABB9B061DB25E5E00D794A4 /* IGSecurityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABB9B051DB25E5E00D794A4 /* IGSecurityManager.swift */; };
 		FAC34DB41E1A3F7E00BB9823 /* IGRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC34DB31E1A3F7E00BB9823 /* IGRealm.swift */; };
 		FAC34DB61E1A651200BB9823 /* IGContactInMessageCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC34DB51E1A651200BB9823 /* IGContactInMessageCellView.swift */; };
@@ -602,6 +604,8 @@
 		FAB09D9A1DB76F81001A27C4 /* IGRequestManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IGRequestManager.swift; path = "Request Manager/IGRequestManager.swift"; sourceTree = "<group>"; };
 		FAB0F9451FE956D1008F23EB /* Splash.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = Splash.gif; sourceTree = "<group>"; };
 		FAB2C2DE1DF7F6E8001F30B5 /* IGSessionInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGSessionInfo.swift; sourceTree = "<group>"; };
+		FAB75D66211EBE0400F0B550 /* LocationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationCell.swift; sourceTree = "<group>"; };
+		FAB75D6B211EBE4200F0B550 /* LocationCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LocationCell.xib; sourceTree = "<group>"; };
 		FAB8210D20D7D583003938BB /* Firebase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Firebase.h; sourceTree = "<group>"; };
 		FAB8210E20D7D589003938BB /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		FABB9B051DB25E5E00D794A4 /* IGSecurityManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IGSecurityManager.swift; path = "Security Manager/IGSecurityManager.swift"; sourceTree = "<group>"; };
@@ -1248,6 +1252,8 @@
 				FA93EE292029A3FF00DD1521 /* VoiceCell.xib */,
 				FA93EE2B2029DB1300DD1521 /* AudioCell.swift */,
 				FA93EE2D2029DBC300DD1521 /* AudioCell.xib */,
+				FAB75D66211EBE0400F0B550 /* LocationCell.swift */,
+				FAB75D6B211EBE4200F0B550 /* LocationCell.xib */,
 			);
 			path = "Chat Cells";
 			sourceTree = "<group>";
@@ -1572,6 +1578,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FAB75D6C211ED56F00F0B550 /* LocationCell.xib in Resources */,
 				FA5656C6204AB18F00DB46F0 /* igap_busy.mp3 in Resources */,
 				FA33063D1F445AE90096031A /* IRANSans_Medium.ttf in Resources */,
 				FAD580951DDC5C4E00A242DE /* IGMessageCollectionViewCell.xib in Resources */,
@@ -1817,6 +1824,7 @@
 				FA63BAA31DD70D94000B60AD /* IGRequestSystem.swift in Sources */,
 				FA42EEF81E5C205D00CF8A32 /* IGImageView.swift in Sources */,
 				93AA67D01E4F40C80053380C /* IGChannelInfoAdminsTableViewCell.swift in Sources */,
+				FAB75D68211EBE0400F0B550 /* LocationCell.swift in Sources */,
 				FA0953421E1B97700043ED3F /* IGActiveSessionsParentCell.swift in Sources */,
 				FA0953541E1B97700043ED3F /* IGSettingChatStickersTableViewCell.swift in Sources */,
 				FA42EF0F1E5C224F00CF8A32 /* UIImage.swift in Sources */,

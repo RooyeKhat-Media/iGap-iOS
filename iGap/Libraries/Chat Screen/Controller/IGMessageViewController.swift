@@ -1731,6 +1731,14 @@ extension IGMessageViewController: IGMessageCollectionViewDataSource {
                             isNextMessageFromSameSender: false)
             return cell
             
+        } else if message.type == .location {
+            
+            let cell: LocationCell = collectionView.dequeueReusableCell(withReuseIdentifier: LocationCell.cellReuseIdentifier(), for: indexPath) as! LocationCell
+            let bubbleSize = CellSizeCalculator.sharedCalculator.mainBubbleCountainerSize(for: message)
+            cell.setMessage(message,isIncommingMessage: isIncommingMessage,shouldShowAvatar: shouldShowAvatar,messageSizes: bubbleSize,isPreviousMessageFromSameSender: isPreviousMessageFromSameSender,isNextMessageFromSameSender: isNextMessageFromSameSender)
+            cell.delegate = self
+            return cell
+            
         } else if (message.type == .text && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .text) {
             
             let cell: TextCell = collectionView.dequeueReusableCell(withReuseIdentifier: TextCell.cellReuseIdentifier(), for: indexPath) as! TextCell

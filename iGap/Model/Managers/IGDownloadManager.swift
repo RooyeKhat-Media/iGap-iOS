@@ -15,7 +15,7 @@ import Digger
 
 typealias DownloadCompleteHandler = ((_ attachment:IGFile)->())?
 typealias DownloadFailedHander    = (()->())?
-
+typealias DownloadLocationImage = ((_ locationPath:String)->())?
 
 class IGDownloadManager {
     
@@ -189,6 +189,33 @@ class IGDownloadManager {
                 startNextThumbnailTaskIfPossible()
             }
         }
+    }
+    
+    func downloadLocation(latitude: Double, longitude: Double, locationObserver: DownloadLocationImage) {
+        let locationSize = LocationCell.sizeForLocation()
+        let url = "http://maps.google.com/maps/api/staticmap?markers=\(latitude),\(longitude)&zoom=15&size=\(Float(locationSize.width).cleanDecimal)x\(Float(locationSize.height).cleanDecimal)&sensor=true"
+        let catPictureURL = URL(string: "\(url).png")!
+        let session = URLSession(configuration: .default)
+        let downloadPicTask = session.dataTask(with: catPictureURL) { (data, response, error) in
+            if let e = error {
+                print("Error downloading cat picture: \(e)")
+            } else {
+                if let _ = response as? HTTPURLResponse {
+                    if let imageData = data {
+                        let fileManager = FileManager.default
+                        let content = imageData
+                        let locationPath : String! = LocationCell.locationPath(latitude: latitude, longitude: longitude)?.path
+                        fileManager.createFile(atPath: locationPath, contents: content, attributes: nil)
+                        locationObserver!((LocationCell.locationPath(latitude: latitude, longitude: longitude)?.path)!)
+                    } else {
+                        print("Couldn't get image: Image is nil")
+                    }
+                } else {
+                    print("Couldn't get response code for some reason")
+                }
+            }
+        }
+        downloadPicTask.resume()
     }
     
     private func downloadCDN(task downloadTask:IGDownloadTask) {

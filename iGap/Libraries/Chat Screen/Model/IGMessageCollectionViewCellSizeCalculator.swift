@@ -167,15 +167,6 @@ class IGMessageCollectionViewCellSizeCalculator: NSObject {
             }
         }
         
-        
-    
-        
-        
-        
-       
-        
-        
-        
         if let text = message.message as NSString? {
             let stringRect = IGMessageCollectionViewCell.bodyRect(text: text, isEdited: message.isEdited, addArbitraryTexts: true)
             finalSize.height += stringRect.height
@@ -198,6 +189,12 @@ class IGMessageCollectionViewCellSizeCalculator: NSObject {
             finalSize.height = max(IGMessageCollectionViewCell.ConstantSizes.Bubble.Height.Minimum.TextOnly + 6, finalSize.height)
         }
         
+        if message.type == .location {
+            let locationSize = LocationCell.sizeForLocation()
+            finalSize.width = locationSize.width
+            finalSize.height += locationSize.height
+            messageAttachmentHeight = locationSize.height
+        }
         
         finalSize.height += 7.5
         
