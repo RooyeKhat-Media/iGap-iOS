@@ -11,6 +11,7 @@
 import RealmSwift
 import Foundation
 import IGProtoBuff
+import MapKit
 
 class IGRoomMessageLocation: Object {
     @objc dynamic var id:         String?
@@ -26,6 +27,13 @@ class IGRoomMessageLocation: Object {
         self.id = message.primaryKeyId
         self.latitude = igpRoomMessageLocation.igpLat
         self.longitude = igpRoomMessageLocation.igpLon
+    }
+    
+    convenience init(location: CLLocation, for message: IGRoomMessage) {
+        self.init()
+        self.id = message.primaryKeyId
+        self.latitude = location.coordinate.latitude
+        self.longitude = location.coordinate.longitude
     }
     
     //detach from current realm
