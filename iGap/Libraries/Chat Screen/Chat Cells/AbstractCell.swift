@@ -499,6 +499,8 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
             
             if repliedMessage.type == .contact {
                 txtReplyMessageAbs.text = "contact message"
+            } else if repliedMessage.type == .location {
+                txtReplyMessageAbs.text = "location message"
             } else if body != nil && !(body?.isEmpty)! {
                 txtReplyMessageAbs.text = body
             } else if let media = repliedMessage.attachment {

@@ -56,8 +56,6 @@ class IGFile: Object {
         case video
         case audio
         case voice
-//        case pdf
-//        case document
         case file
     }
     
@@ -219,16 +217,29 @@ class IGFile: Object {
         switch messageType {
         case .audio, .audioAndText:
             fileType = .audio
+            break
+            
         case .image, .imageAndText:
             fileType = .image
+            break
+            
         case .video, .videoAndText:
             fileType = .video
+            break
+            
         case .voice:
             fileType = .voice
-        case .gif,.gifAndText:
+            break
+            
+        case .gif, .gifAndText:
             fileType = .gif
-        default:
+            break
+            
+        case .file, .fileAndText:
             fileType = .file
+            break
+            
+        default:
             break
         }
         

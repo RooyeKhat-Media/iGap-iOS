@@ -32,9 +32,16 @@ class IGMessageAttachmentCurrentLocationViewController: UIViewController , UIGes
     var currentLocationSelect : CLLocation? // use from this param for go to location after click button
     var isSendLocation = true
     var showedCurrentLocation = false
+    var room : IGRoom!
     
     @IBAction func btnCurrentLocation(_ sender: UIButton) {
         setCurrentLocation()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        if isSendLocation {
+            IGClientActionManager.shared.cancelSendingLocation(for: room)
+        }
     }
     
     override func viewDidLoad() {

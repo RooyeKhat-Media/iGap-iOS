@@ -350,6 +350,11 @@ class IGChannelSendMessageRequest: IGRequest {
                 channelSendMessageRequestMessage.igpContact = igpContact
             }
             
+            if let location = message.location {
+                channelSendMessageRequestMessage.igpLocation.igpLat = location.latitude
+                channelSendMessageRequestMessage.igpLocation.igpLon = location.longitude
+            }
+            
             return IGRequestWrapper(message: channelSendMessageRequestMessage, actionID: 410)
         }
     }

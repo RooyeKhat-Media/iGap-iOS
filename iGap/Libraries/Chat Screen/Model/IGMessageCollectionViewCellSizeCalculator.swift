@@ -189,7 +189,7 @@ class IGMessageCollectionViewCellSizeCalculator: NSObject {
             finalSize.height = max(IGMessageCollectionViewCell.ConstantSizes.Bubble.Height.Minimum.TextOnly + 6, finalSize.height)
         }
         
-        if message.type == .location {
+        if message.type == .location || (message.forwardedFrom != nil && message.forwardedFrom?.type == .location) {
             let locationSize = LocationCell.sizeForLocation()
             finalSize.width = locationSize.width
             finalSize.height += locationSize.height

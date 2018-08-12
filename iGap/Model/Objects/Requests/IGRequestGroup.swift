@@ -371,6 +371,11 @@ class IGGroupSendMessageRequest : IGRequest {
                 sendMessageRequestMessage.igpContact = igpContact
             }
             
+            if let location = message.location {
+                sendMessageRequestMessage.igpLocation.igpLat = location.latitude
+                sendMessageRequestMessage.igpLocation.igpLon = location.longitude
+            }
+            
             return IGRequestWrapper(message: sendMessageRequestMessage, actionID: 310)
         }
     }

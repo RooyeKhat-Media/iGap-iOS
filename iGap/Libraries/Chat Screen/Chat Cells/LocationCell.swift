@@ -38,7 +38,7 @@ class LocationCell: AbstractCell {
         makeLocationView()
         super.setMessage(message, isIncommingMessage: isIncommingMessage, shouldShowAvatar: shouldShowAvatar, messageSizes: messageSizes, isPreviousMessageFromSameSender: isPreviousMessageFromSameSender, isNextMessageFromSameSender: isNextMessageFromSameSender)
         manageLocationViewPosition(messageSizes: messageSizes)
-        setLocationImage(message: message)
+        setLocationImage()
     }
     
     private func initializeView(){
@@ -47,18 +47,15 @@ class LocationCell: AbstractCell {
         mainBubbleViewWidthAbs = mainBubbleViewWidth
     }
     
-    private func setLocationImage(message: IGRoomMessage, path: String? = nil){
+    private func setLocationImage(path: String? = nil){
         
-        let latitude = message.location?.latitude
-        let longitude = message.location?.longitude
+        let latitude = finalRoomMessage.location?.latitude
+        let longitude = finalRoomMessage.location?.longitude
         
-        var locationPath : String! = path
-        if locationPath == nil {
-            locationPath = LocationCell.locationPath(latitude: latitude!, longitude: longitude!)?.path
-        }
+        let locationPath = LocationCell.locationPath(latitude: latitude!, longitude: longitude!)?.path
         
-        if FileManager.default.fileExists(atPath: locationPath) {
-            if let image = UIImage(contentsOfFile: locationPath) {
+        if FileManager.default.fileExists(atPath: locationPath!) {
+            if let image = UIImage(contentsOfFile: locationPath!) {
                 imgMediaAbs.image = image
             }
         } else {
