@@ -35,8 +35,9 @@ class LocationCell: AbstractCell {
     
     override func setMessage(_ message: IGRoomMessage, isIncommingMessage: Bool, shouldShowAvatar: Bool, messageSizes: RoomMessageCalculatedSize, isPreviousMessageFromSameSender: Bool, isNextMessageFromSameSender: Bool) {
         initializeView()
-        makeLocation(messageSizes: messageSizes)
+        makeLocationView()
         super.setMessage(message, isIncommingMessage: isIncommingMessage, shouldShowAvatar: shouldShowAvatar, messageSizes: messageSizes, isPreviousMessageFromSameSender: isPreviousMessageFromSameSender, isNextMessageFromSameSender: isNextMessageFromSameSender)
+        manageLocationViewPosition(messageSizes: messageSizes)
         setLocationImage(message: message)
     }
     
@@ -71,7 +72,7 @@ class LocationCell: AbstractCell {
         }
     }
     
-    private func makeLocation(messageSizes: RoomMessageCalculatedSize){
+    private func makeLocationView(){
         if imgMediaAbs != nil {
             imgMediaAbs.removeFromSuperview()
             imgMediaAbs = nil
@@ -81,7 +82,9 @@ class LocationCell: AbstractCell {
             imgMediaAbs = IGImageView()
             mainBubbleViewAbs.addSubview(imgMediaAbs)
         }
-        
+    }
+    
+    private func manageLocationViewPosition(messageSizes: RoomMessageCalculatedSize){
         imgMediaAbs.snp.makeConstraints { (make) in
             
             make.trailing.equalTo(mainBubbleViewAbs.snp.trailing)
