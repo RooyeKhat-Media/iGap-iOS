@@ -9,57 +9,115 @@
  */
 
 import UIKit
+import RxSwift
 
 class IGChannelAndGroupInfoSharedMediaFileTableViewCell: UITableViewCell {
-
+    
     @IBOutlet weak var creationDateLabel: UILabel!
     @IBOutlet weak var fileSizeLabel: UILabel!
     @IBOutlet weak var fileImageView: UIImageView!
     @IBOutlet weak var fileNameLabel: UILabel!
+    @IBOutlet weak var indicatorView: IGDownloadUploadIndicatorView!
+    
+    var attachment: IGFile?
+    let disposeBag = DisposeBag()
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
     
-    func setFileDetails(attachment: IGFile , messsage: IGRoomMessage) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+    }
+    
+    override func prepareForReuse() {
+        self.indicatorView.prepareForReuse()
+        self.indicatorView.isHidden = true
+    }
+    
+    func setFileDetails(attachment: IGFile , message: IGRoomMessage) {
+        
+        if let messageAttachmentVariableInCache = IGAttachmentManager.sharedManager.getRxVariable(attachmentPrimaryKeyId: attachment.primaryKeyId!) {
+            self.attachment = messageAttachmentVariableInCache.value
+        } else {
+            self.attachment = attachment.detach()
+            IGAttachmentManager.sharedManager.add(attachment: self.attachment!)
+            self.attachment = IGAttachmentManager.sharedManager.getRxVariable(attachmentPrimaryKeyId: attachment.primaryKeyId!)?.value
+        }
+        
         let fileImage = UIImage(named: "IG_Message_Cell_File_Generic")
         fileImageView.image = fileImage
-        if let creationDate = messsage.creationTime {
-            creationDateLabel.text = "\(creationDate)"
+        if let creationDate = message.creationTime {
+            creationDateLabel.text = "\(creationDate.completeHumanReadableTime())"
         }
-        let sizeInByte = attachment.size
-        var sizeSting = ""
-        if sizeInByte < 1024 {
-            //byte
-            sizeSting = "\(sizeInByte) B"
-        } else if sizeInByte < 1048576 {
-            //kilobytes
-            sizeSting = "\(sizeInByte/1024) KB"
-        } else if sizeInByte < 1073741824 {
-            //megabytes
-            sizeSting = "\(sizeInByte/1048576) MB"
-        } else { //if sizeInByte < 1099511627776 {
-            //gigabytes
-            sizeSting = "\(sizeInByte/1073741824) GB"
-        }
-        self.fileSizeLabel.text = sizeSting
+        self.fileSizeLabel.text = IGAttachmentManager.sharedManager.convertFileSize(sizeInByte: attachment.size)
         fileImageView.setThumbnail(for: attachment)
         fileNameLabel.text = attachment.name
         
-            switch attachment.fileTypeBasedOnNameExtension {
+        switch attachment.fileTypeBasedOnNameExtension {
         case .docx:
             self.fileImageView.image = UIImage(named: "IG_Message_Cell_File_Doc")
         default:
             self.fileImageView.image = UIImage(named: "IG_Message_Cell_File_Generic")
         }
-
         
+        
+        if let variableInCache = IGAttachmentManager.sharedManager.getRxVariable(attachmentPrimaryKeyId: attachment.primaryKeyId!) {
+            self.attachment = variableInCache.value
+            variableInCache.asObservable().subscribe({ (event) in
+                DispatchQueue.main.async {
+                    self.updateAttachmentDownloadUploadIndicatorView()
+                }
+            }).disposed(by: disposeBag)
+        }
+        
+        switch (message.type) {
+        case .file, .fileAndText:
+            
+            self.indicatorView.isHidden = false
+            self.fileImageView.isHidden = false
+            
+            Progress(totalUnitCount: 100).completedUnitCount = 0
+            
+            if attachment.status != .ready {
+                self.indicatorView.size = attachment.sizeToString()
+                self.indicatorView.delegate = self
+            }
+            
+        default:
+            break
+        }
     }
-
+    
+    func updateAttachmentDownloadUploadIndicatorView() {
+        if let attachment = self.attachment {
+            if IGGlobal.isFileExist(path: attachment.path(), fileSize: attachment.size) {
+                self.indicatorView.setState(.ready)
+                self.fileImageView.setThumbnail(for: attachment)
+                return
+            }
+            
+            switch attachment.type {
+            case .file:
+                self.indicatorView.setFileType(.media)
+                self.indicatorView.setState(attachment.status)
+                if attachment.status == .downloading || attachment.status == .uploading {
+                    self.indicatorView.setPercentage(attachment.downloadUploadPercent)
+                }
+            default:
+                break
+            }
+        }
+    }
 }
+
+extension IGChannelAndGroupInfoSharedMediaFileTableViewCell: IGDownloadUploadIndicatorViewDelegate {
+    
+    func downloadUploadIndicatorDidTapOnStart(_ indicator: IGDownloadUploadIndicatorView) {
+        if let attachment = self.attachment {
+            IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: { (attachment) -> Void in }, failure: {})
+        }
+    }
+    func downloadUploadIndicatorDidTapOnCancel(_ indicator: IGDownloadUploadIndicatorView) {}
+}
+

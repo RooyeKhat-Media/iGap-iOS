@@ -473,6 +473,7 @@ extension UIImageView {
                 }
                 
             } else {
+                print("QQQ || 1 attachment token : \(attachment.token)")
                 self.image = UIImage(named:"IG_Message_Cell_File_Generic")
             }
             
@@ -500,10 +501,10 @@ extension UIImageView {
                         }
                     }
                 } catch {
-                    imagesMap[attachment.cacheID!] = self
+                    imagesMap[attachment.token!] = self
                     IGDownloadManager.sharedManager.download(file: thumbnail, previewType:.smallThumbnail, completion: { (attachment) -> Void in
                         DispatchQueue.main.async {
-                            if let image = imagesMap[attachment.cacheID!]{
+                            if let image = imagesMap[attachment.token!] {
                                 image.setThumbnail(for: attachment)
                             }
                         }

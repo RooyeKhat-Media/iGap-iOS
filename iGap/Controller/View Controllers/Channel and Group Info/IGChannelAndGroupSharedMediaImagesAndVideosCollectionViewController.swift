@@ -21,7 +21,7 @@ import AVFoundation
 private let reuseIdentifier = "SharedMediaImageAndVideoCell"
 
 class IGChannelAndGroupSharedMediaImagesAndVideosCollectionViewController: UICollectionViewController , UIGestureRecognizerDelegate {
-
+    
     var sharedMedia: [IGRoomMessage] = []
     var room: IGRoom?
     var hud = MBProgressHUD()
@@ -30,11 +30,11 @@ class IGChannelAndGroupSharedMediaImagesAndVideosCollectionViewController: UICol
     var isFetchingFiles: Bool = false
     var navigationTitle : String!
     var sharedMediaFilter : IGSharedMediaFilter?
-//    var countOfSharedMedia : Int32 = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         if let thisRoom = room {
-            let messagePredicate = NSPredicate(format: "roomId = %lld AND isDeleted == false AND  isFromSharedMedia == true", thisRoom.id)
+            let messagePredicate = NSPredicate(format: "roomId = %lld AND isDeleted == false AND isFromSharedMedia == true", thisRoom.id)
             shareMediaMessage =  try! Realm().objects(IGRoomMessage.self).filter(messagePredicate)
             self.notificationToken = shareMediaMessage.observe { (changes: RealmCollectionChange) in
                 switch changes {
@@ -42,7 +42,6 @@ class IGChannelAndGroupSharedMediaImagesAndVideosCollectionViewController: UICol
                     self.collectionView?.reloadData()
                     break
                 case .update(_, let _, let _, let _):
-                    print("updating members tableV")
                     // Query messages have changed, so apply them to the TableView
                     self.collectionView?.reloadData()
                     break
@@ -53,6 +52,7 @@ class IGChannelAndGroupSharedMediaImagesAndVideosCollectionViewController: UICol
                 }
             }
         }
+        
         let navigationItem = self.navigationItem as! IGNavigationItem
         navigationItem.addNavigationViewItems(rightItemText: nil, title: navigationTitle )
         navigationItem.navigationController = self.navigationController as! IGNavigationController
@@ -67,39 +67,38 @@ class IGChannelAndGroupSharedMediaImagesAndVideosCollectionViewController: UICol
         layout.minimumInteritemSpacing = 0
         layout.minimumLineSpacing = 0
         collectionView?.collectionViewLayout = layout
-
-            }
-
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     override func viewWillAppear(_ animated: Bool) {
     }
-
+    
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using [segue destinationViewController].
+     // Pass the selected object to the new view controller.
+     }
+     */
+    
     // MARK: UICollectionViewDataSource
-
+    
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
-
-
+    
+    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
         return sharedMedia.count
     }
-
+    
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SharedMediaImageAndVideoCell", for: indexPath) as! IGChannelAndGroupInfoSharedMediaImagesAndVideosCollectionViewCell
         // Configure the cell
@@ -112,8 +111,6 @@ class IGChannelAndGroupSharedMediaImagesAndVideosCollectionViewController: UICol
                         sharedMediaFilter = .image
                         //cell.attachment = sharedAttachment
                         cell.setMediaIndicator(message: sharedImage)
-                        
-
                     }
                 }
             }
@@ -124,37 +121,19 @@ class IGChannelAndGroupSharedMediaImagesAndVideosCollectionViewController: UICol
                 if let sharedAttachment = sharedImage.attachment {
                     if sharedAttachment.type == .video {
                         cell.sharedMediaImageView.setThumbnail(for: sharedAttachment)
-                        let sizeInByte = sharedAttachment.size
-                        var sizeSting = ""
-                        if sizeInByte < 1024 {
-                            //byte
-                            sizeSting = "\(sizeInByte) B"
-                        } else if sizeInByte < 1048576 {
-                            //kilobytes
-                            sizeSting = "\(sizeInByte/1024) KB"
-                        } else if sizeInByte < 1073741824 {
-                            //megabytes
-                            sizeSting = "\(sizeInByte/1048576) MB"
-                        } else { //if sizeInByte < 1099511627776 {
-                            //gigabytes
-                            sizeSting = "\(sizeInByte/1073741824) GB"
-                        }
-                        cell.videoSizeLabel.text = sizeSting
+                        cell.videoSizeLabel.text = IGAttachmentManager.sharedManager.convertFileSize(sizeInByte: sharedAttachment.size)
                         cell.videoSizeLabel.isHidden = false
                         sharedMediaFilter = .video
                         cell.setMediaIndicator(message: sharedImage)
-                       // cell.attachment = sharedAttachment
                     }
-
                 }
             }
-            
         }
         return cell
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if sharedMedia[indexPath.row].type == .image {
+        if sharedMedia[indexPath.row].type == .image || sharedMedia[indexPath.row].type == .imageAndText {
             var photos: [INSPhotoViewable] = Array(self.sharedMedia.map { (message) -> IGMedia in
                 return IGMedia(message: message, forwardedMedia: false)
             })
@@ -162,7 +141,7 @@ class IGChannelAndGroupSharedMediaImagesAndVideosCollectionViewController: UICol
             let currentPhoto = photos[indexPath.row]
             let galleryPreview = INSPhotosViewController(photos: photos, initialPhoto: currentPhoto, referenceView: nil)
             present(galleryPreview, animated: true, completion: nil)
-        } else if sharedMedia[indexPath.row].type == .video {
+        } else if sharedMedia[indexPath.row].type == .video || sharedMedia[indexPath.row].type == .videoAndText {
             if let path = sharedMedia[indexPath.row].attachment?.path() {
                 let player = AVPlayer(url: path)
                 let avController = AVPlayerViewController()
@@ -173,14 +152,14 @@ class IGChannelAndGroupSharedMediaImagesAndVideosCollectionViewController: UICol
             }
         }
     }
-
+    
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offsetY = scrollView.contentOffset.y
         let contentHeight = scrollView.contentSize.height
         if offsetY > contentHeight - scrollView.frame.size.height {
             if isFetchingFiles == false {
-            loadMoreDataFromServer()
-            self.collectionView?.reloadData()
+                loadMoreDataFromServer()
+                self.collectionView?.reloadData()
             }
         }
     }
@@ -195,7 +174,7 @@ class IGChannelAndGroupSharedMediaImagesAndVideosCollectionViewController: UICol
                     case let clientSearchRoomHistoryResponse as IGPClientSearchRoomHistoryResponse:
                         let response =  IGClientSearchRoomHistoryRequest.Handler.interpret(response: clientSearchRoomHistoryResponse , roomId: selectedRoom.id)
                         if let messagesResponse: [IGPRoomMessage] = response.messages {
-                            for message in messagesResponse {
+                            for message in messagesResponse.reversed() {
                                 let msg = IGRoomMessage(igpMessage: message, roomId: selectedRoom.id)
                                 self.sharedMedia.append(msg)
                             }
@@ -220,16 +199,12 @@ class IGChannelAndGroupSharedMediaImagesAndVideosCollectionViewController: UICol
                 }
                 
             }).send()
-            
         }
-
     }
-    
-   
 }
 
 extension IGChannelAndGroupSharedMediaImagesAndVideosCollectionViewController : UICollectionViewDelegateFlowLayout {
-     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         let edgeIneset: UIEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         return edgeIneset
     }

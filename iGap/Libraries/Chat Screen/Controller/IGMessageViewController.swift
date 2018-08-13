@@ -1420,22 +1420,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
         self.inputBarSendButton.isHidden = false
         self.inputBarRecordButton.isHidden = true
         self.inputBarAttachmentViewFileNameLabel.text  = currentAttachment?.name
-        let sizeInByte = currentAttachment!.size
-        var sizeSting = ""
-        if sizeInByte < 1024 {
-            //byte
-            sizeSting = "\(sizeInByte) B"
-        } else if sizeInByte < 1048576 {
-            //kilobytes
-            sizeSting = "\(sizeInByte/1024) KB"
-        } else if sizeInByte < 1073741824 {
-            //megabytes
-            sizeSting = "\(sizeInByte/1048576) MB"
-        } else { //if sizeInByte < 1099511627776 {
-            //gigabytes
-            sizeSting = "\(sizeInByte/1073741824) GB"
-        }
-        self.inputBarAttachmentViewFileSizeLabel.text = sizeSting
+        self.inputBarAttachmentViewFileSizeLabel.text = IGAttachmentManager.sharedManager.convertFileSize(sizeInByte: currentAttachment!.size)
     }
 
     func saveAttachmentToLocalStorage(data: Data, fileNameOnDisk: String) {
@@ -1904,7 +1889,7 @@ extension IGMessageViewController: IGMessageCollectionViewDataSource {
             
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionFooter, withReuseIdentifier: IGMessageLogCollectionViewCell.cellReuseIdentifier(), for: indexPath) as! IGMessageLogCollectionViewCell
             
-            if indexPath.section <= messages.count {
+            if indexPath.section < messages.count {
                 if let message = messages?[indexPath.section] {
                     if message.shouldFetchBefore {
                         header.setText("Loading ...")
@@ -2367,11 +2352,10 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
                 present(avController, animated: true, completion: nil)
             }
             return
-        case .voice , .audio :
+        case .voice , .audio, .audioAndText :
             let musicPlayer = IGMusicViewController()
             musicPlayer.attachment = finalMessage.attachment
-            self.present(musicPlayer, animated: true, completion: {
-            })
+            self.present(musicPlayer, animated: true, completion: nil)
             return
             
         case .file , .fileAndText:

@@ -119,4 +119,21 @@ class IGAttachmentManager: NSObject {
             print("unable to open file")
         }
     }
+    
+    func convertFileSize(sizeInByte : Int) -> String {
+        if sizeInByte == 0 {
+            return ""
+        } else if sizeInByte < 1024 { // Byte
+            return "\(sizeInByte) B"
+        } else if sizeInByte < 1048576 { // KB
+            let size: Double = Double(sizeInByte) / 1024.0
+            return String(format: "%.2f KB", size)
+        } else if sizeInByte < 1073741824 { // MB
+            let size: Double = Double(sizeInByte) / 1048576.0
+            return String(format: "%.2f MB", size)
+        } else { // GB
+            let size: Double = Double(sizeInByte) / 1073741824.0
+            return String(format: "%.2f GB", size)
+        }
+    }
 }

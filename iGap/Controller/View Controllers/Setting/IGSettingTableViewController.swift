@@ -650,10 +650,6 @@ extension IGSettingTableViewController: UINavigationControllerDelegate {
 }
 extension IGSettingTableViewController: IGDownloadUploadIndicatorViewDelegate {
     func downloadUploadIndicatorDidTapOnStart(_ indicator: IGDownloadUploadIndicatorView) {
-        if self.userAvatar?.file?.status == .downloading {
-            return
-        }
-        
         if let attachment = self.userAvatar?.file {
             IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: { (attachment) -> Void in
                 

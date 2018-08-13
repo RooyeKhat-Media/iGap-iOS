@@ -23,14 +23,6 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
     @IBOutlet weak var sizeOfSharedLinksLabel: UILabel!
     @IBOutlet weak var sizeOfSharedVoice: UILabel!
     
-//    @IBOutlet weak var imageIndicator: UIActivityIndicatorView!
-//    @IBOutlet weak var voicesIndicator: UIActivityIndicatorView!
-//    @IBOutlet weak var linkIndicator: UIActivityIndicatorView!
-//    @IBOutlet weak var fileIndicator: UIActivityIndicatorView!
-//    @IBOutlet weak var audioIndicator: UIActivityIndicatorView!
-//    @IBOutlet weak var videoIndicator: UIActivityIndicatorView!
-    
-    
     var selectedRowNum : Int!
     var room: IGRoom?
     var hud = MBProgressHUD()
@@ -39,14 +31,11 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
     var sharedMediaVideoFile: [IGRoomMessage] = []
     var sharedMediaLinkFile:  [IGRoomMessage] = []
     var sharedMediaFile:      [IGRoomMessage] = []
-    var sharedMediaVoiceFile:     [IGRoomMessage] = []
+    var sharedMediaVoiceFile: [IGRoomMessage] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        let navigationItem = self.navigationItem as! IGNavigationItem
-        navigationItem.addNavigationViewItems(rightItemText: "Done", title: "shared Media")
-        navigationItem.navigationController = self.navigationController as! IGNavigationController
-        let navigationController = self.navigationController as! IGNavigationController
-        navigationController.interactivePopGestureRecognizer?.delegate = self
+        initNavigation()
         getCountOfImages()
         getCountOfAudio()
         getCountOfVideos()
@@ -54,29 +43,25 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
         getCountOfVoices()
         getCountOfLinks()
         getCountOfSahredMediaFiles()
-
-        
+    }
+    
+    private func initNavigation(){
+        let navigationItem = self.navigationItem as! IGNavigationItem
+        navigationItem.addNavigationViewItems(rightItemText: "Done", title: "shared Media")
+        navigationItem.navigationController = self.navigationController as? IGNavigationController
+        let navigationController = self.navigationController as! IGNavigationController
+        navigationController.interactivePopGestureRecognizer?.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
         self.tableView.isUserInteractionEnabled = true
-        
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
-    // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return 6
     }
     
@@ -124,7 +109,6 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
             default:
                 break
             }
-            
         }
     }
     
@@ -173,8 +157,6 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
                 }
                 
             }).send()
-
-
         }
     }
     
@@ -187,11 +169,12 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
                     case let clientSearchRoomHistoryResponse as IGPClientSearchRoomHistoryResponse:
                         let response =  IGClientSearchRoomHistoryRequest.Handler.interpret(response: clientSearchRoomHistoryResponse , roomId: selectedRoom.id)
                         if let messagesResponse: [IGPRoomMessage] = response.messages {
-                            for message in messagesResponse {
+                            for message in messagesResponse.reversed() {
                                 let msg = IGRoomMessage(igpMessage: message, roomId: selectedRoom.id)
                                 self.sharedMediaImageFile.append(msg)
                             }
                         }
+                        break
                     default:
                         break
                     }
@@ -210,12 +193,12 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
                     DispatchQueue.main.async {
                         self.sizeOfSharedImage.text = "\(0)"
                     }
+                    break
                 default:
                     break
                 }
                 
             }).send()
-            
         }
     }
     
@@ -227,7 +210,7 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
                     case let clientSearchRoomHistoryResponse as IGPClientSearchRoomHistoryResponse:
                         let response =  IGClientSearchRoomHistoryRequest.Handler.interpret(response: clientSearchRoomHistoryResponse , roomId: selectedRoom.id)
                         if let messagesResponse: [IGPRoomMessage] = response.messages {
-                            for message in messagesResponse {
+                            for message in messagesResponse.reversed() {
                                 let msg = IGRoomMessage(igpMessage: message, roomId: selectedRoom.id)
                                 self.sharedMediaAudioFile.append(msg)
                             }
@@ -251,13 +234,12 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
                     DispatchQueue.main.async {
                         self.sizeOfSharedAudiosLabel.text = "\(0)"
                     }
-
+                    break
                 default:
                     break
                 }
                 
             }).send()
-            
         }
     }
     
@@ -269,7 +251,7 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
                     case let clientSearchRoomHistoryResponse as IGPClientSearchRoomHistoryResponse:
                         let response =  IGClientSearchRoomHistoryRequest.Handler.interpret(response: clientSearchRoomHistoryResponse , roomId: selectedRoom.id)
                         if let messagesResponse: [IGPRoomMessage] = response.messages {
-                            for message in messagesResponse {
+                            for message in messagesResponse.reversed() {
                                 let msg = IGRoomMessage(igpMessage: message, roomId: selectedRoom.id)
                                 self.sharedMediaVideoFile.append(msg)
                             }
@@ -292,15 +274,13 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
                         self.sizeOfSharedVideos.text = "\(0)"
 
                     }
-
+                    break
                 default:
                     break
                 }
                 
             }).send()
-            
         }
-        
     }
     
     func getCountOfFile() {
@@ -312,13 +292,11 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
                     case let clientSearchRoomHistoryResponse as IGPClientSearchRoomHistoryResponse:
                         let response =  IGClientSearchRoomHistoryRequest.Handler.interpret(response: clientSearchRoomHistoryResponse , roomId: selectedRoom.id)
                         if let messagesResponse: [IGPRoomMessage] = response.messages {
-                            for message in messagesResponse {
+                            for message in messagesResponse.reversed() {
                                 let msg = IGRoomMessage(igpMessage: message, roomId: selectedRoom.id)
                                 self.sharedMediaFile.append(msg)
                             }
                         }
-                        let countOfImage = response.NotDeletedCount
-                        self.sizeOfSharedFiles.text = "\(countOfImage)"
                     default:
                         break
                     }
@@ -336,15 +314,13 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
                     DispatchQueue.main.async {
                         self.sizeOfSharedFiles.text = "\(0)"
                     }
-
+                    break
                 default:
                     break
                 }
                 
             }).send()
-            
         }
-
     }
     
     func getCountOfVoices() {
@@ -355,13 +331,11 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
                     case let clientSearchRoomHistoryResponse as IGPClientSearchRoomHistoryResponse:
                         let response =  IGClientSearchRoomHistoryRequest.Handler.interpret(response: clientSearchRoomHistoryResponse , roomId: selectedRoom.id)
                         if let messagesResponse: [IGPRoomMessage] = response.messages {
-                            for message in messagesResponse {
+                            for message in messagesResponse.reversed() {
                                 let msg = IGRoomMessage(igpMessage: message, roomId: selectedRoom.id)
                                 self.sharedMediaVoiceFile.append(msg)
                             }
                         }
-                        let countOfImage = response.NotDeletedCount
-                        self.sizeOfSharedVoice.text = "\(countOfImage)"
                     default:
                         break
                     }
@@ -377,18 +351,17 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
                     }
                 case .clientSearchRoomHistoryNotFound:
                     DispatchQueue.main.async {
-                        self.sizeOfSharedLinksLabel.text = "\(0)"
+                        self.sizeOfSharedVoice.text = "\(0)"
                     }
-   
+                    break
                 default:
                     break
                 }
                 
             }).send()
-            
         }
-
     }
+    
     func getCountOfLinks() {
         if let selectedRoom = room {
             IGClientSearchRoomHistoryRequest.Generator.generate(roomId: selectedRoom.id, offset: 0, filter: .url).success({ (protoResponse) in
@@ -397,13 +370,11 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
                     case let clientSearchRoomHistoryResponse as IGPClientSearchRoomHistoryResponse:
                         let response =  IGClientSearchRoomHistoryRequest.Handler.interpret(response: clientSearchRoomHistoryResponse , roomId: selectedRoom.id)
                         if let messagesResponse: [IGPRoomMessage] = response.messages {
-                            for message in messagesResponse {
+                            for message in messagesResponse.reversed() {
                                 let msg = IGRoomMessage(igpMessage: message, roomId: selectedRoom.id)
                                 self.sharedMediaLinkFile.append(msg)
                             }
                         }
-                        let countOfImage = response.NotDeletedCount
-                        self.sizeOfSharedLinksLabel.text = "\(countOfImage)"
                     default:
                         break
                     }
@@ -421,20 +392,14 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
                     DispatchQueue.main.async {
                         self.sizeOfSharedLinksLabel.text = "\(0)"
                     }
-                    
+                    break
                 default:
                     break
                 }
                 
             }).send()
-            
         }
-        
-
     }
-
-
-        // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -479,7 +444,6 @@ class IGGroupSharedMediaListTableViewController: UITableViewController , UIGestu
             default:
                 break
             }
-            
         }
     }
 }

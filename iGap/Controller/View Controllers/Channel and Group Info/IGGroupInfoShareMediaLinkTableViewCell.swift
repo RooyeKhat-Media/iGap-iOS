@@ -9,43 +9,73 @@
  */
 
 import UIKit
+import MBProgressHUD
+import IGProtoBuff
 
 class IGGroupInfoShareMediaLinkTableViewCell: UITableViewCell {
-    @IBOutlet weak var linkImageView: UIImageView!
-
+    
     @IBOutlet weak var creationDateLabel: UILabel!
-    @IBOutlet weak var linkAddressLabel: UILabel!
     @IBOutlet weak var linkDescriptionLabel: UILabel!
-    @IBOutlet weak var linkTitleLabel: UILabel!
+    @IBOutlet weak var linkTitleLabel: ActiveLabel!
+    
+    var hud = MBProgressHUD()
+    var urlClickDelegate : IGUrlClickDelegate!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
+    
     func setLinkDetails(message: IGRoomMessage) {
-        linkAddressLabel.text = message.message
+        
         if let creationtime = message.creationTime {
-            creationDateLabel.text = "\(creationtime)"
+            creationDateLabel.text = "\(creationtime.completeHumanReadableTime())"
             linkDescriptionLabel.text = message.message
-            
         }
-        let input = message.message
+        
+        var input = message.message
+        
+        if !(input?.hasPrefix("http://"))! && !(input?.hasPrefix("https://"))! {
+            input = "http://" + input!
+        }
+        
         let detector = try! NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
         let matches = detector.matches(in: input!, options: [], range: NSRange(location: 0, length: (input?.utf16.count)!))
         
         for match in matches {
-            let url = (input! as NSString).substring(with: match.range)
-            print(url)
+            var url = (input! as NSString).substring(with: match.range)
+            if !(url.hasPrefix("http://")) && !(url.hasPrefix("https://")) {
+                url = "http://" + url
+            }
             linkTitleLabel.text = url
         }
-
+        
+        linkManager(txtMessage: linkTitleLabel)
+    }
+    
+    private func linkManager(txtMessage: ActiveLabel?){
+        txtMessage?.customize { (label) in
+            let customInvitedLink = ActiveType.custom(pattern: "((?:http|https)://)?[iGap\\.net]+(\\.\\w{0})?(/(?<=/)(?:[\\join./]+[a-zA-Z0-9]{2,}))") //look for iGap.net/join/
+            label.enabledTypes.append(customInvitedLink)
+            label.hashtagColor = UIColor.organizationalColor()
+            label.mentionColor = UIColor.organizationalColor()
+            label.URLColor = UIColor.organizationalColor()
+            label.customColor[customInvitedLink] = UIColor.organizationalColor()
+            
+            label.handleURLTap { url in
+                self.urlClickDelegate?.didTapOnURl(url: url)
+            }
+            
+            label.handleCustomTap(for:customInvitedLink) {
+                self.urlClickDelegate?.didTapOnRoomLink(link: $0)
+            }
+        }
     }
 }
+
 extension NSRange {
     func range(for str: String) -> Range<String.Index>? {
         guard location != NSNotFound else { return nil }
