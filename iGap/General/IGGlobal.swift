@@ -711,6 +711,12 @@ extension String {
     }
 }
 
+extension Float {
+    var cleanDecimal: String {
+        return self.truncatingRemainder(dividingBy: 1) == 0 ? String(format: "%.0f", self) : String(self)
+    }
+}
+
 extension Array where Element: Hashable {
     func difference(from other: [Element]) -> [Element] {
         let thisSet = Set(self)
