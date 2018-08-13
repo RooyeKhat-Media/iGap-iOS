@@ -21,15 +21,15 @@ class IGMessageAttachmentCurrentLocationViewController: UIViewController , UIGes
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var currentLocationNameLabel: UILabel!
     @IBOutlet weak var pinImageView: UIImageView!
-    @IBOutlet weak var imgSendLocation: UIImageView!
     @IBOutlet weak var txtSendLocation: UILabel!
     @IBOutlet weak var btnCurrentLocation: UIButton!
+    @IBOutlet weak var txtSendLocationIcon: UILabel!
     
     let locationManager = CLLocationManager()
     var centerAnnotation = MKPointAnnotation()
     var locationDelegate : DidSelectLocationDelegate?
     var currentLocation : CLLocation!
-    var currentLocationSelect : CLLocation? // use from this param for go to location after click button
+    var currentLocationShowView : CLLocation? // use from this param for go to location after click button
     var isSendLocation = true
     var showedCurrentLocation = false
     var room : IGRoom!
@@ -49,6 +49,7 @@ class IGMessageAttachmentCurrentLocationViewController: UIViewController , UIGes
         
         initNavigation()
         buttonViewCustomize()
+        manageBottomView()
         initLocation()
         
         bottomView.addAction {
@@ -85,6 +86,13 @@ class IGMessageAttachmentCurrentLocationViewController: UIViewController , UIGes
         btnCurrentLocation.layer.cornerRadius = btnCurrentLocation.frame.width / 2
     }
     
+    func manageBottomView(){
+        bottomView.layer.shadowColor = UIColor.black.cgColor
+        bottomView.layer.shadowOffset = CGSize(width: 0, height: 2)
+        bottomView.layer.shadowRadius = 5.0
+        bottomView.layer.shadowOpacity = 0.6
+    }
+    
     private func initLocation() {
        
         mapView.delegate = self
@@ -98,16 +106,16 @@ class IGMessageAttachmentCurrentLocationViewController: UIViewController , UIGes
             currentLocation = locationManager.location
 
             if currentLocation != nil {
-                currentLocationSelect = currentLocation
+                currentLocationShowView = currentLocation
                 showCurrentLocation()
             }
             
         } else { // for received location
-            imgSendLocation.isHidden = true
+            txtSendLocationIcon.isHidden = true
             pinImageView.isHidden = true
             mapView.isZoomEnabled = true
             txtSendLocation.text = "Received this Location"
-            currentLocationSelect = currentLocation
+            currentLocationShowView = currentLocation
             
             addMarker()
             showCurrentLocation()
@@ -126,12 +134,12 @@ class IGMessageAttachmentCurrentLocationViewController: UIViewController , UIGes
     }
     
     func setCurrentLocation() {
-        if currentLocationSelect == nil {
+        if currentLocationShowView == nil {
             return
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             let span = MKCoordinateSpanMake(0, 360 / pow(2, Double(16)) * Double(self.mapView.frame.size.width) / 256)
-            let region = MKCoordinateRegionMake((self.currentLocationSelect?.coordinate)!, span)
+            let region = MKCoordinateRegionMake((self.currentLocationShowView?.coordinate)!, span)
             self.mapView.setRegion(region, animated: true)
         }
     }
@@ -177,14 +185,13 @@ class IGMessageAttachmentCurrentLocationViewController: UIViewController , UIGes
 }
 
 extension IGMessageAttachmentCurrentLocationViewController : MKMapViewDelegate {
+    
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        if !isSendLocation {
-            return
-        }
+        if !isSendLocation { return }
         let location = CLLocation(latitude: mapView.centerCoordinate.latitude, longitude: mapView.centerCoordinate.longitude)
         currentLocation = location
-        if currentLocationSelect == nil {
-            currentLocationSelect = currentLocation
+        if currentLocationShowView == nil {
+            currentLocationShowView = currentLocation
         }
         self.showCurrentLocation()
     }
@@ -218,6 +225,14 @@ extension IGMessageAttachmentCurrentLocationViewController : MKMapViewDelegate {
     }
 }
 extension IGMessageAttachmentCurrentLocationViewController : CLLocationManagerDelegate {
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        // we don't need following condition because when isSendLocation is false location manage callbacks are disable
+        // if !isSendLocation { return }
+        
+        self.currentLocationShowView = locations.last!
+    }
+    
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("Errors : " + error.localizedDescription)
     }
