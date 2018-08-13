@@ -27,45 +27,48 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" zoomEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H4W-xY-YF8">
-                                <rect key="frame" x="0.0" y="64" width="375" height="543"/>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" zoomEnabled="NO" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="H4W-xY-YF8">
+                                <rect key="frame" x="0.0" y="20" width="375" height="587"/>
                             </mapView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qjF-99-u5b" customClass="IGTappableView" customModule="iGap" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="607" width="375" height="60"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Locating..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GOW-He-PNQ" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
-                                        <rect key="frame" x="158" y="41.5" width="59.5" height="14.5"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                        <nil key="textColor"/>
+                                        <rect key="frame" x="156.5" y="41.5" width="63" height="14.5"/>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="12"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Send this Location" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z4Q-eZ-Ji4">
-                                        <rect key="frame" x="124" y="4" width="127" height="18"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <color key="textColor" red="0.0" green="0.69019607839999997" blue="0.74901960779999999" alpha="1" colorSpace="calibratedRGB"/>
+                                        <rect key="frame" x="121.5" y="4" width="132.5" height="18"/>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                        <color key="textColor" red="0.25962049190000003" green="0.2621909918" blue="0.2621909918" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IG_Location_arrow" translatesAutoresizingMaskIntoConstraints="NO" id="cxX-W6-HxA">
-                                        <rect key="frame" x="8" y="14" width="32" height="32"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9ES-5L-MFG">
+                                        <rect key="frame" x="8" y="8.5" width="44" height="44"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="32" id="oRV-6d-EPp"/>
-                                            <constraint firstAttribute="height" constant="32" id="p5A-2d-sh1"/>
+                                            <constraint firstAttribute="width" constant="44" id="Lzi-Os-1Y7"/>
+                                            <constraint firstAttribute="height" constant="44" id="hdF-aa-IgG"/>
                                         </constraints>
-                                    </imageView>
+                                        <fontDescription key="fontDescription" name="iGap-Fontico" family="iGap-Fontico" pointSize="30"/>
+                                        <color key="textColor" red="0.25962049190000003" green="0.2621909918" blue="0.2621909918" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="0.0" green="0.69019607839999997" blue="0.74901960779999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
+                                    <constraint firstItem="9ES-5L-MFG" firstAttribute="leading" secondItem="qjF-99-u5b" secondAttribute="leading" constant="8" id="1CT-GY-yis"/>
                                     <constraint firstItem="z4Q-eZ-Ji4" firstAttribute="centerX" secondItem="qjF-99-u5b" secondAttribute="centerX" id="BPg-X9-MwS"/>
                                     <constraint firstAttribute="bottom" secondItem="GOW-He-PNQ" secondAttribute="bottom" constant="4" id="Eqp-1v-qRF"/>
-                                    <constraint firstItem="cxX-W6-HxA" firstAttribute="leading" secondItem="qjF-99-u5b" secondAttribute="leading" constant="8" id="F1a-4S-7NI"/>
-                                    <constraint firstItem="cxX-W6-HxA" firstAttribute="centerY" secondItem="qjF-99-u5b" secondAttribute="centerY" id="LaJ-0g-mSi"/>
+                                    <constraint firstItem="9ES-5L-MFG" firstAttribute="centerY" secondItem="qjF-99-u5b" secondAttribute="centerY" id="l2U-fb-0Fo"/>
                                     <constraint firstItem="z4Q-eZ-Ji4" firstAttribute="top" secondItem="qjF-99-u5b" secondAttribute="top" constant="4" id="mza-A3-GeW"/>
                                     <constraint firstAttribute="height" constant="60" id="r1w-oF-m5N"/>
                                     <constraint firstItem="GOW-He-PNQ" firstAttribute="centerX" secondItem="qjF-99-u5b" secondAttribute="centerX" id="u69-Tm-DV1"/>
                                 </constraints>
                             </view>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Location_Marker" translatesAutoresizingMaskIntoConstraints="NO" id="dzT-ao-hN1">
-                                <rect key="frame" x="162.5" y="310.5" width="50" height="50"/>
+                                <rect key="frame" x="162.5" y="263.5" width="50" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="50" id="afQ-eQ-1Eb"/>
                                     <constraint firstAttribute="height" constant="50" id="lGm-3q-Vk7"/>
@@ -94,7 +97,7 @@
                             <constraint firstItem="dzT-ao-hN1" firstAttribute="centerX" secondItem="H4W-xY-YF8" secondAttribute="centerX" id="SCe-CV-qu7"/>
                             <constraint firstAttribute="trailingMargin" secondItem="E0t-it-I0J" secondAttribute="trailing" constant="2" id="VJJ-Hv-BBU"/>
                             <constraint firstAttribute="trailing" secondItem="H4W-xY-YF8" secondAttribute="trailing" id="aIt-e5-35g"/>
-                            <constraint firstItem="dzT-ao-hN1" firstAttribute="centerY" secondItem="H4W-xY-YF8" secondAttribute="centerY" id="cxp-vH-pxy"/>
+                            <constraint firstItem="dzT-ao-hN1" firstAttribute="centerY" secondItem="H4W-xY-YF8" secondAttribute="centerY" constant="-25" id="cxp-vH-pxy"/>
                             <constraint firstAttribute="trailing" secondItem="qjF-99-u5b" secondAttribute="trailing" id="czR-Ve-9Fr"/>
                             <constraint firstItem="qjF-99-u5b" firstAttribute="leading" secondItem="lAm-2Z-Uih" secondAttribute="leading" id="gBK-X9-L7t"/>
                             <constraint firstItem="qjF-99-u5b" firstAttribute="top" secondItem="E0t-it-I0J" secondAttribute="bottom" constant="20" id="j7x-P8-MPF"/>
@@ -105,10 +108,10 @@
                         <outlet property="bottomView" destination="qjF-99-u5b" id="yPh-Ai-TeH"/>
                         <outlet property="btnCurrentLocation" destination="E0t-it-I0J" id="lXs-wK-Bwv"/>
                         <outlet property="currentLocationNameLabel" destination="GOW-He-PNQ" id="3Y1-xo-ndR"/>
-                        <outlet property="imgSendLocation" destination="cxX-W6-HxA" id="jby-YC-aXX"/>
                         <outlet property="mapView" destination="H4W-xY-YF8" id="0iK-Vf-3TX"/>
                         <outlet property="pinImageView" destination="dzT-ao-hN1" id="zEj-aR-uVU"/>
                         <outlet property="txtSendLocation" destination="z4Q-eZ-Ji4" id="1jR-iW-51q"/>
+                        <outlet property="txtSendLocationIcon" destination="9ES-5L-MFG" id="xPs-mQ-bYM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vr7-yp-7f8" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -123,7 +126,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <view key="tableHeaderView" contentMode="scaleToFill" id="V8S-0G-tEw">
+                        <view key="tableHeaderView" contentMode="scaleToFill" misplaced="YES" id="V8S-0G-tEw">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="5"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -495,11 +498,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="back1" translatesAutoresizingMaskIntoConstraints="NO" id="PLh-MM-IK9">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </imageView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="9G6-WI-YVj" customClass="IGMessageCollectionView" customModule="iGap" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="TTu-g1-jEU">
                                     <size key="itemSize" width="50" height="50"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -824,7 +827,7 @@
                                 </constraints>
                             </view>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gI9-RR-rF9">
-                                <rect key="frame" x="0.0" y="64" width="375" height="50"/>
+                                <rect key="frame" x="0.0" y="20" width="375" height="50"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ODy-Ce-ZEZ">
                                         <rect key="frame" x="8" y="5" width="3" height="40"/>
@@ -975,7 +978,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <view key="tableHeaderView" contentMode="scaleToFill" id="OrM-Sw-TGg">
+                        <view key="tableHeaderView" contentMode="scaleToFill" misplaced="YES" id="OrM-Sw-TGg">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="5"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1036,7 +1039,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <view key="tableHeaderView" contentMode="scaleToFill" id="3rp-9r-PIi">
+                        <view key="tableHeaderView" contentMode="scaleToFill" misplaced="YES" id="3rp-9r-PIi">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="5"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1078,7 +1081,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <view key="tableHeaderView" contentMode="scaleToFill" id="jnE-JQ-jrQ">
+                        <view key="tableHeaderView" contentMode="scaleToFill" misplaced="YES" id="jnE-JQ-jrQ">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="5"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1451,7 +1454,6 @@
         <image name="IG_Chat_Screen_Record" width="38" height="38"/>
         <image name="IG_Chat_Screen_Scroll_To_Bottom" width="40" height="40"/>
         <image name="IG_Chat_Screen_Send" width="38" height="38"/>
-        <image name="IG_Location_arrow" width="32" height="32"/>
         <image name="IG_Splash_Cute_5" width="162" height="125"/>
         <image name="IG_Tabbar_Call_Off" width="37" height="37"/>
         <image name="IG_Tabbar_Call_On" width="37" height="37"/>
@@ -1467,7 +1469,6 @@
         <image name="back1" width="450" height="800"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Paj-YA-riE"/>
         <segue reference="jRj-hY-oEr"/>
         <segue reference="ebc-Vg-0Gq"/>
         <segue reference="ONr-pK-81u"/>
