@@ -2394,19 +2394,18 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
     
     func didTapOnAttachment(cellMessage: IGRoomMessage, cell: IGMessageGeneralCollectionViewCell) {
         
-        if cellMessage.type == .location || (cellMessage.forwardedFrom != nil && cellMessage.forwardedFrom?.type == .location) {
-            isSendLocation = false
-            receivedLocation = CLLocation(latitude: (cellMessage.location?.latitude)!, longitude: (cellMessage.location?.longitude)!)
-            self.performSegue(withIdentifier: "showLocationViewController", sender: self)
-            return
-        }
-        
         var finalMessage = cellMessage
         var roomMessageLists = self.messagesWithMedia
-        
         if cellMessage.forwardedFrom != nil {
             roomMessageLists = self.messagesWithForwardedMedia
             finalMessage = cellMessage.forwardedFrom!
+        }
+        
+        if finalMessage.type == .location {
+            isSendLocation = false
+            receivedLocation = CLLocation(latitude: (finalMessage.location?.latitude)!, longitude: (finalMessage.location?.longitude)!)
+            self.performSegue(withIdentifier: "showLocationViewController", sender: self)
+            return
         }
         
         var attachmetVariableInCache = IGAttachmentManager.sharedManager.getRxVariable(attachmentPrimaryKeyId: finalMessage.attachment!.primaryKeyId!)
