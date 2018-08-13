@@ -49,7 +49,7 @@ class IGHeader: UICollectionReusableView {
     
 }
 
-class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIGestureRecognizerDelegate, UIDocumentInteractionControllerDelegate {
+class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIGestureRecognizerDelegate, UIDocumentInteractionControllerDelegate, CLLocationManagerDelegate {
 
     @IBOutlet weak var pinnedMessageView: UIView!
     @IBOutlet weak var txtPinnedMessage: UILabel!
@@ -126,6 +126,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
     var selectedChannelToSeeTheirInfo: IGChannelRoom?
     var selectedGroupToSeeTheirInfo: IGGroupRoom?
     var hud = MBProgressHUD()
+    let locationManager = CLLocationManager()
     
     /* variables for fetch message */
     var allMessages:Results<IGRoomMessage>!
@@ -141,6 +142,8 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
     var allowForGetHistoryLocal = true
     var isFirstHistory = true
     var hasLocal = true
+    var isSendLocation : Bool!
+    var receivedLocation : CLLocation!
 
     fileprivate var typingStatusExpiryTimer = Timer() //use this to send cancel for typing status
     
@@ -640,8 +643,31 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
         }
     }
     
+    /***** user send location callback *****/
     func userWasSelectedLocation(location: CLLocation) {
-        print(location)
+        
+        let message = IGRoomMessage(body: "")
+        let locationMessage = IGRoomMessageLocation(location: location, for: message)
+        message.location = locationMessage.detach()
+        message.roomId = self.room!.id
+        message.type = .location
+        
+        let detachedMessage = message.detach()
+        
+        IGFactory.shared.saveNewlyWriitenMessageToDatabase(detachedMessage)
+        message.forwardedFrom = selectedMessageToForwardToThisRoom // Hint: if use this line before "saveNewlyWriitenMessageToDatabase" app will be crashed
+        message.repliedTo = selectedMessageToReply // Hint: if use this line before "saveNewlyWriitenMessageToDatabase" app will be crashed
+        IGMessageSender.defaultSender.send(message: message, to: room!)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            self.inputBarSendButton.isHidden = true
+            self.inputBarRecordButton.isHidden = false
+            self.inputTextView.text = ""
+            self.selectedMessageToForwardToThisRoom = nil
+            self.selectedMessageToReply = nil
+            self.currentAttachment = nil
+            self.setInputBarHeight()
+        }
     }
 
     //MARK: - Scroll
@@ -1027,19 +1053,46 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
     
     @IBAction func didTapOnAddAttachmentButton(_ sender: UIButton) {
         self.inputTextView.resignFirstResponder()
-        let contact = UIAlertAction(title: "Contact", style: .default, handler: { (action) in
-        })
-        let location = UIAlertAction(title: "Location", style: .default, handler: { (action) in
-            let settingStoryBoard = UIStoryboard(name: "Main", bundle: nil)
-            let setCurrentLocationTableViewController = settingStoryBoard.instantiateViewController(withIdentifier: "SetCurrentLocationPage") as! IGMessageAttachmentCurrentLocationViewController
-            let modalStyle: UIModalTransitionStyle = UIModalTransitionStyle.coverVertical
-            setCurrentLocationTableViewController.modalTransitionStyle = modalStyle
-            let navigationBar = IGNavigationController(rootViewController: setCurrentLocationTableViewController)
-            self.present(navigationBar, animated: true, completion: nil)
-
-        })
-        _ = [contact, location]
         
+        let alertC = UIAlertController(title: nil, message: nil, preferredStyle: IGGlobal.detectAlertStyle())
+        let attachment = UIAlertAction(title: "Media (Image or Video)", style: .default, handler: { (action) in
+            self.pickAttachment()
+        })
+        
+        let contact = UIAlertAction(title: "Contact", style: .default, handler: { (action) in })
+        let location = UIAlertAction(title: "Location", style: .default, handler: { (action) in
+            self.openLocation()
+        })
+        
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        alertC.addAction(attachment)
+        alertC.addAction(location)
+        //alertC.addAction(contact)
+        alertC.addAction(cancel)
+        
+        self.present(alertC, animated: true, completion: nil)
+    }
+    
+    private func openLocation(){
+        let status = CLLocationManager.authorizationStatus()
+        if status == .notDetermined {
+            locationManager.delegate = self
+            locationManager.requestWhenInUseAuthorization()
+        } else if status == .authorizedWhenInUse || status == .authorizedAlways {
+            isSendLocation = true
+            self.performSegue(withIdentifier: "showLocationViewController", sender: self)
+        }
+    }
+    
+    /***** overrided method for location manager *****/
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        if (status == CLAuthorizationStatus.authorizedWhenInUse) {
+            openLocation()
+        }
+    }
+    
+    private func pickAttachment(){
         let attachmentPickerController = DBAttachmentPickerController(customActions: nil, finishPicking: { (files) in
             //at phase 1 we only select one media
             if files.count > 0 {
@@ -1123,7 +1176,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
                 }
             }
         }, cancel: nil)
-
+        
         
         attachmentPickerController.mediaType = [.image , .video]
         attachmentPickerController.capturedVideoQulity = .typeHigh
@@ -1466,6 +1519,8 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
             self.inputBarOriginalMessageViewBodyTextLabel.text = textMessage
         } else if message.contact != nil {
             self.inputBarOriginalMessageViewBodyTextLabel.text = "reply contact message"
+        } else if message.location != nil {
+            self.inputBarOriginalMessageViewBodyTextLabel.text = "reply location message"
         } else if let file = message.attachment {
             self.inputBarOriginalMessageViewBodyTextLabel.text = "reply '\(IGFile.convertFileTypeToString(fileType: file.type))' message"
         }
@@ -1646,9 +1701,20 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
             let destinationTv = segue.destination as! IGReport
             destinationTv.room = self.room
             destinationTv.messageId = self.reportMessageId!
+        } else if segue.identifier == "showLocationViewController" {
+            let destinationTv = segue.destination as! IGMessageAttachmentCurrentLocationViewController
+            let modalStyle: UIModalTransitionStyle = UIModalTransitionStyle.coverVertical
+            destinationTv.modalTransitionStyle = modalStyle
+            destinationTv.isSendLocation = isSendLocation
+            if !isSendLocation {
+                destinationTv.currentLocation = receivedLocation
+            } else {
+                IGClientActionManager.shared.sendSendingLocation(for: self.room!)
+            }
+            destinationTv.room = self.room!
+            destinationTv.locationDelegate = self
         }
     }
- 
 }
 
 ////MARK: - UICollectionView
@@ -1731,7 +1797,7 @@ extension IGMessageViewController: IGMessageCollectionViewDataSource {
                             isNextMessageFromSameSender: false)
             return cell
             
-        } else if message.type == .location {
+        } else if (message.type == .location && message.forwardedFrom == nil) || (message.forwardedFrom != nil && message.forwardedFrom?.type == .location) {
             
             let cell: LocationCell = collectionView.dequeueReusableCell(withReuseIdentifier: LocationCell.cellReuseIdentifier(), for: indexPath) as! LocationCell
             let bubbleSize = CellSizeCalculator.sharedCalculator.mainBubbleCountainerSize(for: message)
@@ -2327,6 +2393,13 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
     }
     
     func didTapOnAttachment(cellMessage: IGRoomMessage, cell: IGMessageGeneralCollectionViewCell) {
+        
+        if cellMessage.type == .location || (cellMessage.forwardedFrom != nil && cellMessage.forwardedFrom?.type == .location) {
+            isSendLocation = false
+            receivedLocation = CLLocation(latitude: (cellMessage.location?.latitude)!, longitude: (cellMessage.location?.longitude)!)
+            self.performSegue(withIdentifier: "showLocationViewController", sender: self)
+            return
+        }
         
         var finalMessage = cellMessage
         var roomMessageLists = self.messagesWithMedia

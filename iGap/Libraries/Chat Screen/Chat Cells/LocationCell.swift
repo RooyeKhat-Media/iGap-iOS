@@ -35,9 +35,10 @@ class LocationCell: AbstractCell {
     
     override func setMessage(_ message: IGRoomMessage, isIncommingMessage: Bool, shouldShowAvatar: Bool, messageSizes: RoomMessageCalculatedSize, isPreviousMessageFromSameSender: Bool, isNextMessageFromSameSender: Bool) {
         initializeView()
-        makeLocation(messageSizes: messageSizes)
+        makeLocationView()
         super.setMessage(message, isIncommingMessage: isIncommingMessage, shouldShowAvatar: shouldShowAvatar, messageSizes: messageSizes, isPreviousMessageFromSameSender: isPreviousMessageFromSameSender, isNextMessageFromSameSender: isNextMessageFromSameSender)
-        setLocationImage(message: message)
+        manageLocationViewPosition(messageSizes: messageSizes)
+        setLocationImage()
     }
     
     private func initializeView(){
@@ -46,18 +47,15 @@ class LocationCell: AbstractCell {
         mainBubbleViewWidthAbs = mainBubbleViewWidth
     }
     
-    private func setLocationImage(message: IGRoomMessage, path: String? = nil){
+    private func setLocationImage(path: String? = nil){
         
-        let latitude = message.location?.latitude
-        let longitude = message.location?.longitude
+        let latitude = finalRoomMessage.location?.latitude
+        let longitude = finalRoomMessage.location?.longitude
         
-        var locationPath : String! = path
-        if locationPath == nil {
-            locationPath = LocationCell.locationPath(latitude: latitude!, longitude: longitude!)?.path
-        }
+        let locationPath = LocationCell.locationPath(latitude: latitude!, longitude: longitude!)?.path
         
-        if FileManager.default.fileExists(atPath: locationPath) {
-            if let image = UIImage(contentsOfFile: locationPath) {
+        if FileManager.default.fileExists(atPath: locationPath!) {
+            if let image = UIImage(contentsOfFile: locationPath!) {
                 imgMediaAbs.image = image
             }
         } else {
@@ -71,7 +69,7 @@ class LocationCell: AbstractCell {
         }
     }
     
-    private func makeLocation(messageSizes: RoomMessageCalculatedSize){
+    private func makeLocationView(){
         if imgMediaAbs != nil {
             imgMediaAbs.removeFromSuperview()
             imgMediaAbs = nil
@@ -81,7 +79,9 @@ class LocationCell: AbstractCell {
             imgMediaAbs = IGImageView()
             mainBubbleViewAbs.addSubview(imgMediaAbs)
         }
-        
+    }
+    
+    private func manageLocationViewPosition(messageSizes: RoomMessageCalculatedSize){
         imgMediaAbs.snp.makeConstraints { (make) in
             
             make.trailing.equalTo(mainBubbleViewAbs.snp.trailing)

@@ -21,52 +21,132 @@ class IGMessageAttachmentCurrentLocationViewController: UIViewController , UIGes
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var currentLocationNameLabel: UILabel!
     @IBOutlet weak var pinImageView: UIImageView!
+    @IBOutlet weak var imgSendLocation: UIImageView!
+    @IBOutlet weak var txtSendLocation: UILabel!
+    @IBOutlet weak var btnCurrentLocation: UIButton!
+    
     let locationManager = CLLocationManager()
     var centerAnnotation = MKPointAnnotation()
     var locationDelegate : DidSelectLocationDelegate?
-    var currentLocation = CLLocation()
+    var currentLocation : CLLocation!
+    var currentLocationSelect : CLLocation? // use from this param for go to location after click button
+    var isSendLocation = true
+    var showedCurrentLocation = false
+    var room : IGRoom!
+    
+    @IBAction func btnCurrentLocation(_ sender: UIButton) {
+        setCurrentLocation()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        if isSendLocation {
+            IGClientActionManager.shared.cancelSendingLocation(for: room)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        currentLocationNameLabel.text = "Locating..."
-        self.locationManager.delegate = self
-        self.mapView.delegate = self
-        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        self.locationManager.requestWhenInUseAuthorization()
-        self.locationManager.startUpdatingLocation()
-        self.mapView.showsUserLocation = true
-        if( CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedWhenInUse ||
-            CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedAlways) {
-            currentLocation = locationManager.location!
-            let userCoordinate = CLLocationCoordinate2D(latitude: currentLocation.coordinate.latitude, longitude: currentLocation.coordinate.longitude)
-            let camera = MKMapCamera(lookingAtCenter: userCoordinate, fromEyeCoordinate: userCoordinate, eyeAltitude: 400.0)
-            self.mapView.setCamera(camera, animated: true)
-            displayLocationInfo(location: currentLocation)
-            pinImageView.backgroundColor = UIColor.clear
-            pinImageView.isUserInteractionEnabled = false
+        
+        initNavigation()
+        buttonViewCustomize()
+        initLocation()
+        
+        bottomView.addAction {
+            if self.isSendLocation && self.isSendLocation && self.currentLocation != nil {
+                if self.locationDelegate != nil {
+                    self.locationDelegate?.userWasSelectedLocation(location: self.currentLocation)
+                }
+                self.navigationController?.popViewController(animated: true)
+            }
         }
+    }
+    
+    private func initNavigation(){
         let navigationItem = self.navigationItem as! IGNavigationItem
-        navigationItem.addModalViewItems(leftItemText: nil, rightItemText: "Cancel", title: "Location")
-        navigationItem.navigationController = self.navigationController as! IGNavigationController
+        var title = "Received Location"
+        if isSendLocation {
+            title = "Send Location"
+        }
+        navigationItem.addNavigationViewItems(rightItemText: nil, title: title)
+        navigationItem.navigationController = self.navigationController as? IGNavigationController
         let navigationController = self.navigationController as! IGNavigationController
         navigationController.interactivePopGestureRecognizer?.delegate = self
-        navigationItem.rightViewContainer?.addAction {
-            self.dismiss(animated: true, completion: nil)
-        }
-        bottomView.addAction {
-            self.dismiss(animated: true, completion: {
-                self.locationDelegate?.userWasSelectedLocation(location: self.currentLocation)
-            })
+    }
+    
+    func buttonViewCustomize(){
+        btnCurrentLocation.layer.shadowColor = UIColor.darkGray.cgColor
+        btnCurrentLocation.layer.shadowOffset = CGSize(width: 0.0, height: 2.0)
+        btnCurrentLocation.layer.shadowRadius = 0.1
+        btnCurrentLocation.layer.shadowOpacity = 0.1
+        
+        btnCurrentLocation.layer.borderWidth = 1.5
+        btnCurrentLocation.layer.borderColor = UIColor.darkGray.cgColor
+        btnCurrentLocation.layer.masksToBounds = false
+        btnCurrentLocation.layer.cornerRadius = btnCurrentLocation.frame.width / 2
+    }
+    
+    private func initLocation() {
+       
+        mapView.delegate = self
+        
+        if isSendLocation { // for send location
+            
+            self.locationManager.delegate = self
+            self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            self.locationManager.requestWhenInUseAuthorization()
+            self.locationManager.startUpdatingLocation()
+            currentLocation = locationManager.location
+
+            if currentLocation != nil {
+                currentLocationSelect = currentLocation
+                showCurrentLocation()
+            }
+            
+        } else { // for received location
+            imgSendLocation.isHidden = true
+            pinImageView.isHidden = true
+            mapView.isZoomEnabled = true
+            txtSendLocation.text = "Received this Location"
+            currentLocationSelect = currentLocation
+            
+            addMarker()
+            showCurrentLocation()
         }
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func showCurrentLocation() {
+        if !showedCurrentLocation { // just once go to current location
+            showedCurrentLocation = true
+            let userCoordinate = CLLocationCoordinate2D(latitude: currentLocation.coordinate.latitude, longitude: currentLocation.coordinate.longitude)
+            let camera = MKMapCamera(lookingAtCenter: userCoordinate, fromEyeCoordinate: userCoordinate, eyeAltitude: 300.0)
+            self.mapView.setCamera(camera, animated: true)
+            setCurrentLocation()
+        }
+        displayLocationInfo()
     }
     
-    func displayLocationInfo(location:CLLocation) {
+    func setCurrentLocation() {
+        if currentLocationSelect == nil {
+            return
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            let span = MKCoordinateSpanMake(0, 360 / pow(2, Double(16)) * Double(self.mapView.frame.size.width) / 256)
+            let region = MKCoordinateRegionMake((self.currentLocationSelect?.coordinate)!, span)
+            self.mapView.setRegion(region, animated: true)
+        }
+    }
+    
+    func addMarker(){
+        let annotation = MKPointAnnotation()
+        let userLocation = CLLocationCoordinate2D(latitude: currentLocation.coordinate.latitude, longitude: currentLocation.coordinate.longitude)
+        annotation.coordinate = userLocation
+        annotation.subtitle = "Received Location"
+        mapView.addAnnotation(annotation)
+    }
+    
+    func displayLocationInfo() {
         let geoCoder = CLGeocoder()
-        geoCoder.reverseGeocodeLocation(location, completionHandler: { (placemarks, error) -> Void in
+        geoCoder.reverseGeocodeLocation(currentLocation, completionHandler: { (placemarks, error) -> Void in
             // Place details
             var placeMark: CLPlacemark!
             placeMark = placemarks?[0]
@@ -95,12 +175,46 @@ class IGMessageAttachmentCurrentLocationViewController: UIViewController , UIGes
         })
     }
 }
-//MARK:- UIMapViewDelegate
+
 extension IGMessageAttachmentCurrentLocationViewController : MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        if !isSendLocation {
+            return
+        }
         let location = CLLocation(latitude: mapView.centerCoordinate.latitude, longitude: mapView.centerCoordinate.longitude)
         currentLocation = location
-        displayLocationInfo(location: location)
+        if currentLocationSelect == nil {
+            currentLocationSelect = currentLocation
+        }
+        self.showCurrentLocation()
+    }
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        // Don't want to show a custom image if the annotation is the user's location.
+        guard !(annotation is MKUserLocation) else {
+            return nil
+        }
+        
+        // Better to make this class property
+        let annotationIdentifier = "AnnotationIdentifier"
+        
+        var annotationView: MKAnnotationView?
+        if let dequeuedAnnotationView = mapView.dequeueReusableAnnotationView(withIdentifier: annotationIdentifier) {
+            annotationView = dequeuedAnnotationView
+            annotationView?.annotation = annotation
+        } else {
+            let av = MKAnnotationView(annotation: annotation, reuseIdentifier: annotationIdentifier)
+            av.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+            annotationView = av
+        }
+
+        // Configure your annotation view here
+        if let annotationView = annotationView {
+            annotationView.canShowCallout = true
+            annotationView.image = UIImage(named: "Location_Marker")
+        }
+        
+        return annotationView
     }
 }
 extension IGMessageAttachmentCurrentLocationViewController : CLLocationManagerDelegate {
