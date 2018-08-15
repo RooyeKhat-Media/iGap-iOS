@@ -23,6 +23,7 @@ import RxRealm
 import RxSwift
 import RxCocoa
 import MBProgressHUD
+import ContactsUI
 
 class IGHeader: UICollectionReusableView {
     
@@ -49,7 +50,7 @@ class IGHeader: UICollectionReusableView {
     
 }
 
-class IGMessageViewController: UIViewController, DidSelectLocationDelegate, UIGestureRecognizerDelegate, UIDocumentInteractionControllerDelegate, CLLocationManagerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class IGMessageViewController: UIViewController, DidSelectLocationDelegate, UIGestureRecognizerDelegate, UIDocumentInteractionControllerDelegate, CLLocationManagerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CNContactPickerDelegate, EPPickerDelegate {
 
     @IBOutlet weak var pinnedMessageView: UIView!
     @IBOutlet weak var txtPinnedMessage: UILabel!
@@ -1050,24 +1051,6 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate, UIGe
         }
     }
     
-    private func openLocation(){
-        let status = CLLocationManager.authorizationStatus()
-        if status == .notDetermined {
-            locationManager.delegate = self
-            locationManager.requestWhenInUseAuthorization()
-        } else if status == .authorizedWhenInUse || status == .authorizedAlways {
-            isSendLocation = true
-            self.performSegue(withIdentifier: "showLocationViewController", sender: self)
-        }
-    }
-    
-    /***** overrided method for location manager *****/
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        if (status == CLAuthorizationStatus.authorizedWhenInUse) {
-            openLocation()
-        }
-    }
-    
     /************************************************************************/
     /*********************** Attachment Manager Start ***********************/
     /************************************************************************/
@@ -1083,7 +1066,9 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate, UIGe
             self.attachmentPicker()
         })
         
-        let contact = UIAlertAction(title: "Contact", style: .default, handler: { (action) in })
+        let contact = UIAlertAction(title: "Contact", style: .default, handler: { (action) in
+            self.openContact()
+        })
         
         let location = UIAlertAction(title: "Location", style: .default, handler: { (action) in
             self.openLocation()
@@ -1094,7 +1079,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate, UIGe
         
         alertC.addAction(camera)
         alertC.addAction(galley)
-        //alertC.addAction(contact)
+        alertC.addAction(contact)
         alertC.addAction(location)
         alertC.addAction(cancel)
         
@@ -1209,6 +1194,68 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate, UIGe
         self.inputBarAttachmentViewThumnailImageView.layer.masksToBounds = true
         
         self.didSelectAttachment(attachment)
+    }
+    
+    private func openLocation(){
+        let status = CLLocationManager.authorizationStatus()
+        if status == .notDetermined {
+            locationManager.delegate = self
+            locationManager.requestWhenInUseAuthorization()
+        } else if status == .authorizedWhenInUse || status == .authorizedAlways {
+            isSendLocation = true
+            self.performSegue(withIdentifier: "showLocationViewController", sender: self)
+        }
+    }
+    
+    /***** overrided method for location manager *****/
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        if (status == CLAuthorizationStatus.authorizedWhenInUse) {
+            openLocation()
+        }
+    }
+    
+    private func openContact(){
+        IGClientActionManager.shared.sendChoosingContact(for: self.room!)
+        let contactPickerScene = EPContactsPicker(delegate: self, multiSelection:false, subtitleCellType: SubtitleCellValue.email)
+        let navigationController = UINavigationController(rootViewController: contactPickerScene)
+        self.present(navigationController, animated: true, completion: nil)
+    }
+    
+    func epContactPicker(_: EPContactsPicker, didCancel error: NSError) {
+        IGClientActionManager.shared.cancelChoosingContact(for: self.room!)
+    }
+    
+    func epContactPicker(_: EPContactsPicker, didSelectContact contact : EPContact){
+        IGClientActionManager.shared.cancelChoosingContact(for: self.room!)
+        var phones : [String] = []
+        var emails : [String] = []
+        for phone in contact.phoneNumbers {
+            phones.append(phone.phoneNumber)
+        }
+        for email in contact.emails {
+            emails.append(email.email)
+        }
+        
+        let message = IGRoomMessage(body: "")
+        let contact = IGRoomMessageContact(message:message, firstName:contact.firstName, lastName:contact.lastName, phones:phones, emails:emails)
+        message.contact = contact.detach()
+        message.type = .contact
+        message.roomId = self.room!.id
+        let detachedMessage = message.detach()
+        IGFactory.shared.saveNewlyWriitenMessageToDatabase(detachedMessage)
+        message.forwardedFrom = self.selectedMessageToForwardToThisRoom // Hint: if use this line before "saveNewlyWriitenMessageToDatabase" app will be crashed
+        message.repliedTo = self.selectedMessageToReply // Hint: if use this line before "saveNewlyWriitenMessageToDatabase" app will be crashed
+        IGMessageSender.defaultSender.send(message: message, to: self.room!)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            self.inputBarSendButton.isHidden = true
+            self.inputBarRecordButton.isHidden = false
+            self.inputTextView.text = ""
+            self.selectedMessageToForwardToThisRoom = nil
+            self.selectedMessageToReply = nil
+            self.currentAttachment = nil
+            self.setInputBarHeight()
+        }
     }
     /**********************************************************************/
     /*********************** Attachment Manager End ***********************/

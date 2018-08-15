@@ -67,39 +67,31 @@ class IGRoomMessageContact: Object {
         self.lastName = lastName
         
         phones?.forEach{
-            let predicate = NSPredicate(format: "innerString = %@", $0)
-            let realm = try! Realm()
-            if let phoneInDb = realm.objects(IGRealmString.self).filter(predicate).first {
-                self.phones.append(phoneInDb)
-            } else {
-                let phoneString = IGRealmString(string: $0)
-                self.phones.append(phoneString)
-            }
+            let phoneString = IGRealmString(string: $0)
+            self.phones.append(phoneString)
         }
-        
         
         emails?.forEach{
-            let predicate = NSPredicate(format: "innerString = %@", $0)
-            let realm = try! Realm()
-            if let emailInDb = realm.objects(IGRealmString.self).filter(predicate).first {
-                self.emails.append(emailInDb)
-            } else {
-                let emailString = IGRealmString(string: $0)
-                self.emails.append(emailString)
-            }
+            let emailString = IGRealmString(string: $0)
+            self.emails.append(emailString)
         }
+        
+        //if we use from follwoing code this error will be occured => 'Object is already managed by another Realm. Use create instead to copy it into this Realm.'
+        //seems to this error is for "let realm = try! Realm()" or "let phoneInDb = realm.objects(IGRealmString.self).filter(predicate).first"
+        //let realm = try! Realm()
+        //phones?.forEach{
+        //    let predicate = NSPredicate(format: "innerString = %@", $0)
+        //    if let phoneInDb = realm.objects(IGRealmString.self).filter(predicate).first {
+        //        self.phones.append(phoneInDb)
+        //    } else {
+        //        let phoneString = IGRealmString(string: $0)
+        //        self.phones.append(phoneString)
+        //    }
+        //}
     }
     
-    
-    
-    //detach from current realm
     func detach() -> IGRoomMessageContact {
         let detachedRoomMessageContact = IGRoomMessageContact(value: self)
-//        let phones = List<IGRealmString>(value: self.phones)
-//            let detachedPhones = phones
-//            //detachedRoomMessageLog.targetUser = detachedUser
-//        }
         return detachedRoomMessageContact
     }
-    
 }

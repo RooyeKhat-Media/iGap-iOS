@@ -161,6 +161,14 @@
 		FA42EF151E5C593500CF8A32 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = FA42EF141E5C593500CF8A32 /* TTTAttributedLabel.m */; };
 		FA4BD8A31DF2A53400CCB239 /* IGMusicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4BD8A11DF2A53400CCB239 /* IGMusicViewController.swift */; };
 		FA4BD8A41DF2A53400CCB239 /* IGMusicViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4BD8A21DF2A53400CCB239 /* IGMusicViewController.xib */; };
+		FA4CCFBE212306CE0019028B /* Contacts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA4CCFBC212306CE0019028B /* Contacts.framework */; };
+		FA4CCFBF212306CE0019028B /* ContactsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA4CCFBD212306CE0019028B /* ContactsUI.framework */; };
+		FA4CCFC7212308600019028B /* EPContactCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4CCFC12123085E0019028B /* EPContactCell.xib */; };
+		FA4CCFC8212308600019028B /* EPConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4CCFC22123085E0019028B /* EPConstants.swift */; };
+		FA4CCFC9212308600019028B /* EPContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4CCFC32123085F0019028B /* EPContactCell.swift */; };
+		FA4CCFCA212308600019028B /* EPExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4CCFC42123085F0019028B /* EPExtensions.swift */; };
+		FA4CCFCB212308600019028B /* EPContactsPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4CCFC5212308600019028B /* EPContactsPicker.swift */; };
+		FA4CCFCC212308600019028B /* EPContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4CCFC6212308600019028B /* EPContact.swift */; };
 		FA50A8C41DD35E8500C6D2EA /* IGAppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA50A8C31DD35E8500C6D2EA /* IGAppManager.swift */; };
 		FA50A8CD1DD35EFD00C6D2EA /* IGRegistrationStepPhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA50A8C71DD35EFD00C6D2EA /* IGRegistrationStepPhoneViewController.swift */; };
 		FA50A8CE1DD35EFD00C6D2EA /* IGRegistrationStepProfileInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA50A8C81DD35EFD00C6D2EA /* IGRegistrationStepProfileInfoViewController.swift */; };
@@ -492,6 +500,14 @@
 		FA42EF141E5C593500CF8A32 /* TTTAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTAttributedLabel.m; sourceTree = "<group>"; };
 		FA4BD8A11DF2A53400CCB239 /* IGMusicViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGMusicViewController.swift; sourceTree = "<group>"; };
 		FA4BD8A21DF2A53400CCB239 /* IGMusicViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IGMusicViewController.xib; sourceTree = "<group>"; };
+		FA4CCFBC212306CE0019028B /* Contacts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Contacts.framework; path = System/Library/Frameworks/Contacts.framework; sourceTree = SDKROOT; };
+		FA4CCFBD212306CE0019028B /* ContactsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ContactsUI.framework; path = System/Library/Frameworks/ContactsUI.framework; sourceTree = SDKROOT; };
+		FA4CCFC12123085E0019028B /* EPContactCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EPContactCell.xib; sourceTree = "<group>"; };
+		FA4CCFC22123085E0019028B /* EPConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EPConstants.swift; sourceTree = "<group>"; };
+		FA4CCFC32123085F0019028B /* EPContactCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EPContactCell.swift; sourceTree = "<group>"; };
+		FA4CCFC42123085F0019028B /* EPExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EPExtensions.swift; sourceTree = "<group>"; };
+		FA4CCFC5212308600019028B /* EPContactsPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EPContactsPicker.swift; sourceTree = "<group>"; };
+		FA4CCFC6212308600019028B /* EPContact.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EPContact.swift; sourceTree = "<group>"; };
 		FA5097D21DEDA18000A44699 /* iGap-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iGap-Bridging-Header.h"; sourceTree = "<group>"; };
 		FA50A8C31DD35E8500C6D2EA /* IGAppManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGAppManager.swift; sourceTree = "<group>"; };
 		FA50A8C71DD35EFD00C6D2EA /* IGRegistrationStepPhoneViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGRegistrationStepPhoneViewController.swift; sourceTree = "<group>"; };
@@ -682,6 +698,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA4CCFBE212306CE0019028B /* Contacts.framework in Frameworks */,
+				FA4CCFBF212306CE0019028B /* ContactsUI.framework in Frameworks */,
 				FA367E7E210459E900FA5A91 /* Digger.framework in Frameworks */,
 				FA39EAA320D7BF7B001CFF77 /* Protobuf.framework in Frameworks */,
 				FA73837620D7BA730094312D /* FirebaseInstanceID.framework in Frameworks */,
@@ -994,6 +1012,19 @@
 			path = "Music Player";
 			sourceTree = "<group>";
 		};
+		FA4CCFC0212308480019028B /* Contact Picker */ = {
+			isa = PBXGroup;
+			children = (
+				FA4CCFC22123085E0019028B /* EPConstants.swift */,
+				FA4CCFC6212308600019028B /* EPContact.swift */,
+				FA4CCFC32123085F0019028B /* EPContactCell.swift */,
+				FA4CCFC12123085E0019028B /* EPContactCell.xib */,
+				FA4CCFC5212308600019028B /* EPContactsPicker.swift */,
+				FA4CCFC42123085F0019028B /* EPExtensions.swift */,
+			);
+			path = "Contact Picker";
+			sourceTree = "<group>";
+		};
 		FA50A8C61DD35EFD00C6D2EA /* Splash and Register */ = {
 			isa = PBXGroup;
 			children = (
@@ -1303,6 +1334,7 @@
 		FAD5807E1DDC402600A242DE /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				FA4CCFC0212308480019028B /* Contact Picker */,
 				FA930D961E5B178F00069EE1 /* ThirdParty Libraries */,
 				FA4BD8A01DF2A52300CCB239 /* Music Player */,
 				FAD5807F1DDC403200A242DE /* Chat Screen */,
@@ -1464,6 +1496,8 @@
 		FAF985881E2E10EC00B26940 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FA4CCFBC212306CE0019028B /* Contacts.framework */,
+				FA4CCFBD212306CE0019028B /* ContactsUI.framework */,
 				FA367E7D210459E900FA5A91 /* Digger.framework */,
 				FA39EAA220D7BF7A001CFF77 /* Protobuf.framework */,
 				FA73836B20D798230094312D /* FirebaseCore.framework */,
@@ -1581,6 +1615,7 @@
 				FAB75D6C211ED56F00F0B550 /* LocationCell.xib in Resources */,
 				FA5656C6204AB18F00DB46F0 /* igap_busy.mp3 in Resources */,
 				FA33063D1F445AE90096031A /* IRANSans_Medium.ttf in Resources */,
+				FA4CCFC7212308600019028B /* EPContactCell.xib in Resources */,
 				FAD580951DDC5C4E00A242DE /* IGMessageCollectionViewCell.xib in Resources */,
 				FA33063C1F445AE80096031A /* IRANSans_Light.ttf in Resources */,
 				FA80F5A0204ABC5900F0EE74 /* tone.mp3 in Resources */,
@@ -1713,10 +1748,12 @@
 				FA50A8CF1DD35EFD00C6D2EA /* IGRegistrationStepSelectCountryTableViewController.swift in Sources */,
 				FAD57EE11E191DB000FC17D9 /* IGMessageLogCollectionViewCell.swift in Sources */,
 				FAEA75D91DDAFFA200C387F1 /* IGRoomMessageLocation.swift in Sources */,
+				FA4CCFC9212308600019028B /* EPContactCell.swift in Sources */,
 				FA0953611E1B97700043ED3F /* IGSettingContactsTableViewController.swift in Sources */,
 				FAC34DB41E1A3F7E00BB9823 /* IGRealm.swift in Sources */,
 				FA42EF0A1E5C224F00CF8A32 /* FrameStore.swift in Sources */,
 				FAF45932205021AF005E0539 /* IGCallFromContactListObserver.swift in Sources */,
+				FA4CCFCB212308600019028B /* EPContactsPicker.swift in Sources */,
 				FA0CC8091E5D7D4400556283 /* ActiveType.swift in Sources */,
 				FAD530621E0BD80800FE6C54 /* IGNavigationBar.swift in Sources */,
 				FA7F373820860B160024F8BF /* IGRealmiGapMap.swift in Sources */,
@@ -1886,6 +1923,7 @@
 				9366D98C1E363C2500998BA3 /* IGSettingAboutWebViewViewController.swift in Sources */,
 				FA0CC8071E5D7D4400556283 /* ActiveBuilder.swift in Sources */,
 				FA42EF0E1E5C224F00CF8A32 /* CGSize.swift in Sources */,
+				FA4CCFCA212308600019028B /* EPExtensions.swift in Sources */,
 				FA35DA171DE0245600F171EE /* IGDatabaseManager.swift in Sources */,
 				FA4BD8A31DF2A53400CCB239 /* IGMusicViewController.swift in Sources */,
 				FA60ADD4200BA39B004EE151 /* IGReport.swift in Sources */,
@@ -1899,6 +1937,7 @@
 				93AA67CC1E4F40260053380C /* IGChannelInfoMemberListInviteLinkTableViewCell.swift in Sources */,
 				FA5E159D1E0FD76300EC19A1 /* IGAvatarView.swift in Sources */,
 				93321E7A1E5C127E004D4454 /* IGForwardMessageTableViewController.swift in Sources */,
+				FA4CCFCC212308600019028B /* EPContact.swift in Sources */,
 				FA0953411E1B97700043ED3F /* IGActiveSessionObject.swift in Sources */,
 				FABB9B061DB25E5E00D794A4 /* IGSecurityManager.swift in Sources */,
 				FA0953551E1B97700043ED3F /* IGSettingChatStickersTableViewController.swift in Sources */,
@@ -1917,6 +1956,7 @@
 				FA11E28A1DE8A8A900A2F87C /* IGAttachmentManager.swift in Sources */,
 				FA0953671E1B97700043ED3F /* IGSettingPrivacy&SecurityPasscodeLockTableViewController.swift in Sources */,
 				FAA2A85A200A31CB00CAA7C7 /* IGSettingAccountBioTableViewController.swift in Sources */,
+				FA4CCFC8212308600019028B /* EPConstants.swift in Sources */,
 				93AA67BE1E4F35770053380C /* IGChannelInfoEditDescriptionTableViewController.swift in Sources */,
 				93193F381E5814980039AC0C /* IGGroupInfoAdminListTableViewController.swift in Sources */,
 				FA63BAAD1DD70F09000B60AD /* IGRequestGroup.swift in Sources */,
