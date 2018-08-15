@@ -1126,24 +1126,23 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate, UIGe
         let fileSize = Int(IGGlobal.getFileSize(path: mediaUrl))
         let randomString = IGGlobal.randomString(length: 16) + "_"
         
-        let attachment = IGFile(name: filename)
-        attachment.size = fileSize
-        attachment.fileNameOnDisk = randomString + filename
-        attachment.name = filename
-        attachment.type = .video
-        // TODO : get video height & width
-        attachment.height = 300
-        attachment.width = 200
-        //--------------------------------
-        
-        let pathOnDisk = documents + "/" + randomString + filename
-        try! FileManager.default.copyItem(atPath: mediaUrl.path, toPath: pathOnDisk)
-        
         /*** get thumbnail from video ***/
         let asset = AVURLAsset(url: mediaUrl)
         let imgGenerator = AVAssetImageGenerator(asset: asset)
         let cgImage = try!imgGenerator.copyCGImage(at: CMTimeMake(0, 1), actualTime: nil)
         let uiImage = UIImage(cgImage: cgImage)
+        
+        let attachment = IGFile(name: filename)
+        attachment.size = fileSize
+        attachment.fileNameOnDisk = randomString + filename
+        attachment.name = filename
+        attachment.attachedImage = uiImage
+        attachment.type = .video
+        attachment.height = Double(cgImage.height)
+        attachment.width = Double(cgImage.width)
+        
+        let pathOnDisk = documents + "/" + randomString + filename
+        try! FileManager.default.copyItem(atPath: mediaUrl.path, toPath: pathOnDisk)
         
         self.inputBarAttachmentViewThumnailImageView.image = uiImage
         self.inputBarAttachmentViewThumnailImageView.layer.cornerRadius = 6.0

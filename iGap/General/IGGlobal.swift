@@ -473,7 +473,6 @@ extension UIImageView {
                 }
                 
             } else {
-                print("QQQ || 1 attachment token : \(attachment.token)")
                 self.image = UIImage(named:"IG_Message_Cell_File_Generic")
             }
             

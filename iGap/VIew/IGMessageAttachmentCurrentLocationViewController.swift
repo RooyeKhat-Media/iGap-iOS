@@ -96,6 +96,7 @@ class IGMessageAttachmentCurrentLocationViewController: UIViewController , UIGes
     private func initLocation() {
        
         mapView.delegate = self
+        currentLocationNameLabel.text = "Locating..."
         
         if isSendLocation { // for send location
             
