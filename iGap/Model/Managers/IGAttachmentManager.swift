@@ -14,21 +14,14 @@ import RealmSwift
 
 class IGAttachmentManager: NSObject {
     static let sharedManager = IGAttachmentManager()
-//    private var cache: NSCache<NSString, IGFile>
     private var variablesCache: NSCache<NSString, Variable<IGFile>>
     
     private override init() {
-//        cache = NSCache()
-//        cache.countLimit = 2000
-//        cache.name = "im.igap.cache.IGAttachmentManager"
-        
         variablesCache = NSCache()
         variablesCache.countLimit = 2000
         variablesCache.name = "im.igap.cache.IGAttachmentManager"
-        
         super.init()
     }
-    
     
     func add(attachmentRef: ThreadSafeReference<IGFile>) {
         let realm = try! Realm()

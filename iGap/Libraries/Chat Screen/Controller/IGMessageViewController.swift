@@ -23,6 +23,7 @@ import RxRealm
 import RxSwift
 import RxCocoa
 import MBProgressHUD
+import ContactsUI
 
 class IGHeader: UICollectionReusableView {
     
@@ -49,7 +50,7 @@ class IGHeader: UICollectionReusableView {
     
 }
 
-class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIGestureRecognizerDelegate, UIDocumentInteractionControllerDelegate, CLLocationManagerDelegate {
+class IGMessageViewController: UIViewController, DidSelectLocationDelegate, UIGestureRecognizerDelegate, UIDocumentInteractionControllerDelegate, CLLocationManagerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CNContactPickerDelegate, EPPickerDelegate {
 
     @IBOutlet weak var pinnedMessageView: UIView!
     @IBOutlet weak var txtPinnedMessage: UILabel!
@@ -1050,28 +1051,149 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
         }
     }
     
-    
+    /************************************************************************/
+    /*********************** Attachment Manager Start ***********************/
+    /************************************************************************/
     @IBAction func didTapOnAddAttachmentButton(_ sender: UIButton) {
         self.inputTextView.resignFirstResponder()
         
         let alertC = UIAlertController(title: nil, message: nil, preferredStyle: IGGlobal.detectAlertStyle())
-        let attachment = UIAlertAction(title: "Media (Image or Video)", style: .default, handler: { (action) in
-            self.pickAttachment()
+        let camera = UIAlertAction(title: "Camera", style: .default, handler: { (action) in
+            self.attachmentPicker(sourceType: .camera)
         })
         
-        let contact = UIAlertAction(title: "Contact", style: .default, handler: { (action) in })
+        let galley = UIAlertAction(title: "Gallery", style: .default, handler: { (action) in
+            self.attachmentPicker()
+        })
+        
+        let contact = UIAlertAction(title: "Contact", style: .default, handler: { (action) in
+            self.openContact()
+        })
+        
         let location = UIAlertAction(title: "Location", style: .default, handler: { (action) in
             self.openLocation()
         })
+        //location.setValue(UIImage(named: "Location_Marker"), forKey: "image")
         
         let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
-        alertC.addAction(attachment)
+        alertC.addAction(camera)
+        alertC.addAction(galley)
+        alertC.addAction(contact)
         alertC.addAction(location)
-        //alertC.addAction(contact)
         alertC.addAction(cancel)
         
         self.present(alertC, animated: true, completion: nil)
+    }
+    
+    func attachmentPicker(sourceType: UIImagePickerControllerSourceType = .photoLibrary){
+        let mediaPicker = UIImagePickerController()
+        mediaPicker.delegate = self
+        mediaPicker.sourceType = sourceType
+        mediaPicker.mediaTypes = ["public.image", "public.movie"]
+        self.present(mediaPicker, animated: true, completion: nil)
+    }
+    
+    /***** overrided method for pick media *****/
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        self.dismiss(animated: true, completion: nil);
+
+        var mediaType : String! = ""
+        if let type = info["UIImagePickerControllerMediaType"] {
+            mediaType = String(describing: type)
+        }
+        switch mediaType! {
+        case "public.image": // image
+            manageImage(imageInfo: info)
+            break
+            
+        case "public.movie" : // video
+            manageVideo(mediaInfo: info)
+            break
+            
+        default: // manage file?
+            break
+        }
+    }
+    
+    func manageVideo(mediaInfo: [String : Any]){
+        guard let mediaUrl = mediaInfo["UIImagePickerControllerMediaURL"] as? URL else {
+            return
+        }
+        
+        let documents = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+        let filename = mediaUrl.lastPathComponent
+        let fileSize = Int(IGGlobal.getFileSize(path: mediaUrl))
+        let randomString = IGGlobal.randomString(length: 16) + "_"
+        
+        let attachment = IGFile(name: filename)
+        attachment.size = fileSize
+        attachment.fileNameOnDisk = randomString + filename
+        attachment.name = filename
+        attachment.type = .video
+        // TODO : get video height & width
+        attachment.height = 300
+        attachment.width = 200
+        //--------------------------------
+        
+        let pathOnDisk = documents + "/" + randomString + filename
+        try! FileManager.default.copyItem(atPath: mediaUrl.path, toPath: pathOnDisk)
+        
+        /*** get thumbnail from video ***/
+        let asset = AVURLAsset(url: mediaUrl)
+        let imgGenerator = AVAssetImageGenerator(asset: asset)
+        let cgImage = try!imgGenerator.copyCGImage(at: CMTimeMake(0, 1), actualTime: nil)
+        let uiImage = UIImage(cgImage: cgImage)
+        
+        self.inputBarAttachmentViewThumnailImageView.image = uiImage
+        self.inputBarAttachmentViewThumnailImageView.layer.cornerRadius = 6.0
+        self.inputBarAttachmentViewThumnailImageView.layer.masksToBounds = true
+        self.didSelectAttachment(attachment)
+    }
+    
+    func manageImage(imageInfo: [String : Any]){
+        let imageUrl = imageInfo["UIImagePickerControllerImageURL"] as? URL
+        let originalImage = imageInfo["UIImagePickerControllerOriginalImage"] as! UIImage
+        
+        var filename : String!
+        var fileSize : Int!
+        
+        if imageUrl != nil {
+            filename = imageUrl?.lastPathComponent
+            fileSize = Int(IGGlobal.getFileSize(path: imageUrl))
+        } else {
+            filename = "IMAGE_" + IGGlobal.randomString(length: 16)
+            fileSize = NSData(data: UIImageJPEGRepresentation((originalImage), 1)!).length
+        }
+        let randomString = IGGlobal.randomString(length: 16) + "_"
+   
+        var scaledImage = originalImage
+        let imgData = UIImageJPEGRepresentation(scaledImage, 0.7)
+        let fileNameOnDisk = randomString + filename
+        
+        if (originalImage.size.width) > CGFloat(2000.0) || (originalImage.size.height) >= CGFloat(2000) {
+            scaledImage = IGUploadManager.compress(image: originalImage)
+        }
+        
+        let attachment = IGFile(name: filename)
+        attachment.size = fileSize
+        attachment.attachedImage = scaledImage
+        attachment.fileNameOnDisk = fileNameOnDisk
+        attachment.height = Double((scaledImage.size.height))
+        attachment.width = Double((scaledImage.size.width))
+        attachment.size = (imgData?.count)!
+        attachment.data = imgData
+        attachment.type = .image
+        
+        DispatchQueue.main.async {
+            self.saveAttachmentToLocalStorage(data: imgData!, fileNameOnDisk: fileNameOnDisk)
+        }
+        
+        self.inputBarAttachmentViewThumnailImageView.image = attachment.attachedImage
+        self.inputBarAttachmentViewThumnailImageView.layer.cornerRadius = 6.0
+        self.inputBarAttachmentViewThumnailImageView.layer.masksToBounds = true
+        
+        self.didSelectAttachment(attachment)
     }
     
     private func openLocation(){
@@ -1092,98 +1214,53 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate , UIG
         }
     }
     
-    private func pickAttachment(){
-        let attachmentPickerController = DBAttachmentPickerController(customActions: nil, finishPicking: { (files) in
-            //at phase 1 we only select one media
-            if files.count > 0 {
-                let selectedFile = files[0]
-                
-                let attachment = IGFile(name: selectedFile.fileName)
-                attachment.size = Int(selectedFile.fileSize)
-                print("size = \(Int(selectedFile.fileSize))")
-                switch selectedFile.sourceType {
-                case .image, .phAsset:
-                    selectedFile.loadOriginalImage(completion: { (image) in
-                        var scaledImage = image
-                        
-                        if (image?.size.width)! > CGFloat(2000.0) || (image?.size.height)! >= CGFloat(2000) {
-                            scaledImage = IGUploadManager.compress(image: image!)
-                        }
-                        
-                        attachment.attachedImage = scaledImage
-                        let imgData = UIImageJPEGRepresentation(scaledImage!, 0.7)
-                        let randomString = IGGlobal.randomString(length: 16) + "_"
-                        let fileNameOnDisk = randomString + selectedFile.fileName!
-                        attachment.fileNameOnDisk = fileNameOnDisk
-                        DispatchQueue.main.async {
-                            self.saveAttachmentToLocalStorage(data: imgData!, fileNameOnDisk: fileNameOnDisk)
-                        }
-                        
-                        attachment.height = Double((scaledImage?.size.height)!)
-                        attachment.width = Double((scaledImage?.size.width)!)
-                        attachment.size = (imgData?.count)!
-                        attachment.data = imgData
-                        attachment.type = .image
-                        
-                        self.inputBarAttachmentViewThumnailImageView.image = attachment.attachedImage
-                        
-                        self.inputBarAttachmentViewThumnailImageView.layer.cornerRadius = 6.0
-                        self.inputBarAttachmentViewThumnailImageView.layer.masksToBounds = true
-                        
-                        self.didSelectAttachment(attachment)
-                    })
-                    break
-                case .documentURL:
-                    //recorded videos will be here
-                    //also selected files form other apps
-                    
-                    if selectedFile.originalFileResource() is String {
-                        print ("This is a file selected from ")
-                        let selectedFilePath = selectedFile.originalFileResource() as! String
-                        
-                        
-                        let documents = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-                        let randomString = IGGlobal.randomString(length: 16) + "_"
-                        attachment.fileNameOnDisk = randomString + selectedFile.fileName!
-                        let pathOnDisk = documents + "/" + randomString + selectedFile.fileName!
-                        
-                        try! FileManager.default.copyItem(atPath: selectedFilePath, toPath: pathOnDisk)
-                        attachment.height = 0
-                        print(URL(string: pathOnDisk)!.pathExtension)
-                        attachment.width = 0
-                        switch URL(string: pathOnDisk)!.pathExtension {
-                        case "MP3":
-                            attachment.type = .audio
-                        case "MOV":
-                            attachment.type = .video
-                        case "MP4":
-                            attachment.type = .video
-                        default:
-                            attachment.type = .file
-                        }
-                        attachment.name = selectedFile.fileName
-                        
-                        self.inputBarAttachmentViewThumnailImageView.layer.cornerRadius = 6.0
-                        self.inputBarAttachmentViewThumnailImageView.layer.masksToBounds = true
-                        
-                        self.didSelectAttachment(attachment)
-                    }
-                    
-                    
-                    break
-                case .unknown:
-                    break
-                }
-            }
-        }, cancel: nil)
-        
-        
-        attachmentPickerController.mediaType = [.image , .video]
-        attachmentPickerController.capturedVideoQulity = .typeHigh
-        attachmentPickerController.allowsMultipleSelection = false
-        attachmentPickerController.allowsSelectionFromOtherApps = true
-        attachmentPickerController.present(on: self)
+    private func openContact(){
+        IGClientActionManager.shared.sendChoosingContact(for: self.room!)
+        let contactPickerScene = EPContactsPicker(delegate: self, multiSelection:false, subtitleCellType: SubtitleCellValue.email)
+        let navigationController = UINavigationController(rootViewController: contactPickerScene)
+        self.present(navigationController, animated: true, completion: nil)
     }
+    
+    func epContactPicker(_: EPContactsPicker, didCancel error: NSError) {
+        IGClientActionManager.shared.cancelChoosingContact(for: self.room!)
+    }
+    
+    func epContactPicker(_: EPContactsPicker, didSelectContact contact : EPContact){
+        IGClientActionManager.shared.cancelChoosingContact(for: self.room!)
+        var phones : [String] = []
+        var emails : [String] = []
+        for phone in contact.phoneNumbers {
+            phones.append(phone.phoneNumber)
+        }
+        for email in contact.emails {
+            emails.append(email.email)
+        }
+        
+        let message = IGRoomMessage(body: "")
+        let contact = IGRoomMessageContact(message:message, firstName:contact.firstName, lastName:contact.lastName, phones:phones, emails:emails)
+        message.contact = contact.detach()
+        message.type = .contact
+        message.roomId = self.room!.id
+        let detachedMessage = message.detach()
+        IGFactory.shared.saveNewlyWriitenMessageToDatabase(detachedMessage)
+        message.forwardedFrom = self.selectedMessageToForwardToThisRoom // Hint: if use this line before "saveNewlyWriitenMessageToDatabase" app will be crashed
+        message.repliedTo = self.selectedMessageToReply // Hint: if use this line before "saveNewlyWriitenMessageToDatabase" app will be crashed
+        IGMessageSender.defaultSender.send(message: message, to: self.room!)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            self.inputBarSendButton.isHidden = true
+            self.inputBarRecordButton.isHidden = false
+            self.inputTextView.text = ""
+            self.selectedMessageToForwardToThisRoom = nil
+            self.selectedMessageToReply = nil
+            self.currentAttachment = nil
+            self.setInputBarHeight()
+        }
+    }
+    /**********************************************************************/
+    /*********************** Attachment Manager End ***********************/
+    /**********************************************************************/
+   
     
     @IBAction func didTapOnDeleteSelectedAttachment(_ sender: UIButton) {
         self.currentAttachment = nil

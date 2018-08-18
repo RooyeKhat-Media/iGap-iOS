@@ -148,6 +148,12 @@ class CellSizeCalculator: NSObject {
                 finalSize.width = min(finalSize.width, maximumWidth)
                 forwardedMessageBodyHeight = stringRect.height
             }
+            
+            if originalMessage.type == .contact {
+                let contactSize = IGContactInMessageCellView.sizeForContact(originalMessage.contact!)
+                finalSize.width = contactSize.width
+                finalSize.height += contactSize.height
+            }
         }
         
         //MARK: attachment
@@ -232,6 +238,9 @@ class CellSizeCalculator: NSObject {
             finalSize.height = 30.0
         } else if message.type == .contact {
             let contactSize = IGContactInMessageCellView.sizeForContact(message.contact!)
+            if (finalSize.height == 0) { // use this block for avoid from contact small show (bad view) before when message is in sending state
+                finalSize.height = 40
+            }
             finalSize.width = contactSize.width
             finalSize.height += contactSize.height
         } else {
@@ -250,7 +259,7 @@ class CellSizeCalculator: NSObject {
         if message.forwardedFrom != nil {
             if message.forwardedFrom?.type == .contact {
                 finalSize.width = 200
-                finalSize.height += 30
+                finalSize.height -= 10
             } else if message.forwardedFrom?.type == .audio || message.forwardedFrom?.type == .audioAndText {
                 finalSize.width = 220
             } else if message.forwardedFrom?.type == .file || message.forwardedFrom?.type == .fileAndText {

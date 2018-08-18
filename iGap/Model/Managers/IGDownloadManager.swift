@@ -427,6 +427,10 @@ class IGDownloadManager {
     
     func pauseDownload(attachment: IGFile) {
         
+        if attachment.token == nil {
+            return
+        }
+        
         var task : IGDownloadTask! = dictionaryDownloadTaskMain[attachment.token!]
         if task != nil {
             

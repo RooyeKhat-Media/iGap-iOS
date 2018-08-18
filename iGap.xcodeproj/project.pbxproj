@@ -252,6 +252,12 @@
 		FA98F838204D37670070424E /* IGCallQuality.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA98F837204D37670070424E /* IGCallQuality.swift */; };
 		FA98F83A204D41AB0070424E /* Cosmos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA98F839204D41AA0070424E /* Cosmos.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		FA9CE15B2068DF4F0056C866 /* IGSelectCountryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9CE15A2068DF4E0056C866 /* IGSelectCountryCell.swift */; };
+		FA9F73562127E589004418E5 /* EPConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9F73502127E589004418E5 /* EPConstants.swift */; };
+		FA9F73572127E589004418E5 /* EPContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9F73512127E589004418E5 /* EPContactCell.swift */; };
+		FA9F73582127E589004418E5 /* EPContactCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA9F73522127E589004418E5 /* EPContactCell.xib */; };
+		FA9F73592127E589004418E5 /* EPContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9F73532127E589004418E5 /* EPContact.swift */; };
+		FA9F735A2127E589004418E5 /* EPContactsPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9F73542127E589004418E5 /* EPContactsPicker.swift */; };
+		FA9F735B2127E589004418E5 /* EPExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9F73552127E589004418E5 /* EPExtensions.swift */; };
 		FAA2A85A200A31CB00CAA7C7 /* IGSettingAccountBioTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA2A859200A31CB00CAA7C7 /* IGSettingAccountBioTableViewController.swift */; };
 		FAA30F671DAA6F790061B8C9 /* IGWebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA30F661DAA6F790061B8C9 /* IGWebSocketManager.swift */; };
 		FAA3604D201614B600736F95 /* TextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA3604B201614B600736F95 /* TextCell.swift */; };
@@ -605,6 +611,12 @@
 		FA98F837204D37670070424E /* IGCallQuality.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGCallQuality.swift; sourceTree = "<group>"; };
 		FA98F839204D41AA0070424E /* Cosmos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cosmos.framework; path = Carthage/Build/iOS/Cosmos.framework; sourceTree = "<group>"; };
 		FA9CE15A2068DF4E0056C866 /* IGSelectCountryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGSelectCountryCell.swift; sourceTree = "<group>"; };
+		FA9F73502127E589004418E5 /* EPConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EPConstants.swift; sourceTree = "<group>"; };
+		FA9F73512127E589004418E5 /* EPContactCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EPContactCell.swift; sourceTree = "<group>"; };
+		FA9F73522127E589004418E5 /* EPContactCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EPContactCell.xib; sourceTree = "<group>"; };
+		FA9F73532127E589004418E5 /* EPContact.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EPContact.swift; sourceTree = "<group>"; };
+		FA9F73542127E589004418E5 /* EPContactsPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EPContactsPicker.swift; sourceTree = "<group>"; };
+		FA9F73552127E589004418E5 /* EPExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EPExtensions.swift; sourceTree = "<group>"; };
 		FAA2A859200A31CB00CAA7C7 /* IGSettingAccountBioTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGSettingAccountBioTableViewController.swift; sourceTree = "<group>"; };
 		FAA30F661DAA6F790061B8C9 /* IGWebSocketManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IGWebSocketManager.swift; path = "WebSocket Manager/IGWebSocketManager.swift"; sourceTree = "<group>"; };
 		FAA3604B201614B600736F95 /* TextCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextCell.swift; sourceTree = "<group>"; };
@@ -1253,6 +1265,20 @@
 			path = ReusableViews;
 			sourceTree = "<group>";
 		};
+		FA9F734F2127E4C0004418E5 /* Contact Picker */ = {
+			isa = PBXGroup;
+			children = (
+				FA9F73502127E589004418E5 /* EPConstants.swift */,
+				FA9F73532127E589004418E5 /* EPContact.swift */,
+				FA9F73512127E589004418E5 /* EPContactCell.swift */,
+				FA9F73522127E589004418E5 /* EPContactCell.xib */,
+				FA9F73542127E589004418E5 /* EPContactsPicker.swift */,
+				FA9F73552127E589004418E5 /* EPExtensions.swift */,
+			);
+			name = "Contact Picker";
+			path = "New Group";
+			sourceTree = "<group>";
+		};
 		FAA30F641DAA6ECA0061B8C9 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
@@ -1344,6 +1370,7 @@
 		FAD5807E1DDC402600A242DE /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				FA9F734F2127E4C0004418E5 /* Contact Picker */,
 				FA930D961E5B178F00069EE1 /* ThirdParty Libraries */,
 				FA4BD8A01DF2A52300CCB239 /* Music Player */,
 				FAD5807F1DDC403200A242DE /* Chat Screen */,
@@ -1624,6 +1651,7 @@
 				FA5656C6204AB18F00DB46F0 /* igap_busy.mp3 in Resources */,
 				FA33063D1F445AE90096031A /* IRANSans_Medium.ttf in Resources */,
 				FAD580951DDC5C4E00A242DE /* IGMessageCollectionViewCell.xib in Resources */,
+				FA9F73582127E589004418E5 /* EPContactCell.xib in Resources */,
 				FA33063C1F445AE80096031A /* IRANSans_Light.ttf in Resources */,
 				FA80F5A0204ABC5900F0EE74 /* tone.mp3 in Resources */,
 				FAAEAC5520E0EAEF00A1EAE5 /* Localizable.strings in Resources */,
@@ -1761,6 +1789,7 @@
 				FA42EF0A1E5C224F00CF8A32 /* FrameStore.swift in Sources */,
 				FAF45932205021AF005E0539 /* IGCallFromContactListObserver.swift in Sources */,
 				FA0CC8091E5D7D4400556283 /* ActiveType.swift in Sources */,
+				FA9F735A2127E589004418E5 /* EPContactsPicker.swift in Sources */,
 				FAD530621E0BD80800FE6C54 /* IGNavigationBar.swift in Sources */,
 				FA7F373820860B160024F8BF /* IGRealmiGapMap.swift in Sources */,
 				FAD959071F48D4EF00FBD306 /* IGSettingQrScannerViewController.swift in Sources */,
@@ -1809,6 +1838,7 @@
 				93193F301E5812CA0039AC0C /* IGGroupInfoMemberListTableViewController.swift in Sources */,
 				FA0953681E1B97700043ED3F /* IGSettingPrivacy&SecurityTableViewController.swift in Sources */,
 				FA8F22561DD89C88005A90D1 /* IGChannelRoom.swift in Sources */,
+				FA9F73572127E589004418E5 /* EPContactCell.swift in Sources */,
 				FAA3604D201614B600736F95 /* TextCell.swift in Sources */,
 				FA0953821E1B97E20043ED3F /* IGChooseContactToAddNewGroupTableViewCell.swift in Sources */,
 				FAC0F08920F0C8C700182758 /* IGFinancialServiceBillQrScanner.swift in Sources */,
@@ -1844,7 +1874,9 @@
 				FA63BAB11DD70F36000B60AD /* IGRequestClient.swift in Sources */,
 				FA50A8D01DD35EFD00C6D2EA /* IGRegistrationStepTermsViewController.swift in Sources */,
 				932D1AB71E740B35000F0D97 /* IGGroupAndChannelInfoSharedMediaAudioAndVoicesTableViewCell.swift in Sources */,
+				FA9F73592127E589004418E5 /* EPContact.swift in Sources */,
 				93E181E41E77E7EE005C3593 /* IGChannelAndGroupInfoSharedMediaFileTableViewCell.swift in Sources */,
+				FA9F735B2127E589004418E5 /* EPExtensions.swift in Sources */,
 				FAEA75DD1DDB035400C387F1 /* IGRoomMessageContact.swift in Sources */,
 				FA50A8D11DD35EFD00C6D2EA /* IGRegistrationStepVerificationCodeViewController.swift in Sources */,
 				FA09535B1E1B97700043ED3F /* IGSettingChatWhenDownloadDataTableViewController.swift in Sources */,
@@ -1879,6 +1911,7 @@
 				FA03C19C2042945D008812E3 /* IGCall.swift in Sources */,
 				FA0953521E1B97700043ED3F /* IGSettingChatFontSizeTableViewController.swift in Sources */,
 				FA63BAA51DD70DD0000B60AD /* IGRequest.swift in Sources */,
+				FA9F73562127E589004418E5 /* EPConstants.swift in Sources */,
 				93A3D3CA1E407E5200D2686F /* IGChooseMemberFromContactToCreateChannelViewController.swift in Sources */,
 				FA63BAAF1DD70F21000B60AD /* IGRequestChannel.swift in Sources */,
 				93AA67BC1E4F35580053380C /* IGChannelInfoEditNameTableViewController.swift in Sources */,
