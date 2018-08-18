@@ -129,4 +129,40 @@ class IGAttachmentManager: NSObject {
             return String(format: "%.2f GB", size)
         }
     }
+    
+    func convertFileTime(seconds: Int) -> String{
+        var time = ""
+        var secondTime = seconds
+        
+        let hour = seconds / 3600
+        let minute = seconds / 60
+        
+        if hour > 0 {
+             secondTime = secondTime % 3600
+            if hour > 9 {
+                time += "\(hour):"
+            } else {
+                time += "0\(hour):"
+            }
+        }
+        
+        if minute > 0 {
+            secondTime = secondTime % 60
+            if minute > 9 {
+                time += "\(minute):"
+            } else {
+                time += "0\(minute):"
+            }
+        } else {
+            time += "00:"
+        }
+        
+        if secondTime > 9 {
+            time += "\(secondTime)"
+        } else {
+            time += "0\(secondTime)"
+        }
+        
+        return time
+    }
 }

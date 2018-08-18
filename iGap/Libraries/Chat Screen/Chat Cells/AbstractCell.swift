@@ -21,6 +21,7 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
     var mediaContainerViewAbs: UIView?
     var messageViewAbs: UIView?
     var replyLineViewAbs: UIView!
+    var viewInfoVideoAbs: UIView!
     
     var txtSenderNameAbs: UILabel!
     var txtEditedAbs: UILabel!
@@ -28,9 +29,12 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
     var txtReplyDisplayNameAbs: UILabel!
     var txtReplyMessageAbs: UILabel!
     var txtForwardAbs: UILabel!
+    var txtTimeVideoAbs: UILabel!
+    var txtSizeVideoAbs: UILabel!
     
     var imgStatusAbs: UIImageView!
     var imgFileAbs: UIImageView!
+    var imgVideoPlayAbs: UIImageView!
     
     var txtMessageHeightConstraintAbs: NSLayoutConstraint!
     var mainBubbleViewWidthAbs: NSLayoutConstraint!
@@ -168,7 +172,7 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
             switch (finalRoomMessage.type) {
             case .image, .video, .gif:
 
-                makeImage()
+                makeImage(finalRoomMessage.type)
                 
                 txtMessageAbs.snp.remakeConstraints{ (make) in
                     make.centerY.equalTo(mainBubbleViewAbs.snp.centerY)
@@ -177,7 +181,7 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
                 break
             case .imageAndText, .videoAndText, .gifAndText:
 
-                makeImage()
+                makeImage(finalRoomMessage.type)
                 
                 txtMessageAbs.snp.remakeConstraints{ (make) in
                     make.top.equalTo(imgMediaAbs.snp.bottom)
@@ -333,7 +337,7 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
         /************ Bubble View ************/
         mainBubbleViewAbs.layer.cornerRadius = 18
         mainBubbleViewAbs.layer.masksToBounds = true
-        mainBubbleViewAbs.layer.borderColor = UIColor(red: 179.0/255.0, green: 179.0/255.0, blue: 179.0/255.0, alpha: 1.0).cgColor
+        mainBubbleViewAbs.layer.borderColor = UIColor.chatBubbleBorderColor().cgColor
         mainBubbleViewAbs.backgroundColor = UIColor.chatBubbleBackground(isIncommingMessage: isIncommingMessage)
         
         /************ Bubble Size ************/
@@ -606,6 +610,11 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
         
         if let attachment = self.attachment {
             if IGGlobal.isFileExist(path: attachment.path(), fileSize: attachment.size) { // attachment.status == .ready ||
+                
+                if finalRoomMessage.type == .video || finalRoomMessage.type == .videoAndText {
+                    makeVideoPlayView()
+                }
+                
                 indicatorViewAbs.setState(.ready)
                 if attachment.type == .gif {
                     attachment.loadData()
@@ -907,7 +916,11 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
     
     
     
-    private func makeImage(){
+    private func makeImage(_ messageType: IGRoomMessageType){
+        
+        removeVideoInfo()
+        removeVideoPlayView()
+        
         if imgMediaAbs != nil {
             imgMediaAbs.removeFromSuperview()
             imgMediaAbs = nil
@@ -926,6 +939,10 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
         if indicatorViewAbs == nil {
             indicatorViewAbs = IGDownloadUploadIndicatorView()
             mainBubbleViewAbs.addSubview(indicatorViewAbs)
+        }
+
+        if messageType == .video || messageType == .videoAndText {
+            makeVideoInfo()
         }
         
         imgMediaAbs.snp.makeConstraints { (make) in
@@ -968,6 +985,94 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
         if indicatorViewAbs != nil {
             indicatorViewAbs.removeFromSuperview()
             indicatorViewAbs = nil
+        }
+    }
+    
+    private func makeVideoInfo(){
+        
+        if viewInfoVideoAbs == nil {
+            viewInfoVideoAbs = UIView()
+            viewInfoVideoAbs.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+            viewInfoVideoAbs.layer.cornerRadius = 10
+            viewInfoVideoAbs.layer.borderWidth = 1
+            viewInfoVideoAbs.layer.borderColor = UIColor.chatBubbleBorderColor().cgColor
+            mainBubbleViewAbs.addSubview(viewInfoVideoAbs)
+        }
+        
+        if txtTimeVideoAbs == nil {
+            txtTimeVideoAbs = UILabel()
+            txtTimeVideoAbs?.textColor = UIColor.white
+            txtTimeVideoAbs!.font = UIFont.systemFont(ofSize: 10.0, weight: UIFontWeightSemibold)
+            viewInfoVideoAbs.addSubview(txtTimeVideoAbs)
+        }
+        
+        if txtSizeVideoAbs == nil {
+            txtSizeVideoAbs = UILabel()
+            txtSizeVideoAbs?.textColor = UIColor.white
+            txtSizeVideoAbs!.font = UIFont.systemFont(ofSize: 10.0, weight: UIFontWeightSemibold)
+            viewInfoVideoAbs.addSubview(txtSizeVideoAbs)
+        }
+        
+        viewInfoVideoAbs?.snp.makeConstraints { (make) in
+            make.leading.equalTo(imgMediaAbs.snp.leading).offset(10)
+            make.top.equalTo(imgMediaAbs.snp.top).offset(10)
+            make.height.equalTo(20)
+            make.width.greaterThanOrEqualTo(40)
+        }
+        
+        txtTimeVideoAbs?.snp.makeConstraints { (make) in
+            make.leading.equalTo(viewInfoVideoAbs.snp.leading).offset(4)
+            make.centerY.equalTo(viewInfoVideoAbs.snp.centerY)
+        }
+        
+        txtSizeVideoAbs?.snp.makeConstraints { (make) in
+            make.leading.equalTo(txtTimeVideoAbs.snp.trailing).offset(3)
+            make.trailing.equalTo(viewInfoVideoAbs.snp.trailing).offset(-4)
+            make.centerY.equalTo(viewInfoVideoAbs.snp.centerY)
+        }
+    }
+    
+    private func removeVideoInfo(){
+        if viewInfoVideoAbs != nil {
+            viewInfoVideoAbs.removeFromSuperview()
+            viewInfoVideoAbs = nil
+        }
+        
+        if txtTimeVideoAbs != nil {
+            txtTimeVideoAbs.removeFromSuperview()
+            txtTimeVideoAbs = nil
+        }
+        
+        if txtSizeVideoAbs != nil {
+            txtSizeVideoAbs.removeFromSuperview()
+            txtSizeVideoAbs = nil
+        }
+    }
+    
+    private func makeVideoPlayView(){
+        if imgVideoPlayAbs == nil {
+            imgVideoPlayAbs = UIImageView()
+            imgVideoPlayAbs.image = UIImage(named: "IG_Music_Player_Play")
+            imgVideoPlayAbs.image = imgVideoPlayAbs.image!.withRenderingMode(.alwaysTemplate)
+            
+            imgVideoPlayAbs.tintColor = UIColor.white.withAlphaComponent(0.8)
+            imgVideoPlayAbs.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+            imgVideoPlayAbs.layer.cornerRadius = 10
+            imgMediaAbs.addSubview(imgVideoPlayAbs)
+        }
+        
+        imgVideoPlayAbs?.snp.makeConstraints { (make) in
+            make.width.equalTo(35)
+            make.height.equalTo(35)
+            make.centerX.equalTo(imgMediaAbs.snp.centerX)
+            make.centerY.equalTo(imgMediaAbs.snp.centerY)
+        }
+    }
+    
+    private func removeVideoPlayView(){
+        if imgVideoPlayAbs != nil {
+            imgVideoPlayAbs.removeFromSuperview()
+            imgVideoPlayAbs = nil
         }
     }
 }

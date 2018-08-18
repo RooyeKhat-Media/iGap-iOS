@@ -1134,6 +1134,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate, UIGe
         
         let attachment = IGFile(name: filename)
         attachment.size = fileSize
+        attachment.duration = asset.duration.seconds
         attachment.fileNameOnDisk = randomString + filename
         attachment.name = filename
         attachment.attachedImage = uiImage

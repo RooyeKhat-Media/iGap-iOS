@@ -34,6 +34,7 @@ class VideoCell: AbstractCell {
     override func setMessage(_ message: IGRoomMessage, isIncommingMessage: Bool, shouldShowAvatar: Bool, messageSizes: RoomMessageCalculatedSize, isPreviousMessageFromSameSender: Bool, isNextMessageFromSameSender: Bool) {
         initializeView()
         super.setMessage(message, isIncommingMessage: isIncommingMessage, shouldShowAvatar: shouldShowAvatar, messageSizes: messageSizes, isPreviousMessageFromSameSender: isPreviousMessageFromSameSender, isNextMessageFromSameSender: isNextMessageFromSameSender)
+        setInfoVideo()
     }
     
     private func initializeView(){
@@ -48,6 +49,12 @@ class VideoCell: AbstractCell {
         
         /******** constraint ********/
         txtMessageHeightConstraintAbs = txtMessageHeightConstraint
+    }
+    
+    private func setInfoVideo(){
+        let time : String! = IGAttachmentManager.sharedManager.convertFileTime(seconds: Int((finalRoomMessage.attachment?.duration)!))
+        txtTimeVideoAbs.text = time
+        txtSizeVideoAbs.text = "(\(IGAttachmentManager.sharedManager.convertFileSize(sizeInByte: (finalRoomMessage.attachment?.size)!)))"
     }
 }
 
