@@ -473,7 +473,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate, UIGe
     
     override func viewWillAppear(_ animated: Bool) {
         if let forwardMsg = selectedMessageToForwardToThisRoom {
-            self.forwardMessage(forwardMsg)
+            self.forwardOrReplyMessage(forwardMsg, isReply: false)
         } else if let draft = self.room!.draft {
             if draft.message != "" || draft.replyTo != -1 {
                 inputTextView.text = draft.message
@@ -481,7 +481,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate, UIGe
                 if draft.replyTo != -1 {
                     let predicate = NSPredicate(format: "id = %lld AND roomId = %lld", draft.replyTo, self.room!.id)
                     if let replyToMessage = try! Realm().objects(IGRoomMessage.self).filter(predicate).first {
-                        replyMessage(replyToMessage)
+                        forwardOrReplyMessage(replyToMessage)
                     }
                 }
                 setSendAndRecordButtonStates()
@@ -1576,14 +1576,23 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate, UIGe
         self.inputBarOriginalMessageViewSenderNameLabel.text = "Edit Message"
         self.inputBarOriginalMessageViewBodyTextLabel.text = message.message
         self.setInputBarHeight()
-        
     }
     
-    fileprivate func replyMessage(_ message: IGRoomMessage) {
-        self.selectedMessageToEdit = nil
-        self.selectedMessageToReply = message
-        self.selectedMessageToForwardToThisRoom = nil
+    fileprivate func forwardOrReplyMessage(_ message: IGRoomMessage, isReply: Bool = true) {
         
+        var prefix = ""
+        
+        self.selectedMessageToEdit = nil
+        if isReply {
+            prefix = "reply"
+            self.selectedMessageToForwardToThisRoom = nil
+            self.selectedMessageToReply = message
+        } else {
+            prefix = "forward"
+            self.selectedMessageToReply = nil
+            self.selectedMessageToForwardFromThisRoom = message
+            self.setSendAndRecordButtonStates()
+        }
         
         if let user = message.authorUser {
             self.inputBarOriginalMessageViewSenderNameLabel.text = user.displayName
@@ -1595,24 +1604,14 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate, UIGe
         if textMessage != nil && !(textMessage?.isEmpty)! {
             self.inputBarOriginalMessageViewBodyTextLabel.text = textMessage
         } else if message.contact != nil {
-            self.inputBarOriginalMessageViewBodyTextLabel.text = "reply contact message"
+            self.inputBarOriginalMessageViewBodyTextLabel.text = "\(prefix) contact message"
         } else if message.location != nil {
-            self.inputBarOriginalMessageViewBodyTextLabel.text = "reply location message"
+            self.inputBarOriginalMessageViewBodyTextLabel.text = "\(prefix) location message"
         } else if let file = message.attachment {
-            self.inputBarOriginalMessageViewBodyTextLabel.text = "reply '\(IGFile.convertFileTypeToString(fileType: file.type))' message"
+            self.inputBarOriginalMessageViewBodyTextLabel.text = "\(prefix) '\(IGFile.convertFileTypeToString(fileType: file.type))' message"
         }
         
         self.setInputBarHeight()
-    }
-    
-    fileprivate func forwardMessage(_ message: IGRoomMessage) {
-        self.selectedMessageToEdit = nil
-        self.selectedMessageToReply = nil
-        self.selectedMessageToForwardFromThisRoom = message
-        self.inputBarOriginalMessageViewSenderNameLabel.text = message.authorUser?.displayName
-        self.inputBarOriginalMessageViewBodyTextLabel.text = message.message
-        self.setInputBarHeight()
-        self.setSendAndRecordButtonStates()
     }
     
     func reportRoom(roomId: Int64, messageId: Int64, reason: IGPClientRoomReport.IGPReason) {
@@ -2372,7 +2371,7 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
             }
         })
         let reply = UIAlertAction(title: "Reply", style: .default, handler: { (action) in
-            self.replyMessage(cellMessage)
+            self.forwardOrReplyMessage(cellMessage)
         })
         let forward = UIAlertAction(title: "Forward", style: .default, handler: { (action) in
             self.selectedMessageToForwardFromThisRoom = cellMessage
@@ -2753,7 +2752,7 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
 extension IGMessageViewController : IGForwardMessageDelegate {
     func didSelectRoomToForwardMessage(room: IGRoom) {
         if room.id == self.room?.id {
-            self.forwardMessage(self.selectedMessageToForwardFromThisRoom!)
+            self.forwardOrReplyMessage(self.selectedMessageToForwardFromThisRoom!, isReply: false)
             return
         }
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
