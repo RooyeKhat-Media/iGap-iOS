@@ -925,6 +925,59 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate, UIGe
         return false
     }
     
+    /************************** Alert Action Permissions **************************/
+    func allowCopy(_ message: IGRoomMessage) -> Bool{
+        var finalMessage = message
+        if let forward = message.forwardedFrom {
+            finalMessage = forward
+        }
+        if (finalMessage.type == .text) ||
+            finalMessage.type == .gifAndText ||
+            finalMessage.type == .fileAndText ||
+            finalMessage.type == .audioAndText ||
+            finalMessage.type == .videoAndText ||
+            finalMessage.type == .imageAndText {
+            return true
+        }
+        return false
+    }
+    
+    func allowPin() -> Bool{
+        return groupPinGranted() || channelPinGranted()
+    }
+    
+    func allowReply() -> Bool{
+        if !(room!.isReadOnly){
+            return true
+        }
+        return false
+    }
+    
+    func allowEdit(_ message: IGRoomMessage) -> Bool{
+        if message.authorHash == currentLoggedInUserAuthorHash ||
+            (self.room!.type == .channel && self.room!.channelRoom!.role == .owner) ||
+            (self.room!.type == .group   && self.room!.groupRoom!.role   == .owner) {
+            return true
+        }
+        return false
+    }
+    
+    func allowDelete(_ message: IGRoomMessage) -> (singleDelete: Bool, bothDelete: Bool){
+        var singleDelete = false
+        var bothDelete = false
+        if (message.authorHash == currentLoggedInUserAuthorHash) ||
+            (self.room!.type == .channel && self.room!.channelRoom!.role == .owner) ||
+            (self.room!.type == .group   && self.room!.groupRoom!.role   == .owner) {
+            //If user can delete message for all participants
+            if (self.room!.type == .chat) && (message.creationTime != nil) && (Date().timeIntervalSince1970 - message.creationTime!.timeIntervalSince1970 < 2 * 3600) {
+                bothDelete = true
+            }
+            singleDelete = true
+        }
+        return (singleDelete,bothDelete)
+    }
+    
+    
     @IBAction func didTapOnPinClose(_ sender: UIButton) {
         if groupPinGranted() {
             self.groupPin()
@@ -2412,14 +2465,16 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
         })
         
         //Copy
-        alertC.addAction(copy)
+        if allowCopy(cellMessage){
+            alertC.addAction(copy)
+        }
         
-        if groupPinGranted() || channelPinGranted() {
+        if allowPin() {
             alertC.addAction(pin)
         }
         
         //Reply
-        if !(room!.isReadOnly){
+        if allowReply(){
             alertC.addAction(reply)
         }
         
@@ -2427,42 +2482,26 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
         alertC.addAction(forward)
         
         //Edit
-        if cellMessage.authorHash == currentLoggedInUserAuthorHash ||
-            (self.room!.type == .channel && self.room!.channelRoom!.role == .owner) ||
-            (self.room!.type == .group   && self.room!.groupRoom!.role   == .owner)
-        {
+        if self.allowEdit(cellMessage){
             alertC.addAction(edit)
         }
         
         alertC.addAction(report)
-        //More (Temporary Disabled)
-        //alertC.addAction(more)
-        
         
         //Delete
-        if cellMessage.authorHash == currentLoggedInUserAuthorHash ||
-            (self.room!.type == .channel && self.room!.channelRoom!.role == .owner) ||
-            (self.room!.type == .group   && self.room!.groupRoom!.role   == .owner)
-        {
-            //If user can delete message for all participants
-            if (self.room!.type == .chat) &&
-                (cellMessage.creationTime != nil) &&
-                (Date().timeIntervalSince1970 - cellMessage.creationTime!.timeIntervalSince1970 < 2 * 3600)
-            {
-                alertC.addAction(deleteForMe)
-                alertC.addAction(deleteForBoth)
-            } else {
-                alertC.addAction(deleteForMe)
-            }
+        let delete = allowDelete(cellMessage)
+        if delete.singleDelete {
+            alertC.addAction(deleteForMe)
+        }
+        if delete.bothDelete {
+            alertC.addAction(deleteForBoth)
         }
         
         alertC.addAction(cancel)
         
-        self.present(alertC, animated: true, completion: {
-            
-        })
+        self.present(alertC, animated: true, completion: nil)
     }
-    
+  
     /******* overrided method for show file attachment (use from UIDocumentInteractionControllerDelegate) *******/
     func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
         return self

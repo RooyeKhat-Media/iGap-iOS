@@ -261,7 +261,9 @@ class CellSizeCalculator: NSObject {
                 finalSize.width = 200
                 finalSize.height -= 10
             } else if message.forwardedFrom?.type == .video || message.forwardedFrom?.type == .videoAndText {
-                finalSize.width += 50
+                if finalSize.height > finalSize.width {
+                    finalSize.width += 50
+                }
             } else if message.forwardedFrom?.type == .audio || message.forwardedFrom?.type == .audioAndText {
                 finalSize.width = 220
             } else if message.forwardedFrom?.type == .file || message.forwardedFrom?.type == .fileAndText {
