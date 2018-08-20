@@ -234,6 +234,10 @@ extension UIColor {
         }
     }
     
+    class func chatBubbleBorderColor() -> UIColor {
+        return UIColor(red: 179.0/255.0, green: 179.0/255.0, blue: 179.0/255.0, alpha: 1.0)
+    }
+    
     class func chatBubbleTextColor(isIncommingMessage: Bool) -> UIColor {
         return UIColor(red: 51.0/255.0, green: 51.0/255.0, blue: 51.0/255.0, alpha: 1.0)
     }
@@ -473,7 +477,6 @@ extension UIImageView {
                 }
                 
             } else {
-                print("QQQ || 1 attachment token : \(attachment.token)")
                 self.image = UIImage(named:"IG_Message_Cell_File_Generic")
             }
             

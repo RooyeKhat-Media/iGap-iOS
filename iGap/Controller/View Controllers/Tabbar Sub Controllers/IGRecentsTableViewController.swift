@@ -22,7 +22,6 @@ class IGRecentsTableViewController: UITableViewController, MessageReceiveObserve
     
     static var messageReceiveDelegat: MessageReceiveObserver!
     static var visibleChat: [Int64 : Bool] = [:]
-    var alreadySavedContacts: Bool = false
     var selectedRoomForSegue : IGRoom?
     var cellIdentifer = IGChatRoomListTableViewCell.cellReuseIdentifier()
     var rooms: Results<IGRoom>? = nil
@@ -325,11 +324,8 @@ class IGRecentsTableViewController: UITableViewController, MessageReceiveObserve
     }
     
     @objc private func saveAndSendContacts() {
-        if !alreadySavedContacts {
-            let contactManager = IGContactManager.sharedManager
-            contactManager.savePhoneContactsToDatabase()
-            contactManager.sendContactsToServer()
-            alreadySavedContacts = true
+        if !IGContactManager.importedContact {
+            IGContactManager.sharedManager.manageContact()
         }
     }
     @objc private func requestToGetUserPrivacy() {
