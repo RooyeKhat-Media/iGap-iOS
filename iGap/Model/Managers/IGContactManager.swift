@@ -14,6 +14,8 @@ import IGProtoBuff
 
 class IGContactManager: NSObject {
     static let sharedManager = IGContactManager()
+    
+    static var importedContact: Bool = false
     private var contactStore = CNContactStore()
     private var contacts = [IGContact]()
     private var contactsStruct = [ContactsStruct]()
@@ -25,26 +27,21 @@ class IGContactManager: NSObject {
     }
     
     struct ContactsStruct {
-       var phoneNumber: String?
-       var firstName: String?
-       var lastName: String?
+        var phoneNumber: String?
+        var firstName: String?
+        var lastName: String?
     }
     
-    func savePhoneContactsToDatabase() {
-        
-//        self.contactStore.requestAccessForEntityType(CNEntityType.Contacts, completionHandler: { (access, accessError) -> Void in
-//            if access {
-//                completionHandler(accessGranted: access)
-//            }
-//            else {
-//                if authorizationStatus == CNAuthorizationStatus.Denied {
-//                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//                        let message = "\(accessError!.localizedDescription)\n\nPlease allow the app to access your contacts through the Settings."
-//                        self.showMessage(message)
-//                    })
-//                }
-//            }
-//        })
+    func manageContact() {
+        if CNContactStore.authorizationStatus(for: CNEntityType.contacts) == CNAuthorizationStatus.authorized {
+            savePhoneContactsToDatabase()
+            sendContactsToServer()
+        } else {
+            getContactListFromServer()
+        }
+    }
+    
+    private func savePhoneContactsToDatabase() {
         
         let keys = [CNContactGivenNameKey,
                     CNContactMiddleNameKey,
@@ -53,7 +50,6 @@ class IGContactManager: NSObject {
                     CNContactPhoneNumbersKey,
                     CNContactImageDataAvailableKey,
                     CNContactThumbnailImageDataKey]
-
         
         // Get all the containers
         var allContainers: [CNContainer] = []
@@ -92,7 +88,7 @@ class IGContactManager: NSObject {
         IGFactory.shared.saveContactsToDatabase(contacts)
     }
     
-    func sendContactsToServer() {
+   private func sendContactsToServer() {
         contactIndex = 0
         contactsStructChunk = contactsStruct.chunks(CONTACT_IMPORT_LIMIT)
         if contactsStructChunk.count == 0 {
@@ -102,8 +98,13 @@ class IGContactManager: NSObject {
         contactIndex += 1
     }
     
-    func sendContact(phoneContacts : [ContactsStruct]){
-        IGUserContactsImportRequest.Generator.generateStruct(contacts: phoneContacts).success { (protoResponse) in
+    private func sendContact(phoneContacts : [ContactsStruct]){
+        if IGContactManager.importedContact {
+            return
+        }
+        IGContactManager.importedContact = true
+        
+        IGUserContactsImportRequest.Generator.generateStruct(contacts: phoneContacts).success ({ (protoResponse) in
             switch protoResponse {
             case let contactImportResponse as IGPUserContactsImportResponse:
                 IGUserContactsImportRequest.Handler.interpret(response: contactImportResponse)
@@ -117,14 +118,20 @@ class IGContactManager: NSObject {
                 break
             }
             self.getContactListFromServer()
-            }.error { (errorCode, waitTime) in
-                
-            }.send()
+        }).error ({ (errorCode, waitTime) in
+            switch errorCode {
+            case .timeout:
+                IGContactManager.importedContact = false
+                self.sendContactsToServer()
+            default:
+                break
+            }
+        }).send()
     }
     
     
-    func getContactListFromServer() {
-        IGUserContactsGetListRequest.Generator.generate().success { (protoResponse) in
+    private func getContactListFromServer() {
+        IGUserContactsGetListRequest.Generator.generate().success ({ (protoResponse) in
             switch protoResponse {
             case let contactGetListResponse as IGPUserContactsGetListResponse:
                 IGUserContactsGetListRequest.Handler.interpret(response: contactGetListResponse)
@@ -132,9 +139,13 @@ class IGContactManager: NSObject {
             default:
                 break
             }
-        }.error { (errorCode, waitTime) in
-            
-        }.send()
+        }).error ({ (errorCode, waitTime) in
+            switch errorCode {
+            case .timeout:
+                self.getContactListFromServer()
+            default:
+                break
+            }
+        }).send()
     }
-    
 }

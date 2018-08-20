@@ -35,6 +35,8 @@ class IGSplashScreenViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        IGContactManager.importedContact = false
+        
         // Do any additional setup after loading the view.
         self.navigationController?.isNavigationBarHidden = true
         
