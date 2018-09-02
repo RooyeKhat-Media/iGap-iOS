@@ -954,9 +954,8 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate, UIGe
     }
     
     func allowEdit(_ message: IGRoomMessage) -> Bool{
-        if (message.forwardedFrom == nil) && message.authorHash == currentLoggedInUserAuthorHash &&
-            ((self.room!.type == .channel && self.room!.channelRoom!.role == .owner) ||
-            (self.room!.type == .group   && self.room!.groupRoom!.role   == .owner)) {
+        if (message.forwardedFrom == nil) && message.authorHash == currentLoggedInUserAuthorHash && message.type != .contact && message.type != .location &&
+            ((self.room!.type == .chat) || (self.room!.type == .channel && self.room!.channelRoom!.role != .member) || (self.room!.type == .group && self.room!.groupRoom!.role != .member)) {
             return true
         }
         return false
