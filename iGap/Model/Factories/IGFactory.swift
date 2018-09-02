@@ -1212,16 +1212,13 @@ class IGFactory: NSObject {
             let task = IGFactoryTask()
             task.task = {
                 IGDatabaseManager.shared.perfrmOnDatabaseThread {
-                    
-                    let user = IGRegisteredUser(igpUser: igpRegistredUser)
                     try! IGDatabaseManager.shared.realm.write {
+                        let user = IGRegisteredUser(igpUser: igpRegistredUser)
                         IGDatabaseManager.shared.realm.add(user, update: true)
-                    }
-                    let predicate = NSPredicate(format: "id = %lld", user.id)
-                    if let userInDb = try! Realm().objects(IGRegisteredUser.self).filter(predicate).first {
-                        let cotactPredicate = NSPredicate(format: "phoneNumber = %@", "\(user.phone)")
-                        if let contactInDB = try! Realm().objects(IGContact.self).filter(cotactPredicate).first {
-                            try! IGDatabaseManager.shared.realm.write {
+                        let predicate = NSPredicate(format: "id = %lld", user.id)
+                        if let userInDb = try! Realm().objects(IGRegisteredUser.self).filter(predicate).first {
+                            let cotactPredicate = NSPredicate(format: "phoneNumber = %@", "\(user.phone)")
+                            if let contactInDB = try! Realm().objects(IGContact.self).filter(cotactPredicate).first {
                                 contactInDB.user = userInDb
                             }
                         }
@@ -1517,9 +1514,8 @@ class IGFactory: NSObject {
         
         task.task = {
             IGDatabaseManager.shared.perfrmOnDatabaseThread {
-                
-                if let userPrivacyInDb = IGDatabaseManager.shared.realm.objects(IGUserPrivacy.self).first {
-                    try! IGDatabaseManager.shared.realm.write {
+                try! IGDatabaseManager.shared.realm.write {
+                    if let userPrivacyInDb = IGDatabaseManager.shared.realm.objects(IGUserPrivacy.self).first {
                         switch igPrivacyType {
                         case .avatar:
                             userPrivacyInDb.avatar = igPrivacyLevel
@@ -1538,31 +1534,28 @@ class IGFactory: NSObject {
                         case .secretChat:
                             userPrivacyInDb.secretChat = igPrivacyLevel
                         }
-                    }
-                } else {
-                  let userPrivacy = IGUserPrivacy()
-                    switch igPrivacyType {
-                    case .avatar:
-                        userPrivacy.avatar = igPrivacyLevel
-                    case .channelInvite:
-                        userPrivacy.channelInvite = igPrivacyLevel
-                    case .groupInvite:
-                        userPrivacy.groupInvite = igPrivacyLevel
-                    case .userStatus:
-                        userPrivacy.userStatus = igPrivacyLevel
-                    case .voiceCalling:
-                        userPrivacy.voiceCalling = igPrivacyLevel
-                    case .videoCalling:
-                        userPrivacy.videoCalling = igPrivacyLevel
-                    case .screenSharing:
-                        userPrivacy.screenSharing = igPrivacyLevel
-                    case .secretChat:
-                        userPrivacy.secretChat = igPrivacyLevel
-                    }
-                    try! IGDatabaseManager.shared.realm.write {
+                    } else {
+                        let userPrivacy = IGUserPrivacy()
+                        switch igPrivacyType {
+                        case .avatar:
+                            userPrivacy.avatar = igPrivacyLevel
+                        case .channelInvite:
+                            userPrivacy.channelInvite = igPrivacyLevel
+                        case .groupInvite:
+                            userPrivacy.groupInvite = igPrivacyLevel
+                        case .userStatus:
+                            userPrivacy.userStatus = igPrivacyLevel
+                        case .voiceCalling:
+                            userPrivacy.voiceCalling = igPrivacyLevel
+                        case .videoCalling:
+                            userPrivacy.videoCalling = igPrivacyLevel
+                        case .screenSharing:
+                            userPrivacy.screenSharing = igPrivacyLevel
+                        case .secretChat:
+                            userPrivacy.secretChat = igPrivacyLevel
+                        }
                         IGDatabaseManager.shared.realm.add(userPrivacy, update: true)
                     }
-  
                 }
                 
                 IGFactory.shared.performInFactoryQueue {
