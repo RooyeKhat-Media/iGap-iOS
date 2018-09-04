@@ -131,7 +131,8 @@ class IGDownloadManager {
     private func addToThumbnailQueue(_ task: IGDownloadTask) {
         //IGAttachmentManager.sharedManager.setProgress(0.0, for: task.file)
         //IGAttachmentManager.sharedManager.setStatus(.downloading, for: task.file)
-        thumbnailTasks.append(task)
+        //thumbnailTasks.append(task)
+        thumbnailTasks.insert(task, at: 0)
         startNextThumbnailTaskIfPossible()
     }
     
