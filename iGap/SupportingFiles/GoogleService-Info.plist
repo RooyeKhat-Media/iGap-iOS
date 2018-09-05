@@ -2,24 +2,22 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>TRACKING_ID</key>
-	<string>UA-89789834-5</string>
 	<key>AD_UNIT_ID_FOR_BANNER_TEST</key>
 	<string>ca-app-pub-3940256099942544/2934735716</string>
 	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
 	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>780057141561-da4q8mdjnktgrcvvpsph4s1l3e0ve75h.apps.googleusercontent.com</string>
+	<string>780057141561-iqjmcihfd4jhmlku923e9gsl61ik1tf8.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.780057141561-da4q8mdjnktgrcvvpsph4s1l3e0ve75h</string>
+	<string>com.googleusercontent.apps.780057141561-iqjmcihfd4jhmlku923e9gsl61ik1tf8</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDGgMr-G-Q2nuGrGD13_Fft4aitVaH0qoM</string>
+	<string>AIzaSyDHprxt5WLJAmBLg-OQJ5HSUGzB3FAvILs</string>
 	<key>GCM_SENDER_ID</key>
 	<string>780057141561</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>net.iGap</string>
+	<string>im.iGap</string>
 	<key>PROJECT_ID</key>
 	<string>igap-im</string>
 	<key>STORAGE_BUCKET</key>
@@ -35,7 +33,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true/>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:780057141561:ios:69c59b7595e50096</string>
+	<string>1:780057141561:ios:369f919b7d16303f</string>
 	<key>DATABASE_URL</key>
 	<string>https://igap-im.firebaseio.com</string>
 </dict>
