@@ -199,15 +199,15 @@ class IGGeoGetNearbyDistance : IGRequest {
                         let igpUser = userInfoResponse.igpUser
                         IGFactory.shared.saveRegistredUsers([igpUser])
                         
-                        let nearbyDistance = userNoInfoDictionary[igpUser.igpID]!
-                        
-                        // after get userInfo now add nearbyDistance to realm for update in tableView
-                        IGFactory.shared.setMapNearbyUsersDistance(nearbyDistance: nearbyDistance)
-                        
-                        if nearbyDistance.igpHasComment {
-                            getUserComment(userId: igpUser.igpID)
-                        } else {
-                            userNoInfoDictionary.removeValue(forKey: igpUser.igpID)
+                        if let nearbyDistance = userNoInfoDictionary[igpUser.igpID] {
+                            // after get userInfo now add nearbyDistance to realm for update in tableView
+                            IGFactory.shared.setMapNearbyUsersDistance(nearbyDistance: nearbyDistance)
+                            
+                            if nearbyDistance.igpHasComment {
+                                getUserComment(userId: igpUser.igpID)
+                            } else {
+                                userNoInfoDictionary.removeValue(forKey: igpUser.igpID)
+                            }
                         }
                         
                         break
