@@ -470,7 +470,7 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
     }
     
     func didTapOnAttachment(_ gestureRecognizer: UITapGestureRecognizer) {
-        self.delegate?.didTapOnAttachment(cellMessage: realmRoomMessage!, cell: self)
+        self.delegate?.didTapOnAttachment(cellMessage: realmRoomMessage!, cell: self, imageView: imgMediaAbs)
     }
     
     func didTapOnForwardedAttachment(_ gestureRecognizer: UITapGestureRecognizer) {

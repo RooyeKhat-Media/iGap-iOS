@@ -176,41 +176,44 @@ class IGSettingTableViewController: UITableViewController , NVActivityIndicatorV
                                                             type: NVActivityIndicatorType.audioEqualizer)
         downloadIndicatorMainView.addSubview(activityIndicatorView)
         
-        let galleryPreview = INSPhotosViewController(photos: photos, initialPhoto: currentPhoto, referenceView: nil, deleteView: deleteView, downloadView: downloadIndicatorMainView)
+        let galleryPreview = INSPhotosViewController(photos: photos, initialPhoto: currentPhoto, referenceView: userAvatarView)//, deleteView: deleteView, downloadView: downloadIndicatorMainView)
+        galleryPreview.referenceViewForPhotoWhenDismissingHandler = { [weak self] photo in
+            return self?.userAvatarView
+        }
         galleryPhotos = galleryPreview
         present(galleryPreview, animated: true, completion: nil)
         activityIndicatorView.startAnimating()
         //activityIndicatorView.startAnimating()
 
-        DispatchQueue.main.async {
-            let size = CGSize(width: 30, height: 30)
-            self.startAnimating(size, message: nil, type: NVActivityIndicatorType.ballRotateChase)
-            
-            let thisPhoto = galleryPreview.accessCurrentPhotoDetail()
-            
-            //self.avatarPhotos.index(of:thisPhoto)
-           if let index =  self.avatarPhotos?.index(where: {$0 === thisPhoto}) {
-            self.lastIndex = index
-            let currentAvatarFile = self.avatars[index].file
-            self.currentAvatarId = self.avatars[index].id
-            if currentAvatarFile?.status == .downloading {
-                return
-            }
-            
-            if let attachment = currentAvatarFile {
-                IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: { (attachment) -> Void in
-                    DispatchQueue.main.async {
-                        galleryPreview.hiddenDownloadView()
-                        self.stopAnimating()
-                    }
-                }, failure: {
-                    
-                })
-            }
-
-            }
-            self.scheduledTimerWithTimeInterval()
-       }
+//        DispatchQueue.main.async {
+//            let size = CGSize(width: 30, height: 30)
+//            self.startAnimating(size, message: nil, type: NVActivityIndicatorType.ballRotateChase)
+//
+//            let thisPhoto = galleryPreview.accessCurrentPhotoDetail()
+//
+//            //self.avatarPhotos.index(of:thisPhoto)
+//           if let index =  self.avatarPhotos?.index(where: {$0 === thisPhoto}) {
+//            self.lastIndex = index
+//            let currentAvatarFile = self.avatars[index].file
+//            self.currentAvatarId = self.avatars[index].id
+//            if currentAvatarFile?.status == .downloading {
+//                return
+//            }
+//
+//            if let attachment = currentAvatarFile {
+//                IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: { (attachment) -> Void in
+//                    DispatchQueue.main.async {
+//                        galleryPreview.hiddenDownloadView()
+//                        self.stopAnimating()
+//                    }
+//                }, failure: {
+//
+//                })
+//            }
+//
+//            }
+//            self.scheduledTimerWithTimeInterval()
+//       }
     }
     func scheduledTimerWithTimeInterval(){
         // Scheduling timer to Call the function **Countdown** with the interval of 1 seconds
@@ -218,30 +221,30 @@ class IGSettingTableViewController: UITableViewController , NVActivityIndicatorV
     }
     
     func updateCounting(){
-        let nextPhoto = galleryPhotos?.accessCurrentPhotoDetail()
-        if let index =  self.avatarPhotos?.index(where: {$0 === nextPhoto}) {
-            let currentAvatarFile = self.avatars[index].file
-            let nextAvatarId = self.avatars[index].id
-            if nextAvatarId != self.currentAvatarId {
-                let size = CGSize(width: 30, height: 30)
-                self.startAnimating(size, message: nil, type: NVActivityIndicatorType.ballRotateChase)
-                if currentAvatarFile?.status == .downloading {
-                    return
-                }
-                
-                if let attachment = currentAvatarFile {
-                    IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: { (attachment) -> Void in
-                        self.galleryPhotos?.hiddenDownloadView()
-                        self.stopAnimating()
-                    }, failure: {
-                        
-                    })
-                }
-                self.currentAvatarId = nextAvatarId
-            } else {
-                
-            }
-        }
+//        let nextPhoto = galleryPhotos?.accessCurrentPhotoDetail()
+//        if let index =  self.avatarPhotos?.index(where: {$0 === nextPhoto}) {
+//            let currentAvatarFile = self.avatars[index].file
+//            let nextAvatarId = self.avatars[index].id
+//            if nextAvatarId != self.currentAvatarId {
+//                let size = CGSize(width: 30, height: 30)
+//                self.startAnimating(size, message: nil, type: NVActivityIndicatorType.ballRotateChase)
+//                if currentAvatarFile?.status == .downloading {
+//                    return
+//                }
+//
+//                if let attachment = currentAvatarFile {
+//                    IGDownloadManager.sharedManager.download(file: attachment, previewType: .originalFile, completion: { (attachment) -> Void in
+//                        self.galleryPhotos?.hiddenDownloadView()
+//                        self.stopAnimating()
+//                    }, failure: {
+//
+//                    })
+//                }
+//                self.currentAvatarId = nextAvatarId
+//            } else {
+//
+//            }
+//        }
     }
 
     

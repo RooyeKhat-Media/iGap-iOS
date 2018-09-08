@@ -40,6 +40,7 @@ class IGMedia: INSPhotoViewable, Equatable {
     
     init(avatar: IGAvatar) {
         if let file = avatar.file {
+            self.file = file
             image = UIImage.originalImage(for: file)
             thumbnailImage = UIImage.thumbnail(for: file)
         }
@@ -50,18 +51,24 @@ class IGMedia: INSPhotoViewable, Equatable {
             completion(image, nil)
             return
         }
-        //loadImageWithURL(imageURL, completion: completion)
+        self.image = UIImage.thumbnail(for: file!)
+        IGDownloadManager.sharedManager.download(file: file!, previewType:.originalFile, completion: { (attachment) -> Void in
+            self.image = UIImage.originalImage(for: attachment)
+            completion(self.image, nil)
+        }, failure: {})
     }
+    
     
     func loadThumbnailImageWithCompletionHandler(_ completion: @escaping (_ image: UIImage?, _ error: Error?) -> ()) {
         if let thumbnailImage = thumbnailImage {
             completion(thumbnailImage, nil)
             return
         }
-        //loadImageWithURL(imageURL, completion: completion)
+        IGDownloadManager.sharedManager.download(file: (file?.smallThumbnail!)!, previewType:.smallThumbnail, completion: { (attachment) -> Void in
+            self.thumbnailImage = UIImage.thumbnail(for: attachment)
+            completion(self.thumbnailImage, nil)
+        }, failure: {})
     }
-    
-    
 }
 
 func ==<T: IGMedia>(lhs: T, rhs: T) -> Bool {
