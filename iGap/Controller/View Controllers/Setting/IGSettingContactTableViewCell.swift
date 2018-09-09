@@ -9,8 +9,9 @@
  */
 
 import UIKit
+import MGSwipeTableCell
 
-class IGSettingContactTableViewCell: UITableViewCell {
+class IGSettingContactTableViewCell: MGSwipeTableCell {
     @IBOutlet weak var blockedLabel: UILabel!
     @IBOutlet weak var userAvatarView: IGAvatarView!
     @IBOutlet weak var contactNameLable: UILabel!

@@ -19,6 +19,7 @@ class IGSettingAddContactViewController: UIViewController, UIGestureRecognizerDe
     @IBOutlet weak var txtCountryCode: UILabel!
     @IBOutlet weak var edtPhoneNumber: AKMaskField!
     @IBOutlet weak var btnChooseCountry: UIButton!
+    static var reloadAfterAddContact: Bool = false
     
     @IBAction func btnChooseCountry(_ sender: UIButton) {
         let chooseCountry = IGRegistrationStepSelectCountryTableViewController.instantiateFromAppStroryboard(appStoryboard: .Register)
@@ -94,8 +95,9 @@ class IGSettingAddContactViewController: UIViewController, UIGestureRecognizerDe
             switch protoResponse {
             case let contactGetListResponse as IGPUserContactsGetListResponse:
                 DispatchQueue.main.async {
-                    self.navigationController?.popViewController(animated: true)
                     IGUserContactsGetListRequest.Handler.interpret(response: contactGetListResponse)
+                    IGSettingAddContactViewController.reloadAfterAddContact = true
+                    self.navigationController?.popViewController(animated: true)
                 }
                 break
             default:

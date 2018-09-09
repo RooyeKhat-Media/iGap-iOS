@@ -13,6 +13,7 @@ import Contacts
 import RealmSwift
 import MBProgressHUD
 import IGProtoBuff
+import MGSwipeTableCell
 
 class IGSettingContactsTableViewController: UITableViewController,UISearchResultsUpdating , UIGestureRecognizerDelegate, IGCallFromContactListObserver {
     
@@ -137,8 +138,16 @@ class IGSettingContactsTableViewController: UITableViewController,UISearchResult
 
     
     override func viewDidAppear(_ animated: Bool) {
+        if IGSettingAddContactViewController.reloadAfterAddContact && tableView != nil {
+            sections = fillContacts(filterContact: true)
+            tableView.reloadData()
+        }
         self.navigationController?.extendedLayoutIncludesOpaqueBars = true
         self.tableView.isUserInteractionEnabled = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        IGSettingAddContactViewController.reloadAfterAddContact = false
     }
     
     @IBAction func addBarButtonClicked(_ sender: UIBarButtonItem) {
@@ -188,6 +197,46 @@ class IGSettingContactsTableViewController: UITableViewController,UISearchResult
         })
     }
     
+    private func deleteContactAlert(phone: Int64){
+        let alert = UIAlertController(title: "Delete Contact", message: "Are you sure you want to delete this contact ?", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Ok", style: .destructive, handler: { action in
+            self.deleteContact(phone: phone)
+        })
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
+        
+        alert.addAction(okAction)
+        alert.addAction(cancelAction)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    private func deleteContact(phone: Int64){
+        IGGlobal.prgShow(self.view)
+        IGUserContactsDeleteRequest.Generator.generate(phone: phone).success({ (protoResponse) in
+            if let deleteContactResponse = protoResponse as? IGPUserContactsDeleteResponse {
+                IGUserContactsDeleteRequest.Handler.interpret(response: deleteContactResponse)
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                IGGlobal.prgHide()
+                self.sections = self.fillContacts(filterContact: true)
+                self.tableView.reloadData()
+            }
+        }).error ({ (errorCode, waitTime) in
+            switch errorCode {
+            case .timeout:
+                DispatchQueue.main.async {
+                    IGGlobal.prgHide()
+                    let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: nil)
+                }
+            default:
+                break
+            }
+            
+        }).send()
+    }
+    
     // MARK: - Table view data source
     override func numberOfSections(in tableView: UITableView) -> Int {
         if (self.resultSearchController.isActive) {
@@ -213,16 +262,33 @@ class IGSettingContactsTableViewController: UITableViewController,UISearchResult
             let blockListCell  = tableView.dequeueReusableCell(withIdentifier: "BlockListCell", for: indexPath) as! IGSettingContactsBlockListTableViewCell
             blockListCell.numberOfBlockedContacts.text = "\(blockedUsers.count)"+" " + "Contacts"
             cell = blockListCell
-        }else{
+        } else {
+            
             let contactsCell = tableView.dequeueReusableCell(withIdentifier: "ContactsCell", for: indexPath) as! IGSettingContactTableViewCell
-            if (self.resultSearchController.isActive) {
-                contactsCell.contactNameLable?.text = filteredTableData[indexPath.row].givenName + filteredTableData[indexPath.row].familyName
-            }else{
-                let user = self.sections[indexPath.section - 1 ].users[indexPath.row]
-                contactsCell.setUser(user.registredUser)
-            }
+            //            if (self.resultSearchController.isActive) {
+            //                contactsCell.contactNameLable?.text = filteredTableData[indexPath.row].givenName + filteredTableData[indexPath.row].familyName
+            //            } else {
+            let user = self.sections[indexPath.section - 1 ].users[indexPath.row]
+            contactsCell.setUser(user.registredUser)
+            //            }
+            
+            contactsCell.rightButtons = [MGSwipeButton(title: "Delete Contact", backgroundColor: UIColor(red: 252.0/255.0, green: 23.0/255.0, blue: 22.0/255.0, alpha: 1), callback: { (sender: MGSwipeTableCell!) -> Bool in
+                self.deleteContactAlert(phone: user.registredUser.phone)
+                return true
+            })]
+            contactsCell.rightSwipeSettings.transition = MGSwipeTransition.border
+            
+            contactsCell.leftExpansion.buttonIndex = 0
+            contactsCell.leftExpansion.fillOnTrigger = true
+            contactsCell.leftExpansion.threshold = 2.0
+            
+            contactsCell.rightExpansion.buttonIndex = 0
+            contactsCell.rightExpansion.fillOnTrigger = true
+            contactsCell.rightExpansion.threshold = 1.5
+            
             cell = contactsCell
         }
+        
         return cell
     }
     

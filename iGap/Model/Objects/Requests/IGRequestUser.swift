@@ -314,10 +314,17 @@ class IGUserContactsGetListRequest : IGRequest {
 //MARK: -
 class IGUserContactsDeleteRequest : IGRequest {
     class Generator : IGRequest.Generator{
-        
+        class func generate(phone: Int64) -> IGRequestWrapper {
+            var builder = IGPUserContactsDelete()
+            builder.igpPhone = phone
+            return IGRequestWrapper(message: builder, actionID: 108)
+        }
     }
     
     class Handler : IGRequest.Handler{
+        class func interpret(response responseProtoMessage: IGPUserContactsDeleteResponse) {
+            IGFactory.shared.contactDelete(phone: responseProtoMessage.igpPhone)
+        }
         override class func handlePush(responseProtoMessage: Message) {}
     }
 }
