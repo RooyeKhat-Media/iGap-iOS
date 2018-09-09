@@ -87,6 +87,22 @@
                                     <action selector="btnCurrentLocation:" destination="S3I-yk-3Ak" eventType="touchUpInside" id="QJt-Ts-1GQ"/>
                                 </connections>
                             </button>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="9Zi-OB-nXt">
+                                <rect key="frame" x="112.5" y="40" width="150" height="28"/>
+                                <color key="backgroundColor" red="0.2058030589" green="0.74759840899999996" blue="0.79368454219999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="27" id="Iqr-8q-T6O"/>
+                                    <constraint firstAttribute="width" constant="150" id="Ph4-ik-Vwm"/>
+                                </constraints>
+                                <segments>
+                                    <segment title="Standard"/>
+                                    <segment title="Satellite"/>
+                                </segments>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <connections>
+                                    <action selector="segmentChanger:" destination="S3I-yk-3Ak" eventType="valueChanged" id="vMM-Vg-qjJ"/>
+                                </connections>
+                            </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -95,10 +111,12 @@
                             <constraint firstItem="H4W-xY-YF8" firstAttribute="top" secondItem="HId-RA-OqG" secondAttribute="bottom" id="Gw0-SR-qob"/>
                             <constraint firstItem="H4W-xY-YF8" firstAttribute="leading" secondItem="lAm-2Z-Uih" secondAttribute="leading" id="M1W-fT-eMX"/>
                             <constraint firstItem="dzT-ao-hN1" firstAttribute="centerX" secondItem="H4W-xY-YF8" secondAttribute="centerX" id="SCe-CV-qu7"/>
+                            <constraint firstItem="9Zi-OB-nXt" firstAttribute="top" secondItem="HId-RA-OqG" secondAttribute="bottom" constant="20" id="Udy-I0-2cb"/>
                             <constraint firstAttribute="trailingMargin" secondItem="E0t-it-I0J" secondAttribute="trailing" constant="2" id="VJJ-Hv-BBU"/>
                             <constraint firstAttribute="trailing" secondItem="H4W-xY-YF8" secondAttribute="trailing" id="aIt-e5-35g"/>
                             <constraint firstItem="dzT-ao-hN1" firstAttribute="centerY" secondItem="H4W-xY-YF8" secondAttribute="centerY" constant="-25" id="cxp-vH-pxy"/>
                             <constraint firstAttribute="trailing" secondItem="qjF-99-u5b" secondAttribute="trailing" id="czR-Ve-9Fr"/>
+                            <constraint firstItem="9Zi-OB-nXt" firstAttribute="centerX" secondItem="H4W-xY-YF8" secondAttribute="centerX" id="ewc-8C-1nI"/>
                             <constraint firstItem="qjF-99-u5b" firstAttribute="leading" secondItem="lAm-2Z-Uih" secondAttribute="leading" id="gBK-X9-L7t"/>
                             <constraint firstItem="qjF-99-u5b" firstAttribute="top" secondItem="E0t-it-I0J" secondAttribute="bottom" constant="20" id="j7x-P8-MPF"/>
                         </constraints>
@@ -1348,6 +1366,22 @@
                                     <action selector="btnCurrentLocation:" destination="hsi-ex-lNf" eventType="touchUpInside" id="HYn-HL-OKX"/>
                                 </connections>
                             </button>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bordered" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="7Tw-wt-vgJ">
+                                <rect key="frame" x="112.5" y="130" width="150" height="28"/>
+                                <color key="backgroundColor" red="0.2058030589" green="0.74759840899999996" blue="0.79368454219999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="27" id="WAY-po-dwQ"/>
+                                    <constraint firstAttribute="width" constant="150" id="mde-SV-hm0"/>
+                                </constraints>
+                                <segments>
+                                    <segment title="Standard"/>
+                                    <segment title="Satellite"/>
+                                </segments>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <connections>
+                                    <action selector="segmentChanger:" destination="hsi-ex-lNf" eventType="valueChanged" id="5YS-9q-V3m"/>
+                                </connections>
+                            </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -1361,6 +1395,8 @@
                             <constraint firstItem="Zw1-Rt-Hey" firstAttribute="top" secondItem="E87-JL-NHt" secondAttribute="topMargin" constant="6" id="Ovc-nb-zya"/>
                             <constraint firstItem="Lag-5t-Bo2" firstAttribute="leading" secondItem="E87-JL-NHt" secondAttribute="leadingMargin" constant="-16" id="PHE-ax-WRR"/>
                             <constraint firstItem="Lag-5t-Bo2" firstAttribute="trailing" secondItem="E87-JL-NHt" secondAttribute="trailingMargin" constant="16" id="YUp-o9-qOo"/>
+                            <constraint firstItem="7Tw-wt-vgJ" firstAttribute="top" secondItem="ldf-Fa-K1P" secondAttribute="bottom" constant="20" id="dOV-bg-A6R"/>
+                            <constraint firstItem="7Tw-wt-vgJ" firstAttribute="centerX" secondItem="Lag-5t-Bo2" secondAttribute="centerX" id="fs0-Wg-1i3"/>
                             <constraint firstAttribute="trailingMargin" secondItem="ldf-Fa-K1P" secondAttribute="trailing" constant="-10" id="pZf-BD-OOE"/>
                             <constraint firstItem="SWU-Vq-U8i" firstAttribute="top" secondItem="Lag-5t-Bo2" secondAttribute="bottom" id="qGi-AU-TET"/>
                         </constraints>

@@ -59,6 +59,17 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
     var usersCommentDictionary:[Int64:String] = [:]
     var userNoInfoDictionary:[Int64:IGPGeoGetNearbyCoordinateResponse.IGPResult] = [:]
     
+    @IBAction func segmentChanger(_ sender: UISegmentedControl) {
+        switch (sender.selectedSegmentIndex) {
+        case 0:
+            mapView.mapType = .standard
+        case 1:
+            mapView.mapType = .satellite
+        default:
+            mapView.mapType = .standard
+        }
+    }
+    
     @IBAction func btnCurrentLocation(_ sender: UIButton) {
         setCurrentLocation(setRegion: true)
     }
