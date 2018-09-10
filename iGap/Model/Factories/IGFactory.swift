@@ -878,7 +878,44 @@ class IGFactory: NSObject {
             }.addToQueue()
         self.performNextFactoryTaskIfPossible()
     }
-
+    
+    func contactEdit(contactEditInfo: IGPUserContactsEditResponse) {
+        let task = IGFactoryTask()
+        
+        task.task = {
+            IGDatabaseManager.shared.perfrmOnDatabaseThread {
+                
+                try! IGDatabaseManager.shared.realm.write {
+                    
+                    let predicate = NSPredicate(format: "phone == %lld", contactEditInfo.igpPhone)
+                    if let contact = IGDatabaseManager.shared.realm.objects(IGRegisteredUser.self).filter(predicate).first {
+                        contact.firstName = contactEditInfo.igpFirstName
+                        contact.lastName = contactEditInfo.igpLastName
+                        contact.displayName = contactEditInfo.igpFirstName + " " + contactEditInfo.igpLastName
+                        contact.initials = contactEditInfo.igpInitials
+                        
+                        /**
+                         * set data to 'IGRoom' for run 'RealmCollectionChange' and update room title in view
+                         **/
+                        let predicateRoom = NSPredicate(format: "chatRoom.peer.id == %lld", contact.id)
+                        if let room = IGDatabaseManager.shared.realm.objects(IGRoom.self).filter(predicateRoom).first {
+                            room.title = contactEditInfo.igpFirstName + " " + contactEditInfo.igpLastName
+                        }
+                    }
+                }
+                
+                IGFactory.shared.performInFactoryQueue {
+                    task.success!()
+                }
+            }
+        }
+        task.success {
+            self.removeTaskFromQueueAndPerformNext(task)
+            }.error {
+                self.removeTaskFromQueueAndPerformNext(task)
+            }.addToQueue()
+        self.performNextFactoryTaskIfPossible()
+    }
     
     func saveGroupMemberListToDatabase(_ igpMembers: [IGPGroupGetMemberListResponse.IGPMember], roomId: Int64) {
         var memberUserIDs = Set<Int64>()

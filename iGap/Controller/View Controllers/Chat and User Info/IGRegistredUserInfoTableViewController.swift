@@ -154,13 +154,45 @@ class IGRegistredUserInfoTableViewController: UITableViewController , UIGestureR
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == 0 && indexPath.row == 3{
-            if let bio = user?.bio {
-                DispatchQueue.main.async {
-                    let alert = UIAlertController(title: "Bio", message: bio, preferredStyle: .alert)
-                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                    alert.addAction(okAction)
-                    self.present(alert, animated: true, completion: nil)
+        if indexPath.section == 0 {
+            if (user?.isInContacts)! && indexPath.row == 0 {
+                let alert = UIAlertController(title: "Edit Contact", message: nil, preferredStyle: .alert)
+                
+                alert.addTextField { (textField) in
+                    textField.placeholder = "first name"
+                    textField.text = String(describing: (self.user?.firstName)!)
+                }
+                
+                alert.addTextField { (textField) in
+                    textField.placeholder = "last name"
+                    textField.text = String(describing: (self.user?.lastName)!)
+                }
+                
+                alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { [weak alert] (_) in
+                    let firstname = alert?.textFields![0]
+                    let lastname = alert?.textFields![1]
+                    
+                    if firstname?.text != nil && !(firstname?.text?.isEmpty)! {
+                        self.contactEdit(phone: (self.user?.phone)!, firstname: (firstname?.text)!, lastname: (lastname?.text)!)
+                    } else {
+                        let alert = UIAlertController(title: "Hint", message: "please enter first name!", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                }))
+                
+                alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
+                
+                self.present(alert, animated: true, completion: nil)
+                
+            } else if indexPath.row == 3 {
+                if let bio = user?.bio {
+                    DispatchQueue.main.async {
+                        let alert = UIAlertController(title: "Bio", message: bio, preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                    }
                 }
             }
         } else if indexPath.section == 1 {
@@ -201,13 +233,40 @@ class IGRegistredUserInfoTableViewController: UITableViewController , UIGestureR
         }
     }
     
+    private func contactEdit(phone: Int64, firstname: String, lastname: String?){
+        IGGlobal.prgShow(self.view)
+        IGUserContactsEditRequest.Generator.generate(phone: phone, firstname: firstname, lastname: lastname).success({ (protoResponse) in
+            
+            if let contactEditResponse = protoResponse as? IGPUserContactsEditResponse {
+                IGUserContactsEditRequest.Handler.interpret(response: contactEditResponse)
+                DispatchQueue.main.async {
+                    IGGlobal.prgHide()
+                    self.displayNameLabel.text = contactEditResponse.igpFirstName + " " + contactEditResponse.igpLastName
+                }
+            }
+        }).error ({ (errorCode, waitTime) in
+            switch errorCode {
+            case .timeout:
+                DispatchQueue.main.async {
+                    IGGlobal.prgHide()
+                    let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: nil)
+                }
+            default:
+                break
+            }
+        }).send()
+    }
+    
     func requestToGetAvatarList() {
         if let currentUserId = user?.id {
             IGUserAvatarGetListRequest.Generator.generate(userId: currentUserId).success({ (protoResponse) in
                 DispatchQueue.main.async {
                     switch protoResponse {
                     case let UserAvatarGetListoResponse as IGPUserAvatarGetListResponse:
-                        let responseAvatars =   IGUserAvatarGetListRequest.Handler.interpret(response: UserAvatarGetListoResponse, userId: currentUserId)
+                        let responseAvatars = IGUserAvatarGetListRequest.Handler.interpret(response: UserAvatarGetListoResponse, userId: currentUserId)
                         self.avatars = responseAvatars
                         for avatar in self.avatars {
                             let avatarView = IGImageView()

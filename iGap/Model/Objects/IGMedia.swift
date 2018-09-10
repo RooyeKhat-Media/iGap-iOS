@@ -32,7 +32,7 @@ class IGMedia: INSPhotoViewable, Equatable {
             image = UIImage.originalImage(for: attachment)
             thumbnailImage = UIImage.thumbnail(for: attachment)
             if let text = roomMessage?.message {
-                attributedTitle = NSAttributedString(string: text, attributes: [NSForegroundColorAttributeName: UIColor.white])
+                attributedTitle = NSAttributedString(string: text, attributes: [NSForegroundColorAttributeName: UIColor.white, NSBackgroundColorAttributeName: UIColor.black.withAlphaComponent(0.5)])
             }
         }
     }

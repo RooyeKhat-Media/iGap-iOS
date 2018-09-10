@@ -88,12 +88,8 @@ class IGSettingContactsTableViewController: UITableViewController,UISearchResult
                 break
             }
         }
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(addressBookDidChange),
-            name: NSNotification.Name.CNContactStoreDidChange,
-            object: nil)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(addressBookDidChange), name: NSNotification.Name.CNContactStoreDidChange, object: nil)
         
         sections = fillContacts()
     }
@@ -237,6 +233,66 @@ class IGSettingContactsTableViewController: UITableViewController,UISearchResult
         }).send()
     }
     
+    private func contactEditAlert(phone: Int64, firstname: String, lastname: String?){
+        let alert = UIAlertController(title: "Edit Contact", message: nil, preferredStyle: .alert)
+        
+        alert.addTextField { (textField) in
+            textField.placeholder = "first name"
+            textField.text = String(describing: firstname)
+        }
+        
+        alert.addTextField { (textField) in
+            textField.placeholder = "last name"
+            if lastname != nil && !(lastname?.isEmpty)! {
+                textField.text = String(describing: lastname!)
+            }
+        }
+        
+        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { [weak alert] (_) in
+            let firstname = alert?.textFields![0]
+            let lastname = alert?.textFields![1]
+            
+            if firstname?.text != nil && !(firstname?.text?.isEmpty)! {
+                self.contactEdit(phone: phone, firstname: (firstname?.text)!, lastname: lastname?.text)
+            } else {
+                let alert = UIAlertController(title: "Hint", message: "please enter first name!", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            }
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
+        
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    private func contactEdit(phone: Int64, firstname: String, lastname: String?){
+        IGGlobal.prgShow(self.view)
+        IGUserContactsEditRequest.Generator.generate(phone: phone, firstname: firstname, lastname: lastname).success({ (protoResponse) in
+            
+            if let contactEditResponse = protoResponse as? IGPUserContactsEditResponse {
+                IGUserContactsEditRequest.Handler.interpret(response: contactEditResponse)
+                DispatchQueue.main.async {
+                    IGGlobal.prgHide()
+                }
+            }
+        }).error ({ (errorCode, waitTime) in
+            switch errorCode {
+            case .timeout:
+                DispatchQueue.main.async {
+                    IGGlobal.prgHide()
+                    let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: nil)
+                }
+            default:
+                break
+            }
+        }).send()
+    }
+    
+    
     // MARK: - Table view data source
     override func numberOfSections(in tableView: UITableView) -> Int {
         if (self.resultSearchController.isActive) {
@@ -272,9 +328,16 @@ class IGSettingContactsTableViewController: UITableViewController,UISearchResult
             contactsCell.setUser(user.registredUser)
             //            }
             
-            contactsCell.rightButtons = [MGSwipeButton(title: "Delete Contact", backgroundColor: UIColor(red: 252.0/255.0, green: 23.0/255.0, blue: 22.0/255.0, alpha: 1), callback: { (sender: MGSwipeTableCell!) -> Bool in
+            contactsCell.rightButtons = [MGSwipeButton(title: "Delete", backgroundColor: UIColor(red: 252.0/255.0, green: 23.0/255.0, blue: 22.0/255.0, alpha: 1), callback: { (sender: MGSwipeTableCell!) -> Bool in
+                
                 self.deleteContactAlert(phone: user.registredUser.phone)
                 return true
+                
+            }),MGSwipeButton(title: "Edit", backgroundColor: UIColor.iGapColor(), callback: { (sender: MGSwipeTableCell!) -> Bool in
+                
+                self.contactEditAlert(phone: user.registredUser.phone, firstname: user.registredUser.firstName, lastname: user.registredUser.lastName)
+                return true
+                
             })]
             contactsCell.rightSwipeSettings.transition = MGSwipeTransition.border
             
