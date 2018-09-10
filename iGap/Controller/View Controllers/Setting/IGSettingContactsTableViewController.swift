@@ -328,17 +328,18 @@ class IGSettingContactsTableViewController: UITableViewController,UISearchResult
             contactsCell.setUser(user.registredUser)
             //            }
             
-            contactsCell.rightButtons = [MGSwipeButton(title: "Delete", backgroundColor: UIColor.swipeRed(), callback: { (sender: MGSwipeTableCell!) -> Bool in
-                
+            let delete = MGSwipeButton(title: "Delete", backgroundColor: UIColor.swipeRed(), callback: { (sender: MGSwipeTableCell!) -> Bool in
                 self.deleteContactAlert(phone: user.registredUser.phone)
                 return true
-                
-            }),MGSwipeButton(title: "Edit", backgroundColor: UIColor.swipeBlueGray(), callback: { (sender: MGSwipeTableCell!) -> Bool in
-                
+            })
+            
+            let edit = MGSwipeButton(title: "Edit", backgroundColor: UIColor.swipeBlueGray(), callback: { (sender: MGSwipeTableCell!) -> Bool in
                 self.contactEditAlert(phone: user.registredUser.phone, firstname: user.registredUser.firstName, lastname: user.registredUser.lastName)
                 return true
-                
-            })]
+            })
+            
+            contactsCell.rightButtons = [delete, edit]
+            removeButtonsUnderline(buttons: [delete, edit])
             contactsCell.rightSwipeSettings.transition = MGSwipeTransition.border
             contactsCell.rightExpansion.buttonIndex = 0
             contactsCell.rightExpansion.fillOnTrigger = true
@@ -352,6 +353,12 @@ class IGSettingContactsTableViewController: UITableViewController,UISearchResult
         }
         
         return cell
+    }
+    
+    private func removeButtonsUnderline(buttons: [UIButton]){
+        for btn in buttons {
+            btn.removeUnderline()
+        }
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String {

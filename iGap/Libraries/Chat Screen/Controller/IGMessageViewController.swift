@@ -56,7 +56,6 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate, UIGe
     @IBOutlet weak var txtPinnedMessage: UILabel!
     @IBOutlet weak var collectionView: IGMessageCollectionView!
     @IBOutlet weak var inputBarContainerView: UIView!
-    @IBOutlet weak var joinButton: UIButton!
     @IBOutlet weak var inputTextView: GrowingTextView!
     @IBOutlet weak var inputTextViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var inputBarHeightContainerConstraint: NSLayoutConstraint!
@@ -66,8 +65,14 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate, UIGe
     @IBOutlet weak var inputBarLeftView: UIView!
     @IBOutlet weak var inputBarRightiew: UIView!
     @IBOutlet weak var inputBarViewBottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var joinButton: UIButton!
     @IBOutlet weak var inputBarRecordButton: UIButton!
+    @IBOutlet weak var btnScrollToBottom: UIButton!
     @IBOutlet weak var inputBarSendButton: UIButton!
+    @IBOutlet weak var btnCancelReplyOrForward: UIButton!
+    @IBOutlet weak var btnDeleteSelectedAttachment: UIButton!
+    @IBOutlet weak var btnClosePin: UIButton!
+    @IBOutlet weak var btnAttachment: UIButton!
     @IBOutlet weak var inputBarRecordTimeLabel: UILabel!
     @IBOutlet weak var inputBarRecordView: UIView!
     @IBOutlet weak var inputBarRecodingBlinkingView: UIView!
@@ -151,6 +156,10 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate, UIGe
     //MARK: - Initilizers
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        removeButtonsUnderline(buttons: [joinButton, inputBarRecordButton, btnScrollToBottom,
+                                         inputBarSendButton, btnCancelReplyOrForward,
+                                         btnDeleteSelectedAttachment, btnClosePin, btnAttachment])
         
         IGAppManager.sharedManager.connectionStatus.asObservable().subscribe(onNext: { (connectionStatus) in
             DispatchQueue.main.async {
@@ -328,6 +337,12 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate, UIGe
         
         if messages.count == 0 {
             fetchRoomHistoryWhenDbIsClear()
+        }
+    }
+    
+    private func removeButtonsUnderline(buttons: [UIButton]){
+        for btn in buttons {
+            btn.removeUnderline()
         }
     }
     

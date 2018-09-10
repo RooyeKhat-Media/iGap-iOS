@@ -78,6 +78,7 @@ class IGFinancialServiceBillingInquiry: UIViewController, UIGestureRecognizerDel
     private func manageButtonsView(buttons: [UIButton], enable: Bool = true){
         if enable {
             for btn in buttons {
+                btn.removeUnderline()
                 btn.layer.cornerRadius = 5
                 btn.layer.borderWidth = 1
                 btn.layer.borderColor = UIColor.iGapColor().cgColor
@@ -86,6 +87,7 @@ class IGFinancialServiceBillingInquiry: UIViewController, UIGestureRecognizerDel
             }
         } else {
             for btn in buttons {
+                btn.removeUnderline()
                 btn.layer.cornerRadius = 5
                 btn.layer.borderWidth = 1
                 btn.layer.borderColor = UIColor.gray.cgColor

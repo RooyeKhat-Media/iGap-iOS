@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -172,6 +172,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Your Phone" id="EY8-i4-Rhi" customClass="IGNavigationItem" customModule="iGap" customModuleProvider="target"/>
                     <connections>
+                        <outlet property="btnLoginQrCode" destination="7dr-Le-eo5" id="GQI-9k-ePg"/>
                         <outlet property="countryBackgroundView" destination="6eI-Dd-wbu" id="gMu-Yv-nC3"/>
                         <outlet property="countryCodeBackgroundView" destination="UN7-ob-GGq" id="5p1-E8-d4M"/>
                         <outlet property="countryCodeLabel" destination="6yE-qv-Vbg" id="SFo-bY-Vll"/>

@@ -25,6 +25,7 @@ class IGRegistrationStepPhoneViewController: UIViewController {
     @IBOutlet weak var termLabel: UILabel!
     @IBOutlet weak var countryNameLabel: UILabel!
     @IBOutlet weak var countryCodeLabel: UILabel!
+    @IBOutlet weak var btnLoginQrCode: UIButton!
     
     internal static var allowGetCountry:Bool = true
     var phone: String?
@@ -68,6 +69,9 @@ class IGRegistrationStepPhoneViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        btnLoginQrCode.removeUnderline()
+        
         IGAppManager.sharedManager.connectionStatus.asObservable().subscribe(onNext: { (connectionStatus) in
             DispatchQueue.main.async {
                 self.updateNavigationBarBasedOnNetworkStatus(connectionStatus)

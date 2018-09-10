@@ -24,12 +24,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="900"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                        <view key="tableHeaderView" contentMode="scaleToFill" misplaced="YES" id="O8d-so-e5Y">
+                        <view key="tableHeaderView" contentMode="scaleToFill" id="O8d-so-e5Y">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="194"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2NO-Sq-9OI" customClass="IGAvatarView" customModule="iGap" customModuleProvider="target">
-                                    <rect key="frame" x="137" y="119" width="100" height="100"/>
+                                    <rect key="frame" x="137" y="37" width="100" height="100"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="100" id="FJL-Ht-PYp"/>
@@ -37,7 +37,7 @@
                                     </constraints>
                                 </view>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QdJ-KJ-h0A">
-                                    <rect key="frame" x="211" y="186" width="24" height="26"/>
+                                    <rect key="frame" x="211" y="104" width="24" height="26"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="24" id="itm-A2-666"/>
                                         <constraint firstAttribute="height" constant="26" id="j5o-Mb-6fY"/>
@@ -48,7 +48,7 @@
                                     </connections>
                                 </button>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="John Smith" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oVd-v2-fme" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
-                                    <rect key="frame" x="145" y="227" width="86.333333333333314" height="20.333333333333343"/>
+                                    <rect key="frame" x="145" y="145" width="86.333333333333314" height="20.333333333333343"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
@@ -1478,6 +1478,7 @@ To proceed, confirm that your new number can recieve SMS or calls and tap Next t
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="blockedLabel" destination="fMq-Fl-71A" id="pZE-ND-Nvf"/>
+                                    <outlet property="btnCall" destination="7nz-yi-dbc" id="0uU-a2-PQC"/>
                                     <outlet property="contactNameLable" destination="AfS-DV-hwR" id="Lud-6K-Qrf"/>
                                     <outlet property="lastSeenStatusLabel" destination="Tbh-Uh-fyc" id="Kr9-L2-tdN"/>
                                     <outlet property="userAvatarView" destination="vzn-zu-Jl3" id="FVp-hc-z4V"/>
@@ -5215,6 +5216,7 @@ Please wait 0:59</string>
                     </tableView>
                     <navigationItem key="navigationItem" title="Title" id="Nz8-Sy-pxl" customClass="IGNavigationItem" customModule="iGap" customModuleProvider="target"/>
                     <connections>
+                        <outlet property="btnForgetPassword" destination="IS3-Xt-fnG" id="e7e-ct-mJ1"/>
                         <outlet property="passwordTextField" destination="fHP-wP-wSy" id="K7W-Ca-m4V"/>
                         <segue destination="8aK-dM-Tut" kind="show" identifier="showTwoStepOptions" id="1Fr-Vf-hq4"/>
                         <segue destination="rcJ-Dc-4E0" kind="show" identifier="changePasswordWithQuestions" id="v4b-3a-R6D"/>
@@ -6317,9 +6319,9 @@ Afg
         </image>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Pqu-UA-ZWb"/>
-        <segue reference="v4b-3a-R6D"/>
-        <segue reference="Qum-5d-uYe"/>
+        <segue reference="DaW-k4-iW0"/>
+        <segue reference="Oa0-mY-XGu"/>
+        <segue reference="P15-0g-TjZ"/>
         <segue reference="Xzv-Yc-EAf"/>
         <segue reference="FWu-Ni-6zD"/>
     </inferredMetricsTieBreakers>

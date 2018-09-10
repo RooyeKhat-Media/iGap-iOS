@@ -80,6 +80,7 @@ class IGGroupInfoTableViewController: UITableViewController , UIGestureRecognize
         let tap = UITapGestureRecognizer.init(target: self, action: #selector(self.handleTap(recognizer:)))
         groupAvatarView.avatarImageView?.addGestureRecognizer(tap)
 
+        cameraButton.removeUnderline()
         switch myRole! {
         case .admin:
             cameraButton.isHidden = false
@@ -152,9 +153,6 @@ class IGGroupInfoTableViewController: UITableViewController , UIGestureRecognize
     }
     override func viewWillAppear(_ animated: Bool) {
         self.tableView.isUserInteractionEnabled = true
-
-    }
-    @IBAction func didTapOnCameraBtn(_ sender: UIButton) {
     }
     
     @IBAction func didTapOnCameraButton(_ sender: UIButton) {

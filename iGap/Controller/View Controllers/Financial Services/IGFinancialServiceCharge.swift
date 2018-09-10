@@ -100,6 +100,7 @@ class IGFinancialServiceCharge: UIViewController, UIGestureRecognizerDelegate, U
     
     private func manageButtonsView(buttons: [UIButton]){
         for btn in buttons {
+            btn.removeUnderline()
             btn.layer.cornerRadius = 5
             btn.layer.borderWidth = 1
             btn.layer.borderColor = UIColor.iGapColor().cgColor

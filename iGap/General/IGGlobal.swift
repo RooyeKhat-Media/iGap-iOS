@@ -752,3 +752,16 @@ extension Array {
         }
     }
 }
+
+extension UIButton {
+    
+    func removeUnderline(){
+        if let text = self.titleLabel?.text {
+            let attrs = [ NSFontAttributeName : self.titleLabel?.font as Any,
+                          NSForegroundColorAttributeName : self.titleLabel?.textColor as Any,
+                          NSUnderlineStyleAttributeName : NSUnderlineStyle.styleNone.rawValue ] as [String : Any]
+            
+            self.setAttributedTitle(NSMutableAttributedString(string: text, attributes: attrs), for: self.state)
+        }
+    }
+}

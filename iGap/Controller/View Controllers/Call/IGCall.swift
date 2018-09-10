@@ -169,6 +169,8 @@ class IGCall: UIViewController, CallStateObserver, ReturnToCallObserver {
     }
     
     private func buttonViewCustomize(button: UIButton, color: UIColor, imgName: String = ""){
+
+        button.removeUnderline()
         button.backgroundColor = color
         
         button.layer.shadowColor = UIColor.darkGray.cgColor

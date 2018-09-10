@@ -86,6 +86,8 @@ class IGMessageAttachmentCurrentLocationViewController: UIViewController , UIGes
     }
     
     func buttonViewCustomize(){
+        btnCurrentLocation.removeUnderline()
+        
         btnCurrentLocation.layer.shadowColor = UIColor.darkGray.cgColor
         btnCurrentLocation.layer.shadowOffset = CGSize(width: 0.0, height: 2.0)
         btnCurrentLocation.layer.shadowRadius = 0.1

@@ -138,7 +138,7 @@ class IGGroupsTableViewController: UITableViewController {
             pinTitle = "UnPin"
         }
         
-        cell.rightButtons = [MGSwipeButton(title: muteTitle, backgroundColor: UIColor(red: 90.0/255.0, green: 90.0/255.0, blue: 90.0/255.0, alpha: 1), callback: { (sender: MGSwipeTableCell!) -> Bool in
+        let btnMuteSwipeCell = MGSwipeButton(title: muteTitle, backgroundColor: UIColor.swipeGray(), callback: { (sender: MGSwipeTableCell!) -> Bool in
             if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
                 let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
                 let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
@@ -149,7 +149,9 @@ class IGGroupsTableViewController: UITableViewController {
                 self.muteRoom(room: room)
             }
             return true
-        }),MGSwipeButton(title: pinTitle, backgroundColor: UIColor(red: 50.0/255.0, green: 100.0/255.0, blue: 122.0/255.0, alpha: 1), callback: { (sender: MGSwipeTableCell!) -> Bool in
+        })
+        
+        let btnPinSwipeCell = MGSwipeButton(title: pinTitle, backgroundColor: UIColor.swipeBlueGray(), callback: { (sender: MGSwipeTableCell!) -> Bool in
             if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
                 let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
                 let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
@@ -160,8 +162,9 @@ class IGGroupsTableViewController: UITableViewController {
                 self.pinRoom(room: room)
             }
             return true
-            
-        }),MGSwipeButton(title: "More...", backgroundColor: UIColor(red: 26.0/255.0, green: 67.0/255.0, blue: 90.0/255.0, alpha: 1), callback: { (sender: MGSwipeTableCell!) -> Bool in
+        })
+        
+        let btnMoreSwipeCell = MGSwipeButton(title: "More...", backgroundColor: UIColor(red: 26.0/255.0, green: 67.0/255.0, blue: 90.0/255.0, alpha: 1), callback: { (sender: MGSwipeTableCell!) -> Bool in
             let title = room.title != nil ? room.title! : "Delete"
             let alertC = UIAlertController(title: title, message: "What do you want to do?", preferredStyle: IGGlobal.detectAlertStyle())
             let clear = UIAlertAction(title: "Clear History", style: .default, handler: { (action) in
@@ -335,7 +338,12 @@ class IGGroupsTableViewController: UITableViewController {
             })
             
             return true
-        })]
+        })
+        
+        let buttons = [btnMuteSwipeCell, btnPinSwipeCell, btnMoreSwipeCell]
+        cell.rightButtons = buttons
+        removeButtonsUnderline(buttons: buttons)
+        
         cell.rightSwipeSettings.transition = MGSwipeTransition.border
         cell.rightExpansion.buttonIndex = 0
         cell.rightExpansion.fillOnTrigger = true
@@ -349,6 +357,12 @@ class IGGroupsTableViewController: UITableViewController {
         cell.layoutMargins = UIEdgeInsets.zero
         
         return cell
+    }
+    
+    private func removeButtonsUnderline(buttons: [UIButton]){
+        for btn in buttons {
+            btn.removeUnderline()
+        }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

@@ -16,11 +16,14 @@ import MBProgressHUD
 class IGSettingPrivacyAndSecurityTwoStepVerificationVerifyPasswordTableViewController: UITableViewController, UIGestureRecognizerDelegate {
 
     @IBOutlet weak var passwordTextField: UITextField!
+    @IBOutlet weak var btnForgetPassword: UIButton!
     
     var twoStepVerification: IGTwoStepVerification?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        btnForgetPassword.removeUnderline()
         
         let navigationController = self.navigationController as! IGNavigationController
         navigationController.interactivePopGestureRecognizer?.delegate = self
