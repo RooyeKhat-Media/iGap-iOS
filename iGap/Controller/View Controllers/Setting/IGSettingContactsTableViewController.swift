@@ -328,26 +328,25 @@ class IGSettingContactsTableViewController: UITableViewController,UISearchResult
             contactsCell.setUser(user.registredUser)
             //            }
             
-            contactsCell.rightButtons = [MGSwipeButton(title: "Delete", backgroundColor: UIColor(red: 252.0/255.0, green: 23.0/255.0, blue: 22.0/255.0, alpha: 1), callback: { (sender: MGSwipeTableCell!) -> Bool in
+            contactsCell.rightButtons = [MGSwipeButton(title: "Delete", backgroundColor: UIColor.swipeRed(), callback: { (sender: MGSwipeTableCell!) -> Bool in
                 
                 self.deleteContactAlert(phone: user.registredUser.phone)
                 return true
                 
-            }),MGSwipeButton(title: "Edit", backgroundColor: UIColor.iGapColor(), callback: { (sender: MGSwipeTableCell!) -> Bool in
+            }),MGSwipeButton(title: "Edit", backgroundColor: UIColor.swipeBlueGray(), callback: { (sender: MGSwipeTableCell!) -> Bool in
                 
                 self.contactEditAlert(phone: user.registredUser.phone, firstname: user.registredUser.firstName, lastname: user.registredUser.lastName)
                 return true
                 
             })]
             contactsCell.rightSwipeSettings.transition = MGSwipeTransition.border
-            
-            contactsCell.leftExpansion.buttonIndex = 0
-            contactsCell.leftExpansion.fillOnTrigger = true
-            contactsCell.leftExpansion.threshold = 2.0
-            
             contactsCell.rightExpansion.buttonIndex = 0
             contactsCell.rightExpansion.fillOnTrigger = true
             contactsCell.rightExpansion.threshold = 1.5
+            
+            contactsCell.layer.cornerRadius = 10
+            contactsCell.clipsToBounds = true
+            contactsCell.swipeBackgroundColor = UIColor.clear
             
             cell = contactsCell
         }
