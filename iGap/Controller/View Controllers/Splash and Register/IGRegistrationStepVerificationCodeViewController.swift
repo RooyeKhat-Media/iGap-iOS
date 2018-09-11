@@ -189,7 +189,6 @@ class IGRegistrationStepVerificationCodeViewController: UIViewController, UIGest
         if let code = Int32(codeTextField.text!){
             IGUserVerifyRequest.Generator.generate(usename: self.username!, code: code).success({ (responseProto) in
                 DispatchQueue.main.async {
-                    self.hud.hide(animated: false)
                     switch responseProto {
                     case let userVerifyReponse as IGPUserVerifyResponse:
                         let interpretedResponse = IGUserVerifyRequest.Handler.intrepret(response: userVerifyReponse)
@@ -277,7 +276,7 @@ class IGRegistrationStepVerificationCodeViewController: UIViewController, UIGest
                 switch protoResponse {
                 case _ as IGPUserLoginResponse:
                     IGUserLoginRequest.Handler.intrepret(response: (protoResponse as? IGPUserLoginResponse)!)
-                    IGAppManager.sharedManager.setUserLoginSuccessful()
+                    IGAppManager.sharedManager.isUserLoggedIn.value = true
                     if self.isUserNew! {
                         self.hud.hide(animated: true)
                         self.performSegue(withIdentifier: "showYourProfile", sender: self)
@@ -293,8 +292,10 @@ class IGRegistrationStepVerificationCodeViewController: UIViewController, UIGest
                                     break
                                 }
                                 self.hud.hide(animated: true)
-                                IGAppManager.sharedManager.setUserLoginSuccessful()
-                                self.dismiss(animated: true, completion: nil)
+                                
+                                self.dismiss(animated: true, completion: {
+                                    IGAppManager.sharedManager.setUserLoginSuccessful()
+                                })
                             }
                         }).error({ (errorCode, waitTime) in
                             DispatchQueue.main.async {
@@ -312,7 +313,13 @@ class IGRegistrationStepVerificationCodeViewController: UIViewController, UIGest
                 }    
             }
         }).error({ (errorCode, waitTime) in
-            
+            DispatchQueue.main.async {
+                self.hud.hide(animated: true)
+                let alertVC = UIAlertController(title: "Error", message: "There was an error logging you in. Try again please.", preferredStyle: .alert)
+                let ok = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alertVC.addAction(ok)
+                self.present(alertVC, animated: true, completion: nil)
+            }
         }).send()
     }
 }

@@ -18,6 +18,7 @@ import IGProtoBuff
 import MGSwipeTableCell
 import MBProgressHUD
 import UserNotifications
+import Contacts
 
 class IGRecentsTableViewController: UITableViewController, MessageReceiveObserver, UNUserNotificationCenterDelegate {
     
@@ -273,20 +274,22 @@ class IGRecentsTableViewController: UITableViewController, MessageReceiveObserve
     
     private func checkPermission() {
         
-        // show 'AVAudioSession Permission' alert after than 'Notification Permission' selected. do this for avoid from override two alert toghther
-        /********** Receive Notification Permission **********/
-        if #available(iOS 10.0, *) {
-            // For iOS 10 display notification (sent via APNS)
-            UNUserNotificationCenter.current().delegate = self
-            let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound, .carPlay]
-            UNUserNotificationCenter.current().requestAuthorization(options: authOptions,completionHandler: {_, _ in
-                /********** Microphon Permission **********/
-                AVAudioSession.sharedInstance().requestRecordPermission { (granted) in }
-            })
-        } else {
+        /********** Contact Permission **********/
+        CNContactStore().requestAccess(for: CNEntityType.contacts, completionHandler: { (granted, error) -> Void in
+            IGContactManager.sharedManager.manageContact()
+            
             /********** Microphon Permission **********/
-            AVAudioSession.sharedInstance().requestRecordPermission { (granted) in }
-        }
+            AVAudioSession.sharedInstance().requestRecordPermission { (granted) in
+
+                /********** Receive Notification Permission **********/
+                if #available(iOS 10.0, *) {
+                    // For iOS 10 display notification (sent via APNS)
+                    UNUserNotificationCenter.current().delegate = self
+                    let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound, .carPlay]
+                    UNUserNotificationCenter.current().requestAuthorization(options: authOptions,completionHandler: {_, _ in })
+                }
+            }
+        })
     }
     
     private func addRoomChangeNotificationBlock() {

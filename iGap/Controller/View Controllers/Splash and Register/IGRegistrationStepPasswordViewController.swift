@@ -138,7 +138,7 @@ class IGRegistrationStepPasswordViewController: UIViewController, UIGestureRecog
                 switch protoResponse {
                 case _ as IGPUserLoginResponse:
                     IGUserLoginRequest.Handler.intrepret(response: (protoResponse as? IGPUserLoginResponse)!)
-                    IGAppManager.sharedManager.setUserLoginSuccessful()
+                    IGAppManager.sharedManager.isUserLoggedIn.value = true
 
                     IGUserInfoRequest.Generator.generate(userID: IGAppManager.sharedManager.userID()!).success({ (protoResponse) in
                         DispatchQueue.main.async {
@@ -151,8 +151,9 @@ class IGRegistrationStepPasswordViewController: UIViewController, UIGestureRecog
                                 break
                             }
                             self.hud.hide(animated: true)
-                            IGAppManager.sharedManager.setUserLoginSuccessful()
-                            self.dismiss(animated: true, completion: nil)
+                            self.dismiss(animated: true, completion: {
+                                IGAppManager.sharedManager.setUserLoginSuccessful()
+                            })
                         }
                     }).error({ (errorCode, waitTime) in
                         DispatchQueue.main.async {
@@ -169,7 +170,13 @@ class IGRegistrationStepPasswordViewController: UIViewController, UIGestureRecog
                 }
             }
         }).error({ (errorCode, waitTime) in
-
+            DispatchQueue.main.async {
+                self.hud.hide(animated: true)
+                let alertVC = UIAlertController(title: "Error", message: "There was an error logging you in. Try again please.", preferredStyle: .alert)
+                let ok = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alertVC.addAction(ok)
+                self.present(alertVC, animated: true, completion: nil)
+            }
         }).send()
     }
 

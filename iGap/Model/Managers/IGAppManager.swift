@@ -308,7 +308,6 @@ class IGAppManager: NSObject {
                         switch responseProto {
                         case _ as IGPUserLoginResponse:
                             IGUserLoginRequest.Handler.intrepret(response: (responseProto as? IGPUserLoginResponse)!)
-                            IGContactManager.sharedManager.manageContact()
                             self.setUserLoginSuccessful()
                             self.setUserUpdateStatus(status: .online)
                             self.getSignalingConfiguration(force: true)
