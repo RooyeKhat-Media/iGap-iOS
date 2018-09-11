@@ -36,6 +36,8 @@ class IGSplashScreenViewController: UIViewController {
         super.viewDidLoad()
         
         skipButton.removeUnderline()
+        startButton.removeUnderline()
+        
         IGContactManager.importedContact = false
         
         // Do any additional setup after loading the view.

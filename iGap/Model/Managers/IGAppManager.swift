@@ -331,10 +331,12 @@ class IGAppManager: NSObject {
                     }
                 }).send()
             } else {
-                // no token or no author hash
-                self.isTryingToLoginUser = false
-                let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                appDelegate.showLoginFaieldAlert()
+                DispatchQueue.main.async {
+                    // no token or no author hash
+                    self.isTryingToLoginUser = false
+                    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                    appDelegate.showLoginFaieldAlert()
+                }
             }
             
         }

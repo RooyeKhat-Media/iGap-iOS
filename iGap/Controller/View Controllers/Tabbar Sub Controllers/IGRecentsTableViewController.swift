@@ -17,8 +17,9 @@ import RxCocoa
 import IGProtoBuff
 import MGSwipeTableCell
 import MBProgressHUD
+import UserNotifications
 
-class IGRecentsTableViewController: UITableViewController, MessageReceiveObserver {
+class IGRecentsTableViewController: UITableViewController, MessageReceiveObserver, UNUserNotificationCenterDelegate {
     
     static var messageReceiveDelegat: MessageReceiveObserver!
     static var visibleChat: [Int64 : Bool] = [:]
@@ -263,10 +264,29 @@ class IGRecentsTableViewController: UITableViewController, MessageReceiveObserve
     
     //MARK: Room List actions
     @objc private func userDidLogin() {
+        self.checkPermission()
         self.addRoomChangeNotificationBlock()
         self.fetchRoomList()
         self.saveAndSendContacts()
         self.requestToGetUserPrivacy()
+    }
+    
+    private func checkPermission() {
+        
+        // show 'AVAudioSession Permission' alert after than 'Notification Permission' selected. do this for avoid from override two alert toghther
+        /********** Receive Notification Permission **********/
+        if #available(iOS 10.0, *) {
+            // For iOS 10 display notification (sent via APNS)
+            UNUserNotificationCenter.current().delegate = self
+            let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound, .carPlay]
+            UNUserNotificationCenter.current().requestAuthorization(options: authOptions,completionHandler: {_, _ in
+                /********** Microphon Permission **********/
+                AVAudioSession.sharedInstance().requestRecordPermission { (granted) in }
+            })
+        } else {
+            /********** Microphon Permission **********/
+            AVAudioSession.sharedInstance().requestRecordPermission { (granted) in }
+        }
     }
     
     private func addRoomChangeNotificationBlock() {
@@ -309,7 +329,6 @@ class IGRecentsTableViewController: UITableViewController, MessageReceiveObserve
         IGClientGetRoomListRequest.Generator.generate(offset: 0, limit: 40).success { (responseProtoMessage) in
             self.isLoadingMoreRooms = false
             DispatchQueue.main.async {
-                AVAudioSession.sharedInstance().requestRecordPermission { (granted) in }
                 switch responseProtoMessage {
                 case let response as IGPClientGetRoomListResponse:
                     self.sendClientCondition(clientCondition: clientCondition)
