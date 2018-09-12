@@ -132,18 +132,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         Messaging.messaging().delegate = self
         Messaging.messaging().shouldEstablishDirectChannel = true
         
-        if #available(iOS 10.0, *) {
-            // For iOS 10 display notification (sent via APNS)
-            UNUserNotificationCenter.current().delegate = self
-            let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound, .carPlay]
-            UNUserNotificationCenter.current().requestAuthorization(
-                options: authOptions,
-                completionHandler: {_, _ in })
+        if #available(iOS 10.0, *) { // For iOS 10 display notification (sent via APNS)
+            /**
+             * execute following code in "IGRecentsTableViewController" and don't execute here,
+             * for avoid from show permission alert in start of app when user not registered yet
+             **/
+            //UNUserNotificationCenter.current().delegate = self
+            //let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound, .carPlay]
+            //UNUserNotificationCenter.current().requestAuthorization(options: authOptions,completionHandler: {_, _ in })
         } else {
             let settings: UIUserNotificationSettings = UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
             application.registerUserNotificationSettings(settings)
         }
-        
+
         application.registerForRemoteNotifications()
     }
     /******************* Notificaton End *******************/
@@ -153,10 +154,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         IGAppManager.sharedManager.clearDataOnLogout()
         let storyboard : UIStoryboard = UIStoryboard(name: "Register", bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "IGSplashNavigationController")
-        self.window?.rootViewController?.present(vc, animated: true, completion: {
-            print("showed")
-        })
+        self.window?.rootViewController?.present(vc, animated: true, completion: nil)
     }
+    
     func showRegistrationSetpProfileInfo() {
         let storyboard : UIStoryboard = UIStoryboard(name: "Register", bundle: nil)
         let setNicknameVC = storyboard.instantiateViewController(withIdentifier: "RegistrationStepProfileInfo")
@@ -182,16 +182,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
     
     func showLoginFaieldAlert() {
-        //DispatchQueue.main.sync(execute: {
-            let badLoginAC = UIAlertController(title: "Login Failed", message: "There was a problem logging you in. Please login again", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) in
-                self.logoutAndShowRegisterViewController()
-            })
-            badLoginAC.addAction(ok)
-            self.window?.rootViewController?.present(badLoginAC, animated: true, completion: {
-                print("showed")
-            })
-        //})
+        let badLoginAC = UIAlertController(title: "Login Failed", message: "There was a problem logging you in. Please login again", preferredStyle: .alert)
+        let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) in
+            self.logoutAndShowRegisterViewController()
+        })
+        badLoginAC.addAction(ok)
+        self.window?.rootViewController?.present(badLoginAC, animated: true, completion: nil)
     }
     
     
@@ -205,6 +201,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             NotificationCenter.default.post(IGNotificationStatusBarTapped)
         }
     }
-    
 }
 

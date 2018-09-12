@@ -385,7 +385,7 @@ class IGNavigationItem: UINavigationItem {
         let avatarViewFrame = CGRect(x: 0, y: 0, width: 40, height:40)
         
         let avatarView = IGAvatarView(frame: avatarViewFrame)
-        avatarView.setRoom(room)
+        avatarView.setRoom(room, showMainAvatar: true)
         rightViewContainer!.addSubview(avatarView)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 10.0) {

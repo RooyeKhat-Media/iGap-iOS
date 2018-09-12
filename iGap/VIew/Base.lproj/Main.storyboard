@@ -308,6 +308,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="btnCancel" destination="N9Z-S5-niI" id="M6L-gg-mml"/>
                         <outlet property="btnSubmit" destination="IKl-b8-enQ" id="EH2-Fp-d6t"/>
                         <outlet property="edtReason" destination="Nem-UB-8Cx" id="QdO-iP-Lod"/>
                         <outlet property="mainView" destination="pdf-1j-jve" id="Nee-Em-nyK"/>
@@ -923,6 +924,11 @@
                     <navigationItem key="navigationItem" title="Title" id="yRi-nN-wYI" customClass="IGNavigationItem" customModule="iGap" customModuleProvider="target"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="btnAttachment" destination="UiX-6W-6LP" id="MgQ-kl-R5d"/>
+                        <outlet property="btnCancelReplyOrForward" destination="pFr-44-9aA" id="UhW-bI-JnR"/>
+                        <outlet property="btnClosePin" destination="grH-pt-p4x" id="q2A-FT-LNb"/>
+                        <outlet property="btnDeleteSelectedAttachment" destination="IvY-L2-6Iw" id="fy8-mA-1E9"/>
+                        <outlet property="btnScrollToBottom" destination="Em7-Bg-41q" id="nBH-S4-gyk"/>
                         <outlet property="collectionView" destination="9G6-WI-YVj" id="W5s-J5-lty"/>
                         <outlet property="inputBarAttachmentView" destination="GKD-aB-Nez" id="LxL-aF-CLm"/>
                         <outlet property="inputBarAttachmentViewBottomConstraint" destination="xTp-jF-6fO" id="CZc-Vr-QBz"/>

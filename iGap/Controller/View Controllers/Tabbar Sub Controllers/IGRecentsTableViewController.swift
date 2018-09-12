@@ -17,8 +17,10 @@ import RxCocoa
 import IGProtoBuff
 import MGSwipeTableCell
 import MBProgressHUD
+import UserNotifications
+import Contacts
 
-class IGRecentsTableViewController: UITableViewController, MessageReceiveObserver {
+class IGRecentsTableViewController: UITableViewController, MessageReceiveObserver, UNUserNotificationCenterDelegate {
     
     static var messageReceiveDelegat: MessageReceiveObserver!
     static var visibleChat: [Int64 : Bool] = [:]
@@ -263,10 +265,31 @@ class IGRecentsTableViewController: UITableViewController, MessageReceiveObserve
     
     //MARK: Room List actions
     @objc private func userDidLogin() {
+        self.checkPermission()
         self.addRoomChangeNotificationBlock()
         self.fetchRoomList()
         self.saveAndSendContacts()
         self.requestToGetUserPrivacy()
+    }
+    
+    private func checkPermission() {
+        
+        /********** Contact Permission **********/
+        CNContactStore().requestAccess(for: CNEntityType.contacts, completionHandler: { (granted, error) -> Void in
+            IGContactManager.sharedManager.manageContact()
+            
+            /********** Microphon Permission **********/
+            AVAudioSession.sharedInstance().requestRecordPermission { (granted) in
+
+                /********** Receive Notification Permission **********/
+                if #available(iOS 10.0, *) {
+                    // For iOS 10 display notification (sent via APNS)
+                    UNUserNotificationCenter.current().delegate = self
+                    let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound, .carPlay]
+                    UNUserNotificationCenter.current().requestAuthorization(options: authOptions,completionHandler: {_, _ in })
+                }
+            }
+        })
     }
     
     private func addRoomChangeNotificationBlock() {
@@ -309,7 +332,6 @@ class IGRecentsTableViewController: UITableViewController, MessageReceiveObserve
         IGClientGetRoomListRequest.Generator.generate(offset: 0, limit: 40).success { (responseProtoMessage) in
             self.isLoadingMoreRooms = false
             DispatchQueue.main.async {
-                AVAudioSession.sharedInstance().requestRecordPermission { (granted) in }
                 switch responseProtoMessage {
                 case let response as IGPClientGetRoomListResponse:
                     self.sendClientCondition(clientCondition: clientCondition)
@@ -411,7 +433,7 @@ class IGRecentsTableViewController: UITableViewController, MessageReceiveObserve
             pinTitle = "UnPin"
         }
         
-        cell.rightButtons = [MGSwipeButton(title: muteTitle, backgroundColor: UIColor.swipeGray(), callback: { (sender: MGSwipeTableCell!) -> Bool in
+        let btnMuteSwipeCell = MGSwipeButton(title: muteTitle, backgroundColor: UIColor.swipeGray(), callback: { (sender: MGSwipeTableCell!) -> Bool in
             if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
                 let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
                 let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
@@ -422,7 +444,9 @@ class IGRecentsTableViewController: UITableViewController, MessageReceiveObserve
                 self.muteRoom(room: room)
             }
             return true
-        }),MGSwipeButton(title: pinTitle, backgroundColor: UIColor.swipeBlueGray(), callback: { (sender: MGSwipeTableCell!) -> Bool in
+        })
+        
+        let btnPinSwipeCell = MGSwipeButton(title: pinTitle, backgroundColor: UIColor.swipeBlueGray(), callback: { (sender: MGSwipeTableCell!) -> Bool in
             if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
                 let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
                 let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
@@ -433,8 +457,9 @@ class IGRecentsTableViewController: UITableViewController, MessageReceiveObserve
                 self.pinRoom(room: room)
             }
             return true
-            
-        }),MGSwipeButton(title: "More...", backgroundColor: UIColor.swipeDarkBlue(), callback: { (sender: MGSwipeTableCell!) -> Bool in
+        })
+        
+        let btnMoreSwipeCell = MGSwipeButton(title: "More...", backgroundColor: UIColor.swipeDarkBlue(), callback: { (sender: MGSwipeTableCell!) -> Bool in
             
             let title = room.title != nil ? room.title! : "Delete"
             let alertC = UIAlertController(title: title, message: "What do you want to do?", preferredStyle: IGGlobal.detectAlertStyle())
@@ -602,8 +627,11 @@ class IGRecentsTableViewController: UITableViewController, MessageReceiveObserve
             self.present(alertC, animated: true, completion: nil)
             
             return true
-            
-        })]
+        })
+        
+        let buttons = [btnMuteSwipeCell, btnPinSwipeCell, btnMoreSwipeCell]
+        cell.rightButtons = buttons
+        removeButtonsUnderline(buttons: buttons)
         
         cell.rightSwipeSettings.transition = MGSwipeTransition.border
         cell.rightExpansion.buttonIndex = 0
@@ -618,6 +646,12 @@ class IGRecentsTableViewController: UITableViewController, MessageReceiveObserve
         cell.layoutMargins = UIEdgeInsets.zero
         
         return cell
+    }
+    
+    private func removeButtonsUnderline(buttons: [UIButton]){
+        for btn in buttons {
+            btn.removeUnderline()
+        }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

@@ -1446,6 +1446,7 @@ To proceed, confirm that your new number can recieve SMS or calls and tap Next t
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="blockedLabel" destination="fMq-Fl-71A" id="pZE-ND-Nvf"/>
+                                    <outlet property="btnCall" destination="7nz-yi-dbc" id="0uU-a2-PQC"/>
                                     <outlet property="contactNameLable" destination="AfS-DV-hwR" id="Lud-6K-Qrf"/>
                                     <outlet property="lastSeenStatusLabel" destination="Tbh-Uh-fyc" id="Kr9-L2-tdN"/>
                                     <outlet property="userAvatarView" destination="vzn-zu-Jl3" id="FVp-hc-z4V"/>
@@ -4674,6 +4675,7 @@ Please wait 0:59</string>
                     </tableView>
                     <navigationItem key="navigationItem" title="Title" id="Nz8-Sy-pxl" customClass="IGNavigationItem" customModule="iGap" customModuleProvider="target"/>
                     <connections>
+                        <outlet property="btnForgetPassword" destination="IS3-Xt-fnG" id="e7e-ct-mJ1"/>
                         <outlet property="passwordTextField" destination="fHP-wP-wSy" id="K7W-Ca-m4V"/>
                         <segue destination="8aK-dM-Tut" kind="show" identifier="showTwoStepOptions" id="1Fr-Vf-hq4"/>
                         <segue destination="rcJ-Dc-4E0" kind="show" identifier="changePasswordWithQuestions" id="v4b-3a-R6D"/>
@@ -5776,9 +5778,9 @@ Afg
         </image>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Pqu-UA-ZWb"/>
-        <segue reference="v4b-3a-R6D"/>
-        <segue reference="Qum-5d-uYe"/>
+        <segue reference="DaW-k4-iW0"/>
+        <segue reference="Oa0-mY-XGu"/>
+        <segue reference="P15-0g-TjZ"/>
         <segue reference="Xzv-Yc-EAf"/>
         <segue reference="FWu-Ni-6zD"/>
     </inferredMetricsTieBreakers>

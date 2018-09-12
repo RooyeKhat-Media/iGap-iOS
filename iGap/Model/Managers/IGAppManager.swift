@@ -299,7 +299,6 @@ class IGAppManager: NSObject {
                         switch responseProto {
                         case _ as IGPUserLoginResponse:
                             IGUserLoginRequest.Handler.intrepret(response: (responseProto as? IGPUserLoginResponse)!)
-                            IGContactManager.sharedManager.manageContact()
                             self.setUserLoginSuccessful()
                             self.setUserUpdateStatus(status: .online)
                             self.getSignalingConfiguration(force: true)
@@ -322,10 +321,12 @@ class IGAppManager: NSObject {
                     }
                 }).send()
             } else {
-                // no token or no author hash
-                self.isTryingToLoginUser = false
-                let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                appDelegate.showLoginFaieldAlert()
+                DispatchQueue.main.async {
+                    // no token or no author hash
+                    self.isTryingToLoginUser = false
+                    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                    appDelegate.showLoginFaieldAlert()
+                }
             }
             
         }

@@ -20,6 +20,7 @@ class IGCallQuality: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var userActionView: UIView!
     @IBOutlet weak var edtReason: UITextField!
     @IBOutlet weak var btnSubmit: UIButton!
+    @IBOutlet weak var btnCancel: UIButton!
     var ratingView: CosmosView!
     
     var rateId: Int64!
@@ -42,6 +43,9 @@ class IGCallQuality: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        btnSubmit.removeUnderline()
+        btnCancel.removeUnderline()
         
         edtReason.delegate = self
         

@@ -73,6 +73,7 @@ class IGChannelInfoTableViewController: UITableViewController , UIGestureRecogni
         tableView.rowHeight = UITableViewAutomaticDimension
         signMessageIndexPath = IndexPath(row: 2, section: 1)
         myRole = room?.channelRoom?.role
+        cameraButton.removeUnderline()
         switch myRole! {
         case .member:
             channelSignMessageCell.isHidden = true
@@ -711,7 +712,7 @@ class IGChannelInfoTableViewController: UITableViewController , UIGestureRecogni
         channelNameLabel.text = room?.title
         ChannelDescriptionLabel.text = room?.channelRoom?.roomDescription
         if let channelRoom = room {
-            channelImage.setRoom(channelRoom)
+            channelImage.setRoom(channelRoom, showMainAvatar: true)
         }
         if let channelType = room?.channelRoom?.type {
             switch channelType {

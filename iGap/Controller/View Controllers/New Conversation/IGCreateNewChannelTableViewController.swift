@@ -40,7 +40,7 @@ class IGCreateNewChannelTableViewController: UITableViewController {
         }
         navigationItem.rightViewContainer?.addAction {
             if self.channelnameTextField.text?.isEmpty == true {
-                let alert = UIAlertController(title: "Alert", message: "Please fill in the Channel name field. ", preferredStyle: UIAlertControllerStyle.alert)
+                let alert = UIAlertController(title: "Hint", message: "Please write your channel name !", preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
                 alert.view.tintColor = UIColor.organizationalColor()
                 self.present(alert, animated: true, completion: nil)

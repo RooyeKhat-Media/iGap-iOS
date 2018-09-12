@@ -61,6 +61,7 @@ class IGRegistrationStepProfileInfoViewController: UITableViewController {
     
     func didTapOnDone() {
         if let nickname = nicknameTextField.text {
+            IGGlobal.prgShow(self.view)
             IGUserProfileSetNicknameRequest.Generator.generate(nickname: nickname).success({ (responseProto) in
                 DispatchQueue.main.async {
                     switch responseProto {
@@ -77,14 +78,14 @@ class IGRegistrationStepProfileInfoViewController: UITableViewController {
                                 default:
                                     break
                                 }
-//                                self.hud.hide(animated: true)
-                                IGAppManager.sharedManager.setUserLoginSuccessful()
-                                self.dismiss(animated: true, completion: nil)
-                            
+                                IGGlobal.prgHide()
+                                self.dismiss(animated: true, completion: {
+                                    IGAppManager.sharedManager.setUserLoginSuccessful()
+                                })
                             }
                         }).error({ (errorCode, waitTime) in
                             DispatchQueue.main.async {
-//                                self.hud.hide(animated: true)
+                                IGGlobal.prgHide()
                                 let alertVC = UIAlertController(title: "Error", message: "There was an error logging you in. Try again please.", preferredStyle: .alert)
                                 let ok = UIAlertAction(title: "OK", style: .default, handler: nil)
                                 alertVC.addAction(ok)
@@ -99,7 +100,7 @@ class IGRegistrationStepProfileInfoViewController: UITableViewController {
                 }
             }).error({ (errorCode, waitTime) in
                 DispatchQueue.main.async {
-//                    self.hud.hide(animated: true)
+                    IGGlobal.prgHide()
                     let alertVC = UIAlertController(title: "Error", message: "There was an error setting your nickname. Try again please.", preferredStyle: .alert)
                     let ok = UIAlertAction(title: "OK", style: .default, handler: nil)
                     alertVC.addAction(ok)

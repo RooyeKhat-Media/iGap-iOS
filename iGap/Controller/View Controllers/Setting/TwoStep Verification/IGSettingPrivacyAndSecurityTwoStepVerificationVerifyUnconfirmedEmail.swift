@@ -31,6 +31,8 @@ class IGSettingPrivacyAndSecurityTwoStepVerificationVerifyUnconfirmedEmail: UITa
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        btnOutletResendCode.removeUnderline()
+        
         let navigationController = self.navigationController as! IGNavigationController
         navigationController.interactivePopGestureRecognizer?.delegate = self
         let navigationItem = self.navigationItem as! IGNavigationItem

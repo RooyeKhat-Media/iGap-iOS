@@ -564,28 +564,53 @@ extension UIImageView {
         }
     }
     
-    func setImage(avatar: IGAvatar) {
-        if let smallThumbnail = avatar.file?.smallThumbnail {
+    func setImage(avatar: IGAvatar, showMain: Bool = false) {
+        
+        var file : IGFile!
+        var previewType : IGFile.PreviewType!
+        
+        if showMain {
+            
+            file = avatar.file
+            previewType = IGFile.PreviewType.originalFile
+            
+        } else {
+            
+            if let largeThumbnail = avatar.file?.largeThumbnail {
+                file = largeThumbnail
+                previewType = IGFile.PreviewType.largeThumbnail
+            } else {
+                file = avatar.file?.smallThumbnail
+                previewType = IGFile.PreviewType.smallThumbnail
+            }
+        }
+        
+        if file != nil {
             do {
-                if smallThumbnail.attachedImage != nil {
-                    self.image = smallThumbnail.attachedImage
+                if file.attachedImage != nil {
+                    self.image = file.attachedImage
                 } else {
+                    
                     var image: UIImage?
-                    let path = smallThumbnail.path()
-                    if FileManager.default.fileExists(atPath: path!.path) {
+                    
+                    let path = file.path()
+                    if IGGlobal.isFileExist(path: path) {
                         image = UIImage(contentsOfFile: path!.path)
                     }
                     
                     if image != nil {
                         self.image = image
                     } else {
+                        if showMain {
+                            setImage(avatar: avatar) // call this method again for load thumbnail before load main image
+                        }
                         throw NSError(domain: "asa", code: 1234, userInfo: nil)
                     }
                 }
             } catch {
-                IGDownloadManager.sharedManager.download(file: smallThumbnail, previewType:.smallThumbnail, completion: { (attachment) -> Void in
+                IGDownloadManager.sharedManager.download(file: file, previewType: previewType, completion: { (attachment) -> Void in
                     DispatchQueue.main.async {
-                        let path = smallThumbnail.path()
+                        let path = file.path()
                         if let data = try? Data(contentsOf: path!) {
                             if let image = UIImage(data: data) {
                                 self.image = image
@@ -597,9 +622,7 @@ extension UIImageView {
                 })
             }
         }
-        
     }
-    
 }
 
 //MARK: -
@@ -749,6 +772,19 @@ extension Array {
     func chunks(_ chunkSize: Int) -> [[Element]] {
         return stride(from: 0, to: self.count, by: chunkSize).map {
             Array(self[$0..<Swift.min($0 + chunkSize, self.count)])
+        }
+    }
+}
+
+extension UIButton {
+    
+    func removeUnderline(){
+        if let text = self.titleLabel?.text {
+            let attrs = [ NSFontAttributeName : self.titleLabel?.font as Any,
+                          NSForegroundColorAttributeName : self.titleLabel?.textColor as Any,
+                          NSUnderlineStyleAttributeName : NSUnderlineStyle.styleNone.rawValue ] as [String : Any]
+            
+            self.setAttributedTitle(NSMutableAttributedString(string: text, attributes: attrs), for: self.state)
         }
     }
 }

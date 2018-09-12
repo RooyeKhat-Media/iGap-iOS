@@ -16,6 +16,7 @@ class IGSettingContactTableViewCell: MGSwipeTableCell {
     @IBOutlet weak var userAvatarView: IGAvatarView!
     @IBOutlet weak var contactNameLable: UILabel!
     @IBOutlet weak var lastSeenStatusLabel: UILabel!
+    @IBOutlet weak var btnCall: UIButton!
     
     var registeredUser: IGRegisteredUser!
 
@@ -41,7 +42,7 @@ class IGSettingContactTableViewCell: MGSwipeTableCell {
     }
     
     func setUser(_ user: IGRegisteredUser) {
-        
+        btnCall.removeUnderline()
         self.registeredUser = user
         
         contactNameLable.text = user.displayName

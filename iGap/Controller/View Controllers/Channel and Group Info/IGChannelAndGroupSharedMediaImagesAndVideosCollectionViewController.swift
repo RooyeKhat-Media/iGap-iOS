@@ -145,7 +145,10 @@ class IGChannelAndGroupSharedMediaImagesAndVideosCollectionViewController: UICol
             galleryPreview.referenceViewForPhotoWhenDismissingHandler = { [weak self] photo in
                 if let index = photos.index(where: {$0 === photo}) {
                     let indexPath = IndexPath(row: index, section: 0)
-                    return collectionView.cellForItem(at: indexPath) as! IGChannelAndGroupInfoSharedMediaImagesAndVideosCollectionViewCell
+                    if let cell = collectionView.cellForItem(at: indexPath) {
+                        return cell as! IGChannelAndGroupInfoSharedMediaImagesAndVideosCollectionViewCell
+                    }
+                    return nil
                 }
                 return nil
             }

@@ -89,6 +89,8 @@ class IGMap: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDel
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        btnComment.removeUnderline()
+        btnCurrentLocation.removeUnderline()
         edtComment.delegate = self
         
         initNavigationBar()

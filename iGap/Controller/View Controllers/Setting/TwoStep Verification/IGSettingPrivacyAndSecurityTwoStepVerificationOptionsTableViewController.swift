@@ -34,6 +34,8 @@ class IGSettingPrivacyAndSecurityTwoStepVerificationOptionsTableViewController: 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        btnOutletVerify.removeUnderline()
+        
         let navigationController = self.navigationController as! IGNavigationController
         navigationController.interactivePopGestureRecognizer?.delegate = self
         

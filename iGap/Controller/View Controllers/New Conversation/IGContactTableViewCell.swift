@@ -16,6 +16,7 @@ class IGContactTableViewCell: UITableViewCell {
     
     @IBOutlet weak var userAvatarView: IGAvatarView!
     @IBOutlet weak var contactNameLable: UILabel!
+    @IBOutlet weak var btnCall: UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -26,6 +27,7 @@ class IGContactTableViewCell: UITableViewCell {
     }
     
     func setUser(_ user: IGRegisteredUser) {
+        btnCall.removeUnderline()
         contactNameLable.text = user.displayName
         userAvatarView.setUser(user)
         self.userRegister = user
