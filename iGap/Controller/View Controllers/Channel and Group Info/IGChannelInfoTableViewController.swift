@@ -712,7 +712,7 @@ class IGChannelInfoTableViewController: UITableViewController , UIGestureRecogni
         channelNameLabel.text = room?.title
         ChannelDescriptionLabel.text = room?.channelRoom?.roomDescription
         if let channelRoom = room {
-            channelImage.setRoom(channelRoom)
+            channelImage.setRoom(channelRoom, showMainAvatar: true)
         }
         if let channelType = room?.channelRoom?.type {
             switch channelType {

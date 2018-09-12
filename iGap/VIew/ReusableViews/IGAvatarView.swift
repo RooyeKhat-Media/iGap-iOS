@@ -71,7 +71,7 @@ class IGAvatarView: UIView {
         self.initialLettersLabel!.text = ""
     }
     
-    func setUser(_ user: IGRegisteredUser) {
+    func setUser(_ user: IGRegisteredUser, showMainAvatar: Bool = false) {
         self.avatarImageView!.image = nil
         self.initialLettersLabel!.text = user.initials
         
@@ -79,7 +79,7 @@ class IGAvatarView: UIView {
         self.initialLettersView!.backgroundColor = color
         
         if let avatar = user.avatar {
-            self.avatarImageView!.setImage(avatar: avatar)
+            self.avatarImageView!.setImage(avatar: avatar, showMain: showMainAvatar)
         }
         
         if self.frame.size.width < 40 {
@@ -92,7 +92,7 @@ class IGAvatarView: UIView {
         
     }
     
-    func setRoom(_ room: IGRoom) {
+    func setRoom(_ room: IGRoom, showMainAvatar: Bool = false) {
         
         if room.isInvalidated {
             return
@@ -107,16 +107,16 @@ class IGAvatarView: UIView {
         switch room.type {
         case .chat:
             if let avatar = room.chatRoom?.peer?.avatar {
-                self.avatarImageView!.setImage(avatar: avatar)
+                self.avatarImageView!.setImage(avatar: avatar, showMain: showMainAvatar)
                 
             }
         case .group:
             if let avatar = room.groupRoom?.avatar {
-                self.avatarImageView!.setImage(avatar: avatar)
+                self.avatarImageView!.setImage(avatar: avatar, showMain: showMainAvatar)
             }
         case .channel:
             if let avatar = room.channelRoom?.avatar {
-                self.avatarImageView!.setImage(avatar: avatar)
+                self.avatarImageView!.setImage(avatar: avatar, showMain: showMainAvatar)
             }
         }
 

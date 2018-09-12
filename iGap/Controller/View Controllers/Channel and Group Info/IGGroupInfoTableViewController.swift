@@ -589,7 +589,7 @@ class IGGroupInfoTableViewController: UITableViewController , UIGestureRecognize
         groupNameLabel.text = room?.title
         groupDescriptionLabel.text = room?.groupRoom?.roomDescription
         if let groupRoom = room {
-            groupAvatarView.setRoom(groupRoom)
+            groupAvatarView.setRoom(groupRoom, showMainAvatar: true)
         }
         if let groupType = room?.groupRoom?.type {
             switch groupType {

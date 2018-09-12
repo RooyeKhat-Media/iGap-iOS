@@ -50,7 +50,7 @@ class IGSettingTableViewController: UITableViewController , NVActivityIndicatorV
         let realm = try! Realm()
         let predicate = NSPredicate(format: "id = %lld", currentUserId!)
         if let userInDb = realm.objects(IGRegisteredUser.self).filter(predicate).first {
-            userAvatarView.setUser(userInDb)
+            userAvatarView.setUser(userInDb, showMainAvatar: true)
             usernameLabel.text = userInDb.displayName
             user = userInDb
             userAvatarView.avatarImageView?.isUserInteractionEnabled = true

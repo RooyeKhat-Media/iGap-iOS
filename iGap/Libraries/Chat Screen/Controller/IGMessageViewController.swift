@@ -2522,7 +2522,7 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
         return self
     }
     
-    func didTapOnAttachment(cellMessage: IGRoomMessage, cell: IGMessageGeneralCollectionViewCell, imageView: IGImageView) {
+    func didTapOnAttachment(cellMessage: IGRoomMessage, cell: IGMessageGeneralCollectionViewCell, imageView: IGImageView?) {
         
         var finalMessage = cellMessage
         var roomMessageLists = self.messagesWithMedia

@@ -42,7 +42,7 @@ class IGRegistredUserInfoTableViewController: UITableViewController , UIGestureR
         super.viewDidLoad()
         if user != nil {
             requestToGetAvatarList()
-            self.avatarView.setUser(user!)
+            self.avatarView.setUser(user!, showMainAvatar: true)
             self.displayNameLabel.text = user!.displayName
             if let phone = user?.phone {
                 if phone == 0 {
@@ -299,7 +299,7 @@ class IGRegistredUserInfoTableViewController: UITableViewController , UIGestureR
     func handleTap(recognizer:UITapGestureRecognizer) {
         if recognizer.state == .ended {
             if let userAvatar = user?.avatar {
-                showAvatar( avatar: userAvatar)
+                showAvatar(avatar: userAvatar)
             }
         }
     }
