@@ -278,7 +278,7 @@ class IGNavigationItem: UINavigationItem {
             return
         }
         
-        if IGAppManager.connectionStatusStatic == IGAppManager.ConnectionStatus.waitingForNetwork || IGAppManager.connectionStatusStatic == IGAppManager.ConnectionStatus.connecting {
+        if IGAppManager.connectionStatusStatic != IGAppManager.ConnectionStatus.iGap {
             return
         }
         

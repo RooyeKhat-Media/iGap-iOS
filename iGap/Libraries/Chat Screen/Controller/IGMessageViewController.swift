@@ -808,12 +808,17 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate, UIGe
         switch status {
         case .connected:
             connectionStatus = .connected
+            break
         case .connecting:
             connectionStatus = .connecting
+            break
         case .waitingForNetwork:
             connectionStatus = .waitingForNetwork
+            break
+        case .iGap:
+            connectionStatus = .iGap
+            break
         }
-        
     }
     
     func groupPin(messageId: Int64 = 0){

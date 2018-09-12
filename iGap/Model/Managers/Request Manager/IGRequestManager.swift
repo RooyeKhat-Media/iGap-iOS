@@ -403,7 +403,7 @@ class IGRequestManager {
     private init() {
         //send pending request and listen for network changes
         IGAppManager.sharedManager.connectionStatus.asObservable().subscribe(onNext: { (networkStatus) in
-            if networkStatus == .connected {
+            if networkStatus == .connected || networkStatus == .iGap {
                 if self.queuedRequests.count > 0 {
                     self.queuedRequests.forEach {
                         let id = $0.key
@@ -450,7 +450,7 @@ class IGRequestManager {
             //TODO: handle batch requests
             var shouldSendRequest = false
             
-            if IGAppManager.sharedManager.connectionStatus.value == .connected {
+            if IGAppManager.sharedManager.connectionStatus.value == .connected || IGAppManager.sharedManager.connectionStatus.value == .iGap {
                 if IGAppManager.sharedManager.isUserLoggedIn.value {
                     shouldSendRequest = true
                 } else if actionIdOfMethodsThatCanBeSentWithoutBeingLoggedIn.contains(requestWrapper.actionId) {
