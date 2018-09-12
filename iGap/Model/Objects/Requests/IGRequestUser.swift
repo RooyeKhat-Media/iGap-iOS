@@ -313,10 +313,17 @@ class IGUserContactsGetListRequest : IGRequest {
 //MARK: -
 class IGUserContactsDeleteRequest : IGRequest {
     class Generator : IGRequest.Generator{
-        
+        class func generate(phone: Int64) -> IGRequestWrapper {
+            var builder = IGPUserContactsDelete()
+            builder.igpPhone = phone
+            return IGRequestWrapper(message: builder, actionID: 108)
+        }
     }
     
     class Handler : IGRequest.Handler{
+        class func interpret(response responseProtoMessage: IGPUserContactsDeleteResponse) {
+            IGFactory.shared.contactDelete(phone: responseProtoMessage.igpPhone)
+        }
         override class func handlePush(responseProtoMessage: Message) {}
     }
 }
@@ -324,10 +331,23 @@ class IGUserContactsDeleteRequest : IGRequest {
 //MARK: -
 class IGUserContactsEditRequest : IGRequest {
     class Generator : IGRequest.Generator{
-        
+        class func generate(phone: Int64, firstname: String, lastname: String?) -> IGRequestWrapper {
+            var builder = IGPUserContactsEdit()
+            builder.igpPhone = phone
+            builder.igpFirstName = firstname
+            if lastname == nil {
+                builder.igpLastName = ""
+            } else {
+                builder.igpLastName = lastname!
+            }
+            return IGRequestWrapper(message: builder, actionID: 109)
+        }
     }
     
     class Handler : IGRequest.Handler{
+        class func interpret(response responseProtoMessage: IGPUserContactsEditResponse) {
+            IGFactory.shared.contactEdit(contactEditInfo: responseProtoMessage)
+        }
         override class func handlePush(responseProtoMessage: Message) {}
     }
 }

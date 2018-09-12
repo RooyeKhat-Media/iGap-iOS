@@ -1004,7 +1004,7 @@ class IGMessageCollectionViewCell: IGMessageGeneralCollectionViewCell {
     }
     
     func didTapOnAttachment(_ gestureRecognizer: UITapGestureRecognizer) {
-        self.delegate?.didTapOnAttachment(cellMessage: cellMessage!, cell: self)
+        self.delegate?.didTapOnAttachment(cellMessage: cellMessage!, cell: self, imageView: IGImageView())
     }
     
     func didTapOnForwardedAttachment(_ gestureRecognizer: UITapGestureRecognizer) {

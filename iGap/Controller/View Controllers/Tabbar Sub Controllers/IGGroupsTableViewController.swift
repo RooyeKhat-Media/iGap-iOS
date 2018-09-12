@@ -28,7 +28,7 @@ class IGGroupsTableViewController: UITableViewController {
     var connectionStatus: IGAppManager.ConnectionStatus?
     var isLoadingMoreRooms: Bool = false
     var numberOfRoomFetchedInLastRequest: Int = -1
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -126,199 +126,227 @@ class IGGroupsTableViewController: UITableViewController {
         let cell: IGChatRoomListTableViewCell = self.tableView.dequeueReusableCell(withIdentifier: cellIdentifer) as! IGChatRoomListTableViewCell
         cell.setRoom(room: rooms![indexPath.row])
         
-        cell.rightButtons =
-            [MGSwipeButton(title: "Options...", backgroundColor: UIColor(red: 252.0/255.0, green: 23.0/255.0, blue: 22.0/255.0, alpha: 1), callback: { (sender: MGSwipeTableCell!) -> Bool in
-                let room = cell.room!
-                //let room = self.rooms![indexPath.row]
-                let title = room.title != nil ? room.title! : "Delete"
-                let alertC = UIAlertController(title: title, message: "What do you want to do?", preferredStyle: IGGlobal.detectAlertStyle())
-                let clear = UIAlertAction(title: "Clear History", style: .default, handler: { (action) in
-                    switch room.type{
-                    case .chat:
-                        if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
-                            let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
-                            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                            alert.addAction(okAction)
-                            self.present(alert, animated: true, completion: nil)
-                            
-                        } else {
-                            self.clearChatMessageHistory(room: room)
-                        }
-                    case .group:
-                        if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
-                            let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
-                            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                            alert.addAction(okAction)
-                            self.present(alert, animated: true, completion: nil)
-                            
-                        } else {
-                            self.clearGroupMessageHistory(room: room)
-                        }
-                    default:
-                        break
+        let room = cell.room!
+        
+        var muteTitle = "Mute"
+        if room.mute == IGRoom.IGRoomMute.mute {
+            muteTitle = "UnMute"
+        }
+        
+        var pinTitle = "Pin"
+        if room.pinId > 0 {
+            pinTitle = "UnPin"
+        }
+        
+        cell.rightButtons = [MGSwipeButton(title: muteTitle, backgroundColor: UIColor(red: 90.0/255.0, green: 90.0/255.0, blue: 90.0/255.0, alpha: 1), callback: { (sender: MGSwipeTableCell!) -> Bool in
+            if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
+                let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alert.addAction(okAction)
+                self.present(alert, animated: true, completion: nil)
+                
+            } else {
+                self.muteRoom(room: room)
+            }
+            return true
+        }),MGSwipeButton(title: pinTitle, backgroundColor: UIColor(red: 50.0/255.0, green: 100.0/255.0, blue: 122.0/255.0, alpha: 1), callback: { (sender: MGSwipeTableCell!) -> Bool in
+            if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
+                let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alert.addAction(okAction)
+                self.present(alert, animated: true, completion: nil)
+                
+            } else {
+                self.pinRoom(room: room)
+            }
+            return true
+            
+        }),MGSwipeButton(title: "More...", backgroundColor: UIColor(red: 26.0/255.0, green: 67.0/255.0, blue: 90.0/255.0, alpha: 1), callback: { (sender: MGSwipeTableCell!) -> Bool in
+            let title = room.title != nil ? room.title! : "Delete"
+            let alertC = UIAlertController(title: title, message: "What do you want to do?", preferredStyle: IGGlobal.detectAlertStyle())
+            let clear = UIAlertAction(title: "Clear History", style: .default, handler: { (action) in
+                switch room.type{
+                case .chat:
+                    if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
+                        let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                        
+                    } else {
+                        self.clearChatMessageHistory(room: room)
                     }
+                case .group:
+                    if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
+                        let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                        
+                    } else {
+                        self.clearGroupMessageHistory(room: room)
+                    }
+                default:
+                    break
+                }
+                
+            })
+            
+            var muteTitle = "Mute"
+            if room.mute == IGRoom.IGRoomMute.mute {
+                muteTitle = "UnMute"
+            }
+            let mute = UIAlertAction(title: muteTitle, style: .default, handler: { (action) in
+                if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
+                    let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: nil)
                     
-                })
-                
-                var muteTitle = "Mute"
-                if room.mute == IGRoom.IGRoomMute.mute {
-                    muteTitle = "UnMute"
-                }
-                let mute = UIAlertAction(title: muteTitle, style: .default, handler: { (action) in
-                    if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
-                        let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
-                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                        alert.addAction(okAction)
-                        self.present(alert, animated: true, completion: nil)
-                        
-                    } else {
-                        self.muteRoom(room: room)
-                    }
-                })
-                
-                var pinTitle = "Pin"
-                if room.pinId > 0 {
-                    pinTitle = "UnPin"
-                }
-                let pin = UIAlertAction(title: pinTitle, style: .default, handler: { (action) in
-                    if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
-                        let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
-                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                        alert.addAction(okAction)
-                        self.present(alert, animated: true, completion: nil)
-                        
-                    } else {
-                        self.pinRoom(room: room)
-                    }
-                })
-                
-                let report = UIAlertAction(title: "Report", style: .default, handler: { (action) in
-                    if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
-                        let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
-                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                        alert.addAction(okAction)
-                        self.present(alert, animated: true, completion: nil)
-                        
-                    } else {
-                        self.report(room: room)
-                    }
-                })
-                
-                let remove = UIAlertAction(title: "Delete", style: .destructive, handler: { (action) in
-                    switch room.type {
-                    case .chat:
-                        if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
-                            let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
-                            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                            alert.addAction(okAction)
-                            self.present(alert, animated: true, completion: nil)
-                            
-                        } else {
-                            self.deleteChat(room: room)
-                        }
-                    case .group:
-                        if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
-                            let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
-                            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                            alert.addAction(okAction)
-                            self.present(alert, animated: true, completion: nil)
-                            
-                        } else {
-                            self.deleteGroup(room: room)
-                        }
-                    default:
-                        break
-                    }
-                })
-                
-                
-                
-                let leave = UIAlertAction(title: "Leave", style: .destructive, handler: { (action) in
-                    switch room.type {
-                    case .chat:
-                        break
-                    case .group:
-                        if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
-                            let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
-                            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                            alert.addAction(okAction)
-                            self.present(alert, animated: true, completion: nil)
-                            
-                            
-                        } else {
-                            self.leaveGroup(room: room)
-                        }
-                    case .channel:
-                        if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
-                            let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
-                            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                            alert.addAction(okAction)
-                            self.present(alert, animated: true, completion: nil)
-                            
-                            
-                        } else {
-                            self.leaveChannel(room: room)
-                        }
-                    }
-                })
-                
-                let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
-                    
-                })
-                
-                
-                if room.type == .chat || room.type == .group {
-                    alertC.addAction(clear)
-                }
-                
-                alertC.addAction(pin)
-                alertC.addAction(mute)
-                alertC.addAction(report)
-                
-                if room.chatRoom != nil {
-                    alertC.addAction(remove)
                 } else {
-                    if let groupRoom = room.groupRoom {
-                        if groupRoom.role == .owner {
-                            alertC.addAction(leave)
-                            alertC.addAction(remove)
-                        } else{
-                            alertC.addAction(leave)
-                        }
-                    } else if let channel = room.channelRoom {
-                        if channel.role == .owner {
-                            alertC.addAction(remove)
-                            alertC.addAction(leave)
-                        } else{
-                            alertC.addAction(leave)
-                        }
+                    self.muteRoom(room: room)
+                }
+            })
+            
+            var pinTitle = "Pin"
+            if room.pinId > 0 {
+                pinTitle = "UnPin"
+            }
+            let pin = UIAlertAction(title: pinTitle, style: .default, handler: { (action) in
+                if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
+                    let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: nil)
+                    
+                } else {
+                    self.pinRoom(room: room)
+                }
+            })
+            
+            let report = UIAlertAction(title: "Report", style: .default, handler: { (action) in
+                if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
+                    let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: nil)
+                    
+                } else {
+                    self.report(room: room)
+                }
+            })
+            
+            let remove = UIAlertAction(title: "Delete", style: .destructive, handler: { (action) in
+                switch room.type {
+                case .chat:
+                    if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
+                        let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                        
+                    } else {
+                        self.deleteChat(room: room)
+                    }
+                case .group:
+                    if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
+                        let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                        
+                    } else {
+                        self.deleteGroup(room: room)
+                    }
+                default:
+                    break
+                }
+            })
+            
+            
+            
+            let leave = UIAlertAction(title: "Leave", style: .destructive, handler: { (action) in
+                switch room.type {
+                case .chat:
+                    break
+                case .group:
+                    if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
+                        let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                        
+                        
+                    } else {
+                        self.leaveGroup(room: room)
+                    }
+                case .channel:
+                    if self.connectionStatus == .waitingForNetwork || self.connectionStatus == .connecting {
+                        let alert = UIAlertController(title: "Error", message: "No Network Connection", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alert.addAction(okAction)
+                        self.present(alert, animated: true, completion: nil)
+                        
+                        
+                    } else {
+                        self.leaveChannel(room: room)
                     }
                 }
+            })
+            
+            let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
                 
+            })
+            
+            
+            if room.type == .chat || room.type == .group {
+                alertC.addAction(clear)
+            }
+            
+            alertC.addAction(pin)
+            alertC.addAction(mute)
+            alertC.addAction(report)
+            
+            if room.chatRoom != nil {
+                alertC.addAction(remove)
+            } else {
+                if let groupRoom = room.groupRoom {
+                    if groupRoom.role == .owner {
+                        alertC.addAction(leave)
+                        alertC.addAction(remove)
+                    } else{
+                        alertC.addAction(leave)
+                    }
+                } else if let channel = room.channelRoom {
+                    if channel.role == .owner {
+                        alertC.addAction(remove)
+                        alertC.addAction(leave)
+                    } else{
+                        alertC.addAction(leave)
+                    }
+                }
+            }
+            
+            
+            alertC.addAction(cancel)
+            
+            self.present(alertC, animated: true, completion: {
                 
-                alertC.addAction(cancel)
-                
-                self.present(alertC, animated: true, completion: {
-                    
-                })
-                
-                return true
-            })]
+            })
+            
+            return true
+        })]
         cell.rightSwipeSettings.transition = MGSwipeTransition.border
-        
-        
-        cell.leftExpansion.buttonIndex = 0
-        cell.leftExpansion.fillOnTrigger = true
-        cell.leftExpansion.threshold = 2.0
-        
         cell.rightExpansion.buttonIndex = 0
         cell.rightExpansion.fillOnTrigger = true
         cell.rightExpansion.threshold = 1.5
         
+        cell.layer.cornerRadius = 10
+        cell.clipsToBounds = true
+        cell.swipeBackgroundColor = UIColor.clear
         
         cell.separatorInset = UIEdgeInsets(top: 0, left: 82.0, bottom: 0, right: 0)
         cell.layoutMargins = UIEdgeInsets.zero
-
         
         return cell
     }
@@ -342,16 +370,16 @@ class IGGroupsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 78.0
     }
-
+    
     //MARK: - Tabbar badge
     func setTabbarBadge() {
-//        var unreadCount = 0
-//        rooms.forEach{unreadCount += Int($0.unreadCount)}
-//        if unreadCount == 0 {
-//            self.tabBarController?.tabBar.items?[2].badgeValue = nil
-//        } else {
-//            self.tabBarController?.tabBar.items?[2].badgeValue = "\(unreadCount)"
-//        }
+        //        var unreadCount = 0
+        //        rooms.forEach{unreadCount += Int($0.unreadCount)}
+        //        if unreadCount == 0 {
+        //            self.tabBarController?.tabBar.items?[2].badgeValue = nil
+        //        } else {
+        //            self.tabBarController?.tabBar.items?[2].badgeValue = "\(unreadCount)"
+        //        }
     }
     
 }

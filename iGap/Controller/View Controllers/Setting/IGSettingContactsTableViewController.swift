@@ -13,6 +13,7 @@ import Contacts
 import RealmSwift
 import MBProgressHUD
 import IGProtoBuff
+import MGSwipeTableCell
 
 class IGSettingContactsTableViewController: UITableViewController,UISearchResultsUpdating , UIGestureRecognizerDelegate, IGCallFromContactListObserver {
     
@@ -87,12 +88,8 @@ class IGSettingContactsTableViewController: UITableViewController,UISearchResult
                 break
             }
         }
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(addressBookDidChange),
-            name: NSNotification.Name.CNContactStoreDidChange,
-            object: nil)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(addressBookDidChange), name: NSNotification.Name.CNContactStoreDidChange, object: nil)
         
         sections = fillContacts()
     }
@@ -137,8 +134,16 @@ class IGSettingContactsTableViewController: UITableViewController,UISearchResult
 
     
     override func viewDidAppear(_ animated: Bool) {
+        if IGSettingAddContactViewController.reloadAfterAddContact && tableView != nil {
+            sections = fillContacts(filterContact: true)
+            tableView.reloadData()
+        }
         self.navigationController?.extendedLayoutIncludesOpaqueBars = true
         self.tableView.isUserInteractionEnabled = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        IGSettingAddContactViewController.reloadAfterAddContact = false
     }
     
     @IBAction func addBarButtonClicked(_ sender: UIBarButtonItem) {
@@ -188,6 +193,106 @@ class IGSettingContactsTableViewController: UITableViewController,UISearchResult
         })
     }
     
+    private func deleteContactAlert(phone: Int64){
+        let alert = UIAlertController(title: "Delete Contact", message: "Are you sure you want to delete this contact ?", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Ok", style: .destructive, handler: { action in
+            self.deleteContact(phone: phone)
+        })
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
+        
+        alert.addAction(okAction)
+        alert.addAction(cancelAction)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    private func deleteContact(phone: Int64){
+        IGGlobal.prgShow(self.view)
+        IGUserContactsDeleteRequest.Generator.generate(phone: phone).success({ (protoResponse) in
+            if let deleteContactResponse = protoResponse as? IGPUserContactsDeleteResponse {
+                IGUserContactsDeleteRequest.Handler.interpret(response: deleteContactResponse)
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                IGGlobal.prgHide()
+                self.sections = self.fillContacts(filterContact: true)
+                self.tableView.reloadData()
+            }
+        }).error ({ (errorCode, waitTime) in
+            switch errorCode {
+            case .timeout:
+                DispatchQueue.main.async {
+                    IGGlobal.prgHide()
+                    let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: nil)
+                }
+            default:
+                break
+            }
+            
+        }).send()
+    }
+    
+    private func contactEditAlert(phone: Int64, firstname: String, lastname: String?){
+        let alert = UIAlertController(title: "Edit Contact", message: nil, preferredStyle: .alert)
+        
+        alert.addTextField { (textField) in
+            textField.placeholder = "first name"
+            textField.text = String(describing: firstname)
+        }
+        
+        alert.addTextField { (textField) in
+            textField.placeholder = "last name"
+            if lastname != nil && !(lastname?.isEmpty)! {
+                textField.text = String(describing: lastname!)
+            }
+        }
+        
+        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { [weak alert] (_) in
+            let firstname = alert?.textFields![0]
+            let lastname = alert?.textFields![1]
+            
+            if firstname?.text != nil && !(firstname?.text?.isEmpty)! {
+                self.contactEdit(phone: phone, firstname: (firstname?.text)!, lastname: lastname?.text)
+            } else {
+                let alert = UIAlertController(title: "Hint", message: "please enter first name!", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            }
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
+        
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    private func contactEdit(phone: Int64, firstname: String, lastname: String?){
+        IGGlobal.prgShow(self.view)
+        IGUserContactsEditRequest.Generator.generate(phone: phone, firstname: firstname, lastname: lastname).success({ (protoResponse) in
+            
+            if let contactEditResponse = protoResponse as? IGPUserContactsEditResponse {
+                IGUserContactsEditRequest.Handler.interpret(response: contactEditResponse)
+                DispatchQueue.main.async {
+                    IGGlobal.prgHide()
+                }
+            }
+        }).error ({ (errorCode, waitTime) in
+            switch errorCode {
+            case .timeout:
+                DispatchQueue.main.async {
+                    IGGlobal.prgHide()
+                    let alert = UIAlertController(title: "Timeout", message: "Please try again later", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alert.addAction(okAction)
+                    self.present(alert, animated: true, completion: nil)
+                }
+            default:
+                break
+            }
+        }).send()
+    }
+    
+    
     // MARK: - Table view data source
     override func numberOfSections(in tableView: UITableView) -> Int {
         if (self.resultSearchController.isActive) {
@@ -213,16 +318,39 @@ class IGSettingContactsTableViewController: UITableViewController,UISearchResult
             let blockListCell  = tableView.dequeueReusableCell(withIdentifier: "BlockListCell", for: indexPath) as! IGSettingContactsBlockListTableViewCell
             blockListCell.numberOfBlockedContacts.text = "\(blockedUsers.count)"+" " + "Contacts"
             cell = blockListCell
-        }else{
+        } else {
+            
             let contactsCell = tableView.dequeueReusableCell(withIdentifier: "ContactsCell", for: indexPath) as! IGSettingContactTableViewCell
-            if (self.resultSearchController.isActive) {
-                contactsCell.contactNameLable?.text = filteredTableData[indexPath.row].givenName + filteredTableData[indexPath.row].familyName
-            }else{
-                let user = self.sections[indexPath.section - 1 ].users[indexPath.row]
-                contactsCell.setUser(user.registredUser)
-            }
+            //            if (self.resultSearchController.isActive) {
+            //                contactsCell.contactNameLable?.text = filteredTableData[indexPath.row].givenName + filteredTableData[indexPath.row].familyName
+            //            } else {
+            let user = self.sections[indexPath.section - 1 ].users[indexPath.row]
+            contactsCell.setUser(user.registredUser)
+            //            }
+            
+            contactsCell.rightButtons = [MGSwipeButton(title: "Delete", backgroundColor: UIColor.swipeRed(), callback: { (sender: MGSwipeTableCell!) -> Bool in
+                
+                self.deleteContactAlert(phone: user.registredUser.phone)
+                return true
+                
+            }),MGSwipeButton(title: "Edit", backgroundColor: UIColor.swipeBlueGray(), callback: { (sender: MGSwipeTableCell!) -> Bool in
+                
+                self.contactEditAlert(phone: user.registredUser.phone, firstname: user.registredUser.firstName, lastname: user.registredUser.lastName)
+                return true
+                
+            })]
+            contactsCell.rightSwipeSettings.transition = MGSwipeTransition.border
+            contactsCell.rightExpansion.buttonIndex = 0
+            contactsCell.rightExpansion.fillOnTrigger = true
+            contactsCell.rightExpansion.threshold = 1.5
+            
+            contactsCell.layer.cornerRadius = 10
+            contactsCell.clipsToBounds = true
+            contactsCell.swipeBackgroundColor = UIColor.clear
+            
             cell = contactsCell
         }
+        
         return cell
     }
     

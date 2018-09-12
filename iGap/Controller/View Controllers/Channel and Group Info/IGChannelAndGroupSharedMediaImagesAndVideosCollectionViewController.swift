@@ -134,12 +134,21 @@ class IGChannelAndGroupSharedMediaImagesAndVideosCollectionViewController: UICol
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if sharedMedia[indexPath.row].type == .image || sharedMedia[indexPath.row].type == .imageAndText {
+            let cell = collectionView.cellForItem(at: indexPath) as! IGChannelAndGroupInfoSharedMediaImagesAndVideosCollectionViewCell
+
             var photos: [INSPhotoViewable] = Array(self.sharedMedia.map { (message) -> IGMedia in
                 return IGMedia(message: message, forwardedMedia: false)
             })
             
             let currentPhoto = photos[indexPath.row]
-            let galleryPreview = INSPhotosViewController(photos: photos, initialPhoto: currentPhoto, referenceView: nil)
+            let galleryPreview = INSPhotosViewController(photos: photos, initialPhoto: currentPhoto, referenceView: cell)
+            galleryPreview.referenceViewForPhotoWhenDismissingHandler = { [weak self] photo in
+                if let index = photos.index(where: {$0 === photo}) {
+                    let indexPath = IndexPath(row: index, section: 0)
+                    return collectionView.cellForItem(at: indexPath) as! IGChannelAndGroupInfoSharedMediaImagesAndVideosCollectionViewCell
+                }
+                return nil
+            }
             present(galleryPreview, animated: true, completion: nil)
         } else if sharedMedia[indexPath.row].type == .video || sharedMedia[indexPath.row].type == .videoAndText {
             if let path = sharedMedia[indexPath.row].attachment?.path() {

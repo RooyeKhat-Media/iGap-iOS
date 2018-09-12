@@ -236,7 +236,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate, UIGe
 //        messages = try! Realm().objects(IGRoomMessage.self).filter(predicate).sorted(byProperty: "creationTime")
 //        messages = try! IGFactory.shared.realm.objects(IGRoomMessage.self).filter(predicate).sorted(byProperty: "creationTime")
         
-        let messagesWithMediaPredicate = NSPredicate(format: "roomId = %lld AND isDeleted == false AND (typeRaw = %d OR typeRaw = %d)", self.room!.id, IGRoomMessageType.image.rawValue, IGRoomMessageType.imageAndText.rawValue)
+        let messagesWithMediaPredicate = NSPredicate(format: "roomId = %lld AND isDeleted == false AND (typeRaw = %d OR typeRaw = %d OR forwardedFrom.typeRaw = %d OR forwardedFrom.typeRaw = %d)", self.room!.id, IGRoomMessageType.image.rawValue, IGRoomMessageType.imageAndText.rawValue, IGRoomMessageType.image.rawValue, IGRoomMessageType.imageAndText.rawValue)
         messagesWithMedia = try! Realm().objects(IGRoomMessage.self).filter(messagesWithMediaPredicate).sorted(by: sortPropertiesForMedia)
         
         let messagesWithForwardedMediaPredicate = NSPredicate(format: "roomId = %lld AND isDeleted == false AND (forwardedFrom.typeRaw == 1 OR forwardedFrom.typeRaw == 2 OR forwardedFrom.typeRaw == 3 OR forwardedFrom.typeRaw == 4)", self.room!.id)
@@ -1877,6 +1877,7 @@ extension IGMessageViewController: IGMessageCollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        self.collectionView = collectionView as! IGMessageCollectionView
         let message = messages![indexPath.section]
         var isIncommingMessage = true
         var shouldShowAvatar = false
@@ -2506,12 +2507,13 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
         return self
     }
     
-    func didTapOnAttachment(cellMessage: IGRoomMessage, cell: IGMessageGeneralCollectionViewCell) {
+    func didTapOnAttachment(cellMessage: IGRoomMessage, cell: IGMessageGeneralCollectionViewCell, imageView: IGImageView) {
         
         var finalMessage = cellMessage
         var roomMessageLists = self.messagesWithMedia
         if cellMessage.forwardedFrom != nil {
-            roomMessageLists = self.messagesWithForwardedMedia
+            //roomMessageLists = self.messagesWithForwardedMedia
+            roomMessageLists = self.messagesWithMedia
             finalMessage = cellMessage.forwardedFrom!
         }
         
@@ -2564,7 +2566,7 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
             return
         }
         
-        let thisMessageInSharedMediaResult = roomMessageLists.filter("id == \(finalMessage.id)")
+        let thisMessageInSharedMediaResult = roomMessageLists.filter("id == \(cellMessage.id)")
         var indexOfThis = 0
         if let this = thisMessageInSharedMediaResult.first {
             indexOfThis = roomMessageLists.index(of: this)!
@@ -2575,7 +2577,10 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
         })
         
         let currentPhoto = photos[indexOfThis]
-        let galleryPreview = INSPhotosViewController(photos: photos, initialPhoto: currentPhoto, referenceView: nil)
+        let galleryPreview = INSPhotosViewController(photos: photos, initialPhoto: currentPhoto, referenceView: imageView)
+        galleryPreview.referenceViewForPhotoWhenDismissingHandler = { photo in
+            return imageView
+        }
         present(galleryPreview, animated: true, completion: nil)
     }
     
