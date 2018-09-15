@@ -1350,6 +1350,10 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate, UIGe
     @IBAction func didTapOnCancelReplyOrForwardButton(_ sender: UIButton) {
         self.selectedMessageToForwardToThisRoom = nil
         self.selectedMessageToReply = nil
+        if self.selectedMessageToEdit != nil {
+            self.selectedMessageToEdit = nil
+            self.inputTextView.text = ""
+        }
         self.setInputBarHeight()
         self.setSendAndRecordButtonStates()
     }
