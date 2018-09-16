@@ -12,4 +12,8 @@ import UIKit
 
 class IGSettingChatWallpaperLibraryCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var backGroundimageView: UIImageView!
+    
+    public func loadImage(file: IGFile){
+        backGroundimageView.setThumbnail(for: file)
+    }
 }

@@ -28,7 +28,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" zoomEnabled="NO" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="H4W-xY-YF8">
-                                <rect key="frame" x="0.0" y="20" width="375" height="587"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="543"/>
                             </mapView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qjF-99-u5b" customClass="IGTappableView" customModule="iGap" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="607" width="375" height="60"/>
@@ -68,7 +68,7 @@
                                 </constraints>
                             </view>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Location_Marker" translatesAutoresizingMaskIntoConstraints="NO" id="dzT-ao-hN1">
-                                <rect key="frame" x="162.5" y="263.5" width="50" height="50"/>
+                                <rect key="frame" x="162.5" y="285.5" width="50" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="50" id="afQ-eQ-1Eb"/>
                                     <constraint firstAttribute="height" constant="50" id="lGm-3q-Vk7"/>
@@ -88,7 +88,7 @@
                                 </connections>
                             </button>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="9Zi-OB-nXt">
-                                <rect key="frame" x="112.5" y="40" width="150" height="28"/>
+                                <rect key="frame" x="112.5" y="84" width="150" height="28"/>
                                 <color key="backgroundColor" red="0.2058030589" green="0.74759840899999996" blue="0.79368454219999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="27" id="Iqr-8q-T6O"/>
@@ -517,11 +517,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="back1" translatesAutoresizingMaskIntoConstraints="NO" id="PLh-MM-IK9">
-                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </imageView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="9G6-WI-YVj" customClass="IGMessageCollectionView" customModule="iGap" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="TTu-g1-jEU">
                                     <size key="itemSize" width="50" height="50"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -846,7 +846,7 @@
                                 </constraints>
                             </view>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gI9-RR-rF9">
-                                <rect key="frame" x="0.0" y="20" width="375" height="50"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="50"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ODy-Ce-ZEZ">
                                         <rect key="frame" x="8" y="5" width="3" height="40"/>
@@ -929,6 +929,7 @@
                         <outlet property="btnClosePin" destination="grH-pt-p4x" id="q2A-FT-LNb"/>
                         <outlet property="btnDeleteSelectedAttachment" destination="IvY-L2-6Iw" id="fy8-mA-1E9"/>
                         <outlet property="btnScrollToBottom" destination="Em7-Bg-41q" id="nBH-S4-gyk"/>
+                        <outlet property="chatBackground" destination="PLh-MM-IK9" id="kmi-ka-fIy"/>
                         <outlet property="collectionView" destination="9G6-WI-YVj" id="W5s-J5-lty"/>
                         <outlet property="inputBarAttachmentView" destination="GKD-aB-Nez" id="LxL-aF-CLm"/>
                         <outlet property="inputBarAttachmentViewBottomConstraint" destination="xTp-jF-6fO" id="CZc-Vr-QBz"/>
@@ -1511,6 +1512,7 @@
         <image name="back1" width="450" height="800"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="Paj-YA-riE"/>
         <segue reference="jRj-hY-oEr"/>
         <segue reference="ebc-Vg-0Gq"/>
         <segue reference="ONr-pK-81u"/>

@@ -2557,5 +2557,49 @@ class IGFactory: NSObject {
         self.performNextFactoryTaskIfPossible()
         
     }
+    
+    func saveWallpaper(wallpapers: [IGPWallpaper]) {
+        let task = IGFactoryTask()
+        task.task = {
+            IGDatabaseManager.shared.perfrmOnDatabaseThread {
+                try! IGDatabaseManager.shared.realm.write {
+                    IGDatabaseManager.shared.realm.add(IGRealmWallpaper(wallpapers: wallpapers))
+                }
+                IGFactory.shared.performInFactoryQueue {
+                    task.success!()
+                }
+            }
+        }
+        task.success {
+            self.removeTaskFromQueueAndPerformNext(task)
+            }.error {
+                self.removeTaskFromQueueAndPerformNext(task)
+            }.addToQueue()
+        self.performNextFactoryTaskIfPossible()
+    }
+    
+    func setWallpaper(wallpaper: URL) {
+        let task = IGFactoryTask()
+        task.task = {
+            IGDatabaseManager.shared.perfrmOnDatabaseThread {
+                
+                if let wallpapers = IGDatabaseManager.shared.realm.objects(IGRealmWallpaper.self).first {
+                    try! IGDatabaseManager.shared.realm.write {
+                        wallpapers.selectedFile = try? NSData(contentsOf: wallpaper)
+                    }
+                }
+                
+                IGFactory.shared.performInFactoryQueue {
+                    task.success!()
+                }
+            }
+        }
+        task.success {
+            self.removeTaskFromQueueAndPerformNext(task)
+            }.error {
+                self.removeTaskFromQueueAndPerformNext(task)
+            }.addToQueue()
+        self.performNextFactoryTaskIfPossible()
+    }
 
 }

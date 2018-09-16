@@ -211,8 +211,37 @@
                                         </tableViewCellContentView>
                                         <inset key="separatorInset" minX="60" minY="0.0" maxX="0.0" maxY="0.0"/>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" rowHeight="47" id="KPa-OQ-jrL">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" rowHeight="47" id="TMJ-wb-Lp7">
                                         <rect key="frame" x="0.0" y="429" width="375" height="47"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="TMJ-wb-Lp7" id="bFd-yo-FPg">
+                                            <rect key="frame" x="0.0" y="0.0" width="337" height="46.666666666666664"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Chat Wallpaper" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KHH-8i-xcx" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
+                                                    <rect key="frame" x="59.999999999999993" y="14" width="117.33333333333331" height="18"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y2j-df-bS9">
+                                                    <rect key="frame" x="14" y="11" width="32" height="32"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" name="iGap-Fontico" family="iGap-Fontico" pointSize="24"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="bottomMargin" secondItem="KHH-8i-xcx" secondAttribute="bottom" constant="4" id="sd8-RJ-hmt"/>
+                                                <constraint firstItem="KHH-8i-xcx" firstAttribute="top" secondItem="bFd-yo-FPg" secondAttribute="topMargin" constant="3" id="vsL-Jh-AJN"/>
+                                                <constraint firstItem="KHH-8i-xcx" firstAttribute="leading" secondItem="bFd-yo-FPg" secondAttribute="leading" constant="60" id="wZl-78-EX2"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <inset key="separatorInset" minX="60" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" rowHeight="47" id="KPa-OQ-jrL">
+                                        <rect key="frame" x="0.0" y="476" width="375" height="47"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KPa-OQ-jrL" id="6pO-Ex-KKV">
                                             <rect key="frame" x="0.0" y="0.0" width="337" height="46.666666666666664"/>
@@ -241,7 +270,7 @@
                                         <inset key="separatorInset" minX="60" minY="0.0" maxX="0.0" maxY="0.0"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" accessoryType="disclosureIndicator" indentationWidth="10" rowHeight="47" id="1nt-gZ-nbe">
-                                        <rect key="frame" x="0.0" y="476" width="375" height="47"/>
+                                        <rect key="frame" x="0.0" y="523" width="375" height="47"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="1nt-gZ-nbe" id="jaf-o0-uUh">
                                             <rect key="frame" x="0.0" y="0.0" width="337" height="46.666666666666664"/>
@@ -270,7 +299,7 @@
                                         <inset key="separatorInset" minX="60" minY="0.0" maxX="0.0" maxY="0.0"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" rowHeight="47" id="T6U-c0-E5l">
-                                        <rect key="frame" x="0.0" y="523" width="375" height="47"/>
+                                        <rect key="frame" x="0.0" y="570" width="375" height="47"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="T6U-c0-E5l" id="Dtq-2D-z8L">
                                             <rect key="frame" x="0.0" y="0.0" width="337" height="46.666666666666664"/>
@@ -299,7 +328,7 @@
                                         <inset key="separatorInset" minX="60" minY="0.0" maxX="0.0" maxY="0.0"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="47" id="hzm-kP-uNI">
-                                        <rect key="frame" x="0.0" y="570" width="375" height="47"/>
+                                        <rect key="frame" x="0.0" y="617" width="375" height="47"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hzm-kP-uNI" id="1JX-lP-dyD">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="46.666666666666664"/>
@@ -332,7 +361,7 @@
                             <tableViewSection headerTitle="" id="6YY-Wc-QLq">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" accessoryType="disclosureIndicator" indentationWidth="10" rowHeight="47" id="r2f-jo-aeq">
-                                        <rect key="frame" x="0.0" y="653" width="375" height="47"/>
+                                        <rect key="frame" x="0.0" y="700" width="375" height="47"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="r2f-jo-aeq" id="DzZ-99-gnp">
                                             <rect key="frame" x="0.0" y="0.0" width="337" height="46.666666666666664"/>
@@ -365,7 +394,7 @@
                             <tableViewSection headerTitle="" id="I60-Nt-LEW">
                                 <cells>
                                     <tableViewCell opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="4EK-5h-lFZ">
-                                        <rect key="frame" x="0.0" y="736" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="783" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="4EK-5h-lFZ" id="aa8-Oe-FMH">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43.666666666666664"/>
@@ -422,6 +451,7 @@
                         <segue destination="bfj-3q-FFV" kind="show" identifier="showFinancialServiceBill" id="Def-8i-Lzn"/>
                         <segue destination="RfO-fU-tzU" kind="show" identifier="showFinancialServiceCharge" id="iN9-dw-bC4"/>
                         <segue destination="RZf-QU-a1n" kind="show" identifier="showFinancialServiceBillingInquiry" id="bpe-TD-CXN"/>
+                        <segue destination="6Hy-fe-G4M" kind="show" identifier="showWallpaperOptionPage" id="drr-8R-XU7"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KyK-za-w4Z" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -808,7 +838,7 @@
                                         <rect key="frame" x="0.0" y="747" width="414" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hyv-XR-tWJ" id="LEP-iO-zXu">
-                                            <rect key="frame" x="0.0" y="0.0" width="388" height="43.666666666666664"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="376" height="43.666666666666664"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Font Size" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OCj-wj-5D8" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
@@ -841,7 +871,7 @@
                                         <rect key="frame" x="0.0" y="791" width="414" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="2ut-Oh-o8Y" id="vru-j4-hW1">
-                                            <rect key="frame" x="0.0" y="0.0" width="388" height="43.666666666666664"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="376" height="43.666666666666664"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Stickers" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v31-0S-icr" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
@@ -862,7 +892,7 @@
                                         <rect key="frame" x="0.0" y="835" width="414" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="uKA-Qg-Oh3" id="tcx-Yp-dTe">
-                                            <rect key="frame" x="0.0" y="0.0" width="388" height="43.666666666666664"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="376" height="43.666666666666664"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Chat Wallpaper" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GLb-q2-ZG4" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
@@ -2555,7 +2585,7 @@ To proceed, confirm that your new number can recieve SMS or calls and tap Next t
                     </tableView>
                     <navigationItem key="navigationItem" title="Chat Wallpaper" id="naV-4y-bWp"/>
                     <connections>
-                        <segue destination="OpA-fx-bUr" kind="show" identifier="GoToWallpaperLibraryPage" id="6ru-We-Sy3"/>
+                        <segue destination="OpA-fx-bUr" kind="show" identifier="showWallpaperListPage" id="6ru-We-Sy3"/>
                         <segue destination="shO-Mb-6BF" kind="show" identifier="GoToSolidColorPage" id="o96-Nd-YvC"/>
                     </connections>
                 </tableViewController>
@@ -2625,7 +2655,7 @@ To proceed, confirm that your new number can recieve SMS or calls and tap Next t
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="pu5-nF-qTS">
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" sectionInsetReference="layoutMargins" id="pu5-nF-qTS">
                             <size key="itemSize" width="115" height="195"/>
                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
@@ -2633,22 +2663,22 @@ To proceed, confirm that your new number can recieve SMS or calls and tap Next t
                         </collectionViewFlowLayout>
                         <cells>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="WallpaperLibraryCell" id="f0n-Nx-uh1" customClass="IGSettingChatWallpaperLibraryCollectionViewCell" customModule="iGap" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="115" height="195"/>
+                                <rect key="frame" x="8" y="8" width="115" height="195"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                     <rect key="frame" x="0.0" y="0.0" width="115" height="195"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="gCi-qj-e2n">
-                                            <rect key="frame" x="19" y="8" width="96" height="179"/>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="gCi-qj-e2n">
+                                            <rect key="frame" x="0.0" y="0.0" width="115" height="190"/>
                                         </imageView>
                                     </subviews>
                                 </view>
                                 <constraints>
-                                    <constraint firstItem="gCi-qj-e2n" firstAttribute="top" secondItem="f0n-Nx-uh1" secondAttribute="topMargin" id="BwJ-o7-x4p"/>
-                                    <constraint firstAttribute="trailing" secondItem="gCi-qj-e2n" secondAttribute="trailing" id="P0M-qN-CIh"/>
-                                    <constraint firstItem="gCi-qj-e2n" firstAttribute="bottom" secondItem="f0n-Nx-uh1" secondAttribute="bottomMargin" id="gyV-eW-Sda"/>
-                                    <constraint firstItem="gCi-qj-e2n" firstAttribute="leading" secondItem="f0n-Nx-uh1" secondAttribute="leadingMargin" constant="11" id="mWm-Ce-u54"/>
+                                    <constraint firstItem="gCi-qj-e2n" firstAttribute="leading" secondItem="f0n-Nx-uh1" secondAttribute="leading" id="3Dp-Pv-trf"/>
+                                    <constraint firstAttribute="bottom" secondItem="gCi-qj-e2n" secondAttribute="bottom" constant="5" id="TXw-Mz-fIe"/>
+                                    <constraint firstAttribute="trailing" secondItem="gCi-qj-e2n" secondAttribute="trailing" id="bXz-Sl-JpG"/>
+                                    <constraint firstItem="gCi-qj-e2n" firstAttribute="top" secondItem="f0n-Nx-uh1" secondAttribute="top" id="gnx-ST-C5w"/>
                                 </constraints>
                                 <connections>
                                     <outlet property="backGroundimageView" destination="gCi-qj-e2n" id="0DA-Ka-tS6"/>
@@ -2660,11 +2690,93 @@ To proceed, confirm that your new number can recieve SMS or calls and tap Next t
                             <outlet property="delegate" destination="OpA-fx-bUr" id="Fiz-v6-Zlq"/>
                         </connections>
                     </collectionView>
-                    <navigationItem key="navigationItem" title="Wallpaper Library" id="iL4-Ej-8x5"/>
+                    <navigationItem key="navigationItem" title="Wallpaper Library" id="iL4-Ej-8x5" customClass="IGNavigationItem" customModule="iGap" customModuleProvider="target"/>
+                    <connections>
+                        <segue destination="ki2-oV-nJi" kind="show" identifier="showWallpaperPreview" id="sng-pJ-Bmg"/>
+                    </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FyH-Ur-3gL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-193" y="-3860"/>
+        </scene>
+        <!--Title-->
+        <scene sceneID="3W6-Pe-zvE">
+            <objects>
+                <viewController id="ki2-oV-nJi" customClass="IGWallpaperPreview" customModule="iGap" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="cfa-PM-hhx"/>
+                        <viewControllerLayoutGuide type="bottom" id="cec-0A-ulq"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="5KS-6a-F8r">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="MIM-za-dUc">
+                                <rect key="frame" x="0.0" y="64" width="414" height="622"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZoO-de-Ih1">
+                                <rect key="frame" x="0.0" y="686" width="207" height="50"/>
+                                <color key="backgroundColor" red="0.2058030589" green="0.74759840899999996" blue="0.79368454219999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="h1F-HO-GWf"/>
+                                    <constraint firstAttribute="width" constant="207" id="j6G-qr-O6t"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                <state key="normal" title="Cancel">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="btnCancel:" destination="ki2-oV-nJi" eventType="touchUpInside" id="uxR-ie-ajb"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vkt-B8-rfI">
+                                <rect key="frame" x="207" y="686" width="207" height="50"/>
+                                <color key="backgroundColor" red="0.2058030589" green="0.74759840899999996" blue="0.79368454219999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="207" id="8Jm-pC-0Lc"/>
+                                    <constraint firstAttribute="height" constant="50" id="Eh1-PI-Qgh"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                <state key="normal" title="Set">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="btnSet:" destination="ki2-oV-nJi" eventType="touchUpInside" id="F48-kb-DiC"/>
+                                </connections>
+                            </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LNB-ke-Lma" customClass="IGDownloadUploadIndicatorView" customModule="iGap" customModuleProvider="target">
+                                <rect key="frame" x="157" y="325" width="100" height="100"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="100" id="L4U-N3-TyZ"/>
+                                    <constraint firstAttribute="width" constant="100" id="cCF-UL-jgX"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="ZoO-de-Ih1" firstAttribute="leading" secondItem="5KS-6a-F8r" secondAttribute="leadingMargin" constant="-20" id="7MS-8w-V2I"/>
+                            <constraint firstItem="cec-0A-ulq" firstAttribute="top" secondItem="ZoO-de-Ih1" secondAttribute="bottom" id="F0u-Nn-ae4"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="vkt-B8-rfI" secondAttribute="trailing" constant="-20" id="JSw-dH-DkB"/>
+                            <constraint firstItem="ZoO-de-Ih1" firstAttribute="top" secondItem="MIM-za-dUc" secondAttribute="bottom" id="Ro8-pm-TiM"/>
+                            <constraint firstItem="MIM-za-dUc" firstAttribute="leading" secondItem="5KS-6a-F8r" secondAttribute="leadingMargin" constant="-20" id="Uq1-W9-eh8"/>
+                            <constraint firstItem="LNB-ke-Lma" firstAttribute="centerY" secondItem="MIM-za-dUc" secondAttribute="centerY" id="W68-jS-eQQ"/>
+                            <constraint firstItem="cec-0A-ulq" firstAttribute="top" secondItem="vkt-B8-rfI" secondAttribute="bottom" id="ae5-yd-X37"/>
+                            <constraint firstItem="LNB-ke-Lma" firstAttribute="centerX" secondItem="MIM-za-dUc" secondAttribute="centerX" id="ekz-hf-O9X"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="MIM-za-dUc" secondAttribute="trailing" constant="-20" id="h1p-Yy-xmy"/>
+                            <constraint firstItem="MIM-za-dUc" firstAttribute="top" secondItem="cfa-PM-hhx" secondAttribute="bottom" id="pJL-B7-e9d"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Title" id="9cm-TM-2UJ" customClass="IGNavigationItem" customModule="iGap" customModuleProvider="target"/>
+                    <connections>
+                        <outlet property="btnCancel" destination="ZoO-de-Ih1" id="121-Ke-Y5N"/>
+                        <outlet property="btnSet" destination="vkt-B8-rfI" id="TTU-Fo-ehx"/>
+                        <outlet property="downloadIndicator" destination="LNB-ke-Lma" id="aR1-8U-Sg3"/>
+                        <outlet property="imgWallpaper" destination="MIM-za-dUc" id="W1V-jy-ttG"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="oAS-a2-gg8" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="684" y="-3860"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="D2C-gH-d6z">
@@ -6323,6 +6435,7 @@ Afg
         <segue reference="Oa0-mY-XGu"/>
         <segue reference="P15-0g-TjZ"/>
         <segue reference="Xzv-Yc-EAf"/>
+        <segue reference="drr-8R-XU7"/>
         <segue reference="FWu-Ni-6zD"/>
     </inferredMetricsTieBreakers>
 </document>

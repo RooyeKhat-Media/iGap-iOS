@@ -34,6 +34,10 @@ class IGContactManager: NSObject {
     
     func manageContact() {
         if CNContactStore.authorizationStatus(for: CNEntityType.contacts) == CNAuthorizationStatus.authorized {
+            if IGContactManager.importedContact {
+                return
+            }
+            IGContactManager.importedContact = true
             savePhoneContactsToDatabase()
             sendContactsToServer()
         } else {
@@ -99,11 +103,6 @@ class IGContactManager: NSObject {
     }
     
     private func sendContact(phoneContacts : [ContactsStruct]){
-        if IGContactManager.importedContact {
-            return
-        }
-        IGContactManager.importedContact = true
-        
         IGUserContactsImportRequest.Generator.generateStruct(contacts: phoneContacts).success ({ (protoResponse) in
             switch protoResponse {
             case let contactImportResponse as IGPUserContactsImportResponse:

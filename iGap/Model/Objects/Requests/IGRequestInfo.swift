@@ -85,3 +85,22 @@ class IGInfoPageRequest : IGRequest {
     }
 }
 
+
+class IGInfoWallpaperRequest : IGRequest {
+    class Generator : IGRequest.Generator{
+        class func generate(fit: IGPInfoWallpaper.IGPFit) -> IGRequestWrapper {
+            var wallpaper = IGPInfoWallpaper()
+            wallpaper.igpFit = fit
+            return IGRequestWrapper(message: wallpaper, actionID: 504)
+        }
+    }
+    
+    class Handler : IGRequest.Handler{
+        class func interpret(response responseProtoMessage:IGPInfoWallpaperResponse) {
+            IGFactory.shared.saveWallpaper(wallpapers: responseProtoMessage.igpWallpaper)
+        }
+        
+        override class func handlePush(responseProtoMessage: Message) {}
+    }
+}
+

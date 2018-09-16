@@ -265,6 +265,8 @@ let protoClassesLookupTable: [Int: (proto: ResponseMessage.Type, reponseHandler:
             IGInfoCountryRequest.Handler.self               as IGRequest.Handler.Type),
     30503: (IGPInfoPageResponse.self                        as ResponseMessage.Type,
             IGInfoPageRequest.Handler.self                  as IGRequest.Handler.Type),
+    30504: (IGPInfoWallpaperResponse.self                   as ResponseMessage.Type,
+            IGInfoWallpaperRequest.Handler.self             as IGRequest.Handler.Type),
 
     //Client: 306xx
     30600: (IGPClientConditionResponse.self                 as ResponseMessage.Type,

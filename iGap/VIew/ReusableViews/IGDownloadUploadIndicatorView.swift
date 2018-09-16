@@ -34,7 +34,7 @@ class IGDownloadUploadIndicatorView: UIView {
         }
     }
     
-    private var backgroundView: UIView?
+    public var backgroundView: UIView?
     private var containerView: UIView?
     private var downloadButton: UIButton?
     private var sizeLabel: UILabel?

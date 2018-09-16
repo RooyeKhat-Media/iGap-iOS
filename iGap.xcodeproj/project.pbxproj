@@ -164,6 +164,8 @@
 		FA42EF151E5C593500CF8A32 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = FA42EF141E5C593500CF8A32 /* TTTAttributedLabel.m */; };
 		FA4BD8A31DF2A53400CCB239 /* IGMusicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4BD8A11DF2A53400CCB239 /* IGMusicViewController.swift */; };
 		FA4BD8A41DF2A53400CCB239 /* IGMusicViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4BD8A21DF2A53400CCB239 /* IGMusicViewController.xib */; };
+		FA4F47B8214D0C5400ABE7A0 /* IGRealmWallpaper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4F47B7214D0C5400ABE7A0 /* IGRealmWallpaper.swift */; };
+		FA4F47BA214D1DA500ABE7A0 /* IGWallpaperPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4F47B9214D1DA500ABE7A0 /* IGWallpaperPreview.swift */; };
 		FA50A8C41DD35E8500C6D2EA /* IGAppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA50A8C31DD35E8500C6D2EA /* IGAppManager.swift */; };
 		FA50A8CD1DD35EFD00C6D2EA /* IGRegistrationStepPhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA50A8C71DD35EFD00C6D2EA /* IGRegistrationStepPhoneViewController.swift */; };
 		FA50A8CE1DD35EFD00C6D2EA /* IGRegistrationStepProfileInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA50A8C81DD35EFD00C6D2EA /* IGRegistrationStepProfileInfoViewController.swift */; };
@@ -522,6 +524,8 @@
 		FA42EF141E5C593500CF8A32 /* TTTAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTAttributedLabel.m; sourceTree = "<group>"; };
 		FA4BD8A11DF2A53400CCB239 /* IGMusicViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGMusicViewController.swift; sourceTree = "<group>"; };
 		FA4BD8A21DF2A53400CCB239 /* IGMusicViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IGMusicViewController.xib; sourceTree = "<group>"; };
+		FA4F47B7214D0C5400ABE7A0 /* IGRealmWallpaper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGRealmWallpaper.swift; sourceTree = "<group>"; };
+		FA4F47B9214D1DA500ABE7A0 /* IGWallpaperPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGWallpaperPreview.swift; sourceTree = "<group>"; };
 		FA5097D21DEDA18000A44699 /* iGap-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iGap-Bridging-Header.h"; sourceTree = "<group>"; };
 		FA50A8C31DD35E8500C6D2EA /* IGAppManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGAppManager.swift; sourceTree = "<group>"; };
 		FA50A8C71DD35EFD00C6D2EA /* IGRegistrationStepPhoneViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGRegistrationStepPhoneViewController.swift; sourceTree = "<group>"; };
@@ -884,6 +888,7 @@
 				FAD959061F48D4EF00FBD306 /* IGSettingQrScannerViewController.swift */,
 				FAA2A859200A31CB00CAA7C7 /* IGSettingAccountBioTableViewController.swift */,
 				FA8D056C20739C96007861E7 /* IGSettingAddContactViewController.swift */,
+				FA4F47B9214D1DA500ABE7A0 /* IGWallpaperPreview.swift */,
 			);
 			path = Setting;
 			sourceTree = "<group>";
@@ -1117,6 +1122,7 @@
 				931585141E6D567000F4C04B /* IGUserPrivacy.swift */,
 				FA8F22571DD89F7C005A90D1 /* IGAvatar.swift */,
 				FAD94C6F1E0136D0006D8D91 /* IGMedia.swift */,
+				FA4F47B7214D0C5400ABE7A0 /* IGRealmWallpaper.swift */,
 			);
 			name = "File, media, attachment";
 			sourceTree = "<group>";
@@ -1904,6 +1910,7 @@
 				93AA67D01E4F40C80053380C /* IGChannelInfoAdminsTableViewCell.swift in Sources */,
 				FA0953421E1B97700043ED3F /* IGActiveSessionsParentCell.swift in Sources */,
 				FA0953541E1B97700043ED3F /* IGSettingChatStickersTableViewCell.swift in Sources */,
+				FA4F47B8214D0C5400ABE7A0 /* IGRealmWallpaper.swift in Sources */,
 				FA42EF0F1E5C224F00CF8A32 /* UIImage.swift in Sources */,
 				FA0953621E1B97700043ED3F /* IGSettingContactTableViewCell.swift in Sources */,
 				FA50A8C41DD35E8500C6D2EA /* IGAppManager.swift in Sources */,
@@ -2007,6 +2014,7 @@
 				FAD580861DDC49A200A242DE /* IGMessageViewController.swift in Sources */,
 				93AA67CE1E4F407E0053380C /* IGChannelInfoMemberListTableViewCell.swift in Sources */,
 				FA50A8D21DD35EFD00C6D2EA /* IGSplashScreenViewController.swift in Sources */,
+				FA4F47BA214D1DA500ABE7A0 /* IGWallpaperPreview.swift in Sources */,
 				93193F3C1E5815340039AC0C /* IGGroupSharedMediaListTableViewController.swift in Sources */,
 				FA09538B1E1B97E20043ED3F /* IGNewChannelChoosePublicOrPrivateTableViewController.swift in Sources */,
 				FAD580991DDC67EB00A242DE /* IGMessageCollectionViewCellSizeCalculator.swift in Sources */,
