@@ -2577,6 +2577,31 @@ To proceed, confirm that your new number can recieve SMS or calls and tap Next t
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
+                            <tableViewSection headerTitle="" id="U7z-Bi-jSg">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="MBj-p6-8Zv">
+                                        <rect key="frame" x="0.0" y="203" width="414" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="MBj-p6-8Zv" id="euf-Xt-ng4">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.666666666666664"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Reset Wallpaper" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HxX-Eo-ftB" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
+                                                    <rect key="frame" x="26.999999999999993" y="13" width="124.33333333333331" height="16"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="HxX-Eo-ftB" firstAttribute="leading" secondItem="euf-Xt-ng4" secondAttribute="leadingMargin" constant="7" id="FhX-6f-hbF"/>
+                                                <constraint firstItem="HxX-Eo-ftB" firstAttribute="top" secondItem="euf-Xt-ng4" secondAttribute="topMargin" constant="2" id="Vai-59-ZFY"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="HxX-Eo-ftB" secondAttribute="bottom" constant="4" id="mPo-ga-dei"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
                         </sections>
                         <connections>
                             <outlet property="dataSource" destination="6Hy-fe-G4M" id="BGv-kB-nw6"/>
@@ -6381,7 +6406,7 @@ Afg
         <segue reference="Oa0-mY-XGu"/>
         <segue reference="P15-0g-TjZ"/>
         <segue reference="Xzv-Yc-EAf"/>
-        <segue reference="sng-pJ-Bmg"/>
+        <segue reference="vpP-Vs-3F7"/>
         <segue reference="drr-8R-XU7"/>
         <segue reference="FWu-Ni-6zD"/>
     </inferredMetricsTieBreakers>

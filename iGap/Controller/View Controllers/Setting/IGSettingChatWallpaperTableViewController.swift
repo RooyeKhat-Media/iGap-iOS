@@ -32,7 +32,7 @@ class IGSettingChatWallpaperTableViewController: UITableViewController, UINaviga
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return 2
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -40,6 +40,8 @@ class IGSettingChatWallpaperTableViewController: UITableViewController, UINaviga
         // #warning Incomplete implementation, return the number of rows
         if section == 0 {
             numberOfRows = 3
+        } else if section == 1 {
+            numberOfRows = 1
         }
         return numberOfRows
     }
@@ -50,11 +52,26 @@ class IGSettingChatWallpaperTableViewController: UITableViewController, UINaviga
             case 0: // show wallpaper
                 isColorPage = false
                 performSegue(withIdentifier: "showWallpaperListPage", sender: self)
+                break
+                
             case 1: // show solid color
                 isColorPage = true
                 performSegue(withIdentifier: "showWallpaperListPage", sender: self)
+                break
+                
             case 2:
                 GoToPhotoLibrary()
+                break
+                
+            default:
+                break
+            }
+        } else if indexPath.section == 1 {
+            switch indexPath.row {
+            case 0:
+                resetWallpaper()
+                break
+                
             default:
                 break
             }
@@ -65,6 +82,23 @@ class IGSettingChatWallpaperTableViewController: UITableViewController, UINaviga
         self.imagePicker.delegate = self
         self.imagePicker.sourceType = .photoLibrary
         self.present(self.imagePicker, animated: true, completion: nil)
+    }
+    
+    func resetWallpaper(){
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: IGGlobal.detectAlertStyle())
+        
+        let resetWallpaper = UIAlertAction(title: "Reset Wallpaper", style: .destructive, handler: { (action) in
+            IGWallpaperPreview.chatSolidColor = nil
+            IGWallpaperPreview.chatWallpaper = nil
+            IGFactory.shared.setWallpaperFile(wallpaper: nil)
+            IGFactory.shared.setWallpaperSolidColor(solidColor: nil)
+        })
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        alert.addAction(resetWallpaper)
+        alert.addAction(cancel)
+        
+        self.present(alert, animated: true, completion: {})
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
