@@ -302,7 +302,7 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
     
     private func manageReceivedOrIncommingMessage(){
         if isIncommingMessage {
-            mainBubbleViewAbs?.layer.borderWidth = 0.0
+            mainBubbleViewAbs?.layer.borderWidth = 0.5
 
             if isPreviousMessageFromSameSender {
                 removeSenderName()
@@ -324,7 +324,7 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
             
         } else {
             
-            mainBubbleViewAbs?.layer.borderWidth = 1.0
+            mainBubbleViewAbs?.layer.borderWidth = 0.5
             removeAvatar()
             removeSenderName()
             manageTime(statusExist: true)
