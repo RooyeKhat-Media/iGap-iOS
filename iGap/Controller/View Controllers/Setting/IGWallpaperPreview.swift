@@ -22,15 +22,27 @@ class IGWallpaperPreview: UIViewController, UIGestureRecognizerDelegate {
     let disposeBag = DisposeBag()
     var wallpaperFile : IGFile!
     var allowSetWallpaper: Bool = false
+    var colorHex: String?
     
     static var chatWallpaper: NSData?
+    static var chatSolidColor: String?
     
     @IBAction func btnSet(_ sender: UIButton) {
         if !allowSetWallpaper {
             return
         }
-        IGFactory.shared.setWallpaper(wallpaper: wallpaperFile.path()!)
-        IGWallpaperPreview.chatWallpaper = try? NSData(contentsOf: wallpaperFile.path()!)
+        
+        if colorHex != nil {
+            IGFactory.shared.setWallpaperSolidColor(solidColor: colorHex!)
+            IGFactory.shared.setWallpaperFile(wallpaper: nil)
+            IGWallpaperPreview.chatSolidColor = colorHex!
+            IGWallpaperPreview.chatWallpaper = nil
+        } else {
+            IGFactory.shared.setWallpaperFile(wallpaper: wallpaperFile.path()!)
+            IGFactory.shared.setWallpaperSolidColor(solidColor: nil)
+            IGWallpaperPreview.chatWallpaper = try? NSData(contentsOf: wallpaperFile.path()!)
+            IGWallpaperPreview.chatSolidColor = nil
+        }
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -46,6 +58,13 @@ class IGWallpaperPreview: UIViewController, UIGestureRecognizerDelegate {
         
         btnSet.removeUnderline()
         btnCancel.removeUnderline()
+        
+        if colorHex != nil {
+            imgWallpaper.backgroundColor = UIColor.hexStringToUIColor(hex: colorHex!)
+            allowSetWallpaper = true
+            self.downloadIndicator.setState(.ready)
+            return
+        }
         
         imgWallpaper.setThumbnail(for: wallpaperFile)
         

@@ -22,6 +22,8 @@ class IGSettingChatWallpaperLibraryCollectionViewController: UICollectionViewCon
     var libraryImageName : [IGFile] = []
     var librarySolidColor: [String] = []
     var wallpaperFile : IGFile!
+    var colorHex : String?
+    var isColorPage: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,36 +32,46 @@ class IGSettingChatWallpaperLibraryCollectionViewController: UICollectionViewCon
         
         let wallpapers = try! Realm().objects(IGRealmWallpaper.self).first
         
-        if wallpapers != nil && (wallpapers?.file.count)! > 0 {
+        if wallpapers != nil && ((wallpapers?.file.count)! > 0 || (wallpapers?.color.count)! > 0) {
             
-            for wallpaper in (wallpapers?.file)! {
-                libraryImageName.append(wallpaper)
-            }
-            
-            for solidColor in (wallpapers?.color)! {
-                librarySolidColor.append(solidColor.innerString)
+            if isColorPage {
+                for solidColor in (wallpapers?.color)! {
+                    librarySolidColor.append(solidColor.innerString)
+                }
+            } else {
+                for wallpaper in (wallpapers?.file)! {
+                    libraryImageName.append(wallpaper)
+                }
             }
             
         } else { // if not exist wallpapers in local get from server
             
+            IGGlobal.prgShow(self.view)
             IGInfoWallpaperRequest.Generator.generate(fit: IGPInfoWallpaper.IGPFit.phone).success({ (protoResponse) in
-                
                 if let wallpaperResponse = protoResponse as? IGPInfoWallpaperResponse {
                     IGInfoWallpaperRequest.Handler.interpret(response: wallpaperResponse)
                     
-                    if let wallpapers = try! Realm().objects(IGRealmWallpaper.self).first {
-                        for wallpaper in wallpapers.file {
-                            self.libraryImageName.append(wallpaper)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                        IGGlobal.prgHide()
+                        if let wallpapers = try! Realm().objects(IGRealmWallpaper.self).first {
+                            
+                            if self.isColorPage {
+                                for solidColor in wallpapers.color {
+                                    self.librarySolidColor.append(solidColor.innerString)
+                                }
+                            } else {
+                                for wallpaper in wallpapers.file {
+                                    self.libraryImageName.append(wallpaper)
+                                }
+                            }
                         }
-                    }
-                    
-                    DispatchQueue.main.async {
+                        
                         self.collectionView?.reloadData()
                     }
                 }
                 
             }).error({ (error, waitTime) in
-                
+                IGGlobal.prgHide()
             }).send()
         }
     }
@@ -70,9 +82,15 @@ class IGSettingChatWallpaperLibraryCollectionViewController: UICollectionViewCon
         }
     }
     
-    func initNavigationBar(){
+    func initNavigationBar() {
+        
+        var title = "Wallpapers"
+        if isColorPage {
+            title = "Solid Colors"
+        }
+        
         let navigationItem = self.navigationItem as! IGNavigationItem
-        navigationItem.addNavigationViewItems(rightItemText: nil, title: "Wallpaper")
+        navigationItem.addNavigationViewItems(rightItemText: nil, title: title)
         navigationItem.navigationController = self.navigationController as? IGNavigationController
         let navigationController = self.navigationController as! IGNavigationController
         navigationController.interactivePopGestureRecognizer?.delegate = self
@@ -84,25 +102,31 @@ class IGSettingChatWallpaperLibraryCollectionViewController: UICollectionViewCon
     }
     
     override func collectionView(_ collectionView: UICollectionView,numberOfItemsInSection section: Int) -> Int {
-        return libraryImageName.count
+        if isColorPage {
+            return librarySolidColor.count
+        } else {
+            return libraryImageName.count
+        }
     }
     
     override func collectionView(_ collectionView: UICollectionView,cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier,for: indexPath as IndexPath) as! IGSettingChatWallpaperLibraryCollectionViewCell
-        cell.backGroundimageView.backgroundColor = UIColor.hexStringToUIColor(hex: librarySolidColor[indexPath.row])
-        cell.loadImage(file: libraryImageName[indexPath.row])
+        if isColorPage {
+            cell.backGroundimageView.backgroundColor = UIColor.hexStringToUIColor(hex: librarySolidColor[indexPath.row])
+        } else {
+            cell.loadImage(file: libraryImageName[indexPath.row])
+        }
         return cell
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        wallpaperFile = libraryImageName[indexPath.row]
-        performSegue(withIdentifier: "showWallpaperPreview", sender: self)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView,layout collectionViewLayout: UICollectionViewLayout,sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let availableWidth = view.frame.width
-        let widthPerItem = availableWidth / itemsPerRow
-        return CGSize(width: widthPerItem, height: widthPerItem)
+        if isColorPage {
+            colorHex = librarySolidColor[indexPath.row]
+            performSegue(withIdentifier: "showWallpaperPreview", sender: self)
+        } else {
+            wallpaperFile = libraryImageName[indexPath.row]
+            performSegue(withIdentifier: "showWallpaperPreview", sender: self)
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
@@ -115,7 +139,22 @@ class IGSettingChatWallpaperLibraryCollectionViewController: UICollectionViewCon
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showWallpaperPreview" {
             let wallpaperPreview = segue.destination as! IGWallpaperPreview
-            wallpaperPreview.wallpaperFile = wallpaperFile
+            if isColorPage {
+                wallpaperPreview.colorHex = self.colorHex
+            } else {
+                wallpaperPreview.wallpaperFile = wallpaperFile
+            }
+        }
+    }
+}
+
+extension IGSettingChatWallpaperLibraryCollectionViewController : UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView,layout collectionViewLayout: UICollectionViewLayout,sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let widthPerItem = (view.frame.width / itemsPerRow) - 15
+        if isColorPage {
+            return CGSize(width: widthPerItem, height: widthPerItem)
+        } else {
+            return CGSize(width: widthPerItem, height: widthPerItem + 80)
         }
     }
 }

@@ -341,14 +341,12 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate, UIGe
         }
     }
     
-    private func detectBackground() {
-        if IGWallpaperPreview.chatWallpaper == nil {
-            if let wallpaper = try! Realm().objects(IGRealmWallpaper.self).first {
-                IGWallpaperPreview.chatWallpaper = wallpaper.selectedFile
-            }
-        }
+    private func setBackground() {
         
-        if let wallpaper = IGWallpaperPreview.chatWallpaper {
+        if let color = IGWallpaperPreview.chatSolidColor {
+            chatBackground.image = nil
+            chatBackground.backgroundColor = UIColor.hexStringToUIColor(hex: color)
+        } else if let wallpaper = IGWallpaperPreview.chatWallpaper {
             chatBackground.image = UIImage(data: wallpaper as Data)
         } else {
             chatBackground.image = UIImage(named: "back1")
@@ -503,7 +501,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate, UIGe
     
     override func viewWillAppear(_ animated: Bool) {
         
-        detectBackground()
+        setBackground()
         
         if let forwardMsg = selectedMessageToForwardToThisRoom {
             self.forwardOrReplyMessage(forwardMsg, isReply: false)

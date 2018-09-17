@@ -2578,14 +2578,42 @@ class IGFactory: NSObject {
         self.performNextFactoryTaskIfPossible()
     }
     
-    func setWallpaper(wallpaper: URL) {
+    func setWallpaperFile(wallpaper: URL?) {
         let task = IGFactoryTask()
         task.task = {
             IGDatabaseManager.shared.perfrmOnDatabaseThread {
                 
                 if let wallpapers = IGDatabaseManager.shared.realm.objects(IGRealmWallpaper.self).first {
                     try! IGDatabaseManager.shared.realm.write {
-                        wallpapers.selectedFile = try? NSData(contentsOf: wallpaper)
+                        if wallpaper != nil {
+                            wallpapers.selectedFile = try? NSData(contentsOf: wallpaper!)
+                        } else {
+                            wallpapers.selectedFile = nil
+                        }
+                    }
+                }
+                
+                IGFactory.shared.performInFactoryQueue {
+                    task.success!()
+                }
+            }
+        }
+        task.success {
+            self.removeTaskFromQueueAndPerformNext(task)
+            }.error {
+                self.removeTaskFromQueueAndPerformNext(task)
+            }.addToQueue()
+        self.performNextFactoryTaskIfPossible()
+    }
+    
+    func setWallpaperSolidColor(solidColor: String?) {
+        let task = IGFactoryTask()
+        task.task = {
+            IGDatabaseManager.shared.perfrmOnDatabaseThread {
+                
+                if let wallpapers = IGDatabaseManager.shared.realm.objects(IGRealmWallpaper.self).first {
+                    try! IGDatabaseManager.shared.realm.write {
+                        wallpapers.selectedColor = solidColor
                     }
                 }
                 

@@ -17,13 +17,25 @@ class IGRealmWallpaper: Object {
     var file                        : List<IGFile>           = List<IGFile>()
     var color                       : List<IGRealmString>    = List<IGRealmString>()
     @objc dynamic var selectedFile  : NSData!
+    @objc dynamic var selectedColor : String!
     
     convenience init(wallpapers: [IGPWallpaper]) {
         self.init()
         
         for wallpaper in wallpapers {
-            self.file.append(IGFile(igpFile : wallpaper.igpFile, type: .image))
-            self.color.append(IGRealmString(string: wallpaper.igpColor))
+            let predicate = NSPredicate(format: "primaryKeyId ==[c] %@", wallpaper.igpFile.igpCacheID)
+            if let file = try! Realm().objects(IGFile.self).filter(predicate).first {
+                self.file.append(file)
+            } else {
+                self.file.append(IGFile(igpFile : wallpaper.igpFile, type: .image))
+            }
+            
+            let predicateString = NSPredicate(format: "innerString ==[c] %@", wallpaper.igpColor)
+            if let color = try! Realm().objects(IGRealmString.self).filter(predicateString).first {
+                self.color.append(color)
+            } else {
+                self.color.append(IGRealmString(string: wallpaper.igpColor))
+            }
         }
     }
 }
