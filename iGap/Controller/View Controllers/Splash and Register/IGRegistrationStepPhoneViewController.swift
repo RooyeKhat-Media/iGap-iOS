@@ -30,7 +30,7 @@ class IGRegistrationStepPhoneViewController: UIViewController {
     internal static var allowGetCountry:Bool = true
     var phone: String?
     var selectedCountry : IGCountryInfo?
-    var registrationResponse : (username:String, userId:Int64, authorHash:String, verificationMethod: IGVerificationCodeSendMethod, resendDelay:Int32, codeDigitsCount:Int32, codeRegex:String)?
+    var registrationResponse : (username:String, userId:Int64, authorHash:String, verificationMethod: IGVerificationCodeSendMethod, resendDelay:Int32, codeDigitsCount:Int32, codeRegex:String, callMethodSupport:Bool)?
     var hud = MBProgressHUD()
     private let disposeBag = DisposeBag()
     var connectionStatus: IGAppManager.ConnectionStatus?
@@ -337,6 +337,7 @@ class IGRegistrationStepPhoneViewController: UIViewController {
             destination.delayBeforeSendingAgaing = self.registrationResponse?.resendDelay
             destination.username = self.registrationResponse?.username
             destination.verificationMethod = self.registrationResponse?.verificationMethod
+            destination.callMethodSupport = (self.registrationResponse?.callMethodSupport)!
             destination.phone = phoneNumberField.text?.replacingOccurrences(of: "_", with: "")
             destination.selectedCountry = self.selectedCountry
             let fullPhone = "+"+String(Int((self.selectedCountry?.countryCode)!))+" "+phoneNumberField.text!.replacingOccurrences(of: "_", with: "")

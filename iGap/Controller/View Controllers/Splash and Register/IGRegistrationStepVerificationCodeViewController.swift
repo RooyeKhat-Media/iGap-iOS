@@ -21,7 +21,8 @@ class IGRegistrationStepVerificationCodeViewController: UIViewController, UIGest
     var canRequestNewCode = false
     var phone : String?
     var phoneNumber : String?
-    var delayBeforeSendingAgaing : Int32? = 360
+    var delayBeforeSendingAgaing : Int32? = 60
+    var delayTime: Int32?
     var username : String?
     var userID : Int64?
     var codeDigitsCount : Int32?
@@ -29,11 +30,14 @@ class IGRegistrationStepVerificationCodeViewController: UIViewController, UIGest
     var selectedCountry : IGCountryInfo?
     var isUserNew : Bool?
     var verificationMethod : IGVerificationCodeSendMethod?
+    var callMethodSupport: Bool = false
     var hud = MBProgressHUD()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         codeTextField.delegate = self
+        
+        delayTime = delayBeforeSendingAgaing
         
         let navigaitonItem = self.navigationItem as! IGNavigationItem
         navigaitonItem.addNavigationViewItems(rightItemText: "Next", title: "Verification Code")
@@ -48,22 +52,32 @@ class IGRegistrationStepVerificationCodeViewController: UIViewController, UIGest
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.codeTextField.becomeFirstResponder()
-        var varificationMethodString = " via "
-        switch verificationMethod! {
-        case .sms:
-            varificationMethodString += "SMS"
-        case .igap:
-            varificationMethodString += "iGap"
-        case .both:
-            varificationMethodString += "SMS and iGap"
-        }
-        self.titleLabel.text = "Please enter the verification code sent \nto " + phoneNumber! + varificationMethodString
+        setTitleText(verificationMethod: verificationMethod!)
         updateCountDown()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
+    private func setTitleText(verificationMethod: IGVerificationCodeSendMethod){
+        var varificationMethodString = " via "
+        switch verificationMethod {
+        case .sms:
+            varificationMethodString += "SMS"
+            break
+            
+        case .call:
+            varificationMethodString += "Call"
+            break
+            
+        case .igap:
+            varificationMethodString += "iGap"
+            break
+            
+        case .both:
+            varificationMethodString += "SMS and iGap"
+            break
+        }
+        self.titleLabel.text = "Please enter the verification code sent \nto " + phoneNumber! + varificationMethodString
     }
+    
     
     func didTapOnNext() {
         if let code = codeTextField.text {
@@ -84,41 +98,67 @@ class IGRegistrationStepVerificationCodeViewController: UIViewController, UIGest
         
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-    }
-    
-    
     func updateCountDown() {
         self.delayBeforeSendingAgaing! -= 1
-        if self.delayBeforeSendingAgaing!>0 {
+        if self.delayBeforeSendingAgaing! > 0 {
             let fixedText = "Didn't receive the text message?\nPlease wait"
             let remainingSeconds = self.delayBeforeSendingAgaing!%60
             let remainingMiuntes = self.delayBeforeSendingAgaing!/60
-            retrySendingCodeLabel.text = "\(fixedText) \(remainingMiuntes):\(remainingSeconds)"
+            if remainingSeconds < 10 {
+                retrySendingCodeLabel.text = "\(fixedText) \(remainingMiuntes):0\(remainingSeconds)"
+            } else {
+                retrySendingCodeLabel.text = "\(fixedText) \(remainingMiuntes):\(remainingSeconds)"
+            }
             self.perform(#selector(IGRegistrationStepVerificationCodeViewController.updateCountDown), with: nil, afterDelay: 1.0)
         } else {
             retrySendingCodeLabel.text = "Tap here to resend code"
-            let tap = UITapGestureRecognizer(target: self, action: #selector(IGDeleteAccountConfirmationTableViewController.tapFunction))
+            let tap = UITapGestureRecognizer(target: self, action: #selector(IGRegistrationStepVerificationCodeViewController.tapFunction))
             retrySendingCodeLabel.isUserInteractionEnabled = true
             retrySendingCodeLabel.addGestureRecognizer(tap)
         }
     }
     
     func tapFunction(sender:UITapGestureRecognizer) {
-        getRegisterToken()
+        manageGetRegisterationCode()
     }
-    func getRegisterToken(){
+    
+    func manageGetRegisterationCode(){
+        if callMethodSupport {
+            let alert = UIAlertController(title: nil, message: "Resend registeration code via:", preferredStyle: IGGlobal.detectAlertStyle())
+            
+            let sendViaSms = UIAlertAction(title: "Send via sms", style: .default, handler: { (action) in
+                self.getRegisterToken(preferenceMethod: IGPUserRegister.IGPPreferenceMethod.verifyCodeSms)
+            })
+            
+            let sendViaCall = UIAlertAction(title: "Send via call", style: .default, handler: { (action) in
+                self.getRegisterToken(preferenceMethod: IGPUserRegister.IGPPreferenceMethod.verifyCodeCall)
+            })
+            
+            let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            
+            alert.addAction(sendViaSms)
+            alert.addAction(sendViaCall)
+            alert.addAction(cancel)
+            
+            self.present(alert, animated: true, completion: nil)
+        } else {
+            getRegisterToken(preferenceMethod: IGPUserRegister.IGPPreferenceMethod.verifyCodeSms)
+        }
+    }
+    
+    func getRegisterToken(preferenceMethod: IGPUserRegister.IGPPreferenceMethod?){
+        delayBeforeSendingAgaing = delayTime
+        updateCountDown()
         self.hud = MBProgressHUD.showAdded(to: self.view, animated: true)
         self.hud.mode = .indeterminate
         let phoneSpaceLess = phone?.replacingOccurrences(of: " ", with: "")
-        let reqW = IGUserRegisterRequest.Generator.generate(countryCode: (self.selectedCountry?.countryISO)!,
-        phoneNumber: Int64(phoneSpaceLess!)!)
+        let reqW = IGUserRegisterRequest.Generator.generate(countryCode: (self.selectedCountry?.countryISO)!, phoneNumber: Int64(phoneSpaceLess!)!, preferenceMethod: preferenceMethod)
         reqW.success { (responseProto) in
             DispatchQueue.main.async {
                 switch responseProto {
                 case let userRegisterReponse as IGPUserRegisterResponse:
-                    IGUserRegisterRequest.Handler.intrepret(response: userRegisterReponse)
+                    let register = IGUserRegisterRequest.Handler.intrepret(response: userRegisterReponse)
+                    self.setTitleText(verificationMethod: register.verificationMethod)
                     self.hud.hide(animated: true)
                 default:
                     break
