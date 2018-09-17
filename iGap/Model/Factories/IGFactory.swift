@@ -2578,7 +2578,7 @@ class IGFactory: NSObject {
         self.performNextFactoryTaskIfPossible()
     }
     
-    func setWallpaperFile(wallpaper: URL?) {
+    func setWallpaperFile(wallpaper: NSData?) {
         let task = IGFactoryTask()
         task.task = {
             IGDatabaseManager.shared.perfrmOnDatabaseThread {
@@ -2586,7 +2586,7 @@ class IGFactory: NSObject {
                 if let wallpapers = IGDatabaseManager.shared.realm.objects(IGRealmWallpaper.self).first {
                     try! IGDatabaseManager.shared.realm.write {
                         if wallpaper != nil {
-                            wallpapers.selectedFile = try? NSData(contentsOf: wallpaper!)
+                            wallpapers.selectedFile = wallpaper
                         } else {
                             wallpapers.selectedFile = nil
                         }

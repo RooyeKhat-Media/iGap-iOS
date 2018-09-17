@@ -224,10 +224,10 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y2j-df-bS9">
-                                                    <rect key="frame" x="14" y="11" width="32" height="32"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y2j-df-bS9">
+                                                    <rect key="frame" x="14" y="12" width="32" height="32"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" name="iGap-Fontico" family="iGap-Fontico" pointSize="24"/>
+                                                    <fontDescription key="fontDescription" name="iGap-Fontico" family="iGap-Fontico" pointSize="33"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -2586,6 +2586,7 @@ To proceed, confirm that your new number can recieve SMS or calls and tap Next t
                     <navigationItem key="navigationItem" title="Chat Wallpaper" id="naV-4y-bWp" customClass="IGNavigationItem" customModule="iGap" customModuleProvider="target"/>
                     <connections>
                         <segue destination="OpA-fx-bUr" kind="show" identifier="showWallpaperListPage" id="6ru-We-Sy3"/>
+                        <segue destination="ki2-oV-nJi" kind="show" identifier="showWallpaperPreview" id="vpP-Vs-3F7"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QfP-9M-IFz" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2642,7 +2643,7 @@ To proceed, confirm that your new number can recieve SMS or calls and tap Next t
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FyH-Ur-3gL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-249" y="-4723"/>
+            <point key="canvasLocation" x="-239" y="-5100"/>
         </scene>
         <!--Title-->
         <scene sceneID="3W6-Pe-zvE">
@@ -2721,7 +2722,7 @@ To proceed, confirm that your new number can recieve SMS or calls and tap Next t
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oAS-a2-gg8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="609" y="-4722"/>
+            <point key="canvasLocation" x="-239" y="-4307"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="D2C-gH-d6z">
@@ -6380,6 +6381,7 @@ Afg
         <segue reference="Oa0-mY-XGu"/>
         <segue reference="P15-0g-TjZ"/>
         <segue reference="Xzv-Yc-EAf"/>
+        <segue reference="sng-pJ-Bmg"/>
         <segue reference="drr-8R-XU7"/>
         <segue reference="FWu-Ni-6zD"/>
     </inferredMetricsTieBreakers>

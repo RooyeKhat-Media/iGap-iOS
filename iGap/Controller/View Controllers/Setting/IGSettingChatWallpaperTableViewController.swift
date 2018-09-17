@@ -14,7 +14,8 @@ import RealmSwift
 class IGSettingChatWallpaperTableViewController: UITableViewController, UINavigationControllerDelegate, UIGestureRecognizerDelegate{
     
     var imagePicker = UIImagePickerController()
-    var isColorPage: Bool!
+    var isColorPage    : Bool!
+    var wallpaperLocal : NSData?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,12 +54,7 @@ class IGSettingChatWallpaperTableViewController: UITableViewController, UINaviga
                 isColorPage = true
                 performSegue(withIdentifier: "showWallpaperListPage", sender: self)
             case 2:
-                let realm = try! Realm()
-                let wallpaper = realm.objects(IGRealmWallpaper.self)
-                try! realm.write {
-                    realm.delete(wallpaper)
-                }
-                //GoToPhotoLibrary()
+                GoToPhotoLibrary()
             default:
                 break
             }
@@ -67,7 +63,6 @@ class IGSettingChatWallpaperTableViewController: UITableViewController, UINaviga
     
     func GoToPhotoLibrary(){
         self.imagePicker.delegate = self
-        self.imagePicker.allowsEditing = true
         self.imagePicker.sourceType = .photoLibrary
         self.present(self.imagePicker, animated: true, completion: nil)
     }
@@ -76,20 +71,22 @@ class IGSettingChatWallpaperTableViewController: UITableViewController, UINaviga
         if segue.identifier == "showWallpaperListPage" {
             let wallpaperList = segue.destination as! IGSettingChatWallpaperLibraryCollectionViewController
             wallpaperList.isColorPage = self.isColorPage
+        } else if segue.identifier == "showWallpaperPreview" {
+            let wallpaperPreview = segue.destination as! IGWallpaperPreview
+            wallpaperPreview.wallpaperLocal = self.wallpaperLocal
         }
     }
-    
 }
 
 extension IGSettingChatWallpaperTableViewController : UIImagePickerControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if imagePicker.sourceType == .photoLibrary {
-            if let pickedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
-                
+            if let imageUrl = info["UIImagePickerControllerImageURL"] as? URL {
+                self.wallpaperLocal = try? NSData(contentsOf: imageUrl)
+                self.isColorPage = false
+                performSegue(withIdentifier: "showWallpaperPreview", sender: self)
             }
         }
-        imagePicker.dismiss(animated: true, completion: {
-            // Anything you want to happen when the user saves an image
-        })
+        imagePicker.dismiss(animated: true, completion: nil)
     }
 }

@@ -21,7 +21,7 @@ class IGSettingChatWallpaperLibraryCollectionViewController: UICollectionViewCon
 
     var libraryImageName : [IGFile] = []
     var librarySolidColor: [String] = []
-    var wallpaperFile : IGFile!
+    var wallpaperFile : IGFile?
     var colorHex : String?
     var isColorPage: Bool = false
     
