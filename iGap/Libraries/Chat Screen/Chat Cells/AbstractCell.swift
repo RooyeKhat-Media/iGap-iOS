@@ -22,6 +22,7 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
     var messageViewAbs: UIView?
     var replyLineViewAbs: UIView!
     var viewInfoVideoAbs: UIView!
+    var viewSenderNameAbs: UIView!
     
     var txtSenderNameAbs: UILabel!
     var txtEditedAbs: UILabel!
@@ -660,18 +661,35 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
     
     private func makeSenderName(){
         
+        if viewSenderNameAbs == nil {
+            viewSenderNameAbs = UIView()
+            viewSenderNameAbs.backgroundColor = UIColor.white
+            viewSenderNameAbs.layer.cornerRadius = 3.5
+            if #available(iOS 11.0, *) {
+                viewSenderNameAbs.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMaxXMaxYCorner]
+            }
+            self.contentView.addSubview(viewSenderNameAbs)
+        }
+        
         if txtSenderNameAbs == nil {
             txtSenderNameAbs = UILabel()
-            txtSenderNameAbs.textColor = UIColor.senderNameColorDark()
+            txtSenderNameAbs.textColor = UIColor.senderNameColorDark() 
             txtSenderNameAbs.font = UIFont.igFont(ofSize: 8.0)
             self.contentView.addSubview(txtSenderNameAbs)
         }
         
         txtSenderNameAbs.snp.makeConstraints { (make) in
             make.leading.equalTo(mainBubbleViewAbs.snp.leading).offset(8)
-            make.trailing.equalTo(mainBubbleViewAbs.snp.trailing)
-            make.bottom.equalTo(mainBubbleViewAbs.snp.top)
-            make.height.equalTo(10)
+            make.width.greaterThanOrEqualTo(30)
+            make.centerY.equalTo(viewSenderNameAbs.snp.centerY)
+            make.height.equalTo(9)
+        }
+        
+        viewSenderNameAbs.snp.makeConstraints{ (make) in
+            make.leading.equalTo(mainBubbleViewAbs.snp.leading)
+            make.trailing.equalTo(txtSenderNameAbs.snp.trailing).offset(8)
+            make.bottom.equalTo(mainBubbleViewAbs.snp.top).offset(-0.5)
+            make.height.equalTo(9.5)
         }
     }
     
@@ -679,6 +697,11 @@ class AbstractCell: IGMessageGeneralCollectionViewCell {
         if txtSenderNameAbs != nil {
             txtSenderNameAbs.removeFromSuperview()
             txtSenderNameAbs = nil
+        }
+        
+        if viewSenderNameAbs != nil {
+            viewSenderNameAbs.removeFromSuperview()
+            viewSenderNameAbs = nil
         }
     }
     
