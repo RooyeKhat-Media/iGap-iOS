@@ -173,6 +173,7 @@
 		FA50A8D01DD35EFD00C6D2EA /* IGRegistrationStepTermsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA50A8CA1DD35EFD00C6D2EA /* IGRegistrationStepTermsViewController.swift */; };
 		FA50A8D11DD35EFD00C6D2EA /* IGRegistrationStepVerificationCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA50A8CB1DD35EFD00C6D2EA /* IGRegistrationStepVerificationCodeViewController.swift */; };
 		FA50A8D21DD35EFD00C6D2EA /* IGSplashScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA50A8CC1DD35EFD00C6D2EA /* IGSplashScreenViewController.swift */; };
+		FA5301DD2150D12B00A95C2C /* IGHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5301DC2150D12B00A95C2C /* IGHelper.swift */; };
 		FA5656B9204AB18F00DB46F0 /* igap_noresponse.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FA5656A5204AB18C00DB46F0 /* igap_noresponse.mp3 */; };
 		FA5656BD204AB18F00DB46F0 /* igap_connect.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FA5656A9204AB18D00DB46F0 /* igap_connect.mp3 */; };
 		FA5656BE204AB18F00DB46F0 /* igap_signaling.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FA5656AA204AB18D00DB46F0 /* igap_signaling.mp3 */; };
@@ -534,6 +535,7 @@
 		FA50A8CA1DD35EFD00C6D2EA /* IGRegistrationStepTermsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGRegistrationStepTermsViewController.swift; sourceTree = "<group>"; };
 		FA50A8CB1DD35EFD00C6D2EA /* IGRegistrationStepVerificationCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGRegistrationStepVerificationCodeViewController.swift; sourceTree = "<group>"; };
 		FA50A8CC1DD35EFD00C6D2EA /* IGSplashScreenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IGSplashScreenViewController.swift; sourceTree = "<group>"; };
+		FA5301DC2150D12B00A95C2C /* IGHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGHelper.swift; sourceTree = "<group>"; };
 		FA5656A5204AB18C00DB46F0 /* igap_noresponse.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = igap_noresponse.mp3; sourceTree = "<group>"; };
 		FA5656A9204AB18D00DB46F0 /* igap_connect.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = igap_connect.mp3; sourceTree = "<group>"; };
 		FA5656AA204AB18D00DB46F0 /* igap_signaling.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = igap_signaling.mp3; sourceTree = "<group>"; };
@@ -1301,6 +1303,7 @@
 				FAEEB0C01E1BC04E00B6775F /* IGContactManager.swift */,
 				FA3D947B1E6AA9580087D368 /* IGRoomManager.swift */,
 				FA3C8E031E6D785800D94FBB /* IGClientActionManager.swift */,
+				FA5301DC2150D12B00A95C2C /* IGHelper.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -1937,6 +1940,7 @@
 				FA0953711E1B97700043ED3F /* IGSettingTableViewController.swift in Sources */,
 				FA1C449C1DC716A20016C346 /* IGCountry.swift in Sources */,
 				932D1ABE1E7426AD000F0D97 /* IGChannelAndGroupInfoSharedMediaImagesAndVideosCollectionViewCell.swift in Sources */,
+				FA5301DD2150D12B00A95C2C /* IGHelper.swift in Sources */,
 				FAEA75DB1DDB012800C387F1 /* IGRoomMessageLog.swift in Sources */,
 				FAA30F671DAA6F790061B8C9 /* IGWebSocketManager.swift in Sources */,
 				FA93EE2C2029DB1300DD1521 /* AudioCell.swift in Sources */,

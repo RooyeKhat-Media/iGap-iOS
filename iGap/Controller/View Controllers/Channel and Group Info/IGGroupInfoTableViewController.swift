@@ -674,28 +674,29 @@ class IGGroupInfoTableViewController: UITableViewController , UIGestureRecognize
             popoverController.permittedArrowDirections = UIPopoverArrowDirection.init(rawValue: 0)
         }
         present(deleteConfirmAlertView, animated: true, completion: nil)
-        
-        
     }
-
     
     func showGroupLinkAlert() {
         if selectedGroup != nil {
-            var channelLink: String? = ""
+            var groupLink: String? = ""
             if room?.groupRoom?.type == .privateRoom {
-                channelLink = room?.groupRoom?.privateExtra?.inviteLink
+                groupLink = room?.groupRoom?.privateExtra?.inviteLink
             }
             if room?.groupRoom?.type == .publicRoom {
-                channelLink = room?.groupRoom?.publicExtra?.username
+                groupLink = room?.groupRoom?.publicExtra?.username
             }
-            let alert = UIAlertController(title: "Group Link", message: channelLink, preferredStyle: .alert)
-            let copyAction = UIAlertAction(title: "Copy", style: .default, handler: {
-                (alert: UIAlertAction) -> Void in
-                UIPasteboard.general.string = channelLink
+            
+            let alert = UIAlertController(title: "Group Link", message: groupLink, preferredStyle: .alert)
+            
+            let copyAction = UIAlertAction(title: "Copy", style: .default, handler: { (alert: UIAlertAction) -> Void in
+                UIPasteboard.general.string = groupLink
             })
-            let shareAction = UIAlertAction(title: "Share", style: .default, handler: nil)
-            let changeAction = UIAlertAction(title: "Change", style: .default, handler: {
-                (alert: UIAlertAction) -> Void in
+            
+            let shareAction = UIAlertAction(title: "Share", style: .default, handler: { (alert: UIAlertAction) -> Void in
+                IGHelper.shareText(message: IGHelper.shareLinkPrefixGroup + "\n" + groupLink!, viewController: self)
+            })
+            
+            let changeAction = UIAlertAction(title: "Change", style: .default, handler: { (alert: UIAlertAction) -> Void in
                 if self.room?.groupRoom?.type == .publicRoom {
                     self.performSegue(withIdentifier: "showGroupTypeSetting", sender: self)
                 }
@@ -703,17 +704,20 @@ class IGGroupInfoTableViewController: UITableViewController , UIGestureRecognize
                     self.requestToRevolLink()
                 }
             })
+            
             let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            
             alert.view.tintColor = UIColor.organizationalColor()
             alert.addAction(copyAction)
             alert.addAction(shareAction)
             if myRole == .owner {
-            alert.addAction(changeAction)
+                alert.addAction(changeAction)
             }
             alert.addAction(cancelAction)
             self.present(alert, animated: true, completion: nil)
         }
     }
+    
     
     func requestToRevolLink() {
         IGGroupRevokLinkRequest.Generator.generate(roomID: (room?.id)!).success({ (protoResponse) in
