@@ -20,17 +20,36 @@ class IGWallpaperPreview: UIViewController, UIGestureRecognizerDelegate {
     @IBOutlet weak var downloadIndicator: IGDownloadUploadIndicatorView!
 
     let disposeBag = DisposeBag()
-    var wallpaperFile : IGFile!
+    var wallpaperFile : IGFile?
+    var wallpaperLocal: NSData?
+    var colorHex: String?
     var allowSetWallpaper: Bool = false
     
     static var chatWallpaper: NSData?
+    static var chatSolidColor: String?
     
     @IBAction func btnSet(_ sender: UIButton) {
         if !allowSetWallpaper {
             return
         }
-        IGFactory.shared.setWallpaper(wallpaper: wallpaperFile.path()!)
-        IGWallpaperPreview.chatWallpaper = try? NSData(contentsOf: wallpaperFile.path()!)
+        
+        if colorHex != nil {
+            IGFactory.shared.setWallpaperSolidColor(solidColor: colorHex!)
+            IGFactory.shared.setWallpaperFile(wallpaper: nil)
+            IGWallpaperPreview.chatSolidColor = colorHex!
+            IGWallpaperPreview.chatWallpaper = nil
+        } else {
+            var imageData : NSData!
+            if wallpaperLocal != nil {
+                imageData = wallpaperLocal
+            } else {
+                imageData = try? NSData(contentsOf: (wallpaperFile?.path())!)
+            }
+            IGFactory.shared.setWallpaperFile(wallpaper: imageData)
+            IGFactory.shared.setWallpaperSolidColor(solidColor: nil)
+            IGWallpaperPreview.chatWallpaper = imageData
+            IGWallpaperPreview.chatSolidColor = nil
+        }
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -47,9 +66,23 @@ class IGWallpaperPreview: UIViewController, UIGestureRecognizerDelegate {
         btnSet.removeUnderline()
         btnCancel.removeUnderline()
         
-        imgWallpaper.setThumbnail(for: wallpaperFile)
+        if wallpaperLocal != nil {
+            imgWallpaper.image = UIImage(data: wallpaperLocal! as Data)
+            allowSetWallpaper = true
+            self.downloadIndicator.setState(.ready)
+            return
+        }
         
-        if !IGGlobal.isFileExist(path: wallpaperFile.path()){
+        if colorHex != nil {
+            imgWallpaper.backgroundColor = UIColor.hexStringToUIColor(hex: colorHex!)
+            allowSetWallpaper = true
+            self.downloadIndicator.setState(.ready)
+            return
+        }
+        
+        imgWallpaper.setThumbnail(for: wallpaperFile!)
+        
+        if !IGGlobal.isFileExist(path: wallpaperFile?.path()){
             
             /*** don't need to use listener for set download percentage, because wallpapaers will be downloaded in one chunck
              
@@ -76,14 +109,14 @@ class IGWallpaperPreview: UIViewController, UIGestureRecognizerDelegate {
             self.downloadIndicator.shouldShowSize = false
             self.downloadIndicator.setState(.downloading)
             
-            IGDownloadManager.sharedManager.download(file: wallpaperFile, previewType: .originalFile, completion: { (attachment) -> Void in
+            IGDownloadManager.sharedManager.download(file: wallpaperFile!, previewType: .originalFile, completion: { (attachment) -> Void in
                 self.allowSetWallpaper = true
                 DispatchQueue.main.async {
                     self.downloadIndicator.setPercentage(1.0)
                 }
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1) { // use delay for show percent to user
-                    self.imgWallpaper.setThumbnail(for: self.wallpaperFile)
+                    self.imgWallpaper.setThumbnail(for: self.wallpaperFile!)
                 }
             }, failure: {
                 

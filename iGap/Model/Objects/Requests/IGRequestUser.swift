@@ -17,16 +17,20 @@ import FirebaseInstanceID
 enum IGVerificationCodeSendMethod {
     case sms
     case igap
+    case call
     case both
 }
 
 //MARK: -
 class IGUserRegisterRequest : IGRequest {
     class Generator : IGRequest.Generator{
-        class func generate(countryCode : String, phoneNumber : Int64) -> IGRequestWrapper {
+        class func generate(countryCode : String, phoneNumber : Int64, preferenceMethod: IGPUserRegister.IGPPreferenceMethod? = nil) -> IGRequestWrapper {
             var userRegisterRequestMessage = IGPUserRegister()
             userRegisterRequestMessage.igpCountryCode = countryCode
             userRegisterRequestMessage.igpPhoneNumber = phoneNumber
+            if preferenceMethod != nil {
+                userRegisterRequestMessage.igpPreferenceMethod = preferenceMethod!
+            }
             return IGRequestWrapper(message: userRegisterRequestMessage, actionID: 100)
         }
     }
@@ -38,17 +42,27 @@ class IGUserRegisterRequest : IGRequest {
             case all
         }
         
-        class func intrepret(response responseProtoMessage: IGPUserRegisterResponse) -> (username:String, userId:Int64, authorHash: String, verificationMethod: IGVerificationCodeSendMethod, resendDelay:Int32, codeDigitsCount:Int32, codeRegex:String) {
+        class func intrepret(response responseProtoMessage: IGPUserRegisterResponse) -> (username:String, userId:Int64, authorHash: String, verificationMethod: IGVerificationCodeSendMethod, resendDelay:Int32, codeDigitsCount:Int32, codeRegex:String, callMethodSupport: Bool) {
             
             var codeSendMethod : IGVerificationCodeSendMethod
             
             switch responseProtoMessage.igpMethod {
             case .verifyCodeSms:
                 codeSendMethod = .sms
+                break
+                
             case .verifyCodeSocket:
                 codeSendMethod = .igap
+                break
+                
+            case .verifyCodeCall:
+                codeSendMethod = .call
+                break
+                
             case .verifyCodeSmsSocket:
                 codeSendMethod = .both
+                break
+                
             case .UNRECOGNIZED(_):
                 codeSendMethod = .sms
             }
@@ -59,7 +73,8 @@ class IGUserRegisterRequest : IGRequest {
                     verificationMethod: codeSendMethod,
                     resendDelay:        responseProtoMessage.igpResendDelay,
                     codeDigitsCount:    responseProtoMessage.igpVerifyCodeDigitCount,
-                    codeRegex:          responseProtoMessage.igpVerifyCodeRegex)
+                    codeRegex:          responseProtoMessage.igpVerifyCodeRegex,
+                    callMethodSupport:  responseProtoMessage.igpCallMethodSupported)
             
         }
         

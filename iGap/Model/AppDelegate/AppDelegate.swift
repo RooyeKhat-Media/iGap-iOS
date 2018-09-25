@@ -29,8 +29,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     internal static var isFirstEnterToApp: Bool = true
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
-        
-        
 //        let config = Realm.Configuration(schemaVersion: try! schemaVersionAtURL(Realm.Configuration.defaultConfiguration.fileURL!) + 1)
 //        Realm.Configuration.defaultConfiguration = config
 //        
@@ -99,6 +97,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         UserDefaults.standard.setValue(false, forKey:"_UIConstraintBasedLayoutLogUnsatisfiable")
 
         pushNotification(application)
+        detectBackground()
         
         return true
     }
@@ -150,6 +149,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         application.registerForRemoteNotifications()
     }
     /******************* Notificaton End *******************/
+    
+    private func detectBackground() {
+        
+        if IGWallpaperPreview.chatSolidColor == nil {
+            if let wallpaper = try! Realm().objects(IGRealmWallpaper.self).first {
+                if let color = wallpaper.selectedColor {
+                    IGWallpaperPreview.chatSolidColor = color
+                    return
+                }
+            }
+        }
+        
+        if IGWallpaperPreview.chatWallpaper == nil {
+            if let wallpaper = try! Realm().objects(IGRealmWallpaper.self).first {
+                IGWallpaperPreview.chatWallpaper = wallpaper.selectedFile
+            }
+        }
+    }
     
     
     func logoutAndShowRegisterViewController() {

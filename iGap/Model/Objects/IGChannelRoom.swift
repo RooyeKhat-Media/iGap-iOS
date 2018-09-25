@@ -175,6 +175,7 @@ class IGChannelRoom: Object {
             self.publicExtra = IGChannelPublicExtra(igpPublicExtra: igpChannelRoom.igpPublicExtra, id: id)
         }
         
+        self.isSignature = igpChannelRoom.igpSignature
         self.isVerified = igpChannelRoom.igpVerified
     }
     

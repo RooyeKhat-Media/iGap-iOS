@@ -338,7 +338,6 @@ class IGSettingTableViewController: UITableViewController , NVActivityIndicatorV
                 performSegue(withIdentifier: "showLookAndFind", sender: self)
             } else if indexPath.row == 4 {
                 self.tableView.isUserInteractionEnabled = false
-                self.tableView.isUserInteractionEnabled = false
                 performSegue(withIdentifier: "showWallpaperOptionPage", sender: self)
             } else if indexPath.row == 5 {
                 self.tableView.isUserInteractionEnabled = false

@@ -195,10 +195,10 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y2j-df-bS9">
-                                                    <rect key="frame" x="14" y="11" width="32" height="32"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y2j-df-bS9">
+                                                    <rect key="frame" x="14" y="12" width="32" height="32"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" name="iGap-Fontico" family="iGap-Fontico" pointSize="24"/>
+                                                    <fontDescription key="fontDescription" name="iGap-Fontico" family="iGap-Fontico" pointSize="33"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -2482,8 +2482,8 @@
                                             <rect key="frame" x="0.0" y="0.0" width="376" height="43.666666666666664"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Photo Library" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R7m-mg-7i4" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="13" width="103" height="16"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Solid Colors" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R7m-mg-7i4" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
+                                                    <rect key="frame" x="27.000000000000007" y="13" width="91.666666666666686" height="16"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -2503,8 +2503,8 @@
                                             <rect key="frame" x="0.0" y="0.0" width="376" height="43.666666666666664"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Solid color" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="boQ-9r-Lzf" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
-                                                    <rect key="frame" x="27" y="13" width="81" height="16"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Photos" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="boQ-9r-Lzf" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
+                                                    <rect key="frame" x="26.999999999999996" y="13" width="53.666666666666657" height="16"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -2519,75 +2519,46 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
+                            <tableViewSection headerTitle="" id="U7z-Bi-jSg">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="MBj-p6-8Zv">
+                                        <rect key="frame" x="0.0" y="203" width="414" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="MBj-p6-8Zv" id="euf-Xt-ng4">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.666666666666664"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Reset Wallpaper" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HxX-Eo-ftB" customClass="IGLabel" customModule="iGap" customModuleProvider="target">
+                                                    <rect key="frame" x="26.999999999999993" y="13" width="124.33333333333331" height="16"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="HxX-Eo-ftB" firstAttribute="leading" secondItem="euf-Xt-ng4" secondAttribute="leadingMargin" constant="7" id="FhX-6f-hbF"/>
+                                                <constraint firstItem="HxX-Eo-ftB" firstAttribute="top" secondItem="euf-Xt-ng4" secondAttribute="topMargin" constant="2" id="Vai-59-ZFY"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="HxX-Eo-ftB" secondAttribute="bottom" constant="4" id="mPo-ga-dei"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
                         </sections>
                         <connections>
                             <outlet property="dataSource" destination="6Hy-fe-G4M" id="BGv-kB-nw6"/>
                             <outlet property="delegate" destination="6Hy-fe-G4M" id="bK0-Fv-0vs"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Chat Wallpaper" id="naV-4y-bWp"/>
+                    <navigationItem key="navigationItem" title="Chat Wallpaper" id="naV-4y-bWp" customClass="IGNavigationItem" customModule="iGap" customModuleProvider="target"/>
                     <connections>
                         <segue destination="OpA-fx-bUr" kind="show" identifier="showWallpaperListPage" id="6ru-We-Sy3"/>
-                        <segue destination="shO-Mb-6BF" kind="show" identifier="GoToSolidColorPage" id="o96-Nd-YvC"/>
+                        <segue destination="ki2-oV-nJi" kind="show" identifier="showWallpaperPreview" id="vpP-Vs-3F7"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QfP-9M-IFz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1112" y="-4721"/>
-        </scene>
-        <!--Setting Chat Wallpaper Solid Color View Controller-->
-        <scene sceneID="Mcm-8E-KiF">
-            <objects>
-                <viewController storyboardIdentifier="SettingChatWallpaperSolidColorPage" id="shO-Mb-6BF" customClass="IGSettingChatWallpaperSolidColorViewController" customModule="iGap" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="nRp-nO-UE3"/>
-                        <viewControllerLayoutGuide type="bottom" id="v9j-86-a4J"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="UhJ-dc-kJV">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LgQ-um-maP" customClass="SwiftHSVColorPicker">
-                                <rect key="frame" x="20.666666666666657" y="219" width="372.66666666666674" height="368"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HCD-mL-s6X">
-                                <rect key="frame" x="180.66666666666666" y="100" width="53" height="30"/>
-                                <state key="normal" title="Choose"/>
-                                <connections>
-                                    <action selector="ChooseButtonClicked:" destination="shO-Mb-6BF" eventType="touchUpInside" id="3ac-bd-cQ9"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sCC-h7-6AG">
-                                <rect key="frame" x="183" y="138" width="48" height="30"/>
-                                <state key="normal" title="Cancel"/>
-                                <connections>
-                                    <action selector="cancelButtonClicked:" destination="shO-Mb-6BF" eventType="touchUpInside" id="sO1-rt-ybC"/>
-                                    <segue destination="l0C-gD-BKD" kind="unwind" identifier="backToChatWallPaperMainList" unwindAction="goBackToMainListWithSeque:" id="Ih6-mi-NRR"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="LgQ-um-maP" firstAttribute="width" secondItem="UhJ-dc-kJV" secondAttribute="width" multiplier="0.9" id="0MP-qa-9NF"/>
-                            <constraint firstItem="HCD-mL-s6X" firstAttribute="centerX" secondItem="UhJ-dc-kJV" secondAttribute="centerX" id="3If-ix-OND"/>
-                            <constraint firstItem="sCC-h7-6AG" firstAttribute="top" secondItem="HCD-mL-s6X" secondAttribute="bottom" constant="8" id="AOi-en-1XY"/>
-                            <constraint firstItem="LgQ-um-maP" firstAttribute="centerX" secondItem="UhJ-dc-kJV" secondAttribute="centerX" id="B6U-oO-Xaa"/>
-                            <constraint firstItem="sCC-h7-6AG" firstAttribute="centerX" secondItem="UhJ-dc-kJV" secondAttribute="centerX" id="Lrr-QS-gLy"/>
-                            <constraint firstItem="LgQ-um-maP" firstAttribute="top" secondItem="sCC-h7-6AG" secondAttribute="bottom" constant="51" id="iOa-MB-mXi"/>
-                            <constraint firstItem="LgQ-um-maP" firstAttribute="height" secondItem="UhJ-dc-kJV" secondAttribute="height" multiplier="0.5" id="o78-RN-qNQ"/>
-                            <constraint firstItem="HCD-mL-s6X" firstAttribute="top" secondItem="nRp-nO-UE3" secondAttribute="bottom" constant="36" id="wac-PZ-xwE"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" id="zQD-6d-0Kd"/>
-                    <connections>
-                        <outlet property="colorPicker" destination="LgQ-um-maP" id="DUR-cM-f47"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="1bF-MS-IJR" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="l0C-gD-BKD" userLabel="Exit" sceneMemberID="exit"/>
-            </objects>
-            <point key="canvasLocation" x="-193" y="-4722"/>
         </scene>
         <!--Wallpaper Library-->
         <scene sceneID="pEM-Mj-nJ9">
@@ -2639,7 +2610,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FyH-Ur-3gL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-193" y="-3860"/>
+            <point key="canvasLocation" x="-239" y="-5100"/>
         </scene>
         <!--Title-->
         <scene sceneID="3W6-Pe-zvE">
@@ -2718,7 +2689,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oAS-a2-gg8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="684" y="-3860"/>
+            <point key="canvasLocation" x="-239" y="-4307"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="D2C-gH-d6z">
@@ -6377,6 +6348,7 @@ Afg
         <segue reference="Oa0-mY-XGu"/>
         <segue reference="P15-0g-TjZ"/>
         <segue reference="Xzv-Yc-EAf"/>
+        <segue reference="vpP-Vs-3F7"/>
         <segue reference="drr-8R-XU7"/>
         <segue reference="FWu-Ni-6zD"/>
     </inferredMetricsTieBreakers>

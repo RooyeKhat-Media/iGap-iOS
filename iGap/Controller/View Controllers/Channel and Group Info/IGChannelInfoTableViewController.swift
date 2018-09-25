@@ -674,14 +674,17 @@ class IGChannelInfoTableViewController: UITableViewController , UIGestureRecogni
             if room?.channelRoom?.type == .publicRoom {
                 channelLink = room?.channelRoom?.publicExtra?.username
             }
+            
             let alert = UIAlertController(title: "Channel Link", message: channelLink, preferredStyle: .alert)
-            let copyAction = UIAlertAction(title: "Copy", style: .default, handler: {
-                (alert: UIAlertAction) -> Void in
+            let copyAction = UIAlertAction(title: "Copy", style: .default, handler: { (alert: UIAlertAction) -> Void in
                 UIPasteboard.general.string = channelLink
             })
-            let shareAction = UIAlertAction(title: "Share", style: .default, handler: nil)
-            let changeAction = UIAlertAction(title: "Change", style: .default, handler: {
-                (alert: UIAlertAction) -> Void in
+            
+            let shareAction = UIAlertAction(title: "Share", style: .default, handler: { (alert: UIAlertAction) -> Void in
+                IGHelper.shareText(message: IGHelper.shareLinkPrefixChannel + "\n" + channelLink!, viewController: self)
+            })
+            
+            let changeAction = UIAlertAction(title: "Change", style: .default, handler: { (alert: UIAlertAction) -> Void in
                 if self.room?.channelRoom?.type == .publicRoom {
                     self.performSegue(withIdentifier: "showChannelInfoSetType", sender: self)
                 }
@@ -689,12 +692,14 @@ class IGChannelInfoTableViewController: UITableViewController , UIGestureRecogni
                     self.requestToRevolLink()
                 }
             })
+            
             let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            
             alert.view.tintColor = UIColor.organizationalColor()
             alert.addAction(copyAction)
             alert.addAction(shareAction)
             if  myRole == .owner {
-            alert.addAction(changeAction)
+                alert.addAction(changeAction)
             }
             alert.addAction(cancelAction)
             self.present(alert, animated: true, completion: nil)
