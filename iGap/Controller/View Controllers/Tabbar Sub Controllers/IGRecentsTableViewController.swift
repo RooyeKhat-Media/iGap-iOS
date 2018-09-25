@@ -54,6 +54,10 @@ class IGRecentsTableViewController: UITableViewController, MessageReceiveObserve
             case .connected:
                 connectionStatus = .connected
                 IGAppManager.connectionStatusStatic = .connected
+                break
+            case .iGap:
+                connectionStatus = .iGap
+                IGAppManager.connectionStatusStatic = .iGap
                 self.setDefaultNavigationItem()
                 break
             }

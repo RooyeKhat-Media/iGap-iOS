@@ -808,12 +808,17 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate, UIGe
         switch status {
         case .connected:
             connectionStatus = .connected
+            break
         case .connecting:
             connectionStatus = .connecting
+            break
         case .waitingForNetwork:
             connectionStatus = .waitingForNetwork
+            break
+        case .iGap:
+            connectionStatus = .iGap
+            break
         }
-        
     }
     
     func groupPin(messageId: Int64 = 0){
@@ -1345,6 +1350,10 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate, UIGe
     @IBAction func didTapOnCancelReplyOrForwardButton(_ sender: UIButton) {
         self.selectedMessageToForwardToThisRoom = nil
         self.selectedMessageToReply = nil
+        if self.selectedMessageToEdit != nil {
+            self.selectedMessageToEdit = nil
+            self.inputTextView.text = ""
+        }
         self.setInputBarHeight()
         self.setSendAndRecordButtonStates()
     }

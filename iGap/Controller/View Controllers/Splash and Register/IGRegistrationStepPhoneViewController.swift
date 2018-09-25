@@ -56,6 +56,9 @@ class IGRegistrationStepPhoneViewController: UIViewController {
             self.getUserCurrentLocation()
             connectionStatus = .connected
             break
+        case .iGap:
+            connectionStatus = .iGap
+            break
         }
     }
 

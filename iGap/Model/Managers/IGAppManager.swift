@@ -25,6 +25,7 @@ class IGAppManager: NSObject {
         case waitingForNetwork
         case connecting
         case connected
+        case iGap // login state
     }
     
     var realm = try! Realm()

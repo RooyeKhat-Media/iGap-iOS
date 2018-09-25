@@ -192,12 +192,17 @@ class IGChannelInfoTableViewController: UITableViewController , UIGestureRecogni
         switch status {
         case .connected:
             connectionStatus = .connected
+            break
         case .connecting:
             connectionStatus = .connecting
+            break
         case .waitingForNetwork:
             connectionStatus = .waitingForNetwork
+            break
+        case .iGap:
+            connectionStatus = .iGap
+            break
         }
-        
     }
     
     @objc func handleTap(recognizer:UITapGestureRecognizer) {
