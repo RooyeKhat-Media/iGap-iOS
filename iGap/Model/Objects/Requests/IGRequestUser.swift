@@ -145,7 +145,6 @@ class IGUserLoginRequest : IGRequest {
         
         class func intrepret(response responseProtoMessage: IGPUserLoginResponse) {
             IGAppManager.sharedManager.setNetworkConnectionStatus(.iGap)
-            IGAppManager.sharedManager.setMplActive(enable: responseProtoMessage.igpMplActive)
             getToken()
         }
         
