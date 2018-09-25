@@ -40,7 +40,7 @@ class IGSettingChatWallpaperTableViewController: UITableViewController,UINavigat
         if indexPath.section == 0 {
             switch indexPath.row {
             case 0:
-                performSegue(withIdentifier: "GoToWallpaperLibraryPage", sender: self)
+                performSegue(withIdentifier: "showWallpaperListPage", sender: self)
             case 1:
                 GoToPhotoLibrary()
             case 2:

@@ -89,6 +89,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate, UIGe
     @IBOutlet weak var inputBarOriginalMessageViewBodyTextLabel: UILabel!
     @IBOutlet weak var scrollToBottomContainerView: UIView!
     @IBOutlet weak var scrollToBottomContainerViewConstraint: NSLayoutConstraint!
+    @IBOutlet weak var chatBackground: UIImageView!
     private let disposeBag = DisposeBag()
     var allowForGetHistory: Bool = true
     var recorder: AVAudioRecorder?
@@ -340,6 +341,20 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate, UIGe
         }
     }
     
+    private func detectBackground() {
+        if IGWallpaperPreview.chatWallpaper == nil {
+            if let wallpaper = try! Realm().objects(IGRealmWallpaper.self).first {
+                IGWallpaperPreview.chatWallpaper = wallpaper.selectedFile
+            }
+        }
+        
+        if let wallpaper = IGWallpaperPreview.chatWallpaper {
+            chatBackground.image = UIImage(data: wallpaper as Data)
+        } else {
+            chatBackground.image = UIImage(named: "back1")
+        }
+    }
+    
     private func removeButtonsUnderline(buttons: [UIButton]){
         for btn in buttons {
             btn.removeUnderline()
@@ -487,6 +502,9 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate, UIGe
     
     
     override func viewWillAppear(_ animated: Bool) {
+        
+        detectBackground()
+        
         if let forwardMsg = selectedMessageToForwardToThisRoom {
             self.forwardOrReplyMessage(forwardMsg, isReply: false)
         } else if let draft = self.room!.draft {
