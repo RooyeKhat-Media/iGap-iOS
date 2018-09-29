@@ -1127,6 +1127,14 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate, UIGe
                 message.repliedTo = selectedMessageToReply // Hint: if use this line before "saveNewlyWriitenMessageToDatabase" app will be crashed
                 IGMessageSender.defaultSender.send(message: message, to: room!)
                 
+                self.inputBarSendButton.isHidden = true
+                self.inputBarRecordButton.isHidden = false
+                self.inputTextView.text = ""
+                self.currentAttachment = nil
+                self.selectedMessageToForwardToThisRoom = nil
+                self.selectedMessageToReply = nil
+                self.setInputBarHeight()
+                
             } else {
                 
                 let messages = inputTextView.text.split(limit: MAX_TEXT_LENGHT)
@@ -1147,17 +1155,17 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate, UIGe
                         message.forwardedFrom = self.selectedMessageToForwardToThisRoom // Hint: if use this line before "saveNewlyWriitenMessageToDatabase" app will be crashed
                         message.repliedTo = self.selectedMessageToReply // Hint: if use this line before "saveNewlyWriitenMessageToDatabase" app will be crashed
                         IGMessageSender.defaultSender.send(message: message, to: self.room!)
+                        
+                        self.inputBarSendButton.isHidden = true
+                        self.inputBarRecordButton.isHidden = false
+                        self.inputTextView.text = ""
+                        self.currentAttachment = nil
+                        self.selectedMessageToForwardToThisRoom = nil
+                        self.selectedMessageToReply = nil
+                        self.setInputBarHeight()
                     }
                 }
             }
-            
-            self.inputBarSendButton.isHidden = true
-            self.inputBarRecordButton.isHidden = false
-            self.inputTextView.text = ""
-            self.selectedMessageToForwardToThisRoom = nil
-            self.selectedMessageToReply = nil
-            self.currentAttachment = nil
-            self.setInputBarHeight()
         }
     }
     

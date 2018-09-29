@@ -135,6 +135,11 @@ class IGMusicViewController: UIViewController {
                     continue
                 }
             }
+            
+            if mediaCoverImageView.image == nil {
+                mediaCoverImageView.image = UIImage(named: "IG_Message_Cell_Player_Default_Cover")
+            }
+            
             mediaNameLabel.text = "\(titleName)-\(albumName)"
         }
     }
