@@ -135,6 +135,9 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate, UIGe
     var hud = MBProgressHUD()
     let locationManager = CLLocationManager()
     
+    let MAX_TEXT_LENGHT = 4096
+    let MAX_TEXT_ATTACHMENT_LENGHT = 200
+    
     /* variables for fetch message */
     var allMessages:Results<IGRoomMessage>!
     var getMessageLimit = 25
@@ -1076,27 +1079,29 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate, UIGe
                 return
             }
             
-            let message = IGRoomMessage(body: inputTextView.text)
-            
             if currentAttachment != nil {
+                
+                let messageText = inputTextView.text.substring(offset: MAX_TEXT_ATTACHMENT_LENGHT)
+                
+                let message = IGRoomMessage(body: messageText)
                 currentAttachment?.status = .processingForUpload
                 message.attachment = currentAttachment?.detach()
                 IGAttachmentManager.sharedManager.add(attachment: currentAttachment!)
                 switch currentAttachment!.type {
                 case .image:
-                    if inputTextView.text == "" {
+                    if messageText == "" {
                         message.type = .image
                     } else {
                         message.type = .imageAndText
                     }
                 case .video:
-                    if inputTextView.text == "" {
+                    if messageText == "" {
                         message.type = .video
                     } else {
                         message.type = .videoAndText
                     }
                 case .audio:
-                    if inputTextView.text == "" {
+                    if messageText == "" {
                         message.type = .audio
                     } else {
                         message.type = .audioAndText
@@ -1104,7 +1109,7 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate, UIGe
                 case .voice:
                     message.type = .voice
                 case .file:
-                    if inputTextView.text == "" {
+                    if messageText == "" {
                         message.type = .file
                     } else {
                         message.type = .fileAndText
@@ -1112,22 +1117,39 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate, UIGe
                 default:
                     break
                 }
+                
+                message.roomId = self.room!.id
+                
+                let detachedMessage = message.detach()
+                
+                IGFactory.shared.saveNewlyWriitenMessageToDatabase(detachedMessage)
+                message.forwardedFrom = selectedMessageToForwardToThisRoom // Hint: if use this line before "saveNewlyWriitenMessageToDatabase" app will be crashed
+                message.repliedTo = selectedMessageToReply // Hint: if use this line before "saveNewlyWriitenMessageToDatabase" app will be crashed
+                IGMessageSender.defaultSender.send(message: message, to: room!)
+                
             } else {
-                if (selectedMessageToReply == nil && selectedMessageToForwardToThisRoom == nil && self.inputTextView.text.isEmpty) {
-                    self.inputTextView.text = ""
-                    return
+                
+                let messages = inputTextView.text.split(limit: MAX_TEXT_LENGHT)
+                for i in 0..<messages.count {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + (Double(i) * 0.5)) {
+                        let message = IGRoomMessage(body: messages[i])
+                        if (self.selectedMessageToReply == nil && self.selectedMessageToForwardToThisRoom == nil && messages[i].isEmpty) {
+                            self.inputTextView.text = ""
+                            return
+                        }
+                        
+                        message.type = .text
+                        message.roomId = self.room!.id
+                        
+                        let detachedMessage = message.detach()
+                        
+                        IGFactory.shared.saveNewlyWriitenMessageToDatabase(detachedMessage)
+                        message.forwardedFrom = self.selectedMessageToForwardToThisRoom // Hint: if use this line before "saveNewlyWriitenMessageToDatabase" app will be crashed
+                        message.repliedTo = self.selectedMessageToReply // Hint: if use this line before "saveNewlyWriitenMessageToDatabase" app will be crashed
+                        IGMessageSender.defaultSender.send(message: message, to: self.room!)
+                    }
                 }
-                message.type = .text
             }
-            
-            message.roomId = self.room!.id
-            
-            let detachedMessage = message.detach()
-            
-            IGFactory.shared.saveNewlyWriitenMessageToDatabase(detachedMessage)
-            message.forwardedFrom = selectedMessageToForwardToThisRoom // Hint: if use this line before "saveNewlyWriitenMessageToDatabase" app will be crashed
-            message.repliedTo = selectedMessageToReply // Hint: if use this line before "saveNewlyWriitenMessageToDatabase" app will be crashed
-            IGMessageSender.defaultSender.send(message: message, to: room!)
             
             self.inputBarSendButton.isHidden = true
             self.inputBarRecordButton.isHidden = false

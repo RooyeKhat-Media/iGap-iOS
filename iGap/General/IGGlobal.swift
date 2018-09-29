@@ -762,6 +762,31 @@ extension String {
         return String(self.prefix(upTo: index))
     }
     
+    func split(limit: Int) -> [String]{
+        var stringArray : [String] = []
+        if self.count <= limit {
+            stringArray = [self]
+        } else {
+            var countInt : Int = self.count / limit
+            let countDouble : Double = Double(self.count) / Double(limit)
+            
+            if Double(countDouble) - Double(countInt) > 0 {
+                countInt += 1
+            }
+            
+            for i in 0..<countInt {
+                let startIndex = i * limit
+                var endIndex = startIndex + limit
+                
+                if i == (count - 1) {
+                    endIndex = self.count - startIndex
+                }
+                
+                stringArray.append(self[startIndex..<endIndex])
+            }
+        }
+        return stringArray
+    }
     
     subscript(_ range: CountableRange<Int>) -> String {
         let idx1 = index(startIndex, offsetBy: max(0, range.lowerBound))
