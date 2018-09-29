@@ -17,7 +17,7 @@ class LocationCell: AbstractCell {
     @IBOutlet var mainBubbleViewWidth: NSLayoutConstraint!
     
     class func sizeForLocation() -> CGSize {
-        return CGSize(width: 300, height: 180)
+        return CGSize(width: 230, height: 130)
     }
     
     class func nib() -> UINib {
