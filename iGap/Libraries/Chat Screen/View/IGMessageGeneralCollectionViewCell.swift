@@ -17,6 +17,7 @@ protocol IGMessageGeneralCollectionViewCellDelegate {
     func didTapOnForwardedAttachment(cellMessage: IGRoomMessage, cell: IGMessageGeneralCollectionViewCell)
     func didTapOnOriginalMessageWhenReply(cellMessage: IGRoomMessage, cell: IGMessageGeneralCollectionViewCell)
     func didTapOnSenderAvatar(cellMessage: IGRoomMessage, cell: IGMessageGeneralCollectionViewCell)
+    func didTapOnReply(cellMessage: IGRoomMessage, cell: IGMessageGeneralCollectionViewCell)
     func didTapOnHashtag(hashtagText: String)
     func didTapOnMention(mentionText: String)
     func didTapOnURl(url: URL)

@@ -2563,6 +2563,21 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
         self.present(alertC, animated: true, completion: nil)
     }
   
+    func goToPosition(cellMessage: IGRoomMessage, cell: IGMessageGeneralCollectionViewCell?){
+        if let replyMessage = cellMessage.repliedTo {
+            let replyId = replyMessage.id
+            var count = 0
+            for message in self.messages {
+                if replyId == message.id {
+                    let indexPath = IndexPath(row: 0, section: count)
+                    self.collectionView.scrollToItem(at: indexPath, at: UICollectionViewScrollPosition.bottom, animated: false)
+                    break
+                }
+                count+=1
+            }
+        }
+    }
+    
     /******* overrided method for show file attachment (use from UIDocumentInteractionControllerDelegate) *******/
     func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
         return self
@@ -2681,7 +2696,10 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
     
     func didTapOnHashtag(hashtagText: String) {
         
-        
+    }
+    
+    func didTapOnReply(cellMessage: IGRoomMessage, cell: IGMessageGeneralCollectionViewCell){
+        goToPosition(cellMessage: cellMessage, cell: cell)
     }
     
     func didTapOnMention(mentionText: String) {
