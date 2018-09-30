@@ -2363,19 +2363,10 @@ extension IGMessageViewController: GrowingTextViewDelegate {
                                                        repeats:  false)
     }
     
-    func textViewDidBeginEditing(_ textView: UITextView) {
-//        self.sendTyping()
-    }
-    
-    func textViewDidEndEditing(_ textView: UITextView) {
-        self.sendCancelTyping()
-    }
-    
     func textViewDidChangeHeight(_ height: CGFloat) {
         inputTextViewHeight = height
         setInputBarHeight()
     }
-    
     
     func setInputBarHeight() {
         let height = max(self.inputTextViewHeight - 16, 22)
