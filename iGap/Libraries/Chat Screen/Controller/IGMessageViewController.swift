@@ -1026,6 +1026,12 @@ class IGMessageViewController: UIViewController, DidSelectLocationDelegate, UIGe
         }
     }
     
+    @IBAction func didTapOnPinView(_ sender: UIButton) {
+        if let pinMessage = room?.pinMessage {
+            goToPosition(cellMessage: pinMessage)
+        }
+    }
+    
     //MARK: IBActions
     @IBAction func didTapOnSendButton(_ sender: UIButton) {
         if currentAttachment == nil && inputTextView.text == "" && selectedMessageToForwardToThisRoom == nil {
@@ -2563,18 +2569,15 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
         self.present(alertC, animated: true, completion: nil)
     }
   
-    func goToPosition(cellMessage: IGRoomMessage, cell: IGMessageGeneralCollectionViewCell?){
-        if let replyMessage = cellMessage.repliedTo {
-            let replyId = replyMessage.id
-            var count = 0
-            for message in self.messages {
-                if replyId == message.id {
-                    let indexPath = IndexPath(row: 0, section: count)
-                    self.collectionView.scrollToItem(at: indexPath, at: UICollectionViewScrollPosition.bottom, animated: false)
-                    break
-                }
-                count+=1
+    func goToPosition(cellMessage: IGRoomMessage){
+        var count = 0
+        for message in self.messages {
+            if cellMessage.id == message.id {
+                let indexPath = IndexPath(row: 0, section: count)
+                self.collectionView.scrollToItem(at: indexPath, at: UICollectionViewScrollPosition.bottom, animated: false)
+                break
             }
+            count+=1
         }
     }
     
@@ -2699,7 +2702,9 @@ extension IGMessageViewController: IGMessageGeneralCollectionViewCellDelegate {
     }
     
     func didTapOnReply(cellMessage: IGRoomMessage, cell: IGMessageGeneralCollectionViewCell){
-        goToPosition(cellMessage: cellMessage, cell: cell)
+        if let replyMessage = cellMessage.repliedTo {
+            goToPosition(cellMessage: replyMessage)
+        }
     }
     
     func didTapOnMention(mentionText: String) {

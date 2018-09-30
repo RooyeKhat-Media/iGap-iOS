@@ -880,12 +880,21 @@
                                             <action selector="didTapOnPinClose:" destination="KJT-Hl-jm5" eventType="touchUpInside" id="bOr-CK-rTb"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lhL-qv-mDu">
+                                        <rect key="frame" x="11" y="0.0" width="304" height="50"/>
+                                        <connections>
+                                            <action selector="didTapOnPinView:" destination="KJT-Hl-jm5" eventType="touchUpInside" id="AAp-EF-OaA"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="grH-pt-p4x" secondAttribute="bottom" id="2Up-fY-Lv4"/>
                                     <constraint firstAttribute="bottom" secondItem="OfO-SB-YDv" secondAttribute="bottom" constant="3" id="6j9-JX-jqd"/>
+                                    <constraint firstAttribute="bottom" secondItem="lhL-qv-mDu" secondAttribute="bottom" id="EQ4-tX-zTU"/>
+                                    <constraint firstItem="grH-pt-p4x" firstAttribute="leading" secondItem="lhL-qv-mDu" secondAttribute="trailing" constant="10" id="GE9-pr-MfC"/>
                                     <constraint firstItem="grH-pt-p4x" firstAttribute="top" secondItem="gI9-RR-rF9" secondAttribute="top" id="I3V-Xb-GhH"/>
+                                    <constraint firstItem="lhL-qv-mDu" firstAttribute="top" secondItem="gI9-RR-rF9" secondAttribute="top" id="LMU-6S-aSY"/>
                                     <constraint firstItem="OfO-SB-YDv" firstAttribute="leading" secondItem="ODy-Ce-ZEZ" secondAttribute="trailing" constant="8" id="NKt-AG-7HC"/>
                                     <constraint firstItem="fMi-wX-rBo" firstAttribute="leading" secondItem="ODy-Ce-ZEZ" secondAttribute="trailing" constant="8" id="NfN-8l-bbw"/>
                                     <constraint firstItem="ODy-Ce-ZEZ" firstAttribute="top" secondItem="gI9-RR-rF9" secondAttribute="top" constant="5" id="Z2S-v0-nhY"/>
@@ -893,6 +902,7 @@
                                     <constraint firstAttribute="trailing" secondItem="grH-pt-p4x" secondAttribute="trailing" id="ciJ-iT-wMI"/>
                                     <constraint firstItem="fMi-wX-rBo" firstAttribute="top" secondItem="gI9-RR-rF9" secondAttribute="top" constant="3" id="dSm-q8-yt7"/>
                                     <constraint firstAttribute="height" constant="50" id="dyY-Fm-Tab"/>
+                                    <constraint firstItem="lhL-qv-mDu" firstAttribute="leading" secondItem="ODy-Ce-ZEZ" secondAttribute="trailing" id="hzc-4V-WtR"/>
                                     <constraint firstItem="ODy-Ce-ZEZ" firstAttribute="leading" secondItem="gI9-RR-rF9" secondAttribute="leading" constant="8" id="ns3-rT-r14"/>
                                 </constraints>
                             </view>
